@@ -1,0 +1,45 @@
+{
+  "protocol_version": 1,
+  "command_required": [
+    "protocol_version",
+    "command_id",
+    "operations"
+  ],
+  "optional_concurrency": [
+    "scene_id",
+    "expected_revision",
+    "dry_run",
+    "world_id"
+  ],
+  "operations": {
+    "snapshot": {},
+    "ping": {},
+    "set_3d_environment": {
+      "values": "allow-listed levels-3d-preview keys"
+    },
+    "scene_update": {
+      "changes": "safe Foundry Scene dotted paths"
+    },
+    "embedded_create": {
+      "document": "allow-listed document type",
+      "data": "object or array"
+    },
+    "embedded_update": {
+      "document": "allow-listed document type",
+      "updates": "objects with _id"
+    },
+    "embedded_delete": {
+      "document": "allow-listed document type",
+      "ids": "array"
+    },
+    "tile_set_model3d": {
+      "tile_id": "string",
+      "foundry_path": "string",
+      "color": "#ffffff optional"
+    },
+    "asset_upload": {
+      "asset_file": "relative path under assets/incoming OR file_b64",
+      "relative_dir": "module storage dir"
+    }
+  }
+}
