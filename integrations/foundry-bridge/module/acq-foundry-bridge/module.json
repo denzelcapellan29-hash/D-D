@@ -1,0 +1,21 @@
+{
+  "id": "acq-foundry-bridge",
+  "title": "Acq Foundry Bridge",
+  "description": "Local, revision-checked bridge between Foundry VTT scenes and the Acq WorldGen workflow.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Acq WorldGen Project"
+    }
+  ],
+  "esmodules": [
+    "scripts/acq-foundry-bridge.js"
+  ],
+  "socket": false,
+  "url": "https://github.com/denzelcapellan29-hash/D-D",
+  "license": "MIT"
+}
