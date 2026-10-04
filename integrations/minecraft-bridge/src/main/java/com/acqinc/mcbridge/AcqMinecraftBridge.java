@@ -144,10 +144,11 @@ public final class AcqMinecraftBridge implements ModInitializer {
     }
 
     private static BlockState resolveBlock(String id) {
-        ResourceLocation key=ResourceLocation.parse(id);
-        Block block=BuiltInRegistries.BLOCK.getValue(key);
-        if(block==null) throw new IllegalArgumentException("unknown block: "+id);
-        return block.defaultBlockState();
+        for (Block block : BuiltInRegistries.BLOCK) {
+            var key = BuiltInRegistries.BLOCK.getKey(block);
+            if (key != null && key.toString().equals(id)) return block.defaultBlockState();
+        }
+        throw new IllegalArgumentException("unknown block: " + id);
     }
 
     private static ServerLevel level() {
