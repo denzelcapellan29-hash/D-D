@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -17,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +59,8 @@ public final class AcqMinecraftBridge implements ModInitializer {
         http.createContext("/fill", AcqMinecraftBridge::fill);
         http.createContext("/query", AcqMinecraftBridge::query);
         http.createContext("/region", AcqMinecraftBridge::region);
+        http.createContext("/player", AcqMinecraftBridge::player);
+        http.createContext("/camera", AcqMinecraftBridge::camera);
         http.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
         http.start();
     }
@@ -73,7 +78,7 @@ public final class AcqMinecraftBridge implements ModInitializer {
         String world = jsonEscape(s.getWorldData().getLevelName());
         reply(ex, 200,
             "{\"ok\":true,\"ready\":true,\"world\":\"" + world +
-            "\",\"bridge_version\":\"0.2.0\"}");
+            "\",\"bridge_version\":\"0.3.0\"}");
     }
 
     private static void setBlock(HttpExchange ex) throws IOException {
@@ -243,6 +248,75 @@ public final class AcqMinecraftBridge implements ModInitializer {
         } catch (Exception e) {
             reply(ex, 400, errorJson(e));
         }
+    }
+
+    private static void player(HttpExchange ex) throws IOException {
+        if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
+            reply(ex, 405, "{\"ok\":false,\"error\":\"GET required\"}");
+            return;
+        }
+        try {
+            String result = onServer(() -> {
+                ServerPlayer p = primaryPlayer();
+                return "{"
+                    + "\"ok\":true,"
+                    + "\"x\":" + p.getX() + ","
+                    + "\"y\":" + p.getY() + ","
+                    + "\"z\":" + p.getZ() + ","
+                    + "\"yaw\":" + p.getYRot() + ","
+                    + "\"pitch\":" + p.getXRot()
+                    + "}";
+            });
+            reply(ex, 200, result);
+        } catch (Exception e) {
+            reply(ex, 400, errorJson(e));
+        }
+    }
+
+    private static void camera(HttpExchange ex) throws IOException {
+        if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+            reply(ex, 405, "{\"ok\":false,\"error\":\"POST required\"}");
+            return;
+        }
+        String[] p = body(ex).trim().split("\\s+");
+        if (p.length != 5) {
+            reply(ex, 400, "{\"ok\":false,\"error\":\"body: x y z yaw pitch\"}");
+            return;
+        }
+
+        try {
+            double x = Double.parseDouble(p[0]);
+            double y = Double.parseDouble(p[1]);
+            double z = Double.parseDouble(p[2]);
+            float yaw = Float.parseFloat(p[3]);
+            float pitch = Float.parseFloat(p[4]);
+
+            String result = onServer(() -> {
+                ServerPlayer player = primaryPlayer();
+                boolean moved = player.teleportTo(
+                    level(), x, y, z, Set.<Relative>of(), yaw, pitch, true
+                );
+                return "{"
+                    + "\"ok\":" + moved + ","
+                    + "\"x\":" + player.getX() + ","
+                    + "\"y\":" + player.getY() + ","
+                    + "\"z\":" + player.getZ() + ","
+                    + "\"yaw\":" + player.getYRot() + ","
+                    + "\"pitch\":" + player.getXRot()
+                    + "}";
+            });
+            reply(ex, 200, result);
+        } catch (Exception e) {
+            reply(ex, 400, errorJson(e));
+        }
+    }
+
+    private static ServerPlayer primaryPlayer() {
+        MinecraftServer s = server;
+        if (s == null) throw new IllegalStateException("server is not ready");
+        var players = s.getPlayerList().getPlayers();
+        if (players.isEmpty()) throw new IllegalStateException("no player is connected");
+        return players.get(0);
     }
 
     private static long volume(int x1, int y1, int z1, int x2, int y2, int z2) {
