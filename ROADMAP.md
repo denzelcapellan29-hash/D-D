@@ -7,13 +7,16 @@
 4. ~~Repair the first detected street-connectivity defect live.~~
 5. Keep automatic structural readback active during edits.
 6. ~~Replace Minecraft-camera dependency with headless colored voxel reconstruction for visual QA.~~
-7. Upgrade region readback to include block-state properties for stairs/slabs/panes/orientation, then continue bounded world-feel iteration:
+7. Upgrade region readback to include block-state properties for stairs/slabs/panes/orientation.
+8. Add resource-pack/model resolution so visual profiles can be swapped without rebuilding geometry.
+9. Continue bounded world-feel iteration:
    - stronger skyline/roof variation
    - richer alleys and loading yards
    - more harbor traffic and props
    - background architecture that prevents hard visual edges
-8. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
-9. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
+10. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
+11. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
+12. Package the validated save as a direct-import world release, with the chosen resource pack/profile alongside it.
 
 ## Later
 - WorldEdit-backed schematic operations, revision/undo safety, biome control, and queued large edits.
