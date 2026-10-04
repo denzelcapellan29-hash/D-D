@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Now — vertical slice quality gate
+0. ~~Compile a direct-import world save from headless data and validate chunk integrity.~~
 1. ~~Install Fabric bridge v0.2.0.~~
 2. ~~Read the live Dock Ward slice through compressed region inspection.~~
 3. ~~Run structural QA from actual runtime data.~~
@@ -16,7 +17,7 @@
    - background architecture that prevents hard visual edges
 10. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
 11. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
-12. Package the validated save as a direct-import world release, with the chosen resource pack/profile alongside it.
+12. ~~Package an initial direct-import world release.~~ Promote to session-ready release only after the remaining visual/material and end-to-end Episode 1 QA gates pass.
 
 ## Later
 - WorldEdit-backed schematic operations, revision/undo safety, biome control, and queued large edits.
