@@ -6,8 +6,8 @@
 3. ~~Run structural QA from actual runtime data.~~
 4. ~~Repair the first detected street-connectivity defect live.~~
 5. Keep automatic structural readback active during edits.
-6. Restore reliable rendered-view capture for visual QA.
-7. Continue bounded world-feel iteration:
+6. ~~Replace Minecraft-camera dependency with headless colored voxel reconstruction for visual QA.~~
+7. Upgrade region readback to include block-state properties for stairs/slabs/panes/orientation, then continue bounded world-feel iteration:
    - stronger skyline/roof variation
    - richer alleys and loading yards
    - more harbor traffic and props
