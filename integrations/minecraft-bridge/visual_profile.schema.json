@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Acq Minecraft Visual Profile",
+  "type": "object",
+  "required": ["profile_id", "blocks"],
+  "properties": {
+    "profile_id": {"type": "string"},
+    "source_pack": {"type": ["string", "null"]},
+    "notes": {"type": ["string", "null"]},
+    "blocks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["hex"],
+        "properties": {
+          "hex": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "rgb": {
+            "type": "array",
+            "items": {"type": "integer", "minimum": 0, "maximum": 255},
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "textures": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+          },
+          "opacity": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "emissive": {"type": "boolean"},
+          "model_hint": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
