@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "acq_minecraft_bridge",
+  "version": "${version}",
+  "name": "Acq Minecraft Bridge",
+  "description": "Local automation bridge for Acquisitions Incorporated campaign map generation.",
+  "authors": ["Acquisitions Incorporated Campaign Project"],
+  "environment": "*",
+  "entrypoints": {"main": ["com.acqinc.mcbridge.AcqMinecraftBridge"]},
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
