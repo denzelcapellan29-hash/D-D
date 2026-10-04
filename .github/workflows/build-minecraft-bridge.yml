@@ -1,0 +1,27 @@
+name: Build Minecraft Bridge
+on:
+  push:
+    paths:
+      - "integrations/minecraft-bridge/**"
+      - ".github/workflows/build-minecraft-bridge.yml"
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: integrations/minecraft-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.6.0"
+      - run: gradle build --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: acq-minecraft-bridge
+          path: integrations/minecraft-bridge/build/libs/*.jar
