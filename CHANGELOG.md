@@ -16,3 +16,10 @@
 - Added curbs, street lamps, market stalls, roofline variation, chimneys, and working clutter.
 - Combined live readback covered 133,590 blocks.
 - Structural QA detected a one-block north/south street pinch; repaired it live into a covered passage.
+
+### QA / world-feel follow-up
+- Expanded live QA to 179,340 blocks spanning harbor through deeper background context.
+- Repaired four detached legacy roof strips, one isolated chain, and a disconnected bowsprit.
+- Final structural graph contains exactly two intentional non-water components: city + moored vessel.
+- Extended the cross street through the older background row and added a deeper skyline mass.
+- Restored crane rigging with the correct 26.3 block ID: `minecraft:iron_chain`.
