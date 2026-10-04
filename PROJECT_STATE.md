@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-Continue visual/world-feel iteration inside the bounded Episode 1 corridor, continue bounded visual/world-feel polish, then restore reliable rendered-view capture for autonomous visual QA.
+Finish the geometry/material separation: add block-state-aware readback plus resource-pack visual profiles, then iterate the world headlessly and package finished Minecraft world saves for direct DM import.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -50,3 +50,13 @@ Rendered Minecraft screenshots are no longer the primary visual-QA dependency.
 - `integrations/minecraft-bridge/render_region.py` now exports a colored PLY point cloud and optional isometric PNG views from bridge region results.
 - Minecraft camera/player automation is now secondary/diagnostic rather than required for normal QA.
 - Next fidelity upgrade is richer block-state readback (stairs/slabs/panes/orientation), followed by entities/block entities where visually relevant.
+
+
+## Visual material profiles
+Appearance is now treated as independent from world geometry.
+- Block/world coordinates remain stable while visual profiles map block IDs/block states to representative color, textures, opacity, emissive behavior, and optional model hints.
+- Fast QA can swap hex/RGB palettes without touching the Minecraft save.
+- Higher-fidelity QA will resolve resource-pack textures/models against the same block-state volume.
+- `integrations/minecraft-bridge/visual_profile.schema.json` defines the profile contract.
+- `integrations/minecraft-bridge/extract_resource_pack_palette.py` extracts representative texture colors from Java resource packs.
+- Target delivery is a validated prebuilt world save plus an optional selected resource pack/profile, so the DM imports a finished release rather than assembling the world manually.
