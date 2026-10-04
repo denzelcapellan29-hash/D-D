@@ -6,7 +6,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
@@ -134,7 +133,7 @@ public final class AcqMinecraftBridge implements ModInitializer {
             int x=Integer.parseInt(p[0]), y=Integer.parseInt(p[1]), z=Integer.parseInt(p[2]);
             String result=onServer(() -> {
                 BlockState state=level().getBlockState(new BlockPos(x,y,z));
-                ResourceLocation key=BuiltInRegistries.BLOCK.getKey(state.getBlock());
+                var key=BuiltInRegistries.BLOCK.getKey(state.getBlock());
                 return key==null?"minecraft:air":key.toString();
             });
             reply(ex,200,"{\"ok\":true,\"block\":\""+jsonEscape(result)+"\"}");
