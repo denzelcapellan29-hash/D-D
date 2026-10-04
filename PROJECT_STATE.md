@@ -20,13 +20,14 @@ Live world editing is operational against the current save.
 - North/south cross street was widened from a one-block pinch into a covered passage.
 
 ## Runtime QA
-- Combined QA region: x=-108..-48, y=96..125, z=-20..52.
-- 133,590 live blocks inspected in the latest combined readback.
-- City geometry is one grounded connected component; the vessel is the only separate intentional component.
-- Street surfaces are continuous; the cross-street pinch found by readback was repaired live.
+- Expanded QA region: x=-108..-48, y=96..125, z=-45..52.
+- 179,340 live blocks inspected in the latest combined readback.
+- Exactly two non-water connected components remain: one grounded city mass and one intentional moored vessel.
+- Detached legacy roof strips, a floating chain, and the disconnected bowsprit were detected and repaired live.
+- Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-Continue visual/world-feel iteration inside the bounded Episode 1 corridor, add background city context without expanding to full Waterdeep, then restore reliable rendered-view capture for autonomous visual QA.
+Continue visual/world-feel iteration inside the bounded Episode 1 corridor, continue bounded visual/world-feel polish, then restore reliable rendered-view capture for autonomous visual QA.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
