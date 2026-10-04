@@ -23,3 +23,9 @@
 - Final structural graph contains exactly two intentional non-water components: city + moored vessel.
 - Extended the cross street through the older background row and added a deeper skyline mass.
 - Restored crane rigging with the correct 26.3 block ID: `minecraft:iron_chain`.
+
+### Headless rendering / resource-pack workflow
+- Formalized geometry/material separation for Minecraft world generation.
+- Added visual profile schema for block color/texture/opacity/emissive metadata.
+- Added resource-pack palette extractor for rapid aesthetic comparison.
+- Changed intended release workflow toward prebuilt validated Minecraft world saves for direct import.
