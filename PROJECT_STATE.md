@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-The first headlessly compiled direct-import world release now exists. Continue iterating the same offline world compiler toward the Episode 1 quality gate: improve urban grammar/material fidelity, then run end-to-end warehouse → fissure → dungeon QA before promoting the release.
+v0.3 structural cleanup is complete. Continue from this controlled coordinate world: improve urban grammar/material fidelity inside the authored envelope, then run end-to-end warehouse → fissure → dungeon QA before promotion.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -37,9 +37,9 @@ Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward wate
 The Minecraft runtime now has an explicit coordinate-based working-area contract in `integrations/minecraft-bridge/workspace.json`.
 - Surface datum: Y=100.
 - Planning origin: world (-80,100,0), giving local u=x+80, v=z, h=y-100.
-- Primary Episode 1 surface authoring envelope: x=-128..-32, y=96..160, z=-64..64.
+- Primary Episode 1 controlled authoring envelope: x=-144..32, y=96..160, z=-96..96.
 - Current verified corridor remains x=-108..-48, y=96..125, z=-45..52.
-- Future bridge writes should be rejected outside the authoring envelope unless explicitly overridden.
+- Future writes should be rejected outside the controlled authoring envelope unless explicitly overridden; uncontrolled pregenerated terrain outside the envelope is not part of the authored world.
 - Camera QA uses named coordinate stations rather than ad-hoc player movement.
 
 
@@ -74,3 +74,17 @@ A new direct-import Minecraft save has been compiled offline from the existing v
 - 35 non-playable background urban masses were added only in previously empty space to create skyline depth.
 - 146 chunks were touched by the offline compiler.
 - Existing Episode 1 v0.5.1 warehouse/fissure/dungeon content remains in the base save and was not regenerated from unsupported source assumptions.
+
+
+## Prebuilt world release v0.3
+Structural cleanup release: `Acq_Waterdeep_DockWard_WORLD_v0_3.zip`.
+- Drive artifact ID: `1ydpXiCfN9KQxX6j4QFLddeL0AMaPoc5N`.
+- Controlled world envelope: x=-144..32, y=96..160, z=-96..96.
+- Cleared 177,238 blocks of uncontrolled terrain/legacy geometry above the neutral Y=96 datum outside the envelope.
+- Removed 82 unsupported structural components / 6,258 blocks inside the envelope.
+- Only two unsupported components remain, both explicitly classified small sail vessels over water.
+- Replaced 23 obsolete `minecraft:chain` states with live 26.3 `minecraft:iron_chain`.
+- 0 `grass_block` cells remain in the pregenerated surface volume.
+- All 300 pregenerated chunks reopen successfully with 0 NBT parse failures.
+- Verified live corridor remains an exact block match: 0 mismatches.
+- Existing Episode 1 warehouse/fissure/dungeon content remains preserved.
