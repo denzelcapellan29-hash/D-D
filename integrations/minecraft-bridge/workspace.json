@@ -4,7 +4,11 @@
   "coordinate_system": {
     "runtime": "minecraft_world_coordinates",
     "surface_datum_y": 100,
-    "planning_origin": {"x": -80, "y": 100, "z": 0},
+    "planning_origin": {
+      "x": -80,
+      "y": 100,
+      "z": 0
+    },
     "local_axes": {
       "u": "x + 80",
       "v": "z",
@@ -13,23 +17,58 @@
   },
   "areas": {
     "episode1_surface_authoring": {
-      "bounds": {"x1": -128, "y1": 96, "z1": -64, "x2": -32, "y2": 160, "z2": 64},
-      "purpose": "Primary mutable surface envelope for the Dock Ward vertical slice."
+      "bounds": {
+        "x1": -144,
+        "y1": 96,
+        "z1": -96,
+        "x2": 32,
+        "y2": 160,
+        "z2": 96
+      },
+      "purpose": "Primary controlled mutable surface envelope for the Dock Ward vertical slice."
     },
     "current_verified_corridor": {
-      "bounds": {"x1": -108, "y1": 96, "z1": -45, "x2": -48, "y2": 125, "z2": 52},
+      "bounds": {
+        "x1": -108,
+        "y1": 96,
+        "z1": -45,
+        "x2": -48,
+        "y2": 125,
+        "z2": 52
+      },
       "purpose": "Current live build and structural-QA corridor."
     },
     "harbor_band": {
-      "bounds": {"x1": -128, "y1": 90, "z1": 32, "x2": -32, "y2": 112, "z2": 64},
+      "bounds": {
+        "x1": -128,
+        "y1": 90,
+        "z1": 32,
+        "x2": -32,
+        "y2": 112,
+        "z2": 64
+      },
       "purpose": "Waterfront, piers, vessels, quay edge and harbor context."
     },
     "dock_frontage_band": {
-      "bounds": {"x1": -128, "y1": 96, "z1": 7, "x2": -32, "y2": 160, "z2": 31},
+      "bounds": {
+        "x1": -128,
+        "y1": 96,
+        "z1": 7,
+        "x2": -32,
+        "y2": 160,
+        "z2": 31
+      },
       "purpose": "Dock Street frontage and primary surface encounter approach."
     },
     "inland_context_band": {
-      "bounds": {"x1": -128, "y1": 96, "z1": -64, "x2": -32, "y2": 160, "z2": 6},
+      "bounds": {
+        "x1": -128,
+        "y1": 96,
+        "z1": -64,
+        "x2": -32,
+        "y2": 160,
+        "z2": 6
+      },
       "purpose": "Inland blocks, skyline mass and connective urban context."
     }
   },
@@ -41,25 +80,58 @@
   },
   "camera_stations": {
     "harbor_oblique": {
-      "position": {"x": -118.0, "y": 116.0, "z": 60.0},
-      "target": {"x": -78.0, "y": 108.0, "z": 18.0}
+      "position": {
+        "x": -118,
+        "y": 116,
+        "z": 60
+      },
+      "target": {
+        "x": -78,
+        "y": 108,
+        "z": 18
+      }
     },
     "dock_street_long": {
-      "position": {"x": -114.0, "y": 108.0, "z": 27.0},
-      "target": {"x": -52.0, "y": 108.0, "z": 18.0}
+      "position": {
+        "x": -114,
+        "y": 108,
+        "z": 27
+      },
+      "target": {
+        "x": -52,
+        "y": 108,
+        "z": 18
+      }
     },
     "inland_street_long": {
-      "position": {"x": -80.0, "y": 109.0, "z": 4.0},
-      "target": {"x": -80.0, "y": 110.0, "z": -42.0}
+      "position": {
+        "x": -80,
+        "y": 109,
+        "z": 4
+      },
+      "target": {
+        "x": -80,
+        "y": 110,
+        "z": -42
+      }
     },
     "warehouse_approach": {
-      "position": {"x": -76.0, "y": 108.0, "z": 29.0},
-      "target": {"x": -59.0, "y": 108.0, "z": 14.0}
+      "position": {
+        "x": -76,
+        "y": 108,
+        "z": 29
+      },
+      "target": {
+        "x": -59,
+        "y": 108,
+        "z": 14
+      }
     }
   },
   "notes": [
     "These are procedural/runtime coordinates, not canonical Forgotten Realms survey coordinates.",
     "The semantic scene remains canonical; this grid is the Minecraft runtime placement contract.",
-    "Camera stations are QA viewpoints and may be adjusted as the surface scene evolves."
+    "Camera stations are QA viewpoints and may be adjusted as the surface scene evolves.",
+    "Outside the active authoring envelope, compiler releases may clear uncontrolled above-ground vanilla/procedural geometry to a neutral lower datum."
   ]
 }
