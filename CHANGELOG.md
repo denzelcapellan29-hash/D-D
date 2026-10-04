@@ -29,3 +29,11 @@
 - Added visual profile schema for block color/texture/opacity/emissive metadata.
 - Added resource-pack palette extractor for rapid aesthetic comparison.
 - Changed intended release workflow toward prebuilt validated Minecraft world saves for direct import.
+
+### Offline world compiler / release v0.2
+- Compiled `Acq_Waterdeep_DockWard_WORLD_v0_2.zip` as a direct-import Minecraft save.
+- Patched 179,340 live-readback cells into the prebuilt Episode 1 world with zero post-build mismatches.
+- Removed visible vanilla grass from the authored context envelope without overwriting non-grass authored surfaces.
+- Added 35 deterministic background urban masses in previously empty cells.
+- Validated all 300 pregenerated chunks after rewrite; zero chunk/NBT parse failures.
+- Persisted the release to Google Drive Build Artifacts.
