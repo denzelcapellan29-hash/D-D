@@ -41,3 +41,12 @@ The Minecraft runtime now has an explicit coordinate-based working-area contract
 - Current verified corridor remains x=-108..-48, y=96..125, z=-45..52.
 - Future bridge writes should be rejected outside the authoring envelope unless explicitly overridden.
 - Camera QA uses named coordinate stations rather than ad-hoc player movement.
+
+
+## Headless voxel QA
+Rendered Minecraft screenshots are no longer the primary visual-QA dependency.
+- Live `/region` data is reconstructed outside Minecraft from XYZ occupancy + block/material identity.
+- The current 179,340-block corridor has been successfully rendered into colored 3D voxel views without using the Minecraft camera.
+- `integrations/minecraft-bridge/render_region.py` now exports a colored PLY point cloud and optional isometric PNG views from bridge region results.
+- Minecraft camera/player automation is now secondary/diagnostic rather than required for normal QA.
+- Next fidelity upgrade is richer block-state readback (stairs/slabs/panes/orientation), followed by entities/block entities where visually relevant.
