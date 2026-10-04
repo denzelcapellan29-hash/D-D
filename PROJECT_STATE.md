@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-Finish the geometry/material separation: add block-state-aware readback plus resource-pack visual profiles, then iterate the world headlessly and package finished Minecraft world saves for direct DM import.
+The first headlessly compiled direct-import world release now exists. Continue iterating the same offline world compiler toward the Episode 1 quality gate: improve urban grammar/material fidelity, then run end-to-end warehouse → fissure → dungeon QA before promoting the release.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -60,3 +60,17 @@ Appearance is now treated as independent from world geometry.
 - `integrations/minecraft-bridge/visual_profile.schema.json` defines the profile contract.
 - `integrations/minecraft-bridge/extract_resource_pack_palette.py` extracts representative texture colors from Java resource packs.
 - Target delivery is a validated prebuilt world save plus an optional selected resource pack/profile, so the DM imports a finished release rather than assembling the world manually.
+
+
+## Prebuilt world release v0.2
+A new direct-import Minecraft save has been compiled offline from the existing validated Episode 1 world plus the latest live Dock Ward block readback.
+- Release: `Acq_Waterdeep_DockWard_WORLD_v0_2.zip`.
+- Drive artifact ID: `1fFokor3_ca_N_hqb0LBLZ3j32RY0Cw-c`.
+- Latest live corridor patch: 179,340 cells reproduced exactly from runtime readback.
+- Offline QA reopened all 300 pregenerated chunks successfully with zero NBT parse failures.
+- Exact live-region comparison after compilation: 0 block mismatches.
+- Authored context envelope contains 0 vanilla `grass_block` surface cells after cleanup.
+- 16,134 previously vanilla surface columns were converted to harbor water or urban paving where safe.
+- 35 non-playable background urban masses were added only in previously empty space to create skyline depth.
+- 146 chunks were touched by the offline compiler.
+- Existing Episode 1 v0.5.1 warehouse/fissure/dungeon content remains in the base save and was not regenerated from unsupported source assumptions.
