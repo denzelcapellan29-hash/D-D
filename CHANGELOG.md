@@ -37,3 +37,14 @@
 - Added 35 deterministic background urban masses in previously empty cells.
 - Validated all 300 pregenerated chunks after rewrite; zero chunk/NBT parse failures.
 - Persisted the release to Google Drive Build Artifacts.
+
+### Offline world compiler / release v0.3
+- Added strict support-graph validation for authored above-ground geometry.
+- Removed 82 unsupported non-vessel components (6,258 blocks) from the controlled working envelope.
+- Preserved only two explicit small sail-vessel components as intentionally unsupported over water.
+- Cleared uncontrolled terrain and legacy above-ground geometry outside the coordinate-defined envelope, leaving a neutral lower datum instead of vanilla grass/legacy clutter.
+- Eliminated all remaining `grass_block` cells in the pregenerated surface volume.
+- Replaced 23 obsolete `minecraft:chain` block states with `minecraft:iron_chain`.
+- Revalidated all 300 pregenerated chunks with zero parse failures.
+- Confirmed the verified live corridor still matches exactly with zero block mismatches.
+- Persisted `Acq_Waterdeep_DockWard_WORLD_v0_3.zip` to Google Drive Build Artifacts.
