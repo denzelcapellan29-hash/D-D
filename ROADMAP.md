@@ -4,6 +4,7 @@
 0. ~~Compile a direct-import world save from headless data and validate chunk integrity.~~
 0a. ~~Structural cleanup / controlled-envelope world: remove unsupported geometry and vanilla terrain bleed.~~
 0b. ~~World-context shell: replace the visible sandbox plate with continuous urban/harbor surroundings across the pregenerated footprint.~~
+0c. ~~Lower Dock Ward scope lock + organic-city pass: curved streets, attached frontage, elevation, harbor context and structural cleanup.~~
 1. ~~Install Fabric bridge v0.2.0.~~
 2. ~~Read the live Dock Ward slice through compressed region inspection.~~
 3. ~~Run structural QA from actual runtime data.~~
@@ -20,6 +21,9 @@
 10. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
 11. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
 12. ~~Package an initial direct-import world release.~~ Promote to session-ready release only after the remaining visual/material and end-to-end Episode 1 QA gates pass.
+
+## Stretch goal
+- Full Waterdeep expansion only if later campaign needs justify it.
 
 ## Later
 - WorldEdit-backed schematic operations, revision/undo safety, biome control, and queued large edits.
