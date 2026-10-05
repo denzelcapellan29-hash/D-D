@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-Infrastructure QA v0.1 is complete. Next: run BlueMap against the actual lower-Dock world after explicit approval for Mojang client-resource downloads, run the non-destructive Amulet load/save/reopen probe against the real world before considering compiler adoption, then integrate block-state/material-profile QA into the next city pass before producing another world release.
+Infrastructure QA v0.1 is complete. The DM explicitly approved BlueMap/Mojang client-resource downloads on 2026-10-04. The actual-world BlueMap + Amulet gate is now staged as a non-destructive local QA run against a stable snapshot of the current lower-Dock save; BlueMap reads the snapshot and Amulet saves/reopens a second disposable copy. No new world release is authorized until these two real-world probes are reviewed. After they pass, integrate block-state/material-profile QA into the next city pass.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -136,3 +136,13 @@ The promised tooling upgrade is now implemented and validated before further wor
 - GitHub Actions run 37250767331 completed successfully across BlueMap, PyVista and Amulet jobs.
 - Production fast renderer is direct VTK; PyVista is an optional higher-level convenience layer.
 - Minecraft screenshots remain diagnostic only.
+
+
+## Actual-world QA staging — 2026-10-04
+- Explicit DM approval received for BlueMap to download the required Mojang client resources.
+- BlueMap target remains 5.28 / Minecraft 26.3 / Java 25.
+- A bounded `run_real_world_qa.ps1` runner is staged for the user machine because the current remote execution sandbox does not provide the required Java/network combination and the Minecraft bridge intentionally does not expose arbitrary shell execution.
+- The runner snapshots the source world before QA; the source save is never written by BlueMap or Amulet.
+- BlueMap renders the snapshot and publishes logs/web output/capture to the existing Minecraft Bridge captures folder when available.
+- Amulet Core 1.9.49 probes load/save/reopen only on a disposable copy.
+- Result review is pending the local run; no v0.6 world work begins before this gate is resolved.
