@@ -182,7 +182,8 @@ async function inspect3dScene(scene) {
     let runtime_bounds = null;
     if (root3d) {
       try {
-        const box = new THREE3D.Box3().setFromObject(root3d);
+        let box = entity3d?._worldBoundingBox?.clone?.() ?? null;
+        if (!box || box.isEmpty()) box = new THREE3D.Box3().setFromObject(root3d);
         if (!box.isEmpty()) {
           const size = box.getSize(new THREE3D.Vector3());
           const center = box.getCenter(new THREE3D.Vector3());
@@ -312,7 +313,7 @@ async function capture3dView(scene, op) {
     obj.visible = false;
   };
 
-  for (const light of Object.values(l3d.lights ?? {})) {
+  for (const light of Object.values(l3d.lights?.sceneLights ?? {})) {
     hideForCapture(light?.lightHelper);
     hideForCapture(light?.dragHandle);
   }
@@ -321,8 +322,13 @@ async function capture3dView(scene, op) {
     hideForCapture(sound?.dragHandle);
     hideForCapture(sound?.helper);
   }
+  for (const note of Object.values(l3d.notes ?? {})) {
+    hideForCapture(note?.dragHandle);
+    hideForCapture(note?.nameplate);
+  }
   hideForCapture(l3d.interactionManager?.transformControls);
   hideForCapture(l3d.interactionManager?.draggable);
+  hideForCapture(l3d.interactionManager?._draggable);
 
   const renderTarget = new THREE3D.WebGLRenderTarget(width, height, {
     format: THREE3D.RGBAFormat,
