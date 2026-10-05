@@ -123,3 +123,10 @@
 - Applied the first real Episode 1 Phase A production write to `Ep1 - World Slice`: seven modular Dock Ward/Jolly's exterior Tiles added with stable semantic IDs; scene Tile count increased from 11 to 18.
 - Persisted `campaign/episode1/phase_a_surface_context_state_v0_1.json` with Foundry IDs, asset paths and before/after revisions.
 - Kept all legacy World Slice geometry in place and disabled collision/sight on new context assets during iteration.
+
+- Expanded the live Episode 1 World Slice from the first surface pass to 61 Tiles and 10 Tokens while keeping all legacy geometry intact.
+- Added warehouse-collapse rocks/timber/beams, Dock Ward lamp posts/carts, neutral City Watch tokens, and a player-safe Drunken Halfling Passerby cover token.
+- Added Area 1 rubble/timber dressing and staged the source-grounded six green giant rats as two hidden waves of three.
+- Added Area 2 blue/green/clear/cloudy pool surfaces, central columns, perimeter supports and provisional paired door shells.
+- Recorded `campaign/episode1/live_vertical_slice_state_v0_2.json` and expanded the live asset catalog with validated timber, lamp and cart assets.
+- Staged Acq Foundry Bridge v0.2.5 to correctly suppress nested 3D Canvas light helpers in QA captures and improve runtime model bounds; smoke CI passed.
