@@ -91,3 +91,5 @@
 - Determined that the Dungeon Master tier is warranted for this project because scenes, tokens, combat and compendium import are required campaign-prep capabilities.
 - Confirmed that hosted Foundry MCP does not replace the specialized 3D authoring layer: its standard screenshot path captures the 2D Pixi canvas, while 3D Canvas uses its own Three.js renderer.
 - Retained the architecture split: hosted Foundry MCP for generic campaign/D&D5e automation + a thin private Acq 3D MCP for 3D Canvas semantic authoring and visual QA.
+
+- Activated and verified the Foundry MCP Dungeon Master tier. Live scene enumeration/readback, compendium enumeration, token readback and world-time access all succeeded against `Acq WorldGen Test`; no writes were performed.
