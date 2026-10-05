@@ -31,7 +31,15 @@
    - Generic MCP screenshots are 2D Foundry-canvas captures, not 3D Canvas truth; build the private Acq 3D MCP for 3D authoring/camera/capture.
    - Google Drive remains fallback transport/artifact storage rather than the normal command path.
 
-5. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
+5. **Install and validate the staged Acq 3D MCP control plane.**
+   - Updated bridge code now includes direct loopback RPC, 3D inspect/camera/capture, asset search, semantic idempotent apply and manifest validation.
+   - Run CI/syntax gate.
+   - Package/install updated Foundry module and local MCP stack.
+   - Connect it with OpenAI Secure MCP Tunnel.
+   - Read-only inspect/capture first; then one disposable semantic Tile transaction.
+   - No production scene writes until this passes.
+
+6. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
    - Resolve semantic roles to existing Mapmaking Pack asset paths/materials.
    - Dock Ward masonry/timber/roofing/cobbles/quay/harbor props.
    - Warehouse structure/clutter.
@@ -39,10 +47,10 @@
    - Area 1/Area 2 architecture and lighting/environment presets.
    - Store references/metadata, not redistributed third-party assets.
 
-6. **Rebuild exactly one continuous vertical slice.**
+7. **Rebuild exactly one continuous vertical slice.**
    lower Dock Ward street -> warehouse exterior -> warehouse interior -> earthquake fissure -> descent -> Area 1 -> Area 2.
 
-7. **Authoring rules.**
+8. **Authoring rules.**
    - Core V14 Scene Levels/Regions for vertical organization.
    - 3D Canvas Tiles for modular geometry, collision, sight and doors.
    - Existing assets/materials first.
@@ -50,14 +58,14 @@
    - Stable `flags.acq.semantic_id` and `flags.acq.build_id` on generated objects.
    - Revision-checked, idempotent scene application.
 
-8. **Programmatic QA and release optimization.**
+9. **Programmatic QA and release optimization.**
    - Structural scene manifest assertions.
    - Expected tiles/regions/lights/doors/actors/journals.
    - Six canonical close/medium/wide camera captures.
    - Performance sanity check.
    - Duplicate scene before bulk optimization; merge compatible static tiles only after QA and skip doors.
 
-9. **Platform gate.**
+10. **Platform gate.**
    - PASS -> Foundry + 3D Canvas becomes campaign production runtime; propagate accepted grammar to Areas 3-10.
    - FAIL -> stop Foundry after this bounded pass and move directly to TaleSpire slab export. Do not resume Minecraft visual-polish infrastructure.
 
