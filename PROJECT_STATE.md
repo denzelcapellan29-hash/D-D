@@ -511,3 +511,20 @@ Current scene revision after the latest 3D write:
 `1c92c40e1fe5a25604aebf6f572953dbdb8ca6194450c272e441cf02a2d5c9c8`
 
 Acq Foundry Bridge **v0.2.5** is staged and CI-passed. It fixes nested 3D Canvas scene-light helper suppression for captures and improves runtime bounds by preferring Tile3D's precomputed world bounding box. The currently loaded v0.2.4 remains usable for production writes; v0.2.5 should be loaded at the next convenient QA checkpoint.
+
+
+## 0.2.5 live QA + 0.2.6 staging (2026-10-05)
+Acq Foundry Bridge v0.2.5 loaded successfully.
+- Runtime bounds now report believable per-asset dimensions for the modular Episode 1 Tiles.
+- Automated captures no longer show the large 3D Canvas light-helper wireframes.
+- A QA pass identified two additional editor-overlay/runtime issues:
+  1. hidden Token/Note helpers can still appear in GM captures;
+  2. switching active Scenes while 3D Canvas remains active can leave the Three.js runtime visually empty until 3D Canvas is reloaded.
+- A short-lived experiment adding cobbled street strips and modular Area 1/2 floors/walls was rolled back cleanly after captures showed the placement approach was not visually reliable in the current runtime state. Live Scene is back to **61 Tiles / 10 Tokens**; the previously approved modular buildings, warehouse-collapse dressing, Area 1 dressing, Area 2 pools/supports/doors and NPC staging remain intact.
+
+Acq Foundry Bridge **v0.2.6** is staged and smoke-CI passed. It:
+- adds a safe `reload_3d_scene` operation using 3D Canvas's supported `reload()`/toggle API;
+- avoids expensive Box3 fallback work during inspection, reducing timeout risk;
+- hides note meshes, hidden-token meshes, token editor helpers and rangefinder overlays from QA captures.
+
+Do not use Scene switching as a QA refresh mechanism again; use the dedicated 3D reload operation once v0.2.6 is loaded.
