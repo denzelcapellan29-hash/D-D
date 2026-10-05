@@ -274,3 +274,38 @@ Keep script/eval-style remote execution disabled. The custom bridge remains allo
 - On a duplicate/release candidate, use 3D Canvas tile merging for compatible static repeated assets after structural QA; never merge interactive doors.
 - QA uses canonical camera stations and automated captures plus structural state assertions.
 - Do not move to remote/dedicated Foundry hosting during the vertical-slice test; it adds infrastructure without improving the local 3D authoring loop.
+
+
+## Direct ChatGPT MCP architecture — 2026-10-05
+The DM confirmed this ChatGPT environment can create custom MCP connections. Infrastructure research is now explicitly scored against the actual product goal: autonomous Acquisitions Incorporated campaign prep and maintenance in a high-quality 3D VTT with minimal DM-side work.
+
+### Research criteria
+Any infrastructure choice must be evaluated on:
+- direct ChatGPT read/write control;
+- 3D world authoring, not merely campaign-document CRUD;
+- semantic/idempotent rebuilds from the canonical campaign model;
+- source-fidelity and GM-only hidden state;
+- visual quality and world/location/encounter continuity;
+- deterministic or revision-checked writes with recovery;
+- asset discovery/reuse before custom modeling;
+- D&D5e actors/items/compendiums/journals/encounters;
+- programmatic camera/capture QA;
+- runtime performance;
+- maintenance/version risk;
+- licensing/privacy/cost;
+- and the amount of manual setup/debugging pushed onto the DM.
+
+### Selected MCP topology
+1. **Foundry API Bridge / Foundry MCP** is the preferred off-the-shelf generic Foundry control plane. It is current, Foundry V14 verified, D&D5e aware, supports ChatGPT OAuth, and exposes 121 tools at the Dungeon Master tier for actors/items/journals/scenes/tokens/combat/compendiums/time/UI. Use it rather than reimplementing generic campaign CRUD.
+2. **Acq 3D MCP** will be a deliberately small private MCP server for project-specific 3D Canvas authoring operations that Foundry MCP does not expose: 3D Tile/model flags, semantic asset resolution, environment controls, semantic build IDs, specialized camera framing/capture, asset upload and idempotent scene-apply/repair.
+3. Connect Acq 3D MCP to ChatGPT through **OpenAI Secure MCP Tunnel** rather than exposing a local port publicly. Reuse the existing Acq Foundry Bridge module/agent internals behind this MCP surface.
+4. Google Drive is demoted from primary command transport to artifact/release/capture/private-source storage and emergency fallback transport.
+
+### Safety
+- Keep Foundry API Bridge "Allow Script Macros" off.
+- Do not use generic code-mode scripts as the production write path because its documented execution is not transactional.
+- Acq 3D MCP meaningful writes remain allow-listed, revision-checked, idempotent where possible, and backed by recoverable Scene snapshots.
+- Full copyrighted adventure source remains in private Drive/project sources; Foundry and third-party MCP services receive only the concise campaign data needed to run/prep the world.
+
+### 3D Canvas dependency correction
+Published 3D Canvas documentation is inconsistent about legacy dependencies: the current V14 wiki still lists libWrapper/socketLib/Levels/Wall Height as required, while the current public source manifest lists only libWrapper as a hard requirement and marks Mapmaking Pack/Token Collection/Advanced Tools as recommendations. Therefore do **not** add or remove Levels/Wall Height/socketLib based on assumptions. Inspect the actual installed 9.0.35 manifest/runtime dependency state before changing the module stack.
