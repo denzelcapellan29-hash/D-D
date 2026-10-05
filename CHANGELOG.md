@@ -58,3 +58,12 @@
 - Structural QA found only the two previously allowed small sail-vessel components unsupported; no new floating architectural components were introduced.
 - Validated all 300 pregenerated chunks with zero parse failures.
 - Persisted `Acq_Waterdeep_DockWard_WORLD_v0_4.zip` to Google Drive Build Artifacts.
+
+### Offline world compiler / release v0.5
+- Locked Episode 1 geographic scope to the lower Dock Ward rather than full Waterdeep.
+- Rebuilt surrounding context using curved deterministic street fields instead of a rectangular street grid.
+- Added frontage-driven attached rowhouses, terraced inland elevation, market/plaza dressing, harbor piers/ships/cranes and a contextual inland skyline edge.
+- Preserved the verified Episode 1 core exactly with zero block mismatches.
+- Structural QA finished at zero unsupported components and zero unsupported blocks.
+- Validated all 300 pregenerated chunks with zero parse failures and zero grass blocks in the checked surface volume.
+- Persisted `Acq_Waterdeep_DockWard_WORLD_v0_5.zip` to Google Drive Build Artifacts.
