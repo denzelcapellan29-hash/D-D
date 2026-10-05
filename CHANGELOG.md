@@ -93,3 +93,7 @@
 - Retained the architecture split: hosted Foundry MCP for generic campaign/D&D5e automation + a thin private Acq 3D MCP for 3D Canvas semantic authoring and visual QA.
 
 - Activated and verified the Foundry MCP Dungeon Master tier. Live scene enumeration/readback, compendium enumeration, token readback and world-time access all succeeded against `Acq WorldGen Test`; no writes were performed.
+
+- Staged the first working Acq 3D MCP implementation: direct loopback RPC, 3D runtime inspection, asset search, camera control, true Three.js capture, semantic idempotent scene apply and manifest validation.
+- Added a narrow Python MCP server and Windows stack launcher without exposing arbitrary JS/shell control.
+- Added Foundry bridge smoke CI to validate protocol JSON, Python syntax, JavaScript syntax and MCP server import before live installation.
