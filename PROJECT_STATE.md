@@ -398,3 +398,13 @@ With the bridge agent manually started and Foundry polling it:
 The first true-3D capture call returned a valid 1920x992 WebP payload but the pixels were black. Root cause is the capture implementation using `renderer.domElement.toDataURL()`, which is unreliable when the WebGL context does not preserve its drawing buffer. A v0.2.2 fix is staged to render into a Three.js WebGLRenderTarget and read pixels explicitly, following 3D Canvas's own export pattern. The same release also adds semantic cleanup so the disposable write gate can create and then remove a test object safely.
 
 Current local runtime remains on the prior installed module until v0.2.2 is installed/reloaded.
+
+
+## Acq 3D MCP v0.2.3 live read path — PASSED (2026-10-05)
+After installing/reloading the v0.2.3 Foundry module:
+- live 3D inspection still passes;
+- the fixed render-target capture now returns a 1920x992 WebP payload of ~154 KB instead of the previous ~5 KB black frame, confirming that the WebGLRenderTarget/readRenderTargetPixels path is producing non-empty scene imagery;
+- Scene revision remained unchanged during capture;
+- semantic apply dry-run passed with the current revision and correctly planned creation of the disposable Tile.
+
+The remaining infrastructure gate is a single actual disposable semantic Tile create/delete transaction. ChatGPT's current custom-plugin permission/safety layer blocks the non-dry-run write call even though dry-run is allowed, so the next user action is to allow low-risk writes for the Acq 3D Map plugin (or otherwise approve writes) and retry.
