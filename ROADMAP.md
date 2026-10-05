@@ -36,7 +36,7 @@
    - **CI/syntax gate PASSED**; validated package is in Google Drive releases.
    - Package/install updated Foundry module and local MCP stack.
    - Connect it with OpenAI Secure MCP Tunnel.
-   - Read-only 3D inspect and asset search PASSED live. Render-target capture fix is now live and returns a non-empty ~154 KB 1920x992 WebP instead of the prior black ~5 KB frame. Semantic apply dry-run also passes. Remaining gate: allow/approve one low-risk custom-plugin write, then perform the disposable semantic Tile create/delete transaction.
+   - **PASSED:** read-only 3D inspection, asset search, true 3D render-target capture, revision-checked semantic Tile create, verification, and cleanup all succeeded. Scene returned to 11 Tiles and the original baseline revision. Infrastructure gate is closed.
    - No production scene writes until this passes.
 
 6. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
