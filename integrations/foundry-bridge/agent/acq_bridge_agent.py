@@ -53,7 +53,10 @@ class BridgeStore:
         self.backups = self.root / "backups"
         self.incoming = self.root / "assets" / "incoming"
         self.lock = threading.RLock()
-        self.inflight: dict[str, Path] = {}
+        self.inflight: dict[str, Path | None] = {}
+        self.transient_queue: list[dict] = []
+        self.transient_waiters: dict[str, threading.Event] = {}
+        self.transient_results: dict[str, dict] = {}
 
         for p in [self.commands, self.processed, self.results, self.state, self.backups, self.incoming]:
             p.mkdir(parents=True, exist_ok=True)
@@ -110,8 +113,58 @@ class BridgeStore:
             op["file_b64"] = base64.b64encode(path.read_bytes()).decode("ascii")
         return cmd
 
+    def enqueue_rpc(self, command: dict, timeout: float = 30.0) -> dict:
+        command = json.loads(json.dumps(command))
+        command_id = str(command.get("command_id") or f"rpc-{time.time_ns()}")
+        command["command_id"] = command_id
+        command.setdefault("protocol_version", PROTOCOL_VERSION)
+
+        waiter = threading.Event()
+        with self.lock:
+            if command_id in self.transient_waiters or command_id in self.inflight:
+                raise ValueError(f"Duplicate command_id: {command_id}")
+            self.transient_waiters[command_id] = waiter
+            self.transient_queue.append(command)
+
+        if not waiter.wait(timeout):
+            with self.lock:
+                self.transient_waiters.pop(command_id, None)
+                self.transient_results.pop(command_id, None)
+                self.transient_queue = [
+                    cmd for cmd in self.transient_queue
+                    if str(cmd.get("command_id")) != command_id
+                ]
+                self.inflight.pop(command_id, None)
+            raise TimeoutError(f"Timed out waiting for Foundry command {command_id}")
+
+        with self.lock:
+            result = self.transient_results.pop(command_id, None)
+            self.transient_waiters.pop(command_id, None)
+        if result is None:
+            raise RuntimeError(f"Foundry command {command_id} completed without a result")
+        return result
+
+    def _claim_transient(self, world_id: str | None, scene_id: str | None) -> dict | None:
+        for index, raw in enumerate(self.transient_queue):
+            if raw.get("world_id") and world_id and raw["world_id"] != world_id:
+                continue
+            if raw.get("scene_id") and scene_id and raw["scene_id"] != scene_id:
+                continue
+            command = self.transient_queue.pop(index)
+            command_id = str(command["command_id"])
+            state = self.current_state()
+            if state:
+                atomic_json(self.backups / f"{command_id}__before.json", state)
+            self.inflight[command_id] = None
+            return command
+        return None
+
     def claim_next(self, world_id: str | None, scene_id: str | None) -> dict | None:
         with self.lock:
+            transient = self._claim_transient(world_id, scene_id)
+            if transient is not None:
+                return transient
+
             for path in self._candidate_commands():
                 raw = json.loads(path.read_text(encoding="utf-8"))
                 command_id = raw.get("command_id") or path.stem
@@ -139,6 +192,10 @@ class BridgeStore:
         with self.lock:
             atomic_json(self.results / f"{command_id}_result.json", result)
             src = self.inflight.pop(command_id, None)
+            waiter = self.transient_waiters.get(command_id)
+            if waiter is not None:
+                self.transient_results[command_id] = result
+                waiter.set()
             if src and src.exists():
                 dst = self.processed / src.name
                 if dst.exists():
@@ -149,6 +206,7 @@ class BridgeStore:
         with self.lock:
             return {
                 "queued": [p.name for p in self._candidate_commands()],
+                "rpc_queued": [str(cmd.get("command_id")) for cmd in self.transient_queue],
                 "inflight": list(self.inflight),
                 "latest_scene": (self.current_state() or {}).get("scene_name")
             }
@@ -240,6 +298,17 @@ class BridgeHandler(BaseHTTPRequestHandler):
             payload = self._read_json()
         except Exception as exc:
             return self._json(400, {"ok": False, "error": f"Invalid JSON: {exc}"})
+
+        if parsed.path == "/rpc":
+            try:
+                timeout = float(payload.pop("_timeout_seconds", 30.0))
+                timeout = max(1.0, min(timeout, 120.0))
+                result = self.store.enqueue_rpc(payload, timeout=timeout)
+                return self._json(200 if result.get("ok") else 409, result)
+            except TimeoutError as exc:
+                return self._json(504, {"ok": False, "error": str(exc)})
+            except Exception as exc:
+                return self._json(500, {"ok": False, "error": str(exc)})
 
         if parsed.path == "/bridge/state":
             try:
