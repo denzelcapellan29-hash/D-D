@@ -445,3 +445,21 @@ Runtime status changed during the asset catalog sweep:
 - hosted Foundry MCP reports the world disconnected;
 - Acq 3D MCP reports the Secure MCP tunnel is no longer polling.
 No production writes were attempted after the disconnect.
+
+
+## Episode 1 asset catalog + QA bridge patch — 2026-10-05
+- Live installed-asset sweep resumed successfully after the runtime recovered.
+- Added `campaign/episode1/asset_catalog_v0_1.json` with validated candidates for:
+  - Dock Ward building/shop facades;
+  - medieval dungeon walls;
+  - columns;
+  - doors;
+  - boulders/rock dressing;
+  - cave terrain;
+  - lamps/torches;
+  - water surface.
+- Disposable placements confirmed that selected building, wall, column, door and boulder GLBs instantiate correctly in 3D Canvas.
+- Current asset gaps are explicit rather than silently filled: convincing street surface, warehouse roof/beams, descent rope, pool basin, Area 2 ritual reliefs and the source-specific ornate double-door/lock composition.
+- The existing custom fissure remains the preferred source-specific topology, with installed rock/cave assets used only as dressing.
+
+3D QA also exposed editor helpers in direct renderer captures. The bridge has been patched to hide 3D Canvas light/sound/transform helpers during capture and to report runtime model bounds for Tiles. Version bumped to **0.2.4**; GitHub smoke CI passed. This local module update must be loaded in Foundry before clean visual QA and deterministic asset placement continue.
