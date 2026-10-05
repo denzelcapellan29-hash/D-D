@@ -359,6 +359,137 @@ async function search3dAssets(op) {
   return {query, roots: safeRoots, count: results.length, results};
 }
 
+
+const SCENE_COLLECTION_BY_DOCUMENT = {
+  Tile: "tiles",
+  AmbientLight: "lights",
+  Wall: "walls",
+  Region: "regions",
+  Drawing: "drawings",
+  MeasuredTemplate: "templates",
+  Note: "notes",
+  Token: "tokens",
+  AmbientSound: "sounds"
+};
+
+function cloneData(value) {
+  if (foundry?.utils?.deepClone) return foundry.utils.deepClone(value);
+  return JSON.parse(JSON.stringify(value));
+}
+
+function collectionForDocument(scene, document) {
+  const key = SCENE_COLLECTION_BY_DOCUMENT[document];
+  if (!key) return [];
+  const collection = scene?.[key];
+  if (!collection) return [];
+  return Array.from(collection?.contents ?? collection);
+}
+
+function withAcqIdentity(data, identity) {
+  const out = cloneData(data ?? {});
+  out.flags ??= {};
+  out.flags.acq = {
+    ...(out.flags.acq ?? {}),
+    semantic_id: identity.semantic_id,
+    build_id: identity.build_id ?? null,
+    provenance: identity.provenance ?? null,
+    classification: identity.classification ?? null
+  };
+  return out;
+}
+
+async function applySemanticObjects(scene, op, dryRun = false) {
+  const objects = Array.isArray(op.objects) ? op.objects : [];
+  if (!objects.length) throw new Error("apply_semantic_objects requires a non-empty objects array.");
+
+  const created = [];
+  const updated = [];
+  const unchanged = [];
+
+  for (const item of objects) {
+    const document = String(item?.document ?? "");
+    if (!ALLOWED_EMBEDDED.has(document)) throw new Error(`Semantic object document not allowed: ${document}`);
+    const semanticId = String(item?.semantic_id ?? "").trim();
+    if (!semanticId) throw new Error("Every semantic object requires semantic_id.");
+
+    const matches = collectionForDocument(scene, document)
+      .filter(doc => String(doc?.flags?.acq?.semantic_id ?? "") === semanticId);
+    if (matches.length > 1) {
+      throw new Error(`Duplicate semantic_id ${semanticId} in ${document}; repair required before idempotent apply.`);
+    }
+
+    const payload = withAcqIdentity(item.data ?? {}, {
+      semantic_id: semanticId,
+      build_id: item.build_id ?? op.build_id ?? null,
+      provenance: item.provenance ?? null,
+      classification: item.classification ?? null
+    });
+
+    if (matches.length === 0) {
+      if (!dryRun) {
+        const docs = await scene.createEmbeddedDocuments(document, [payload]);
+        created.push({document, semantic_id: semanticId, id: docs?.[0]?.id ?? null});
+      } else {
+        created.push({document, semantic_id: semanticId, id: null});
+      }
+      continue;
+    }
+
+    const existing = matches[0];
+    const update = {_id: existing.id, ...payload};
+    if (!dryRun) await scene.updateEmbeddedDocuments(document, [update]);
+    updated.push({document, semantic_id: semanticId, id: existing.id});
+  }
+
+  return {created, updated, unchanged, count: objects.length};
+}
+
+function semanticInventory(scene) {
+  const inventory = [];
+  for (const document of ALLOWED_EMBEDDED) {
+    for (const doc of collectionForDocument(scene, document)) {
+      const semanticId = doc?.flags?.acq?.semantic_id;
+      if (!semanticId) continue;
+      inventory.push({
+        document,
+        id: doc.id,
+        semantic_id: String(semanticId),
+        build_id: doc?.flags?.acq?.build_id ?? null,
+        provenance: doc?.flags?.acq?.provenance ?? null,
+        classification: doc?.flags?.acq?.classification ?? null
+      });
+    }
+  }
+  return inventory;
+}
+
+function validateSceneManifest(scene, op) {
+  const manifest = op.expected_manifest ?? {};
+  const expectedIds = new Set((manifest.semantic_ids ?? []).map(String));
+  const inventory = semanticInventory(scene);
+  const actualIds = new Set(inventory.map(x => x.semantic_id));
+  const missing = [...expectedIds].filter(id => !actualIds.has(id));
+  const unexpected = manifest.allow_unexpected === false
+    ? [...actualIds].filter(id => !expectedIds.has(id))
+    : [];
+
+  const counts = {};
+  for (const item of inventory) counts[item.document] = (counts[item.document] ?? 0) + 1;
+  const countMismatches = [];
+  for (const [document, expected] of Object.entries(manifest.counts ?? {})) {
+    const actual = counts[document] ?? 0;
+    if (actual !== Number(expected)) countMismatches.push({document, expected: Number(expected), actual});
+  }
+
+  return {
+    ok: missing.length === 0 && unexpected.length === 0 && countMismatches.length === 0,
+    missing,
+    unexpected,
+    count_mismatches: countMismatches,
+    inventory
+  };
+}
+
 async function applyOperation(scene, op, dryRun = false) {
   if (!op || typeof op !== "object") throw new Error("Operation must be an object.");
   const type = op.op;
@@ -383,6 +514,16 @@ async function applyOperation(scene, op, dryRun = false) {
   if (type === "search_3d_assets") {
     const search = await search3dAssets(op);
     return {op: type, ok: true, ...search};
+  }
+
+  if (type === "apply_semantic_objects") {
+    const result = await applySemanticObjects(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
+  }
+
+  if (type === "validate_scene_manifest") {
+    const result = validateSceneManifest(scene, op);
+    return {op: type, ok: true, ...result};
   }
 
   if (type === "set_3d_environment") {
