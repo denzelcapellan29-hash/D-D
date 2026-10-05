@@ -172,10 +172,29 @@ function environment3dFlags(scene) {
   return out;
 }
 
-function inspect3dScene(scene) {
+async function inspect3dScene(scene) {
+  const THREE3D = await getThreeModule();
   const l3d = levels3d();
   const tiles = Array.from(scene?.tiles ?? []).map(tile => {
     const flags = tile?.flags?.["levels-3d-preview"] ?? {};
+    const entity3d = l3d?.tiles?.[tile.id] ?? null;
+    const root3d = entity3d?.mesh ?? entity3d?.model ?? entity3d?.object3d ?? null;
+    let runtime_bounds = null;
+    if (root3d) {
+      try {
+        const box = new THREE3D.Box3().setFromObject(root3d);
+        if (!box.isEmpty()) {
+          const size = box.getSize(new THREE3D.Vector3());
+          const center = box.getCenter(new THREE3D.Vector3());
+          runtime_bounds = {
+            min: vectorToObject(box.min),
+            max: vectorToObject(box.max),
+            size: vectorToObject(size),
+            center: vectorToObject(center)
+          };
+        }
+      } catch {}
+    }
     return {
       id: tile.id,
       x: tile.x,
@@ -186,7 +205,8 @@ function inspect3dScene(scene) {
       rotation: tile.rotation ?? 0,
       hidden: Boolean(tile.hidden),
       flags: relevant3dFlags(flags),
-      acq: tile?.flags?.acq ?? null
+      acq: tile?.flags?.acq ?? null,
+      runtime_bounds
     };
   }).filter(t => Object.keys(t.flags).length > 0 || t.acq);
 
@@ -603,7 +623,7 @@ async function applyOperation(scene, op, dryRun = false) {
   if (type === "snapshot" || type === "ping") return {op: type, ok: true};
 
   if (type === "inspect_3d_scene") {
-    return {op: type, ok: true, ...inspect3dScene(scene)};
+    return {op: type, ok: true, ...(await inspect3dScene(scene))};
   }
 
   if (type === "set_3d_camera") {
