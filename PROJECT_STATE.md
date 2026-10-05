@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-Infrastructure QA v0.1 is complete. The DM explicitly approved BlueMap/Mojang client-resource downloads on 2026-10-04. The actual-world BlueMap + Amulet gate is now staged as a non-destructive local QA run against a stable snapshot of the current lower-Dock save; BlueMap reads the snapshot and Amulet saves/reopens a second disposable copy. No new world release is authorized until these two real-world probes are reviewed. After they pass, integrate block-state/material-profile QA into the next city pass.
+BlueMap 5.28 successfully rendered the actual lower-Dock save from a non-destructive snapshot and reported the map fully up to date. The optional browser screenshot capture failed, but that is not a BlueMap render failure. The Amulet real-world probe is deferred rather than blocking progress because the current low-level compiler is already validated and the local Python bootstrap created unnecessary DM-side friction. Next: adapt a higher-level MCP tool layer inspired by VibeCraft onto the existing Minecraft 26.3 bridge, then resume bounded world-feel work with autonomous structural/visual QA.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -146,3 +146,12 @@ The promised tooling upgrade is now implemented and validated before further wor
 - BlueMap renders the snapshot and publishes logs/web output/capture to the existing Minecraft Bridge captures folder when available.
 - Amulet Core 1.9.49 probes load/save/reopen only on a disposable copy.
 - Result review is pending the local run; no v0.6 world work begins before this gate is resolved.
+
+
+## VibeCraft architecture evaluation — 2026-10-05
+- VibeCraft was evaluated as an external MIT-licensed MCP-native Minecraft automation project.
+- Its architecture is highly relevant: structured build tools, WorldEdit/vanilla fallback, spatial analysis, patterns, terrain generation, furniture helpers, and explicit AI-control safety.
+- Its published client-mod compatibility currently stops at Minecraft 1.21.4, so it is not a drop-in replacement for the working Minecraft 26.3 runtime.
+- Decision: keep the existing 26.3 Fabric bridge and adapt/port useful VibeCraft MCP-layer concepts, schemas and deterministic helpers above our bridge rather than replacing the runtime.
+- DM-side manual infrastructure debugging is no longer an acceptable normal workflow. Local installs/restarts remain DM actions when truly required; routine QA and iteration must be bridge/repo/Drive automated.
+- Amulet remains an optional candidate backend and is no longer a prerequisite for the next world-feel pass.
