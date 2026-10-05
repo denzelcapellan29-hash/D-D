@@ -332,3 +332,14 @@ The hosted Foundry MCP is not the 3D authoring engine.
 
 ### Subscription recommendation
 Upgrade to the Dungeon Master tier once the DM chooses to proceed. Connectivity is already proven, so the subscription is no longer an infrastructure gamble. Do not enable script macros. Do not make non-transactional code-mode execute the production world-build path.
+
+
+## Foundry MCP Dungeon Master tier — ACTIVE (2026-10-05)
+Direct DM-tier operations are now verified live through ChatGPT against `Acq WorldGen Test`.
+- Scene enumeration succeeded: 9 scenes, with `Ep1 - World Slice` active.
+- Active scene readback succeeded: 11 Tiles, 11 lights, 5 semantic Regions and 4 Notes.
+- Compendium enumeration succeeded: 23 packs including SRD and 2024 D&D5e actor/item/spell/rules content.
+- Token readback succeeded (currently no tokens in the active scene).
+- World-time readback succeeded.
+- No writes were performed during verification.
+- The hosted MCP is now accepted as the generic Foundry/D&D5e control plane for this project.
