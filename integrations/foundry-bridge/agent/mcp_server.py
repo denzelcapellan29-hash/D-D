@@ -137,6 +137,22 @@ def set_3d_camera(
 
 
 @mcp.tool()
+def reload_3d_scene(
+    scene_id: str | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Safely reload the active 3D Canvas runtime for the current Scene without changing canonical Scene data."""
+    return _operation(
+        _rpc(
+            [{"op": "reload_3d_scene"}],
+            scene_id=scene_id,
+            dry_run=dry_run,
+            timeout_seconds=30.0,
+        )
+    )
+
+
+@mcp.tool()
 def capture_3d_view(
     position: dict[str, float] | None = None,
     target: dict[str, float] | None = None,
