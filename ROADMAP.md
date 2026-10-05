@@ -12,18 +12,19 @@
 5. Keep automatic structural readback active during edits.
 6. ~~Replace Minecraft-camera dependency with headless colored voxel reconstruction for visual QA.~~
 6a. ~~Infrastructure QA v0.1: read-only Anvil reader, direct VTK renderer, BlueMap runner, Amulet probe, and CI smoke validation.~~
-7. BlueMap-render the actual lower-Dock save with resource-pack support. **Mojang asset-download approval received 2026-10-04; non-destructive actual-world run staged, result pending.**
-8. Run the Amulet load/save/reopen probe against the actual world before considering replacement of the current low-level compiler. **Disposable-copy runner staged; result pending.**
-9. Upgrade live region readback to include block-state properties for stairs/slabs/panes/orientation.
-10. Add resource-pack/model resolution so visual profiles can be swapped without rebuilding geometry.
-11. Continue bounded world-feel iteration:
+7. ~~BlueMap-render the actual lower-Dock save.~~ **PASSED:** BlueMap 5.28 rendered the actual snapshot and reported the map fully up to date. Automated browser capture remains a secondary follow-up.
+8. **DEFERRED / NON-BLOCKING:** Amulet real-world load/save/reopen remains a candidate compiler-backend probe, but is not required before the next world pass because the current compiler is already validated.
+9. Add a VibeCraft-inspired MCP tool layer over the existing 26.3 bridge: structured spatial scan/build/terrain/pattern APIs, safety envelopes, and WorldEdit-aware batching.
+10. Upgrade live region readback to include block-state properties for stairs/slabs/panes/orientation.
+11. Add resource-pack/model resolution so visual profiles can be swapped without rebuilding geometry.
+12. Continue bounded world-feel iteration:
    - stronger skyline/roof variation
    - richer alleys and loading yards
    - more harbor traffic and props
    - background architecture that prevents hard visual edges
-12. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
-13. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
-14. ~~Package an initial direct-import world release.~~ Promote to session-ready release only after the remaining visual/material and end-to-end Episode 1 QA gates pass.
+13. Integrate the existing Episode 1 warehouse/fissure/dungeon build with the improved surface district.
+14. Run end-to-end QA from Dock Ward street → warehouse → fissure → Area 1 → Area 2.
+15. ~~Package an initial direct-import world release.~~ Promote to session-ready release only after the remaining visual/material and end-to-end Episode 1 QA gates pass.
 
 ## Stretch goal
 - Full Waterdeep expansion only if later campaign needs justify it.
