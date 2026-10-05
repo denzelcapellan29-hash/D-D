@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install stable Amulet probe target
-        run: pip install 'amulet-core==1.9.49'
+        run: pip install --only-binary=:all: 'amulet-core==1.9.49'
       - name: Import Amulet
         run: python -c "import amulet; print('amulet import ok')"
 
