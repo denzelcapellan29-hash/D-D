@@ -119,3 +119,7 @@
 - Completed the first live Episode 1 installed-asset catalog and committed `campaign/episode1/asset_catalog_v0_1.json`.
 - Validated disposable placements for building, wall, column, door and boulder assets in 3D Canvas.
 - Patched Acq Foundry Bridge capture to hide 3D Canvas editor helpers and added per-Tile runtime bounds to inspection; bumped bridge to v0.2.4 and passed smoke CI.
+
+- Applied the first real Episode 1 Phase A production write to `Ep1 - World Slice`: seven modular Dock Ward/Jolly's exterior Tiles added with stable semantic IDs; scene Tile count increased from 11 to 18.
+- Persisted `campaign/episode1/phase_a_surface_context_state_v0_1.json` with Foundry IDs, asset paths and before/after revisions.
+- Kept all legacy World Slice geometry in place and disabled collision/sight on new context assets during iteration.
