@@ -27,7 +27,23 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-BlueMap 5.28 successfully rendered the actual lower-Dock save from a non-destructive snapshot and reported the map fully up to date. The optional browser screenshot capture failed, but that is not a BlueMap render failure. The Amulet real-world probe is deferred rather than blocking progress because the current low-level compiler is already validated and the local Python bootstrap created unnecessary DM-side friction. Next: adapt a higher-level MCP tool layer inspired by VibeCraft onto the existing Minecraft 26.3 bridge, then resume bounded world-feel work with autonomous structural/visual QA.
+Infrastructure bake-off is complete enough to select the authoring architecture.
+
+**Selected authoring runtime:** local dedicated Fabric 26.3 server, using the existing 26.3 bridge code as the world-control substrate, WorldEdit for bulk edits/schematics, and BlueMap for actual-world visual QA. The semantic campaign/world model remains canonical above Minecraft.
+
+This replaces the earlier assumption that a Paper/VibeCraft-style migration should be the default. Paper/IotA, VibeCraft, Clankercraft, Architect-Agent, Mineflayer MCPs and GDMC remain reference/fallback implementations, not the production dependency stack.
+
+Next engineering work is to package and validate this dedicated-server path on a clone of v0.5 with no DM-side debugging:
+1. server bootstrap with portable Java 25;
+2. Fabric 26.3 + Fabric API;
+3. existing Acq bridge adapted for dedicated-server operation and typed MCP facade;
+4. WorldEdit 7.4.6 beta-02 for 26.3;
+5. BlueMap 5.28 Fabric for 26.3;
+6. explicit transaction snapshots/rollback and coordinate-envelope validation;
+7. automated structural + BlueMap QA;
+8. only then resume world-feel iteration.
+
+The existing singleplayer world remains untouched until the dedicated-server clone passes equivalence checks.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -155,3 +171,18 @@ The promised tooling upgrade is now implemented and validated before further wor
 - Decision: keep the existing 26.3 Fabric bridge and adapt/port useful VibeCraft MCP-layer concepts, schemas and deterministic helpers above our bridge rather than replacing the runtime.
 - DM-side manual infrastructure debugging is no longer an acceptable normal workflow. Local installs/restarts remain DM actions when truly required; routine QA and iteration must be bridge/repo/Drive automated.
 - Amulet remains an optional candidate backend and is no longer a prerequisite for the next world-feel pass.
+
+
+## Infrastructure bake-off conclusion — 2026-10-05
+- Dedicated Fabric 26.3 is the preferred authoring/runtime control surface because it preserves the already-validated Fabric/WorldEdit world path while removing dependence on the player's client being the automation host.
+- Fabric publishes a dedicated 26.3 server launcher; WorldEdit 7.4.6 beta-02 explicitly supports Fabric 26.3 server-side; BlueMap 5.28 supports Fabric 26.3 dedicated servers.
+- The existing Acq bridge is already server-oriented internally (server lifecycle, ServerLevel/ServerPlayer, local HTTP) and therefore has a much shorter migration path to a dedicated Fabric process than a rewrite onto Paper.
+- Standard WorldEdit is preferred over FAWE for now: FAWE's current stable compatibility stops at 26.2 and its 26.3 support is still in-flight.
+- VibeCraft is a useful MCP/tool-schema reference but its published client-mod support stops at 1.21.4.
+- IotA-asce/minecraft-mcp is a useful Paper/WebSocket/MCP reference, but its bridge is v0.1 and compiles against Paper 1.21.4; it is not adopted wholesale.
+- Architect-Agent has an excellent staging/rollback/visual-loop design, but is extremely young and its dedicated-server docs target Paper 1.21.1.
+- Clankercraft is comparatively mature and has strong WorldEdit/MCP tooling, but its player-bot protocol layer adds version/protocol dependency that this project does not need.
+- Mineflayer-based MCP stacks are not selected because stable Mineflayer documentation still tops out at 26.1 while 26.3 protocol support remains under active PR work.
+- minecraft-ai-build-server is a strong validator/compiler design reference but is pinned to 26.1.2 in its current stack.
+- GDMC HTTP Interface currently targets Minecraft 1.21.11, so it is not a 26.3 candidate.
+- No further DM-side Java/Python/PowerShell troubleshooting is part of the normal workflow. The next handoff should be a packaged, tested server launch or a single install/restart action only if unavoidable.
