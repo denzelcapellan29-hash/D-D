@@ -97,3 +97,6 @@
 - Staged the first working Acq 3D MCP implementation: direct loopback RPC, 3D runtime inspection, asset search, camera control, true Three.js capture, semantic idempotent scene apply and manifest validation.
 - Added a narrow Python MCP server and Windows stack launcher without exposing arbitrary JS/shell control.
 - Added Foundry bridge smoke CI to validate protocol JSON, Python syntax, JavaScript syntax and MCP server import before live installation.
+
+- Bumped Acq Foundry Bridge to v0.2.0, passed the Foundry bridge smoke workflow, and produced a validated install ZIP.
+- Persisted `Acq_Foundry_3D_MCP_build_2026-10-05.zip` to Google Drive Foundry Bridge releases (Drive ID `1RiXGH7WKQ-74sEXVxvOnbtfAa1biEJpK`).
