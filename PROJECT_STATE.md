@@ -385,3 +385,16 @@ The new code is staged but not yet installed into the live Foundry machine. Befo
 - Windows installer now auto-detects the normal Foundry user-data locations and the known `G:\My Drive\D&D\Foundry Bridge` transport path when available.
 
 The next step requires a bounded local install/restart/authorization action on the DM machine; no further remote implementation is needed before that runtime gate.
+
+
+## Live Acq 3D MCP runtime validation — partial pass (2026-10-05)
+With the bridge agent manually started and Foundry polling it:
+- `inspect_3d_scene` passed live against `Ep1 - World Slice`;
+- 3D Canvas reported active with live camera state, 11 3D Tiles, 11 lights and 5 regions;
+- `search_3d_assets` passed and returned installed Mapmaking Pack assets from `canvas3dcompendium`;
+- semantic manifest validation passed read-only;
+- the Scene revision remained unchanged during these tests.
+
+The first true-3D capture call returned a valid 1920x992 WebP payload but the pixels were black. Root cause is the capture implementation using `renderer.domElement.toDataURL()`, which is unreliable when the WebGL context does not preserve its drawing buffer. A v0.2.2 fix is staged to render into a Three.js WebGLRenderTarget and read pixels explicitly, following 3D Canvas's own export pattern. The same release also adds semantic cleanup so the disposable write gate can create and then remove a test object safely.
+
+Current local runtime remains on the prior installed module until v0.2.2 is installed/reloaded.
