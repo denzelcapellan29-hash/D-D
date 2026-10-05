@@ -21,12 +21,15 @@
    - Restore only missing project-specific capabilities: camera/capture, semantic bounds, 3D environment/tile authoring, revision checks.
    - Do not rebuild generic actor/item/journal/combat/compendium APIs if Foundry MCP can provide them.
 
-4. **Connect ChatGPT directly to Foundry using standard MCP before extending our bridge.**
-   - Install/enable Foundry API Bridge and add https://foundry-mcp.com/mcp as a custom MCP connection using OAuth.
-   - Prefer the Dungeon Master tier if the DM accepts the cost; it unlocks scenes/tokens/combat/compendiums/time/UI and avoids reimplementing generic Foundry APIs.
+4. **Direct Foundry MCP connection — PASSED.**
+   - ChatGPT OAuth + Foundry WebSocket linkage is verified live against `Acq WorldGen Test`.
+   - Guest-tier `world-info` and live dice execution passed.
+   - Permission probes confirmed Free / Adventurer / Dungeon Master boundaries.
+   - **Next DM action:** upgrade to Dungeon Master (€10/month) if proceeding; it is justified by required scenes/tokens/combat/compendiums/time/UI access.
    - Keep Allow Script Macros off.
-   - Build a second private Acq 3D MCP only for missing 3D Canvas-specific operations and connect it via OpenAI Secure MCP Tunnel.
-   - Google Drive becomes fallback transport/artifact storage rather than the normal command path.
+   - After upgrade, validate scene readback, compendium import/search, tokens and combat before relying on them in campaign prep.
+   - Generic MCP screenshots are 2D Foundry-canvas captures, not 3D Canvas truth; build the private Acq 3D MCP for 3D authoring/camera/capture.
+   - Google Drive remains fallback transport/artifact storage rather than the normal command path.
 
 5. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
    - Resolve semantic roles to existing Mapmaking Pack asset paths/materials.
