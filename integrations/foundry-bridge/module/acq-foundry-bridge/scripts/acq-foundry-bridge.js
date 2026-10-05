@@ -465,6 +465,17 @@ async function applySemanticObjects(scene, op, dryRun = false) {
       throw new Error(`Duplicate semantic_id ${semanticId} in ${document}; repair required before idempotent apply.`);
     }
 
+    if (item.delete === true) {
+      if (matches.length === 0) {
+        unchanged.push({document, semantic_id: semanticId, id: null, deleted: false});
+      } else {
+        const existing = matches[0];
+        if (!dryRun) await scene.deleteEmbeddedDocuments(document, [existing.id]);
+        updated.push({document, semantic_id: semanticId, id: existing.id, deleted: true});
+      }
+      continue;
+    }
+
     const payload = withAcqIdentity(item.data ?? {}, {
       semantic_id: semanticId,
       build_id: item.build_id ?? op.build_id ?? null,
