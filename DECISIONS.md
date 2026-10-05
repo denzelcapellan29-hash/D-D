@@ -50,3 +50,18 @@ Uncontrolled above-ground geometry outside the current envelope may be cleared i
 - Structural QA has an exact spatial contract.
 - World expansion becomes a deterministic compiler operation rather than uncontrolled exploration/worldgen.
 - Neutral space outside the envelope is temporary construction context, not canonical Waterdeep geography.
+
+
+## ADR-003 — Episode 1 targets the lower Dock Ward, not full Waterdeep
+**Status:** Accepted  
+**Date:** 2026-10-04
+
+### Decision
+For Episode 1, generate only enough of Waterdeep's lower Dock Ward to support a convincing persistent approach from harbor/street context to the warehouse, fissure and subterranean encounter chain.
+
+Full-city Waterdeep generation is explicitly a stretch goal.
+
+### Consequences
+- Generator effort prioritizes density, continuity, visual polish and playability over geographic breadth.
+- Non-playable background context may imply a larger city without requiring full simulation or construction.
+- Later episodes may expand the semantic city/world model outward from the same coordinate system.
