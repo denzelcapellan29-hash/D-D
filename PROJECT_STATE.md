@@ -232,3 +232,45 @@ Foundry must demonstrate:
 - no routine DM-side file/script debugging.
 
 If this asset-first vertical slice still fails the visual/world-feel bar after one bounded pass, stop Foundry work and move to TaleSpire. Do not return to Minecraft visual-polish work.
+
+
+## Foundry infrastructure selection — 2026-10-05
+A second-pass infrastructure review was completed specifically to avoid rebuilding generic Foundry functionality.
+
+### Runtime
+Pin the existing known-good line:
+- Foundry VTT 14.368
+- D&D5e 6.0.5
+- 3D Canvas 9.0.35
+- 3D Canvas Mapmaking Pack 10.0.1
+- libWrapper
+- Acq Foundry Bridge
+- 3D Canvas Advanced Tools 9.0.3 only when its mapmaking conveniences materially help; it is not a required control-plane dependency.
+
+The last persisted Foundry bridge state already reported Foundry 14.368, D&D5e 6.0.5, world `Acq WorldGen Test`, scene `Ep1 - World Slice`. Do not reinstall Foundry or D&D5e unless the live instance has since changed.
+
+### Control plane
+Use a hybrid rather than reinventing the entire Foundry API:
+1. **Acq Foundry Bridge stays as the thin project-specific 3D authoring adapter** for 3D Canvas tile/model flags, environment controls, lights, semantic regions/levels, asset upload, camera framing/captures, revision checks and semantic build IDs.
+2. **Foundry API Bridge / Foundry MCP is the preferred off-the-shelf generic campaign sidecar when the user's ChatGPT account supports custom MCP connections and the user elects its paid tier.** Delegate actors/items/journals/tables/compendiums/tokens/combat/time/UI to it instead of duplicating those generic APIs in Acq Bridge.
+3. The vertical-slice rebuild does not depend on Foundry MCP availability. Existing declarative bridge operations remain sufficient to validate 3D authoring first.
+
+Keep script/eval-style remote execution disabled. The custom bridge remains allow-listed and revision-checked.
+
+### Foundry V14 architecture
+- Use core **Scene Levels/Regions** for vertical organization. Do not restore retired Levels/Wall Height module architecture for a fresh V14 scene.
+- Use 3D Canvas **Tiles** as the principal modular geometry primitive; they can carry collision, sight-blocking and door behavior.
+- Build primarily from the Mapmaking Pack asset/material vocabulary; store only semantic references/metadata in the project and respect per-asset licenses.
+- Generate custom GLB only for unique source-specific geometry.
+
+### Transactions and persistence
+- Each generated placeable receives stable `flags.acq.semantic_id`, `flags.acq.build_id`, and provenance/classification metadata.
+- Before meaningful writes: duplicate/snapshot the target Scene and require `expected_revision`.
+- Milestones use Foundry package backups plus versioned semantic manifests and generated/custom assets in project storage.
+- Do not place the live Foundry User Data directory inside Google Drive/OneDrive/Dropbox synchronization. Drive remains bridge transport and artifact storage only.
+
+### Performance/QA
+- Keep authored geometry modular during iteration.
+- On a duplicate/release candidate, use 3D Canvas tile merging for compatible static repeated assets after structural QA; never merge interactive doors.
+- QA uses canonical camera stations and automated captures plus structural state assertions.
+- Do not move to remote/dedicated Foundry hosting during the vertical-slice test; it adds infrastructure without improving the local 3D authoring loop.
