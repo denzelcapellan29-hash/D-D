@@ -88,7 +88,7 @@ Use separate tools for different QA responsibilities rather than forcing the Min
 
 
 ## ADR-005 — Keep Minecraft 26.3 runtime; adapt VibeCraft at the MCP/tool layer
-**Status:** Accepted  
+**Status:** Superseded by ADR-006  
 **Date:** 2026-10-05
 
 ### Context
@@ -105,3 +105,42 @@ Use VibeCraft as a reference/donor architecture for the higher-level MCP/tool la
 - Higher-level build automation can mature without pushing repeated PowerShell/Python setup onto the DM.
 - External code reuse must preserve attribution/license obligations where code is copied rather than reimplemented.
 - Amulet remains optional; replacement of the validated low-level compiler is not a prerequisite for world-feel iteration.
+
+
+## ADR-006 — Dedicated Fabric 26.3 authoring server with typed MCP control
+**Status:** Accepted  
+**Date:** 2026-10-05
+
+### Decision
+Use a **local dedicated Fabric 26.3 server** as the production authoring/control runtime for the Minecraft exporter.
+
+Stack:
+- Minecraft Java 26.3 dedicated Fabric server
+- portable Java 25 bundled by project tooling
+- Fabric API
+- Acq Minecraft Bridge adapted to dedicated-server operation
+- typed MCP facade above the bridge
+- WorldEdit 7.4.6 beta-02 for bulk edits/schematics
+- BlueMap 5.28 Fabric for actual-world visual QA
+- deterministic semantic compiler and structural validators from this repository
+- explicit region snapshots/inverse patches for transaction rollback
+
+The existing singleplayer v0.5 world is not converted in place. Migration is first tested against a cloned save and promoted only after exact protected-core/block-state and QA equivalence checks pass.
+
+### Why this over Paper
+Paper 26.3 itself is viable, but changing server platform adds migration surface without solving a problem Fabric cannot solve. The current bridge is already written against Fabric/Minecraft server classes and has validated 26.3 behavior. Fabric dedicated-server mode removes the client-host dependency while preserving that implementation and the current world/toolchain.
+
+Paper remains the fallback if a required server-only API or plugin cannot be provided cleanly on Fabric.
+
+### Third-party bake-off
+- **VibeCraft:** strong MCP schema/build-helper reference; published client-mod support currently stops at 1.21.4.
+- **IotA-asce/minecraft-mcp:** strong Paper plugin/WebSocket/MCP reference with tests and player-less operations; useful donor/reference, not adopted wholesale.
+- **Architect-Agent (TianYaYou):** best conceptual match for staging, token-compressed inspection, visual feedback and atomic rollback, but too young to be a production dependency and its dedicated-server documentation targets Paper 1.21.1.
+- **Clankercraft:** mature MCP/WorldEdit tool surface, but uses a player-bot protocol layer that creates unnecessary version coupling for this project.
+- **Mineflayer MCP implementations:** rejected for the 26.3 production path until stable protocol support catches up.
+- **minecraft-ai-build-server:** validator/compiler and rollback concepts are strong references, but its current stack is pinned below 26.3.
+- **GDMC HTTP Interface:** rejected for current runtime because its documented target is 1.21.11.
+- **FAWE:** defer until 26.3 support is released/stable; use standard WorldEdit meanwhile.
+
+### Operating rule
+Routine infrastructure setup, QA, rendering and world iteration must not require the DM to debug Java, Python, PowerShell, browser capture or package compatibility. DM involvement is limited to a genuinely unavoidable install/restart/authorization action after the automation has been tested elsewhere.
