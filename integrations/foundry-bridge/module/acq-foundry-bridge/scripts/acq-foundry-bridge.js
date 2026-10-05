@@ -178,24 +178,20 @@ async function inspect3dScene(scene) {
   const tiles = Array.from(scene?.tiles ?? []).map(tile => {
     const flags = tile?.flags?.["levels-3d-preview"] ?? {};
     const entity3d = l3d?.tiles?.[tile.id] ?? null;
-    const root3d = entity3d?.mesh ?? entity3d?.model ?? entity3d?.object3d ?? null;
     let runtime_bounds = null;
-    if (root3d) {
-      try {
-        let box = entity3d?._worldBoundingBox?.clone?.() ?? null;
-        if (!box || box.isEmpty()) box = new THREE3D.Box3().setFromObject(root3d);
-        if (!box.isEmpty()) {
-          const size = box.getSize(new THREE3D.Vector3());
-          const center = box.getCenter(new THREE3D.Vector3());
-          runtime_bounds = {
-            min: vectorToObject(box.min),
-            max: vectorToObject(box.max),
-            size: vectorToObject(size),
-            center: vectorToObject(center)
-          };
-        }
-      } catch {}
-    }
+    try {
+      const box = entity3d?._worldBoundingBox?.clone?.() ?? null;
+      if (box && !box.isEmpty()) {
+        const size = box.getSize(new THREE3D.Vector3());
+        const center = box.getCenter(new THREE3D.Vector3());
+        runtime_bounds = {
+          min: vectorToObject(box.min),
+          max: vectorToObject(box.max),
+          size: vectorToObject(size),
+          center: vectorToObject(center)
+        };
+      }
+    } catch {}
     return {
       id: tile.id,
       x: tile.x,
@@ -267,6 +263,43 @@ async function set3dCamera(scene, op, dryRun = false) {
 }
 
 
+async function reload3dScene(scene, dryRun = false) {
+  const l3d = levels3d();
+  if (!l3d) throw new Error("3D Canvas runtime is unavailable.");
+  const before = {
+    active: Boolean(l3d._active),
+    ready: Boolean(l3d._ready),
+    tile_count: Object.keys(l3d.tiles ?? {}).length,
+    scene_id: canvas?.scene?.id ?? null
+  };
+  if (!dryRun) {
+    if (typeof l3d.reload === "function") {
+      l3d.reload();
+    } else if (typeof l3d.toggle === "function") {
+      l3d.toggle(false);
+      setTimeout(() => l3d.toggle(true), 300);
+    } else {
+      throw new Error("3D Canvas reload/toggle API unavailable.");
+    }
+
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+      if (l3d._active && l3d._ready && canvas?.scene?.id === scene.id) break;
+    }
+  }
+  return {
+    before,
+    after: {
+      active: Boolean(l3d._active),
+      ready: Boolean(l3d._ready),
+      tile_count: Object.keys(l3d.tiles ?? {}).length,
+      scene_id: canvas?.scene?.id ?? null
+    }
+  };
+}
+
+
 function canvasToBase64(canvas, format = "webp", quality = 0.85) {
   const normalized = String(format || "webp").toLowerCase();
   const mime = normalized === "png" ? "image/png" : "image/webp";
@@ -323,8 +356,22 @@ async function capture3dView(scene, op) {
     hideForCapture(sound?.helper);
   }
   for (const note of Object.values(l3d.notes ?? {})) {
+    hideForCapture(note?.mesh);
     hideForCapture(note?.dragHandle);
     hideForCapture(note?.nameplate);
+  }
+  for (const token of Object.values(l3d.tokens ?? {})) {
+    hideForCapture(token?.controlledBox);
+    hideForCapture(token?.border);
+    hideForCapture(token?.nameplate);
+    hideForCapture(token?.dragHandle);
+    if (token?.document?.hidden || token?.token?.document?.hidden || token?.placeable?.document?.hidden) {
+      hideForCapture(token?.mesh);
+    }
+  }
+  for (const finder of l3d.rangeFinders ?? []) {
+    hideForCapture(finder?.mesh);
+    hideForCapture(finder?.label);
   }
   hideForCapture(l3d.interactionManager?.transformControls);
   hideForCapture(l3d.interactionManager?.draggable);
@@ -635,6 +682,11 @@ async function applyOperation(scene, op, dryRun = false) {
   if (type === "set_3d_camera") {
     const camera = await set3dCamera(scene, op, dryRun);
     return {op: type, ok: true, dry_run: dryRun, ...camera};
+  }
+
+  if (type === "reload_3d_scene") {
+    const result = await reload3dScene(scene, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
   }
 
   if (type === "capture_3d_view") {
