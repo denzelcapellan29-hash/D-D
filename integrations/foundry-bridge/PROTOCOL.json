@@ -40,6 +40,38 @@
     "asset_upload": {
       "asset_file": "relative path under assets/incoming OR file_b64",
       "relative_dir": "module storage dir"
+    },
+    "inspect_3d_scene": {},
+    "search_3d_assets": {
+      "query": "string",
+      "limit": "1..200 optional",
+      "roots": "safe module asset roots optional",
+      "max_depth": "0..8 optional"
+    },
+    "set_3d_camera": {
+      "position": "{x,y,z} optional",
+      "target": "{x,y,z} optional",
+      "save_as_initial": "boolean optional"
+    },
+    "capture_3d_view": {
+      "position": "{x,y,z} optional",
+      "target": "{x,y,z} optional",
+      "format": "webp|png",
+      "quality": "0.1..1",
+      "restore_camera": "boolean default true"
+    },
+    "apply_semantic_objects": {
+      "build_id": "optional string",
+      "objects": "array of {document, semantic_id, data, build_id?, provenance?, classification?}"
+    },
+    "validate_scene_manifest": {
+      "expected_manifest": "{semantic_ids?:[], counts?:{}, allow_unexpected?:boolean}"
     }
+  },
+  "direct_rpc": {
+    "endpoint": "POST /rpc on loopback agent",
+    "purpose": "synchronous MCP-to-Foundry command path; bypasses Drive command files",
+    "timeout_seconds": "1..120",
+    "security": "agent remains loopback-only and module remains GM-only"
   }
 }
