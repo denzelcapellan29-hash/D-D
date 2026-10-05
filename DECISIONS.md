@@ -65,3 +65,23 @@ Full-city Waterdeep generation is explicitly a stretch goal.
 - Generator effort prioritizes density, continuity, visual polish and playability over geographic breadth.
 - Non-playable background context may imply a larger city without requiring full simulation or construction.
 - Later episodes may expand the semantic city/world model outward from the same coordinate system.
+
+
+## ADR-004 — Layered Minecraft QA stack
+**Status:** Accepted  
+**Date:** 2026-10-04
+
+### Decision
+Use separate tools for different QA responsibilities rather than forcing the Minecraft client to be the inspection surface.
+
+- Direct VTK renderer: primary fast engineering renderer from actual world-save block/state data.
+- BlueMap: resource-pack-aware renderer of the actual Minecraft save and visual truth check before releases.
+- PyVista: optional higher-level analysis/visualization layer, not a hard production dependency.
+- Amulet Core: candidate world-I/O backend only after a non-destructive real-world load/save/reopen compatibility probe passes.
+- Minecraft screenshots/client camera: diagnostic fallback only.
+
+### Consequences
+- World generation and QA can run headlessly.
+- Material/resource-pack experiments do not require manual Minecraft screenshots.
+- Low-level compiler replacement is gated by compatibility tests rather than assumption.
+- New world releases should follow tooling validation, not precede it.
