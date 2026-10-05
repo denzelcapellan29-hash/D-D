@@ -1,0 +1,194 @@
+{
+  "version": "1.0.0-draft",
+  "vertical_slice": "Episode 1 World Slice",
+  "preferred_modules": [
+    "canvas3dcompendium",
+    "levels-3d-preview"
+  ],
+  "candidate_roles": [
+    {
+      "role": "dock_street_surface",
+      "queries": [
+        "cobble",
+        "street",
+        "road",
+        "stone floor"
+      ],
+      "need": "walkable urban paving"
+    },
+    {
+      "role": "dock_building_facade",
+      "queries": [
+        "building",
+        "house",
+        "shop",
+        "wall",
+        "window"
+      ],
+      "need": "ramshackle Waterdeep street frontage"
+    },
+    {
+      "role": "warehouse_wall",
+      "queries": [
+        "wall",
+        "warehouse",
+        "wood wall",
+        "stone wall"
+      ],
+      "need": "plain industrial/warehouse envelope"
+    },
+    {
+      "role": "warehouse_roof",
+      "queries": [
+        "roof",
+        "beam",
+        "rafter"
+      ],
+      "need": "partially collapsed roof and framing"
+    },
+    {
+      "role": "broken_timber",
+      "queries": [
+        "beam",
+        "plank",
+        "wood",
+        "debris"
+      ],
+      "need": "earthquake breakage"
+    },
+    {
+      "role": "rubble",
+      "queries": [
+        "rubble",
+        "debris",
+        "rock",
+        "stone"
+      ],
+      "need": "collapse debris and blocked passages"
+    },
+    {
+      "role": "fissure_rock",
+      "queries": [
+        "rock",
+        "cliff",
+        "cave",
+        "terrain"
+      ],
+      "need": "exposed earth/stone rupture"
+    },
+    {
+      "role": "rope",
+      "queries": [
+        "rope"
+      ],
+      "need": "anchored descent rope"
+    },
+    {
+      "role": "worked_stone_floor",
+      "queries": [
+        "dungeon floor",
+        "stone floor",
+        "flagstone"
+      ],
+      "need": "Area 1/2 worked stone"
+    },
+    {
+      "role": "worked_stone_wall",
+      "queries": [
+        "dungeon wall",
+        "stone wall",
+        "masonry"
+      ],
+      "need": "subterranean worked walls"
+    },
+    {
+      "role": "buttress",
+      "queries": [
+        "buttress",
+        "support",
+        "pillar"
+      ],
+      "need": "Area 2 reinforcement"
+    },
+    {
+      "role": "column",
+      "queries": [
+        "column",
+        "pillar"
+      ],
+      "need": "Area 2 central/support columns"
+    },
+    {
+      "role": "pool_basin",
+      "queries": [
+        "pool",
+        "basin",
+        "fountain"
+      ],
+      "need": "four 10-ft deep floor-set pools"
+    },
+    {
+      "role": "ornate_double_door",
+      "queries": [
+        "double door",
+        "ornate door",
+        "door"
+      ],
+      "need": "Area 2 far door"
+    },
+    {
+      "role": "wall_relief",
+      "queries": [
+        "relief",
+        "carving",
+        "mural",
+        "statue"
+      ],
+      "need": "robed-figure pool carvings"
+    },
+    {
+      "role": "ambient_lamp",
+      "queries": [
+        "lantern",
+        "lamp",
+        "torch"
+      ],
+      "need": "surface/underground practical lighting"
+    }
+  ],
+  "known_live_candidates": [
+    {
+      "foundry_path": "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Decorative_Wall.glb",
+      "role_candidates": [
+        "worked_stone_wall",
+        "area2_architecture"
+      ],
+      "source": "live asset search 2026-10-05"
+    },
+    {
+      "foundry_path": "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Stairs_SideCoverWall.glb",
+      "role_candidates": [
+        "worked_stone_wall"
+      ],
+      "source": "live asset search 2026-10-05"
+    },
+    {
+      "foundry_path": "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Banner_wall.glb",
+      "role_candidates": [
+        "decorative_wall_context"
+      ],
+      "source": "live asset search 2026-10-05"
+    }
+  ],
+  "selection_policy": [
+    "Choose assets by semantic role and visual fit, not filename alone.",
+    "Verify scale/orientation in a disposable test placement before bulk application.",
+    "Do not redistribute third-party asset binaries; persist only Foundry paths and metadata.",
+    "Prefer modular static pieces during iteration; merge only compatible static geometry at release-candidate stage."
+  ],
+  "status": {
+    "source_roles_defined": true,
+    "installed_catalog_complete": false,
+    "blocker": "Live Foundry/API Bridge and Secure MCP tunnel disconnected during catalog sweep; resume installed-asset discovery when runtime reconnects."
+  }
+}
