@@ -134,3 +134,8 @@
 - Validated Acq Foundry Bridge v0.2.5 live: runtime bounds became usable and large light-helper wireframes disappeared from QA captures.
 - Rolled back an experimental cobble/floor/wall placement pass after visual QA showed it was not yet reliable; live World Slice returned to 61 Tiles / 10 Tokens.
 - Staged v0.2.6 with `reload_3d_scene`, cheaper inspection bounds, and capture suppression for note/hidden-token/rangefinder editor overlays; smoke CI passed.
+
+- Loaded and validated Acq Foundry Bridge v0.2.6 on the live World Slice.
+- Full-scene inspection now completes reliably at 61 Tiles, and canonical 3D captures are clean enough for art-direction review.
+- QA confirmed the remaining visual problems are scene-content problems, not capture-helper problems.
+- Foundry MCP and the Secure MCP tunnel disconnected immediately before the next cobble-surface probe; no production write was made after disconnect.
