@@ -408,3 +408,24 @@ After installing/reloading the v0.2.3 Foundry module:
 - semantic apply dry-run passed with the current revision and correctly planned creation of the disposable Tile.
 
 The remaining infrastructure gate is a single actual disposable semantic Tile create/delete transaction. ChatGPT's current custom-plugin permission/safety layer blocks the non-dry-run write call even though dry-run is allowed, so the next user action is to allow low-risk writes for the Acq 3D Map plugin (or otherwise approve writes) and retry.
+
+
+## Acq 3D MCP infrastructure gate — PASSED (2026-10-05)
+The final reversible write smoke test completed successfully.
+- Disposable semantic Tile `infra_smoke.disposable_tile` was created live through Acq 3D MCP with revision checking.
+- The Tile was verified live with semantic/build/provenance flags.
+- Cleanup succeeded through the local bridge RPC.
+- Hosted Foundry MCP confirms the scene is back to **11 Tiles**.
+- Acq 3D asset search reports the Scene revision restored to the original baseline:
+  `cbde9aa249e4a7bfb0c1b48034df6c38b7f88d81e7506cc9991cdd4572c23e70`.
+
+Infrastructure acceptance status:
+- hosted Foundry MCP generic control plane: PASS;
+- Secure MCP Tunnel path: PASS;
+- Acq 3D MCP read path: PASS;
+- installed 3D asset search: PASS;
+- true 3D render-target capture: PASS;
+- revision-checked semantic write path: PASS;
+- reversible cleanup: PASS.
+
+The infrastructure gate is closed. Next work should be campaign production: build the machine-readable 3D asset catalog and rebuild the Episode 1 vertical slice asset-first. Do not reopen infrastructure work unless a concrete runtime defect blocks production.
