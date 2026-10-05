@@ -1,0 +1,47 @@
+name: Foundry bridge smoke
+
+on:
+  push:
+    paths:
+      - "integrations/foundry-bridge/**"
+      - ".github/workflows/foundry-bridge-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate protocol JSON
+        run: python -m json.tool integrations/foundry-bridge/PROTOCOL.json > /dev/null
+
+      - name: Python syntax
+        run: |
+          python -m py_compile integrations/foundry-bridge/agent/acq_bridge_agent.py
+          python -m py_compile integrations/foundry-bridge/agent/mcp_server.py
+
+      - name: JavaScript syntax
+        run: node --check integrations/foundry-bridge/module/acq-foundry-bridge/scripts/acq-foundry-bridge.js
+
+      - name: Install MCP SDK
+        run: python -m pip install -r integrations/foundry-bridge/agent/requirements-mcp.txt
+
+      - name: Import MCP server
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          path = Path("integrations/foundry-bridge/agent/mcp_server.py")
+          spec = importlib.util.spec_from_file_location("acq3d_mcp", path)
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          assert mod.mcp is not None
+          print("MCP server import OK")
+          PY
