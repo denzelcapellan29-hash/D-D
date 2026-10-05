@@ -86,3 +86,10 @@
 - v0.2.5 bounds/helper fix validated live.
 - v0.2.6 is staged and CI-passed to add deterministic 3D runtime reload plus cleaner player-neutral captures.
 - After loading v0.2.6: reload the active 3D runtime, capture the canonical surface/warehouse/Area 1/Area 2 views, then continue visual tuning. Do not delete legacy monolithic geometry until those captures pass.
+
+
+### v0.2.6 live QA result
+- **PASS:** full-scene inspection on the 61-Tile production scene.
+- **PASS:** clean player-neutral capture path; large light helpers and hidden rat meshes are suppressed.
+- **ART DIRECTION FAIL (expected at this stage):** legacy white/grid surface, sparse warehouse rupture dressing, and schematic Area 2 still require replacement/tuning.
+- Runtime disconnected before the next reversible cobble probe could execute. Restore connections, then continue small visual probes before destructive legacy replacement.
