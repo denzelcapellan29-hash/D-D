@@ -104,3 +104,6 @@
 - Live Acq 3D MCP inspection and installed-asset search passed through ChatGPT → Secure MCP Tunnel → local MCP → bridge agent → Foundry/3D Canvas.
 - Found and fixed the first 3D QA defect: renderer DOM-canvas capture produced black frames. v0.2.2 now captures via a Three.js WebGLRenderTarget/readRenderTargetPixels path.
 - Added semantic-object cleanup to support a reversible disposable write test.
+
+- Verified the v0.2.3 render-target capture fix live: 1920x992 WebP output expanded from the prior black ~5 KB frame to ~154 KB while preserving the Scene revision.
+- Verified semantic Tile apply in dry-run mode. The only remaining infrastructure gate is an approved non-dry-run disposable Tile create/delete transaction.
