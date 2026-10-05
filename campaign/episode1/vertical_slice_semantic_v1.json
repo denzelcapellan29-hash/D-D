@@ -1,0 +1,140 @@
+{
+  "version": "1.0.0-draft",
+  "episode": "Episode 1 - Right Place, Wrong Heroes",
+  "vertical_slice": "Dock Ward environs -> collapsed warehouse -> fissure -> Area 1 -> Area 2",
+  "source_basis": {
+    "private_source": "Google Drive Acq_Inc_Ep1.pdf",
+    "source_pages": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "prior_semantic": "semantic_scene_v0_5_1.json",
+    "source_priority": "Official/private adventure facts override procedural interpretation."
+  },
+  "coordinate_frame": {
+    "foundry_scene_id": "7ADiF7HRrUbOsibQ",
+    "grid_pixels": 100,
+    "grid_distance_ft": 5,
+    "zones": {
+      "dock_ward_street": {
+        "x": 2992,
+        "y": 2306,
+        "width": 5900,
+        "height": 2600
+      },
+      "warehouse": {
+        "x": 4792,
+        "y": 4906,
+        "width": 1600,
+        "height": 2200
+      },
+      "fissure": {
+        "x": 5192,
+        "y": 5106,
+        "width": 800,
+        "height": 1400
+      },
+      "area1": {
+        "x": 5192,
+        "y": 5306,
+        "width": 900,
+        "height": 2500
+      },
+      "area2": {
+        "x": 6592,
+        "y": 5906,
+        "width": 2600,
+        "height": 1800
+      }
+    },
+    "provenance": "Platform adaptation anchored to the existing validated World Slice regions; these coordinates are not adventure-source facts."
+  },
+  "zones": {
+    "dock_ward_environs": {
+      "source_grounded": [
+        "Jolly's Lamp Emporium is an unassuming, ramshackle shop among other unassuming, ramshackle shops.",
+        "A collapsed warehouse stands next door.",
+        "Nearby shop/apartment occupants watch warily from shutters.",
+        "Three Waterdeep City Watch members stand near the warehouse.",
+        "A halfling Gray Hands spy watches the area while pretending to be a drunken passerby."
+      ],
+      "procedural_interpretation": [
+        "Use a coherent lower-Dock-Ward street segment rather than an isolated facade.",
+        "Provide believable neighboring facades, alleys, rooflines and distant architecture beyond the playable footprint."
+      ],
+      "original_worldbuilding": [
+        "Non-interactive dock-district clutter may include handcarts, awnings, drainage, mooring/warehouse hardware and restrained street debris when it does not contradict the source."
+      ]
+    },
+    "warehouse": {
+      "source_grounded": [
+        "Surviving portions of the warehouse contain no crates, boxes, barrels, wares or other stored goods.",
+        "Near the missing door, walls, ceiling and floor have collapsed into a deep sinkhole fissure.",
+        "A hemp rope is anchored firmly in the rubble and descends into the darkness.",
+        "The fissure descends at an angle."
+      ],
+      "procedural_interpretation": [
+        "Keep the warehouse visually sparse; rubble, broken framing and collapsed envelope carry the scene instead of cargo props.",
+        "The rupture must read as a jagged structural failure, not a square hole."
+      ]
+    },
+    "fissure_transition": {
+      "source_grounded": [
+        "Earthquake damage exposed an older tunnel network beneath the warehouse.",
+        "Many side passages are blocked by rubble.",
+        "The traversable route leads from the fissure toward the lost shrine through the adventure areas."
+      ],
+      "procedural_interpretation": [
+        "Use broken timber, rubble, exposed earth/stone and a clear descending path to visually connect warehouse construction to subterranean worked stone."
+      ]
+    },
+    "area1_rats": {
+      "source_grounded": [
+        "The fissure ends at a level floor of worked stone.",
+        "Dust, debris, rocks and pieces of warehouse wood are spread across the floor.",
+        "The south passage is blocked; the passage continues north.",
+        "Two pairs of human-sized boot prints head north.",
+        "Smaller fissures, holes and cracks riddle the passage.",
+        "Twenty feet around the descent point is difficult terrain.",
+        "Six giant rats arrive first; three more arrive about one round later."
+      ],
+      "procedural_interpretation": [
+        "Represent the side cracks as visibly dangerous/non-traversable geometry without player-visible debug markers.",
+        "Boot prints are subtle environmental evidence, not glowing clue markers."
+      ],
+      "hidden_semantics": [
+        "Rat spawn/arrival timing remains encounter metadata rather than visual telegraphing."
+      ]
+    },
+    "area2_trials": {
+      "source_grounded": [
+        "The chamber is rectangular and shows no earthquake damage.",
+        "Buttresses and columns support its walls and ceiling.",
+        "Four floor-set pools contain blue, green, clear and cloudy liquids.",
+        "Wall carvings depict robed figures submerging themselves in the pools.",
+        "A large ornate double door with an ornate carved lock stands at the far end.",
+        "Each pool is 10 feet deep with sheer sides."
+      ],
+      "map_grounded": [
+        "The four pools occupy the four quadrants of the chamber around a central group of columns.",
+        "The double door is on the chamber's far/east wall."
+      ],
+      "procedural_interpretation": [
+        "Use repeated masonry modules for the intact architecture and distinct pool materials for immediate visual readability.",
+        "The door trap and magical trial outcomes remain hidden mechanics; the room should not expose them through debug materials."
+      ]
+    }
+  },
+  "implementation_rules": [
+    "Prefer installed 3D Canvas/Mapmaking Pack assets and materials before custom GLB.",
+    "Custom geometry is reserved for source-specific shapes that installed assets cannot represent convincingly, especially the warehouse fissure and bespoke Area 2 relief/lock details.",
+    "Every generated placeable must carry flags.acq.semantic_id, flags.acq.build_id, provenance and classification.",
+    "Apply changes idempotently with expected scene revision checks.",
+    "Player-visible geometry must not expose traps, secrets or GM-only semantics.",
+    "World context extends beyond the battle grid so the slice reads as a location in Waterdeep rather than a test stage."
+  ]
+}
