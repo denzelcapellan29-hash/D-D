@@ -27,7 +27,7 @@
    - Permission probes confirmed Free / Adventurer / Dungeon Master boundaries.
    - **Next DM action:** upgrade to Dungeon Master (€10/month) if proceeding; it is justified by required scenes/tokens/combat/compendiums/time/UI access.
    - Keep Allow Script Macros off.
-   - After upgrade, validate scene readback, compendium import/search, tokens and combat before relying on them in campaign prep.
+   - **DM tier active and validated:** scene enumeration/readback, compendium enumeration, token readback and world-time access all passed live. Next validate compendium search/import and combat on disposable/test content before first production use.
    - Generic MCP screenshots are 2D Foundry-canvas captures, not 3D Canvas truth; build the private Acq 3D MCP for 3D authoring/camera/capture.
    - Google Drive remains fallback transport/artifact storage rather than the normal command path.
 
