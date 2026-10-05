@@ -115,3 +115,7 @@
 - Began Episode 1 production after closing the infrastructure gate. Reviewed the private Episode 1 source for the World Slice and recovered prior semantic/review artifacts.
 - Added `vertical_slice_semantic_v1.json`, `asset_requirements_v1.json`, and `vertical_slice_build_v1.json` with stable semantic IDs, source/procedural classification, asset-first roles and phase QA.
 - Live Foundry and the Secure MCP tunnel disconnected during the installed-asset catalog sweep; no production writes were made after the disconnect.
+
+- Completed the first live Episode 1 installed-asset catalog and committed `campaign/episode1/asset_catalog_v0_1.json`.
+- Validated disposable placements for building, wall, column, door and boulder assets in 3D Canvas.
+- Patched Acq Foundry Bridge capture to hide 3D Canvas editor helpers and added per-Tile runtime bounds to inspection; bumped bridge to v0.2.4 and passed smoke CI.
