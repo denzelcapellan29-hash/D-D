@@ -140,6 +140,8 @@ def set_3d_camera(
 def capture_3d_view(
     position: dict[str, float] | None = None,
     target: dict[str, float] | None = None,
+    width: int | None = None,
+    height: int | None = None,
     format: str = "webp",
     quality: float = 0.85,
     restore_camera: bool = True,
@@ -152,6 +154,8 @@ def capture_3d_view(
                 "op": "capture_3d_view",
                 "position": position,
                 "target": target,
+                "width": width,
+                "height": height,
                 "format": format,
                 "quality": quality,
                 "restore_camera": restore_camera,
