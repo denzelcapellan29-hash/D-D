@@ -188,7 +188,7 @@ Perform one bounded asset-first vertical-slice rebuild. If Foundry still cannot 
 
 
 ## ADR-008 — Thin 3D adapter + off-the-shelf generic Foundry APIs
-**Status:** Accepted  
+**Status:** Superseded by ADR-009  
 **Date:** 2026-10-05
 
 ### Decision
@@ -227,3 +227,58 @@ Every generated object must be addressable by stable semantic/build flags so sce
 
 ### Hosting
 Stay local for the vertical-slice test. Dedicated/hosted Foundry is a later deployment concern and is not allowed to become another infrastructure project before the visual/runtime gate passes.
+
+
+## ADR-009 — Direct MCP control optimized for autonomous 3D campaign prep
+**Status:** Accepted  
+**Date:** 2026-10-05
+
+### Decision
+Because the DM's ChatGPT environment supports custom MCP connections, make MCP the normal control plane rather than Google Drive command files.
+
+Use two deliberately separated MCP surfaces:
+
+1. **Foundry API Bridge / Foundry MCP** for generic Foundry/D&D5e operations. This is the wheel we do not rebuild: actors, items, journals, roll tables, scenes, tokens, doors, combat, compendiums/import, world time, pause and UI.
+2. **Acq 3D MCP** for specialized campaign/world authoring operations that are unique to this project and 3D Canvas: semantic asset lookup, 3D Tile/model/environment properties, semantic IDs/build IDs, specialized asset upload, canonical camera framing/captures, idempotent scene application and repair, and visual-QA readback.
+
+Connect the private Acq 3D MCP through OpenAI Secure MCP Tunnel. Reuse the existing Acq Foundry Bridge implementation behind it rather than writing another Foundry integration from scratch.
+
+### Why
+The infrastructure is being optimized for the actual product, not for generic VTT automation:
+- ChatGPT should prepare and maintain the campaign;
+- the semantic campaign/world model stays canonical;
+- player-facing presentation must meet the 3D world-feel bar;
+- source-grounded set pieces and GM-only state must survive export;
+- writes need revision checks/recovery;
+- visual QA must be machine-driven;
+- and routine prep must not turn into DM-side scripting/debugging.
+
+### Foundry MCP boundary
+Use the hosted Foundry MCP service when the DM accepts its subscription/privacy tradeoff. Its current Dungeon Master tier exposes the broad campaign tool surface needed here and supports ChatGPT OAuth.
+
+Keep script macros disabled. Do not depend on its code-mode execute path for transactional world-building; its own documentation states scripts are not transactional.
+
+### Acq 3D MCP boundary
+Do not expose arbitrary JavaScript, shell or database access. Provide small semantic tools such as:
+- inspect_3d_scene
+- search_3d_assets
+- apply_semantic_objects
+- place_or_update_3d_tile
+- set_3d_environment
+- set_or_update_light
+- frame_semantic_region
+- capture_3d_view
+- validate_scene_manifest
+- snapshot_scene
+- restore_scene_snapshot
+
+Each write carries scene/build identity and expected revision where applicable.
+
+### Transport/persistence
+- Direct MCP is the normal interactive control plane.
+- Google Drive remains private-source, artifact, release, capture and backup storage plus emergency fallback transport.
+- GitHub remains canonical for code/config/schemas/architecture/project tracking.
+- Live Foundry remains runtime/play state, not canonical campaign semantics.
+
+### Dependency verification correction
+Do not assume V14 core Scene Levels eliminated every 3D Canvas legacy dependency. Current published sources disagree: the 3D Canvas V14 wiki still names Levels/Wall Height/socketLib while the public V14 source manifest lists only libWrapper as required. Verify the installed 9.0.35 manifest/runtime before changing dependencies.
