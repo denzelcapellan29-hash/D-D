@@ -111,3 +111,7 @@
 - Completed the final Acq 3D MCP reversible write smoke test. Created and verified a disposable semantic 3D Tile, then removed it through the local bridge RPC.
 - Verified the live Episode 1 scene returned to 11 Tiles and the original baseline revision `cbde9aa249e4a7bfb0c1b48034df6c38b7f88d81e7506cc9991cdd4572c23e70`.
 - Closed the Foundry infrastructure gate; subsequent work moves to asset cataloging and the Episode 1 vertical-slice rebuild.
+
+- Began Episode 1 production after closing the infrastructure gate. Reviewed the private Episode 1 source for the World Slice and recovered prior semantic/review artifacts.
+- Added `vertical_slice_semantic_v1.json`, `asset_requirements_v1.json`, and `vertical_slice_build_v1.json` with stable semantic IDs, source/procedural classification, asset-first roles and phase QA.
+- Live Foundry and the Secure MCP tunnel disconnected during the installed-asset catalog sweep; no production writes were made after the disconnect.
