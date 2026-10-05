@@ -463,3 +463,20 @@ No production writes were attempted after the disconnect.
 - The existing custom fissure remains the preferred source-specific topology, with installed rock/cave assets used only as dressing.
 
 3D QA also exposed editor helpers in direct renderer captures. The bridge has been patched to hide 3D Canvas light/sound/transform helpers during capture and to report runtime model bounds for Tiles. Version bumped to **0.2.4**; GitHub smoke CI passed. This local module update must be loaded in Foundry before clean visual QA and deterministic asset placement continue.
+
+
+## Episode 1 Phase A — first production placement (2026-10-05)
+The first visible asset-first production write has been applied to `Ep1 - World Slice`.
+- Scene Tile count increased from **11 → 18**.
+- Added seven stable semantic Tiles:
+  - four north-side Dock Ward houses;
+  - one north-side shop;
+  - one south-side context house;
+  - `ep1.surface.jolly.exterior` using the installed `Shop.glb` as a platform-adaptation shell.
+- Legacy `ep1_ws_v06_*` monolithic geometry remains untouched; this is additive and reversible.
+- New context Tiles have collision/sight disabled during art-direction iteration so they cannot disrupt the validated legacy play space.
+- Placement manifest persisted at `campaign/episode1/phase_a_surface_context_state_v0_1.json`.
+- Current production revision after placement:
+  `cb00506fde7c9f357093da69a351161298a29013e934ab651e2928be77f1d640`.
+
+The direct 3D QA capture still shows GM light-helper wireframes. That is a QA-visibility defect, not a production-geometry blocker. Do not confuse the helper overlay with scene content.
