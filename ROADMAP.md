@@ -80,3 +80,9 @@
 ## Retained secondary targets
 - Minecraft/Fabric: deterministic engineering/export target and procedural reference.
 - TaleSpire: immediate fallback if the Foundry asset-first slice fails.
+
+
+### QA-control follow-up
+- v0.2.5 bounds/helper fix validated live.
+- v0.2.6 is staged and CI-passed to add deterministic 3D runtime reload plus cleaner player-neutral captures.
+- After loading v0.2.6: reload the active 3D runtime, capture the canonical surface/warehouse/Area 1/Area 2 views, then continue visual tuning. Do not delete legacy monolithic geometry until those captures pass.
