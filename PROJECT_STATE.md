@@ -480,3 +480,34 @@ The first visible asset-first production write has been applied to `Ep1 - World 
   `cb00506fde7c9f357093da69a351161298a29013e934ab651e2928be77f1d640`.
 
 The direct 3D QA capture still shows GM light-helper wireframes. That is a QA-visibility defect, not a production-geometry blocker. Do not confuse the helper overlay with scene content.
+
+
+## Episode 1 World Slice — production expanded (2026-10-05)
+Following user approval of the first visible surface-context pass, production continued without removing legacy geometry.
+
+Live `Ep1 - World Slice` now contains **61 Tiles** and **10 Tokens**:
+- Surface/Dock Ward:
+  - 7 modular context/building Tiles from the first pass;
+  - 12 warehouse-collapse dressing Tiles using rocks, broken timber and beams only;
+  - 9 surface dressing Tiles: 5 street lamp posts, 2 Jolly's Lamp props, 2 street carts;
+  - 3 neutral Waterdeep City Watch guard tokens;
+  - 1 neutral player-facing `Drunken Halfling Passerby` token. The Gray Hands identity is not exposed to players.
+- Area 1:
+  - 6 rubble/timber dressing Tiles;
+  - 6 hidden green giant rat tokens staged as two waves of 3.
+  - A brief internal over-staging to 9 rats was corrected immediately after re-checking the source-grounded GM prep, which specifies six total: three first, three one round later.
+- Area 2:
+  - 4 distinct pool-surface Tiles (blue, green, clear, cloudy);
+  - 4 central columns;
+  - 6 perimeter support/buttress adaptations;
+  - 2 modular door shells for the large far double door.
+
+The warehouse remains cargo-free. The Area 2 ritual wall reliefs, final ornate lock interaction, warehouse descent rope and subtle Area 1 bootprints remain explicit custom/source-specific gaps rather than being replaced with unrelated stock assets.
+
+Current production state is persisted in:
+`campaign/episode1/live_vertical_slice_state_v0_2.json`
+
+Current scene revision after the latest 3D write:
+`1c92c40e1fe5a25604aebf6f572953dbdb8ca6194450c272e441cf02a2d5c9c8`
+
+Acq Foundry Bridge **v0.2.5** is staged and CI-passed. It fixes nested 3D Canvas scene-light helper suppression for captures and improves runtime bounds by preferring Tile3D's precomputed world bounding box. The currently loaded v0.2.4 remains usable for production writes; v0.2.5 should be loaded at the next convenient QA checkpoint.
