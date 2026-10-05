@@ -1,0 +1,83 @@
+{
+  "name": "Acq 3D MCP",
+  "status": "draft-v0.1",
+  "purpose": "Project-specific 3D Canvas authoring and QA only. Generic Foundry/D&D5e CRUD stays in Foundry MCP.",
+  "tools": {
+    "inspect_3d_scene": {
+      "read_only": true,
+      "returns": [
+        "scene_id",
+        "scene_revision",
+        "levels3d_active",
+        "camera",
+        "environment_flags",
+        "tiles_with_3d_flags",
+        "lights",
+        "regions"
+      ]
+    },
+    "search_3d_assets": {
+      "read_only": true,
+      "inputs": ["query", "kind", "module_ids", "limit"],
+      "returns": ["foundry_path", "filename", "module_id", "kind", "metadata"]
+    },
+    "apply_semantic_objects": {
+      "write": true,
+      "inputs": ["scene_id", "expected_revision", "build_id", "objects"],
+      "requirements": [
+        "stable semantic_id per object",
+        "idempotent create-or-update",
+        "allow-listed 3D Canvas flags",
+        "no arbitrary JavaScript"
+      ]
+    },
+    "set_3d_environment": {
+      "write": true,
+      "inputs": ["scene_id", "expected_revision", "values"],
+      "notes": "Use existing allow-listed levels-3d-preview Scene flags."
+    },
+    "set_3d_camera": {
+      "write": false,
+      "ephemeral_ui_action": true,
+      "inputs": ["position", "target", "first_person_mode"],
+      "notes": "Moves the GM 3D camera only; does not mutate canonical scene data unless save_as_initial is explicitly requested."
+    },
+    "capture_3d_view": {
+      "read_only": true,
+      "inputs": ["position", "target", "width", "height", "format", "quality"],
+      "returns": ["image_base64", "mime_type", "width", "height", "camera"],
+      "notes": "Capture from game.Levels3DPreview.renderer, not Foundry's 2D Pixi canvas."
+    },
+    "validate_scene_manifest": {
+      "read_only": true,
+      "inputs": ["expected_manifest"],
+      "returns": ["ok", "missing", "unexpected", "mismatched", "scene_revision"]
+    },
+    "snapshot_scene": {
+      "read_only": false,
+      "write": true,
+      "inputs": ["label"],
+      "returns": ["snapshot_id", "scene_revision"],
+      "notes": "Create a recoverable pre-write Scene snapshot/clone before meaningful bulk changes."
+    },
+    "restore_scene_snapshot": {
+      "write": true,
+      "destructive": true,
+      "inputs": ["snapshot_id"],
+      "requirements": ["explicit snapshot id", "scene/world identity check"]
+    }
+  },
+  "non_goals": [
+    "actors",
+    "items",
+    "journals",
+    "roll tables",
+    "compendium search/import",
+    "tokens",
+    "combat",
+    "world time",
+    "pause/UI",
+    "arbitrary macro execution",
+    "shell execution"
+  ]
+}
