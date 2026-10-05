@@ -107,3 +107,7 @@
 
 - Verified the v0.2.3 render-target capture fix live: 1920x992 WebP output expanded from the prior black ~5 KB frame to ~154 KB while preserving the Scene revision.
 - Verified semantic Tile apply in dry-run mode. The only remaining infrastructure gate is an approved non-dry-run disposable Tile create/delete transaction.
+
+- Completed the final Acq 3D MCP reversible write smoke test. Created and verified a disposable semantic 3D Tile, then removed it through the local bridge RPC.
+- Verified the live Episode 1 scene returned to 11 Tiles and the original baseline revision `cbde9aa249e4a7bfb0c1b48034df6c38b7f88d81e7506cc9991cdd4572c23e70`.
+- Closed the Foundry infrastructure gate; subsequent work moves to asset cataloging and the Episode 1 vertical-slice rebuild.
