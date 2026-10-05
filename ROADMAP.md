@@ -52,7 +52,10 @@
 
 7. **Rebuild exactly one continuous vertical slice.**
    - **STARTED:** Phase A surface context has its first production placement: 7 new semantic 3D Tiles, taking the scene from 11 to 18 Tiles without deleting legacy geometry.
-   - Next: verify/adjust facade scale and alignment, then add warehouse-collapse dressing and surface lighting/props before any legacy swap.
+   - Surface dressing expanded: warehouse rubble/timber, diegetic lamps, carts, neutral City Watch/cover NPCs.
+   - Area 1 now has source-grounded debris and six hidden rats staged 3 + 3.
+   - Area 2 now has four distinct pools, columns/supports and provisional double-door shells.
+   - Next: load v0.2.5 for clean automated captures, visually tune placements, then build the remaining source-specific rope/bootprints/reliefs/lock details before any legacy swap.
    lower Dock Ward street -> warehouse exterior -> warehouse interior -> earthquake fissure -> descent -> Area 1 -> Area 2.
 
 8. **Authoring rules.**
