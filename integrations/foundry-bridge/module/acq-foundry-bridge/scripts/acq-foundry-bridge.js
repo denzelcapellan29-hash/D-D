@@ -245,6 +245,7 @@ async function set3dCamera(scene, op, dryRun = false) {
   };
 }
 
+
 function canvasToBase64(canvas, format = "webp", quality = 0.85) {
   const normalized = String(format || "webp").toLowerCase();
   const mime = normalized === "png" ? "image/png" : "image/webp";
@@ -258,25 +259,66 @@ function canvasToBase64(canvas, format = "webp", quality = 0.85) {
   };
 }
 
+let threeModulePromise = null;
+
+async function getThreeModule() {
+  if (!threeModulePromise) {
+    threeModulePromise = import("/modules/levels-3d-preview/scripts/lib/three.module.js");
+  }
+  return threeModulePromise;
+}
+
 async function capture3dView(scene, op) {
   const l3d = levels3d();
   if (!l3d?._active || !l3d.renderer || !l3d.scene || !l3d.camera || !l3d.controls) {
     throw new Error("3D Canvas is not active or its renderer/camera is unavailable.");
   }
+
+  const THREE3D = await getThreeModule();
   const renderer = l3d.renderer;
-  const canvas3d = renderer.domElement;
-  if (!canvas3d?.toDataURL) throw new Error("3D Canvas renderer has no capturable DOM canvas.");
+  const sourceCanvas = renderer.domElement;
+  const width = Math.max(1, Math.min(4096, Number(op.width) || sourceCanvas?.width || 1920));
+  const height = Math.max(1, Math.min(4096, Number(op.height) || sourceCanvas?.height || 1080));
 
   const originalPosition = vectorToObject(l3d.camera.position);
   const originalTarget = vectorToObject(l3d.controls.target);
+  const originalRenderTarget = renderer.getRenderTarget();
+  const originalSize = renderer.getSize(new THREE3D.Vector2());
+
+  const renderTarget = new THREE3D.WebGLRenderTarget(width, height, {
+    format: THREE3D.RGBAFormat,
+    type: THREE3D.UnsignedByteType
+  });
 
   try {
     if (op.position) setVector(l3d.camera.position, op.position);
     if (op.target) setVector(l3d.controls.target, op.target);
     if (typeof l3d.controls.update === "function") l3d.controls.update();
+
+    renderer.setSize(width, height, false);
+    renderer.setRenderTarget(renderTarget);
+    renderer.clear();
     renderer.render(l3d.scene, l3d.camera);
+
+    const pixels = new Uint8Array(4 * width * height);
+    renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, pixels);
+
+    const captureCanvas = document.createElement("canvas");
+    captureCanvas.width = width;
+    captureCanvas.height = height;
+    const ctx = captureCanvas.getContext("2d");
+    if (!ctx) throw new Error("Unable to create 2D canvas context for 3D capture.");
+    const imageData = ctx.createImageData(width, height);
+
+    for (let y = 0; y < height; y++) {
+      const srcRow = (height - 1 - y) * width * 4;
+      const destRow = y * width * 4;
+      imageData.data.set(pixels.subarray(srcRow, srcRow + width * 4), destRow);
+    }
+    ctx.putImageData(imageData, 0, 0);
+
     return {
-      ...canvasToBase64(canvas3d, op.format, op.quality),
+      ...canvasToBase64(captureCanvas, op.format, op.quality),
       scene_id: scene.id,
       scene_name: scene.name,
       camera: {
@@ -286,12 +328,17 @@ async function capture3dView(scene, op) {
       }
     };
   } finally {
+    renderer.setRenderTarget(originalRenderTarget);
+    renderer.setSize(originalSize.x ?? originalSize.width, originalSize.y ?? originalSize.height, false);
+    renderTarget.dispose();
+
     if (op.restore_camera !== false) {
       setVector(l3d.camera.position, originalPosition);
       setVector(l3d.controls.target, originalTarget);
       if (typeof l3d.controls.update === "function") l3d.controls.update();
-      renderer.render(l3d.scene, l3d.camera);
     }
+
+    renderer.render(l3d.scene, l3d.camera);
   }
 }
 
