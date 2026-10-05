@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-v0.5 lower-Dock organic-city build is complete. Episode 1 scope is now explicitly the lower Dock Ward only, not all Waterdeep. Next: run the BlueMap/Amulet/PyVista tooling spikes, improve materials/facade grammar from the resulting QA, then integrate and validate the warehouse → fissure → dungeon route.
+Infrastructure QA v0.1 is complete. Next: run BlueMap against the actual lower-Dock world after explicit approval for Mojang client-resource downloads, run the non-destructive Amulet load/save/reopen probe against the real world before considering compiler adoption, then integrate block-state/material-profile QA into the next city pass before producing another world release.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -123,3 +123,16 @@ Organic lower-Dock release: `Acq_Waterdeep_DockWard_WORLD_v0_5.zip`.
 - All 300 pregenerated chunks parse successfully.
 - 0 grass blocks remain in the checked surface volume.
 - Protected Episode 1 core remains exact: 0 block mismatches.
+
+
+## Infrastructure QA v0.1
+The promised tooling upgrade is now implemented and validated before further world-version churn.
+- Added a read-only Java Anvil/NBT world reader that preserves block-state properties.
+- Added a direct off-screen VTK visible-face renderer for fast engineering QA from the actual world save.
+- Rendered the full v0.5 lower-Dock footprint headlessly: 540,080 non-air blocks, 263,057 visible faces, 262,349 mesh points.
+- Added a BlueMap 5.28 standalone QA runner with optional resource-pack injection. BlueMap 5.28 CLI boot is CI-verified on Java 25 and targets Minecraft through 26.3.
+- Added a non-destructive Amulet Core probe. Stable Amulet Core 1.9.49 installs/imports successfully on Python 3.11 in CI; it is not yet the production compiler until the real-world load/save/reopen probe passes.
+- Added PyVista/VTK headless rendering smoke coverage. PyVista off-screen rendering is CI-verified under Xvfb.
+- GitHub Actions run 37250767331 completed successfully across BlueMap, PyVista and Amulet jobs.
+- Production fast renderer is direct VTK; PyVista is an optional higher-level convenience layer.
+- Minecraft screenshots remain diagnostic only.
