@@ -6,7 +6,24 @@ param(
 $ErrorActionPreference = "Stop"
 
 if (-not $FoundryUserData) {
+  $candidates = @(
+    (Join-Path $env:LOCALAPPDATA "FoundryVTT"),
+    (Join-Path $env:APPDATA "FoundryVTT")
+  )
+  foreach ($candidate in $candidates) {
+    if (Test-Path (Join-Path $candidate "Data")) {
+      $FoundryUserData = $candidate
+      break
+    }
+  }
+}
+if (-not $FoundryUserData) {
   $FoundryUserData = Read-Host "Foundry User Data folder (the folder containing Data)"
+}
+
+if (-not $BridgeFolder) {
+  $knownBridge = "G:\My Drive\D&D\Foundry Bridge"
+  if (Test-Path $knownBridge) { $BridgeFolder = $knownBridge }
 }
 if (-not $BridgeFolder) {
   $BridgeFolder = Read-Host "Local Google Drive-synced D&D\Foundry Bridge folder"
