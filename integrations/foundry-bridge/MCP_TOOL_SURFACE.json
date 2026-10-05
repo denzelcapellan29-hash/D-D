@@ -18,12 +18,28 @@
     },
     "search_3d_assets": {
       "read_only": true,
-      "inputs": ["query", "kind", "module_ids", "limit"],
-      "returns": ["foundry_path", "filename", "module_id", "kind", "metadata"]
+      "inputs": [
+        "query",
+        "kind",
+        "module_ids",
+        "limit"
+      ],
+      "returns": [
+        "foundry_path",
+        "filename",
+        "module_id",
+        "kind",
+        "metadata"
+      ]
     },
     "apply_semantic_objects": {
       "write": true,
-      "inputs": ["scene_id", "expected_revision", "build_id", "objects"],
+      "inputs": [
+        "scene_id",
+        "expected_revision",
+        "build_id",
+        "objects"
+      ],
       "requirements": [
         "stable semantic_id per object",
         "idempotent create-or-update",
@@ -33,38 +49,88 @@
     },
     "set_3d_environment": {
       "write": true,
-      "inputs": ["scene_id", "expected_revision", "values"],
+      "inputs": [
+        "scene_id",
+        "expected_revision",
+        "values"
+      ],
       "notes": "Use existing allow-listed levels-3d-preview Scene flags."
     },
     "set_3d_camera": {
       "write": false,
       "ephemeral_ui_action": true,
-      "inputs": ["position", "target", "first_person_mode"],
+      "inputs": [
+        "position",
+        "target",
+        "first_person_mode"
+      ],
       "notes": "Moves the GM 3D camera only; does not mutate canonical scene data unless save_as_initial is explicitly requested."
     },
     "capture_3d_view": {
       "read_only": true,
-      "inputs": ["position", "target", "width", "height", "format", "quality"],
-      "returns": ["image_base64", "mime_type", "width", "height", "camera"],
+      "inputs": [
+        "position",
+        "target",
+        "width",
+        "height",
+        "format",
+        "quality"
+      ],
+      "returns": [
+        "image_base64",
+        "mime_type",
+        "width",
+        "height",
+        "camera"
+      ],
       "notes": "Capture from game.Levels3DPreview.renderer, not Foundry's 2D Pixi canvas."
     },
     "validate_scene_manifest": {
       "read_only": true,
-      "inputs": ["expected_manifest"],
-      "returns": ["ok", "missing", "unexpected", "mismatched", "scene_revision"]
+      "inputs": [
+        "expected_manifest"
+      ],
+      "returns": [
+        "ok",
+        "missing",
+        "unexpected",
+        "mismatched",
+        "scene_revision"
+      ]
     },
     "snapshot_scene": {
       "read_only": false,
       "write": true,
-      "inputs": ["label"],
-      "returns": ["snapshot_id", "scene_revision"],
+      "inputs": [
+        "label"
+      ],
+      "returns": [
+        "snapshot_id",
+        "scene_revision"
+      ],
       "notes": "Create a recoverable pre-write Scene snapshot/clone before meaningful bulk changes."
     },
     "restore_scene_snapshot": {
       "write": true,
       "destructive": true,
-      "inputs": ["snapshot_id"],
-      "requirements": ["explicit snapshot id", "scene/world identity check"]
+      "inputs": [
+        "snapshot_id"
+      ],
+      "requirements": [
+        "explicit snapshot id",
+        "scene/world identity check"
+      ]
+    },
+    "delete_semantic_objects": {
+      "write": true,
+      "destructive": true,
+      "inputs": [
+        "semantic_ids",
+        "scene_id",
+        "expected_revision",
+        "dry_run"
+      ],
+      "notes": "Deletes only documents carrying matching flags.acq.semantic_id."
     }
   },
   "non_goals": [
