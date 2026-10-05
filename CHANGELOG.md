@@ -130,3 +130,7 @@
 - Added Area 2 blue/green/clear/cloudy pool surfaces, central columns, perimeter supports and provisional paired door shells.
 - Recorded `campaign/episode1/live_vertical_slice_state_v0_2.json` and expanded the live asset catalog with validated timber, lamp and cart assets.
 - Staged Acq Foundry Bridge v0.2.5 to correctly suppress nested 3D Canvas light helpers in QA captures and improve runtime model bounds; smoke CI passed.
+
+- Validated Acq Foundry Bridge v0.2.5 live: runtime bounds became usable and large light-helper wireframes disappeared from QA captures.
+- Rolled back an experimental cobble/floor/wall placement pass after visual QA showed it was not yet reliable; live World Slice returned to 61 Tiles / 10 Tokens.
+- Staged v0.2.6 with `reload_3d_scene`, cheaper inspection bounds, and capture suppression for note/hidden-token/rangefinder editor overlays; smoke CI passed.
