@@ -491,6 +491,33 @@ async function applySemanticObjects(scene, op, dryRun = false) {
   return {created, updated, unchanged, count: objects.length};
 }
 
+
+async function deleteSemanticObjects(scene, op, dryRun = false) {
+  const semanticIds = Array.isArray(op.semantic_ids) ? op.semantic_ids.map(String) : [];
+  if (!semanticIds.length) throw new Error("delete_semantic_objects requires semantic_ids.");
+
+  const wanted = new Set(semanticIds);
+  const deleted = [];
+  for (const document of ALLOWED_EMBEDDED) {
+    const matches = collectionForDocument(scene, document)
+      .filter(doc => wanted.has(String(doc?.flags?.acq?.semantic_id ?? "")));
+    if (!matches.length) continue;
+    const ids = matches.map(doc => doc.id);
+    if (!dryRun) await scene.deleteEmbeddedDocuments(document, ids);
+    for (const doc of matches) {
+      deleted.push({
+        document,
+        id: doc.id,
+        semantic_id: String(doc.flags.acq.semantic_id)
+      });
+    }
+  }
+
+  const found = new Set(deleted.map(x => x.semantic_id));
+  const missing = semanticIds.filter(id => !found.has(id));
+  return {deleted, missing, count: deleted.length};
+}
+
 function semanticInventory(scene) {
   const inventory = [];
   for (const document of ALLOWED_EMBEDDED) {
@@ -571,6 +598,11 @@ async function applyOperation(scene, op, dryRun = false) {
   if (type === "validate_scene_manifest") {
     const result = validateSceneManifest(scene, op);
     return {op: type, ok: true, ...result};
+  }
+
+  if (type === "delete_semantic_objects") {
+    const result = await deleteSemanticObjects(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
   }
 
   if (type === "set_3d_environment") {
