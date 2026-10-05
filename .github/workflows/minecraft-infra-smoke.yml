@@ -1,0 +1,55 @@
+name: Minecraft infrastructure smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'integrations/minecraft-bridge/qa/**'
+      - '.github/workflows/minecraft-infra-smoke.yml'
+
+jobs:
+  bluemap-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: BlueMap 5.28 CLI boots
+        run: |
+          curl -L -o bluemap.jar https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v5.28/bluemap-5.28-cli.jar
+          java -jar bluemap.jar -h
+
+  amulet-import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install stable Amulet probe target
+        run: pip install 'amulet-core==1.9.49'
+      - name: Import Amulet
+        run: python -c "import amulet; print('amulet import ok')"
+
+  pyvista-offscreen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install PyVista
+        run: pip install pyvista
+      - name: Off-screen render smoke
+        env:
+          PYVISTA_OFF_SCREEN: 'true'
+        run: |
+          python - <<'PY'
+          import pyvista as pv
+          p=pv.Plotter(off_screen=True, window_size=(400,300))
+          p.add_mesh(pv.Cube())
+          p.show(screenshot='pyvista-smoke.png')
+          print('pyvista offscreen ok')
+          PY
