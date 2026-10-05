@@ -119,11 +119,271 @@ function b64ToFile(b64, filename, mimeType = "application/octet-stream") {
   return new File([bytes], filename, {type: mimeType});
 }
 
+
+function levels3d() {
+  return game?.Levels3DPreview ?? null;
+}
+
+function vectorToObject(v) {
+  if (!v) return null;
+  return {
+    x: Number(v.x ?? 0),
+    y: Number(v.y ?? 0),
+    z: Number(v.z ?? 0)
+  };
+}
+
+function setVector(target, value) {
+  if (!target || !value) return;
+  const x = Number(value.x);
+  const y = Number(value.y);
+  const z = Number(value.z);
+  if (![x, y, z].every(Number.isFinite)) throw new Error("3D vector requires finite x, y, z.");
+  if (typeof target.set === "function") target.set(x, y, z);
+  else {
+    target.x = x;
+    target.y = y;
+    target.z = z;
+  }
+}
+
+function relevant3dFlags(flags = {}) {
+  const allowed = [
+    "model3d", "material", "color", "scale",
+    "collision", "sight", "cameraCollision",
+    "doorType", "doorState", "doorStyle",
+    "doorAnimationDuration", "doorAnimateAngle", "doorSlidePercent",
+    "imageTexture", "fillType", "castShadow"
+  ];
+  const out = {};
+  for (const key of allowed) {
+    if (Object.prototype.hasOwnProperty.call(flags, key)) out[key] = flags[key];
+  }
+  return out;
+}
+
+function environment3dFlags(scene) {
+  const src = scene?.flags?.["levels-3d-preview"] ?? {};
+  const out = {};
+  for (const key of ALLOWED_ENV_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(src, key)) out[key] = src[key];
+  }
+  if (src.initialPosition) out.initialPosition = src.initialPosition;
+  return out;
+}
+
+function inspect3dScene(scene) {
+  const l3d = levels3d();
+  const tiles = Array.from(scene?.tiles ?? []).map(tile => {
+    const flags = tile?.flags?.["levels-3d-preview"] ?? {};
+    return {
+      id: tile.id,
+      x: tile.x,
+      y: tile.y,
+      width: tile.width,
+      height: tile.height,
+      elevation: tile.elevation ?? 0,
+      rotation: tile.rotation ?? 0,
+      hidden: Boolean(tile.hidden),
+      flags: relevant3dFlags(flags),
+      acq: tile?.flags?.acq ?? null
+    };
+  }).filter(t => Object.keys(t.flags).length > 0 || t.acq);
+
+  return {
+    levels3d_active: Boolean(l3d?._active),
+    levels3d_available: Boolean(l3d),
+    camera: l3d ? {
+      position: vectorToObject(l3d.camera?.position),
+      target: vectorToObject(l3d.controls?.target),
+      first_person_mode: Boolean(l3d.firstPersonMode)
+    } : null,
+    environment: environment3dFlags(scene),
+    tiles,
+    tile_count: tiles.length,
+    light_count: Number(scene?.lights?.size ?? scene?.lights?.contents?.length ?? 0),
+    region_count: Number(scene?.regions?.size ?? scene?.regions?.contents?.length ?? 0)
+  };
+}
+
+async function set3dCamera(scene, op, dryRun = false) {
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d.camera || !l3d.controls) {
+    throw new Error("3D Canvas is not active or its camera controls are unavailable.");
+  }
+
+  const before = {
+    position: vectorToObject(l3d.camera.position),
+    target: vectorToObject(l3d.controls.target),
+    first_person_mode: Boolean(l3d.firstPersonMode)
+  };
+
+  if (!dryRun) {
+    if (op.position) setVector(l3d.camera.position, op.position);
+    if (op.target) setVector(l3d.controls.target, op.target);
+    if (typeof l3d.controls.update === "function") l3d.controls.update();
+
+    if (op.save_as_initial) {
+      await scene.update({
+        "flags.levels-3d-preview.initialPosition": {
+          target: vectorToObject(l3d.controls.target),
+          position: vectorToObject(l3d.camera.position),
+          firstPersonMode: Boolean(l3d.firstPersonMode)
+        }
+      }, {render: false});
+    }
+  }
+
+  return {
+    before,
+    after: dryRun ? before : {
+      position: vectorToObject(l3d.camera.position),
+      target: vectorToObject(l3d.controls.target),
+      first_person_mode: Boolean(l3d.firstPersonMode)
+    },
+    saved_as_initial: Boolean(op.save_as_initial && !dryRun)
+  };
+}
+
+function canvasToBase64(canvas, format = "webp", quality = 0.85) {
+  const normalized = String(format || "webp").toLowerCase();
+  const mime = normalized === "png" ? "image/png" : "image/webp";
+  const q = Math.max(0.1, Math.min(1, Number(quality) || 0.85));
+  const dataUrl = canvas.toDataURL(mime, q);
+  return {
+    image_base64: dataUrl.replace(/^data:[^;]+;base64,/, ""),
+    mime_type: mime,
+    width: canvas.width,
+    height: canvas.height
+  };
+}
+
+async function capture3dView(scene, op) {
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d.renderer || !l3d.scene || !l3d.camera || !l3d.controls) {
+    throw new Error("3D Canvas is not active or its renderer/camera is unavailable.");
+  }
+  const renderer = l3d.renderer;
+  const canvas3d = renderer.domElement;
+  if (!canvas3d?.toDataURL) throw new Error("3D Canvas renderer has no capturable DOM canvas.");
+
+  const originalPosition = vectorToObject(l3d.camera.position);
+  const originalTarget = vectorToObject(l3d.controls.target);
+
+  try {
+    if (op.position) setVector(l3d.camera.position, op.position);
+    if (op.target) setVector(l3d.controls.target, op.target);
+    if (typeof l3d.controls.update === "function") l3d.controls.update();
+    renderer.render(l3d.scene, l3d.camera);
+    return {
+      ...canvasToBase64(canvas3d, op.format, op.quality),
+      scene_id: scene.id,
+      scene_name: scene.name,
+      camera: {
+        position: vectorToObject(l3d.camera.position),
+        target: vectorToObject(l3d.controls.target),
+        first_person_mode: Boolean(l3d.firstPersonMode)
+      }
+    };
+  } finally {
+    if (op.restore_camera !== false) {
+      setVector(l3d.camera.position, originalPosition);
+      setVector(l3d.controls.target, originalTarget);
+      if (typeof l3d.controls.update === "function") l3d.controls.update();
+      renderer.render(l3d.scene, l3d.camera);
+    }
+  }
+}
+
+async function browseAssetDirectory(path) {
+  const FP = getFilePicker();
+  if (!FP?.browse) throw new Error("Foundry FilePicker.browse API unavailable.");
+  try {
+    return await FP.browse("public", path, {extensions: [".glb", ".gltf", ".fbx", ".webp", ".png", ".jpg", ".jpeg", ".exr"]});
+  } catch {
+    return await FP.browse("data", path, {extensions: [".glb", ".gltf", ".fbx", ".webp", ".png", ".jpg", ".jpeg", ".exr"]});
+  }
+}
+
+async function search3dAssets(op) {
+  const query = String(op.query ?? "").trim().toLowerCase();
+  if (!query) throw new Error("search_3d_assets requires a non-empty query.");
+  const limit = Math.max(1, Math.min(200, Number(op.limit) || 50));
+  const requestedRoots = Array.isArray(op.roots) ? op.roots : [];
+  const roots = requestedRoots.length ? requestedRoots : [
+    "modules/canvas3dcompendium/assets",
+    "modules/levels-3d-preview/assets",
+    "modules/canvas3d-premium/assets"
+  ];
+  const safeRoots = roots.filter(p => /^modules\/[a-z0-9._-]+\/assets(?:\/|$)/i.test(String(p)));
+  if (!safeRoots.length) throw new Error("No safe module asset roots supplied.");
+
+  const results = [];
+  const queue = safeRoots.map(root => ({path: String(root), depth: 0}));
+  const maxDepth = Math.max(0, Math.min(8, Number(op.max_depth) || 5));
+  const seen = new Set();
+
+  while (queue.length && results.length < limit) {
+    const current = queue.shift();
+    if (!current || seen.has(current.path)) continue;
+    seen.add(current.path);
+    let listing;
+    try {
+      listing = await browseAssetDirectory(current.path);
+    } catch {
+      continue;
+    }
+
+    for (const file of listing?.files ?? []) {
+      const lower = String(file).toLowerCase();
+      if (!lower.includes(query)) continue;
+      results.push({
+        foundry_path: String(file),
+        filename: String(file).split("/").pop(),
+        module_id: String(file).split("/")[1] ?? null,
+        kind: /\.(glb|gltf|fbx)$/i.test(String(file)) ? "model" :
+              /\.exr$/i.test(String(file)) ? "environment" : "texture"
+      });
+      if (results.length >= limit) break;
+    }
+
+    if (current.depth < maxDepth) {
+      for (const dir of listing?.dirs ?? []) {
+        if (String(dir).startsWith(current.path) && !seen.has(String(dir))) {
+          queue.push({path: String(dir), depth: current.depth + 1});
+        }
+      }
+    }
+  }
+
+  return {query, roots: safeRoots, count: results.length, results};
+}
+
 async function applyOperation(scene, op, dryRun = false) {
   if (!op || typeof op !== "object") throw new Error("Operation must be an object.");
   const type = op.op;
 
   if (type === "snapshot" || type === "ping") return {op: type, ok: true};
+
+  if (type === "inspect_3d_scene") {
+    return {op: type, ok: true, ...inspect3dScene(scene)};
+  }
+
+  if (type === "set_3d_camera") {
+    const camera = await set3dCamera(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...camera};
+  }
+
+  if (type === "capture_3d_view") {
+    if (dryRun) return {op: type, ok: true, dry_run: true};
+    const capture = await capture3dView(scene, op);
+    return {op: type, ok: true, ...capture};
+  }
+
+  if (type === "search_3d_assets") {
+    const search = await search3dAssets(op);
+    return {op: type, ok: true, ...search};
+  }
 
   if (type === "set_3d_environment") {
     const values = op.values ?? {};
