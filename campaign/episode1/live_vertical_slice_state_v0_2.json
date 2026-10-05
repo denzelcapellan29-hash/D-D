@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "generated_at": "2026-10-05",
+  "scene_id": "7ADiF7HRrUbOsibQ",
+  "scene_name": "Ep1 - World Slice",
+  "current_revision": "1c92c40e1fe5a25604aebf6f572953dbdb8ca6194450c272e441cf02a2d5c9c8",
+  "tile_count": 61,
+  "token_count": 10,
+  "status": "active production; legacy geometry retained",
+  "surface": {
+    "context_tiles": 7,
+    "collapse_dressing_tiles": 12,
+    "street_dressing_tiles": 9,
+    "npc_tokens": {
+      "city_watch": 3,
+      "passerby_cover_identity": 1
+    },
+    "notes": [
+      "Three City Watch tokens are neutral-disposition semantic Tokens.",
+      "The Gray Hands agent is player-facing only as 'Drunken Halfling Passerby'; hidden identity remains GM-side.",
+      "Warehouse interior remains cargo-free; new dressing is rubble/broken timber only."
+    ]
+  },
+  "area1": {
+    "debris_tiles": 6,
+    "rat_tokens": {
+      "total": 6,
+      "hidden": true,
+      "staging": "first 3 positioned as initial wave; second 3 positioned as one-round-later wave"
+    },
+    "correction": "Earlier internal planning briefly staged 9 rats. Source-grounded GM prep specifies six total: three first, three one round later. The extra three were removed before this state was recorded."
+  },
+  "area2": {
+    "pools": 4,
+    "central_columns": 4,
+    "perimeter_support_adaptations": 6,
+    "double_door_shells": 2,
+    "notes": [
+      "Pool liquid colors are platform adaptations matching the source-described blue, green, clear and cloudy pools.",
+      "Door shells are not yet the final lock/trap interaction implementation.",
+      "Ritual wall reliefs remain a deliberate source-specific asset gap rather than being replaced with unrelated decorative art."
+    ]
+  },
+  "qa": {
+    "structural": "PASS for counts and source-hidden token semantics.",
+    "visual": "User confirmed the surface scene visibly changed and approved continuation.",
+    "capture_issue": "Loaded v0.2.4 still shows 3D Canvas GM helper wireframes in automated captures.",
+    "staged_fix": "Acq Foundry Bridge v0.2.5 fixes nested scene-light helper suppression and prefers Tile3D precomputed world bounds; CI pending/next gate."
+  },
+  "next": [
+    "Load v0.2.5 at a convenient checkpoint and retest clean 3D captures.",
+    "Tune surface facade/warehouse scale visually.",
+    "Add source-specific fissure rope/Area 1 bootprint and Area 2 relief/lock details through custom generated assets rather than unrelated stock props.",
+    "Only after clean QA consider retiring overlapping legacy monolithic tiles."
+  ]
+}
