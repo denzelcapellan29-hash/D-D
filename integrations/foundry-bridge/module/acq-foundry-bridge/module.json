@@ -2,7 +2,7 @@
   "id": "acq-foundry-bridge",
   "title": "Acq Foundry Bridge",
   "description": "Local revision-checked 3D Canvas authoring bridge for the Acq semantic world workflow.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
