@@ -85,3 +85,23 @@ Use separate tools for different QA responsibilities rather than forcing the Min
 - Material/resource-pack experiments do not require manual Minecraft screenshots.
 - Low-level compiler replacement is gated by compatibility tests rather than assumption.
 - New world releases should follow tooling validation, not precede it.
+
+
+## ADR-005 — Keep Minecraft 26.3 runtime; adapt VibeCraft at the MCP/tool layer
+**Status:** Accepted  
+**Date:** 2026-10-05
+
+### Context
+VibeCraft is an MIT-licensed MCP-native Minecraft automation project with structured building tools, WorldEdit integration, spatial analysis, terrain/pattern/furniture helpers and explicit AI-control safety. Its published client-mod compatibility currently stops at Minecraft 1.21.4, while this campaign's validated runtime is Minecraft Java 26.3.
+
+### Decision
+Do not replace the working 26.3 Fabric bridge with VibeCraft's client mod.
+
+Use VibeCraft as a reference/donor architecture for the higher-level MCP/tool layer above the existing bridge. Port or reimplement useful structured tool schemas, spatial-analysis ideas, deterministic build helpers, WorldEdit-aware batching and safety workflows while preserving the project's canonical semantic-world architecture.
+
+### Consequences
+- The validated Minecraft 26.3 world and bridge remain stable.
+- We avoid a runtime downgrade or a second incompatible client-control stack.
+- Higher-level build automation can mature without pushing repeated PowerShell/Python setup onto the DM.
+- External code reuse must preserve attribution/license obligations where code is copied rather than reimplemented.
+- Amulet remains optional; replacement of the validated low-level compiler is not a prerequisite for world-feel iteration.
