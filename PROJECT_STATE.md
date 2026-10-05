@@ -186,3 +186,49 @@ The promised tooling upgrade is now implemented and validated before further wor
 - minecraft-ai-build-server is a strong validator/compiler design reference but is pinned to 26.1.2 in its current stack.
 - GDMC HTTP Interface currently targets Minecraft 1.21.11, so it is not a 26.3 candidate.
 - No further DM-side Java/Python/PowerShell troubleshooting is part of the normal workflow. The next handoff should be a packaged, tested server launch or a single install/restart action only if unavoidable.
+
+
+## Platform decision — 2026-10-05
+After a fresh market/architecture review of Foundry + 3D Canvas, TaleSpire, The RPG Engine, RPG Stories, Menyr, Minecraft/Fabric, and emerging hybrids, **Foundry VTT + 3D Canvas is selected as the primary campaign runtime**.
+
+Rationale:
+- It is the only mature current option that combines high-quality 3D presentation with a documented/extensible campaign/rules platform and a control surface we have already proven end-to-end.
+- Foundry V14 is stable and current; 3D Canvas is actively maintained and verified for V14.
+- The existing Acq Foundry Bridge already proved scene/document CRUD, asset upload, lights/walls/regions/notes/journals, D&D5e compendium work, camera framing, captures, revision-checked writes and backups.
+- TaleSpire remains visually excellent but its official Symbiote API still cannot persistently edit board state/place tiles, which is incompatible with the desired autonomous inspect/write/repair loop.
+- RPG Engine and RPG Stories provide strong 3D building UX, but no sufficiently documented external automation/control API was found for the autonomous prep requirement. RPG Engine's public Steam binary branch has also not materially advanced since April 2025.
+- Menyr is still beta/unreleased and explicitly has more VTT features coming later.
+- Minecraft remains a deterministic/export/engineering target, not the player-facing visual runtime.
+
+### Corrected Foundry implementation strategy
+The earlier Foundry spike overused custom monolithic GLB generation and tried to solve geometry, materials, lighting and world-building simultaneously.
+
+The production strategy is now **asset-first and semantic**:
+1. semantic scene stays canonical;
+2. semantic materials/objects resolve primarily to proven 3D Canvas tiles, props, materials, skyboxes and room-building assets;
+3. 3D Canvas Advanced Tools and Mapmaking Pack provide terrain/interior/material/environment vocabulary;
+4. custom GLB generation is reserved for source-specific geometry such as the earthquake fissure, bespoke carvings and unique set pieces;
+5. the bridge creates/updates modular scene objects, lights, walls, regions, actors, journals and camera views rather than treating the world as one opaque model.
+
+### Version pinning
+For the next vertical slice, pin the runtime rather than auto-updating during campaign prep:
+- Foundry VTT 14.368
+- 3D Canvas 9.0.35
+- 3D Canvas Advanced Tools 9.0.3
+- 3D Canvas Mapmaking Pack 10.0.1
+- compatible D&D5e V14 release
+
+### Hard acceptance gate
+One focused rebuild only:
+Waterdeep lower-Dock street -> warehouse exterior/interior -> fissure -> subterranean transition -> Area 1 -> Area 2.
+
+Foundry must demonstrate:
+- convincing world/location/encounter-scale visual continuity;
+- automated clean-scene reconstruction through the bridge;
+- stable lighting/material response;
+- automated canonical camera captures;
+- working collision/sight/doors/regions;
+- D&D5e actors/journals/encounter support;
+- no routine DM-side file/script debugging.
+
+If this asset-first vertical slice still fails the visual/world-feel bar after one bounded pass, stop Foundry work and move to TaleSpire. Do not return to Minecraft visual-polish work.
