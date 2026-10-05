@@ -48,8 +48,11 @@ jobs:
 
       - name: Build install package
         run: |
-          mkdir -p dist
-          zip -r dist/Acq_Foundry_3D_MCP.zip integrations/foundry-bridge             -x "integrations/foundry-bridge/agent/.venv/*"             -x "*/__pycache__/*"
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          cd integrations/foundry-bridge
+          zip -r "$GITHUB_WORKSPACE/dist/Acq_Foundry_3D_MCP.zip" . \
+            -x "agent/.venv/*" \
+            -x "*/__pycache__/*"
 
       - name: Upload install package
         uses: actions/upload-artifact@v4
