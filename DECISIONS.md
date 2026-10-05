@@ -144,3 +144,44 @@ Paper remains the fallback if a required server-only API or plugin cannot be pro
 
 ### Operating rule
 Routine infrastructure setup, QA, rendering and world iteration must not require the DM to debug Java, Python, PowerShell, browser capture or package compatibility. DM involvement is limited to a genuinely unavoidable install/restart/authorization action after the automation has been tested elsewhere.
+
+
+## ADR-007 — Foundry + 3D Canvas is the primary campaign runtime
+**Status:** Accepted  
+**Date:** 2026-10-05
+
+### Decision
+Select **Foundry VTT + 3D Canvas** as the primary campaign runtime after a renewed comparison with TaleSpire, Minecraft/Fabric, The RPG Engine, RPG Stories, Menyr and emerging 3D VTTs.
+
+### Why
+The project requires all of the following simultaneously:
+1. high-quality player-facing 3D presentation;
+2. autonomous programmatic scene creation and repair;
+3. structural/readback QA;
+4. D&D5e campaign documents, actors, items, journals and encounters;
+5. long-term maintainability and versioned automation;
+6. minimal DM-side preparation.
+
+Foundry + 3D Canvas is the only currently mature candidate that satisfies all six at once, and the project has already empirically validated most of its control plane.
+
+### Important implementation correction
+Do not repeat the earlier custom-GLB-first approach.
+
+Use an **asset-first semantic resolver**:
+semantic object/material -> existing 3D Canvas asset/material/environment whenever suitable -> custom geometry only when necessary.
+
+Scene content should remain modular and bridge-addressable.
+
+### Competitor conclusions
+- **TaleSpire:** best out-of-box tabletop aesthetic; rejected as primary because the supported Symbiote API still cannot persist board-state edits/place tiles. Retained as immediate fallback.
+- **The RPG Engine:** capable 3D world builder with terrain sculpting, campaign building and Workshop content; no sufficiently documented external automation API found, and its public Steam build has been unchanged since April 2025. Not suitable for the autonomous prep loop.
+- **RPG Stories:** actively developed, strong procedural/auto-room builder, Workshop and UVTT export; useful map-building product but no comparable external programmatic control surface found.
+- **Menyr:** visually ambitious and procedural, but still beta/unreleased with VTT features explicitly still arriving.
+- **Minecraft/Fabric:** excellent deterministic control, but too much visual-engineering burden for the desired player-facing experience.
+- **Merlin and other Foundry/Unreal hybrids:** architecturally interesting but not production-ready enough for this campaign.
+
+### Runtime policy
+Pin a known-good Foundry/3D Canvas version set for the campaign and upgrade only after clone-based compatibility testing.
+
+### Final kill criterion
+Perform one bounded asset-first vertical-slice rebuild. If Foundry still cannot meet the visual/world-feel standard without disproportionate engineering effort, switch directly to TaleSpire. No third round of Minecraft visual infrastructure work.
