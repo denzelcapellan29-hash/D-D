@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-v0.4 context-shell build is complete. Continue replacing the remaining procedural/sandbox feel with stronger urban grammar, elevation, landmarks and resource-pack/material polish while preserving the verified Episode 1 core, then run end-to-end warehouse → fissure → dungeon QA.
+v0.5 lower-Dock organic-city build is complete. Episode 1 scope is now explicitly the lower Dock Ward only, not all Waterdeep. Next: run the BlueMap/Amulet/PyVista tooling spikes, improve materials/facade grammar from the resulting QA, then integrate and validate the warehouse → fissure → dungeon route.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -103,3 +103,23 @@ World-feel/context-shell release: `Acq_Waterdeep_DockWard_WORLD_v0_4.zip`.
 - 0 grass blocks remain in the checked surface volume.
 - Structural graph: 210 above-ground components, only 2 unsupported components / 29 blocks; both are the pre-existing explicitly allowed small sail vessels in the protected core.
 - This is still procedural connective/background world-building, not canonical survey geometry for all of Waterdeep.
+
+
+## Episode 1 geographic scope
+Episode 1 intentionally targets only the lower Dock Ward required to make the warehouse/fissure/dungeon approach feel like a coherent lived-in district.
+- Full Waterdeep is a stretch goal, not part of the Episode 1 quality gate.
+- The current pregenerated footprint is context for the lower Dock Ward, not an attempt to represent the entire city.
+- Expansion beyond this footprint should happen only when required by later episodes or explicit campaign decisions.
+
+
+## Prebuilt world release v0.5
+Organic lower-Dock release: `Acq_Waterdeep_DockWard_WORLD_v0_5.zip`.
+- Drive artifact ID: `1akOelL6nL34XacJLNGTMVp--H8DE5go1`.
+- Scope: Episode 1 lower Dock Ward only.
+- Rebuilt procedural context around curved deterministic streets rather than a rectangular grid.
+- Added frontage-driven attached rowhouses, terraced inland elevation, market/plaza dressing, a continuous quay, piers, ships, cranes and an inland skyline/fortification edge.
+- 63 new context houses; 9,435 road cells; 4,861 sidewalk cells; 24 street lamps; 6 piers; 3 context ships; 4 cranes.
+- Structural QA reports 0 unsupported components / 0 unsupported blocks after a boundary support repair outside the protected core.
+- All 300 pregenerated chunks parse successfully.
+- 0 grass blocks remain in the checked surface volume.
+- Protected Episode 1 core remains exact: 0 block mismatches.
