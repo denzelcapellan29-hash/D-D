@@ -33,7 +33,7 @@
 
 5. **Install and validate the staged Acq 3D MCP control plane.**
    - Updated bridge code now includes direct loopback RPC, 3D inspect/camera/capture, asset search, semantic idempotent apply and manifest validation.
-   - Run CI/syntax gate.
+   - **CI/syntax gate PASSED**; validated package is in Google Drive releases.
    - Package/install updated Foundry module and local MCP stack.
    - Connect it with OpenAI Secure MCP Tunnel.
    - Read-only inspect/capture first; then one disposable semantic Tile transaction.
