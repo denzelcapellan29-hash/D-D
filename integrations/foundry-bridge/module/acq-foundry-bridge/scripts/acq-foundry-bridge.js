@@ -285,6 +285,25 @@ async function capture3dView(scene, op) {
   const originalRenderTarget = renderer.getRenderTarget();
   const originalSize = renderer.getSize(new THREE3D.Vector2());
 
+  const hiddenHelpers = [];
+  const hideForCapture = (obj) => {
+    if (!obj || typeof obj.visible !== "boolean") return;
+    hiddenHelpers.push([obj, obj.visible]);
+    obj.visible = false;
+  };
+
+  for (const light of Object.values(l3d.lights ?? {})) {
+    hideForCapture(light?.lightHelper);
+    hideForCapture(light?.dragHandle);
+  }
+  for (const sound of Object.values(l3d.sounds ?? {})) {
+    hideForCapture(sound?.lightHelper);
+    hideForCapture(sound?.dragHandle);
+    hideForCapture(sound?.helper);
+  }
+  hideForCapture(l3d.interactionManager?.transformControls);
+  hideForCapture(l3d.interactionManager?.draggable);
+
   const renderTarget = new THREE3D.WebGLRenderTarget(width, height, {
     format: THREE3D.RGBAFormat,
     type: THREE3D.UnsignedByteType
@@ -328,6 +347,8 @@ async function capture3dView(scene, op) {
       }
     };
   } finally {
+    for (const [obj, visible] of hiddenHelpers) obj.visible = visible;
+
     renderer.setRenderTarget(originalRenderTarget);
     renderer.setSize(originalSize.x ?? originalSize.width, originalSize.y ?? originalSize.height, false);
     renderTarget.dispose();
