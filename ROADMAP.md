@@ -40,8 +40,9 @@
    - No production scene writes until this passes.
 
 6. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
-   - Source roles and query vocabulary are now defined in `campaign/episode1/asset_requirements_v1.json`.
-   - Resume live installed-asset sweep when Foundry + Secure MCP tunnel reconnect; current runtime disconnected during the sweep.
+   - Source roles and query vocabulary are defined in `campaign/episode1/asset_requirements_v1.json`.
+   - **Live candidate sweep completed:** `campaign/episode1/asset_catalog_v0_1.json` now records validated installed candidates and explicit gaps.
+   - Install/load Acq Foundry Bridge v0.2.4 so clean helper-free captures and runtime model bounds are available before production placement.
    - Resolve semantic roles to existing Mapmaking Pack asset paths/materials.
    - Dock Ward masonry/timber/roofing/cobbles/quay/harbor props.
    - Warehouse structure/clutter.
