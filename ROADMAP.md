@@ -6,25 +6,27 @@
    - Expected persisted baseline: Foundry 14.368, D&D5e 6.0.5, world `Acq WorldGen Test`.
    - Verify live module versions and current scene state through the bridge before changing anything.
 
-2. **Minimal runtime/module stack only.**
+2. **Verify the live 3D Canvas dependency graph before changing modules.**
    - Foundry 14.368
    - D&D5e 6.0.5
-   - libWrapper
    - 3D Canvas 9.0.35
    - 3D Canvas Mapmaking Pack 10.0.1
    - Acq Foundry Bridge
-   - Advanced Tools 9.0.3 optional, only if already licensed/desired
-   - Do not add retired Levels/Wall Height or broad automation/effects suites unless a specific requirement appears.
+   - libWrapper as indicated by current source manifest
+   - Advanced Tools optional
+   - Published 3D Canvas V14 docs and source disagree about Levels/Wall Height/socketLib; inspect the installed 9.0.35 manifest/runtime and preserve whatever it actually requires. Do not remove or add legacy dependencies by assumption.
 
 3. **Recover/sync the most capable Acq Bridge implementation before extending it.**
    - Compare current repo v0.1 source with the previously proven v0.1.9-era Drive/release artifacts.
    - Restore only missing project-specific capabilities: camera/capture, semantic bounds, 3D environment/tile authoring, revision checks.
    - Do not rebuild generic actor/item/journal/combat/compendium APIs if Foundry MCP can provide them.
 
-4. **Evaluate Foundry API Bridge / Foundry MCP as an optional generic sidecar.**
-   - If the user's ChatGPT plan supports custom MCP connections and the user wants the DM tier, delegate generic campaign CRUD/compendium/combat/session controls to it.
-   - Keep script macros/code execution disabled.
-   - This is not a blocker for the 3D vertical-slice test.
+4. **Connect ChatGPT directly to Foundry using standard MCP before extending our bridge.**
+   - Install/enable Foundry API Bridge and add https://foundry-mcp.com/mcp as a custom MCP connection using OAuth.
+   - Prefer the Dungeon Master tier if the DM accepts the cost; it unlocks scenes/tokens/combat/compendiums/time/UI and avoids reimplementing generic Foundry APIs.
+   - Keep Allow Script Macros off.
+   - Build a second private Acq 3D MCP only for missing 3D Canvas-specific operations and connect it via OpenAI Secure MCP Tunnel.
+   - Google Drive becomes fallback transport/artifact storage rather than the normal command path.
 
 5. **Build a machine-readable 3D Canvas asset catalog from installed modules.**
    - Resolve semantic roles to existing Mapmaking Pack asset paths/materials.
