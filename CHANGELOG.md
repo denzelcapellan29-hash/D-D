@@ -77,3 +77,17 @@
 - Fixed Linux headless PyVista rendering with Xvfb/EGL/OSMesa dependencies.
 - Validated the infrastructure stack in GitHub Actions run 37250767331: BlueMap success, PyVista success, Amulet success.
 - No new Minecraft world release was produced as part of this infrastructure correction.
+
+
+## 2026-10-05
+
+### Foundry platform / MCP infrastructure
+- Selected Foundry VTT + 3D Canvas as the primary campaign runtime after renewed platform research.
+- Established a direct ChatGPT custom-MCP connection to Foundry MCP using OAuth.
+- Fixed the Foundry-side key/account mismatch and proved full ChatGPT -> hosted MCP -> Foundry WebSocket connectivity.
+- Live `get-world-info` returned `Acq WorldGen Test` on Foundry 14.368 / D&D5e 6.0.5.
+- Executed a live d20 roll through the MCP path.
+- Probed subscription boundaries: Guest, Free, Adventurer and Dungeon Master.
+- Determined that the Dungeon Master tier is warranted for this project because scenes, tokens, combat and compendium import are required campaign-prep capabilities.
+- Confirmed that hosted Foundry MCP does not replace the specialized 3D authoring layer: its standard screenshot path captures the 2D Pixi canvas, while 3D Canvas uses its own Three.js renderer.
+- Retained the architecture split: hosted Foundry MCP for generic campaign/D&D5e automation + a thin private Acq 3D MCP for 3D Canvas semantic authoring and visual QA.
