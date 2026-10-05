@@ -100,3 +100,7 @@
 
 - Bumped Acq Foundry Bridge to v0.2.0, passed the Foundry bridge smoke workflow, and produced a validated install ZIP.
 - Persisted `Acq_Foundry_3D_MCP_build_2026-10-05.zip` to Google Drive Foundry Bridge releases (Drive ID `1RiXGH7WKQ-74sEXVxvOnbtfAa1biEJpK`).
+
+- Live Acq 3D MCP inspection and installed-asset search passed through ChatGPT → Secure MCP Tunnel → local MCP → bridge agent → Foundry/3D Canvas.
+- Found and fixed the first 3D QA defect: renderer DOM-canvas capture produced black frames. v0.2.2 now captures via a Three.js WebGLRenderTarget/readRenderTargetPixels path.
+- Added semantic-object cleanup to support a reversible disposable write test.
