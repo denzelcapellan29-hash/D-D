@@ -3,6 +3,7 @@
 ## Now — vertical slice quality gate
 0. ~~Compile a direct-import world save from headless data and validate chunk integrity.~~
 0a. ~~Structural cleanup / controlled-envelope world: remove unsupported geometry and vanilla terrain bleed.~~
+0b. ~~World-context shell: replace the visible sandbox plate with continuous urban/harbor surroundings across the pregenerated footprint.~~
 1. ~~Install Fabric bridge v0.2.0.~~
 2. ~~Read the live Dock Ward slice through compressed region inspection.~~
 3. ~~Run structural QA from actual runtime data.~~
