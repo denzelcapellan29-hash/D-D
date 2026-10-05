@@ -69,6 +69,14 @@ Start-Sleep -Seconds 1
 & `$Py '$escapedMcp'
 "@ | Set-Content -Path $StackLauncher -Encoding UTF8
 
+$StackCmd = Join-Path $Here "run_acq_3d_stack.cmd"
+@'
+@echo off
+setlocal
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0run_acq_3d_stack.ps1"
+exit /b %ERRORLEVEL%
+'@ | Set-Content -Path $StackCmd -Encoding ASCII
+
 Write-Host "Installed Acq Foundry Bridge + Acq 3D MCP files."
 Write-Host "Restart Foundry, enable the module, then run:"
 Write-Host "  $StackLauncher"
