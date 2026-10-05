@@ -64,8 +64,35 @@ if (-not (Test-Path '$escapedVenv')) {
 }
 `$Py = Join-Path '$escapedVenv' 'Scripts\python.exe'
 & `$Py -m pip install --disable-pip-version-check -r '$escapedReq'
-Start-Process -FilePath `$Py -ArgumentList @('$escapedAgent','--transport','$escapedBridge') -WindowStyle Minimized
-Start-Sleep -Seconds 1
+
+`$LogDir = Join-Path $PSScriptRoot "logs"
+New-Item -ItemType Directory -Force -Path `$LogDir | Out-Null
+`$AgentOut = Join-Path `$LogDir "bridge-agent.out.log"
+`$AgentErr = Join-Path `$LogDir "bridge-agent.err.log"
+Remove-Item `$AgentOut, `$AgentErr -ErrorAction SilentlyContinue
+
+`$AgentProc = Start-Process -FilePath `$Py -ArgumentList @('$escapedAgent','--transport','$escapedBridge') -PassThru -RedirectStandardOutput `$AgentOut -RedirectStandardError `$AgentErr
+
+`$healthy = `$false
+for (`$i = 0; `$i -lt 20; `$i++) {
+  Start-Sleep -Milliseconds 500
+  if (`$AgentProc.HasExited) { break }
+  try {
+    `$h = Invoke-RestMethod -Uri "http://127.0.0.1:18747/health" -TimeoutSec 2
+    if (`$h.ok) { `$healthy = `$true; break }
+  } catch {}
+}
+
+if (-not `$healthy) {
+  Write-Host ""
+  Write-Host "Acq Bridge Agent failed to become healthy." -ForegroundColor Red
+  if (Test-Path `$AgentErr) { Get-Content `$AgentErr -Tail 80 }
+  if (Test-Path `$AgentOut) { Get-Content `$AgentOut -Tail 80 }
+  throw "Bridge agent startup failed. See logs in `$LogDir"
+}
+
+Write-Host "Acq Bridge Agent healthy on http://127.0.0.1:18747" -ForegroundColor Green
+Write-Host "Starting Acq 3D MCP on http://127.0.0.1:18748/mcp" -ForegroundColor Green
 & `$Py '$escapedMcp'
 "@ | Set-Content -Path $StackLauncher -Encoding UTF8
 
