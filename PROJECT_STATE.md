@@ -343,3 +343,32 @@ Direct DM-tier operations are now verified live through ChatGPT against `Acq Wor
 - World-time readback succeeded.
 - No writes were performed during verification.
 - The hosted MCP is now accepted as the generic Foundry/D&D5e control plane for this project.
+
+
+## Acq 3D MCP implementation — staged in repo (2026-10-05)
+The project-specific 3D control plane has now moved from design to implementation.
+
+Implemented in `integrations/foundry-bridge`:
+- direct loopback `POST /rpc` on the existing Python bridge agent, using the existing Foundry polling/execution path rather than Drive command files;
+- 3D Canvas runtime inspection;
+- installed 3D asset path search;
+- ephemeral 3D camera positioning with optional initial-view persistence;
+- true 3D capture from the 3D Canvas Three.js renderer;
+- existing allow-listed environment control;
+- idempotent semantic-object create/update keyed by `flags.acq.semantic_id`;
+- semantic manifest validation;
+- a narrow MCP Python server on loopback port 18748;
+- Windows install/stack launcher;
+- Foundry bridge smoke CI for JSON/Python/JavaScript/MCP import checks.
+
+The hosted Foundry MCP remains responsible for generic campaign operations.
+
+### Remaining gate before world writes
+The new code is staged but not yet installed into the live Foundry machine. Before Episode 1 rebuilding:
+1. pass CI/syntax checks;
+2. package/install updated Acq Foundry Bridge;
+3. start local bridge agent + Acq 3D MCP;
+4. create and authorize an OpenAI Secure MCP Tunnel;
+5. verify read-only 3D inspect/capture;
+6. perform one disposable semantic Tile create/update/delete transaction;
+7. only then permit production vertical-slice writes.
