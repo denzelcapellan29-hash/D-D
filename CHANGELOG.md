@@ -67,3 +67,13 @@
 - Structural QA finished at zero unsupported components and zero unsupported blocks.
 - Validated all 300 pregenerated chunks with zero parse failures and zero grass blocks in the checked surface volume.
 - Persisted `Acq_Waterdeep_DockWard_WORLD_v0_5.zip` to Google Drive Build Artifacts.
+
+### Infrastructure QA v0.1
+- Added a read-only Anvil/NBT world reader with block-state-property parsing.
+- Added a direct off-screen VTK visible-face renderer and successfully rendered the actual v0.5 lower-Dock world: 540,080 blocks, 263,057 visible faces, 262,349 points.
+- Added BlueMap 5.28 standalone QA automation with resource-pack support and explicit Mojang-download consent gating.
+- Added a non-destructive Amulet Core load/save/reopen probe.
+- Added GitHub Actions smoke coverage for BlueMap, PyVista and Amulet.
+- Fixed Linux headless PyVista rendering with Xvfb/EGL/OSMesa dependencies.
+- Validated the infrastructure stack in GitHub Actions run 37250767331: BlueMap success, PyVista success, Amulet success.
+- No new Minecraft world release was produced as part of this infrastructure correction.
