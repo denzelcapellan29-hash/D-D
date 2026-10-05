@@ -1,0 +1,57 @@
+{
+  "version": "0.1.0",
+  "build_id": "ep1-world-slice-asset-first-v1-phase-a",
+  "scene_id": "7ADiF7HRrUbOsibQ",
+  "scene_name": "Ep1 - World Slice",
+  "before_revision": "a376e23626394968acc3e1e3585857aa285d823cee1588b47f6349d45270f5ef",
+  "after_revision": "cb00506fde7c9f357093da69a351161298a29013e934ab651e2928be77f1d640",
+  "legacy_tile_count_before": 11,
+  "tile_count_after": 18,
+  "created": [
+    {
+      "semantic_id": "ep1.surface.context.north.house01",
+      "foundry_id": "uYLxAtSaD5skfDqD",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_1.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.context.north.house02",
+      "foundry_id": "09dk4CPvfi8LJO3v",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_2.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.context.north.house03",
+      "foundry_id": "9nzyHJHkxN31fBrD",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_3.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.context.north.house04",
+      "foundry_id": "0doxNDzTNNSiMFCc",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_4.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.context.north.shop01",
+      "foundry_id": "U79iRK0lTr8eimLU",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Buildings/Shop.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.jolly.exterior",
+      "foundry_id": "WnDnmXR65f6YJMMe",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Buildings/Shop.glb"
+    },
+    {
+      "semantic_id": "ep1.surface.context.south.house01",
+      "foundry_id": "36PG4q06rnz7BtTS",
+      "model3d": "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_2.glb"
+    }
+  ],
+  "notes": [
+    "Legacy monolithic World Slice tiles remain in place; no destructive replacement yet.",
+    "New context tiles have collision/sight disabled during iterative art-direction QA.",
+    "Jolly's Lamp Emporium exterior is represented with a generic installed shop shell as platform adaptation, not as a claim about canonical architecture.",
+    "3D camera was moved ephemerally for surface review; scene revision was unchanged by camera movement."
+  ],
+  "qa_status": {
+    "structural": "PASS: hosted Foundry scene reports 18 Tiles after write.",
+    "visual": "PENDING: direct renderer capture is still contaminated by visible GM light-helper wireframes; helper suppression requires follow-up."
+  }
+}
