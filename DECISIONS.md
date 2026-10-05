@@ -185,3 +185,45 @@ Pin a known-good Foundry/3D Canvas version set for the campaign and upgrade only
 
 ### Final kill criterion
 Perform one bounded asset-first vertical-slice rebuild. If Foundry still cannot meet the visual/world-feel standard without disproportionate engineering effort, switch directly to TaleSpire. No third round of Minecraft visual infrastructure work.
+
+
+## ADR-008 — Thin 3D adapter + off-the-shelf generic Foundry APIs
+**Status:** Accepted  
+**Date:** 2026-10-05
+
+### Decision
+Avoid building a bespoke replacement for Foundry's entire campaign API.
+
+Use:
+- **Foundry V14 core** for Scenes, Scene Levels/Regions, documents and backups;
+- **3D Canvas + Mapmaking Pack** for the player-facing 3D runtime and asset vocabulary;
+- **Acq Foundry Bridge** as a thin, declarative, revision-checked adapter only where the project has genuinely specialized requirements: 3D Canvas tile/model/environment data, semantic build identity, asset upload, camera framing/capture and visual QA;
+- **Foundry API Bridge / Foundry MCP** as the preferred optional generic campaign-management sidecar when account/plan/cost conditions allow it, rather than duplicating its actor/item/journal/table/compendium/token/combat/time/UI tool surface.
+
+### Runtime baseline
+Pin the vertical-slice test to the known-good/current stack:
+- Foundry 14.368
+- D&D5e 6.0.5
+- 3D Canvas 9.0.35
+- Mapmaking Pack 10.0.1
+- libWrapper
+- Acq Foundry Bridge
+- Advanced Tools 9.0.3 optional
+
+### V14 migration rule
+Do not build a fresh V14 scene around the retired Levels/Wall Height module architecture. Use core Scene Levels/Regions. Legacy module installs may be used only for migration if required.
+
+### Asset/build rule
+Treat 3D Canvas Tiles as the normal geometry primitive. Resolve semantic scene objects to installed asset/material references first. Custom GLB generation is reserved for source-specific geometry not represented adequately by the asset ecosystem.
+
+Every generated object must be addressable by stable semantic/build flags so scene application is idempotent and repairable.
+
+### Safety
+- No arbitrary remote eval/shell.
+- Script macros remain disabled for generic remote bridges unless separately justified.
+- Meaningful writes require scene revision checks and a recoverable pre-write state.
+- Live Foundry User Data must not be placed inside bidirectional cloud-sync storage; Drive is transport/artifact storage only.
+- Foundry package backups are supplemented by separately versioned generated/custom multimedia assets because package backups do not necessarily include assets stored outside package directories.
+
+### Hosting
+Stay local for the vertical-slice test. Dedicated/hosted Foundry is a later deployment concern and is not allowed to become another infrastructure project before the visual/runtime gate passes.
