@@ -528,3 +528,15 @@ Acq Foundry Bridge **v0.2.6** is staged and smoke-CI passed. It:
 - hides note meshes, hidden-token meshes, token editor helpers and rangefinder overlays from QA captures.
 
 Do not use Scene switching as a QA refresh mechanism again; use the dedicated 3D reload operation once v0.2.6 is loaded.
+
+
+## Acq Foundry Bridge v0.2.6 live validation — 2026-10-05
+v0.2.6 was loaded successfully and the active World Slice remained structurally intact at 61 Tiles / 10 Tokens.
+- `inspect_3d_scene` passed with 61 Tiles, 11 lights, 5 regions and 50 semantic Tiles.
+- The cheaper runtime-bounds path eliminated the prior inspection timeout on the full production scene.
+- Canonical 3D captures succeeded without the large light-helper wireframes and without hidden giant-rat meshes appearing in the player-neutral QA views.
+- Close/medium/wide captures confirmed the current art-direction weaknesses clearly: the legacy white/grid ground still dominates, warehouse collapse dressing is readable but sparse/prop-like, and Area 2 remains structurally schematic with bright flat pool surfaces and provisional columns/doors.
+- No legacy monolithic geometry was removed.
+- A new cobble-surface probe was queued next, but before that write executed both the hosted Foundry MCP connection and Secure MCP tunnel disconnected. No write occurred after the disconnect.
+
+Current next action: restore the live Foundry + tunnel connections, then continue with small reversible surface/warehouse probes rather than broad bulk replacement.
