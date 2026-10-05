@@ -429,3 +429,19 @@ Infrastructure acceptance status:
 - reversible cleanup: PASS.
 
 The infrastructure gate is closed. Next work should be campaign production: build the machine-readable 3D asset catalog and rebuild the Episode 1 vertical slice asset-first. Do not reopen infrastructure work unless a concrete runtime defect blocks production.
+
+
+## Episode 1 production prep — STARTED (2026-10-05)
+Source-grounded vertical-slice production has begun.
+- Reviewed the private `Acq_Inc_Ep1.pdf` pages covering Warehouse Environs, the warehouse/fissure, Area 1 and Area 2.
+- Recovered the prior `semantic_scene_v0_5_1.json` and `programmatic_review.json` from Drive and carried forward validated source-first decisions (jagged fissure, Area 1 debris/bootprints, reinforced Area 2, no player-visible hazard debug materials).
+- Added canonical generated artifacts:
+  - `campaign/episode1/vertical_slice_semantic_v1.json`
+  - `campaign/episode1/asset_requirements_v1.json`
+  - `campaign/episode1/vertical_slice_build_v1.json`
+- The new build plan uses stable semantic IDs and a phase-by-phase replacement strategy so legacy `ep1_ws_v06_*` GLBs are not removed until each replacement phase passes structural + visual QA.
+
+Runtime status changed during the asset catalog sweep:
+- hosted Foundry MCP reports the world disconnected;
+- Acq 3D MCP reports the Secure MCP tunnel is no longer polling.
+No production writes were attempted after the disconnect.
