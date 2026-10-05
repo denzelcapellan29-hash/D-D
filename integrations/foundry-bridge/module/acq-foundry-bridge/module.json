@@ -1,8 +1,8 @@
 {
   "id": "acq-foundry-bridge",
   "title": "Acq Foundry Bridge",
-  "description": "Local, revision-checked bridge between Foundry VTT scenes and the Acq WorldGen workflow.",
-  "version": "0.1.0",
+  "description": "Local revision-checked 3D Canvas authoring bridge for the Acq semantic world workflow.",
+  "version": "0.2.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
