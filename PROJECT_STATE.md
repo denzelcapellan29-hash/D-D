@@ -372,3 +372,16 @@ The new code is staged but not yet installed into the live Foundry machine. Befo
 5. verify read-only 3D inspect/capture;
 6. perform one disposable semantic Tile create/update/delete transaction;
 7. only then permit production vertical-slice writes.
+
+
+## Acq 3D MCP validated build — 2026-10-05
+- Acq Foundry Bridge version bumped to **0.2.0**.
+- GitHub Actions smoke validation passed on the current staged implementation: protocol JSON, Python syntax, JavaScript syntax, MCP SDK install/import and packaging.
+- Validated workflow run: `37348107962`.
+- Packaged release artifact persisted to Google Drive Foundry Bridge releases:
+  - file: `Acq_Foundry_3D_MCP_build_2026-10-05.zip`
+  - Drive ID: `1RiXGH7WKQ-74sEXVxvOnbtfAa1biEJpK`
+  - artifact digest: `sha256:4e8ac0df4bf99d4e60a8222c4b735a52dfcf5846425787dea74ff01e9d22b11c`
+- Windows installer now auto-detects the normal Foundry user-data locations and the known `G:\My Drive\D&D\Foundry Bridge` transport path when available.
+
+The next step requires a bounded local install/restart/authorization action on the DM machine; no further remote implementation is needed before that runtime gate.
