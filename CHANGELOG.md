@@ -48,3 +48,13 @@
 - Revalidated all 300 pregenerated chunks with zero parse failures.
 - Confirmed the verified live corridor still matches exactly with zero block mismatches.
 - Persisted `Acq_Waterdeep_DockWard_WORLD_v0_3.zip` to Google Drive Build Artifacts.
+
+### Offline world compiler / release v0.4
+- Replaced the visible neutral sandbox plate with a continuous city/harbor context shell across the full 320×240 pregenerated footprint.
+- Added 111 deterministic background buildings, 3 skyline towers, 6 piers, 3 context vessels and 5 cranes.
+- Added continuous street paving and irregularized harbor shoreline outside the protected Episode 1 core.
+- Changed future flat-world generation to bedrock + stone datum only, eliminating new dirt/grass superflat bleed.
+- Preserved the protected Episode 1 core exactly with zero block mismatches.
+- Structural QA found only the two previously allowed small sail-vessel components unsupported; no new floating architectural components were introduced.
+- Validated all 300 pregenerated chunks with zero parse failures.
+- Persisted `Acq_Waterdeep_DockWard_WORLD_v0_4.zip` to Google Drive Build Artifacts.
