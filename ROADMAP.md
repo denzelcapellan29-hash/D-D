@@ -51,6 +51,8 @@
    - Store references/metadata, not redistributed third-party assets.
 
 7. **Rebuild exactly one continuous vertical slice.**
+   - **STARTED:** Phase A surface context has its first production placement: 7 new semantic 3D Tiles, taking the scene from 11 to 18 Tiles without deleting legacy geometry.
+   - Next: verify/adjust facade scale and alignment, then add warehouse-collapse dressing and surface lighting/props before any legacy swap.
    lower Dock Ward street -> warehouse exterior -> warehouse interior -> earthquake fissure -> descent -> Area 1 -> Area 2.
 
 8. **Authoring rules.**
