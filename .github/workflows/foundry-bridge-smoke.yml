@@ -45,3 +45,15 @@ jobs:
           assert mod.mcp is not None
           print("MCP server import OK")
           PY
+
+      - name: Build install package
+        run: |
+          mkdir -p dist
+          zip -r dist/Acq_Foundry_3D_MCP.zip integrations/foundry-bridge             -x "integrations/foundry-bridge/agent/.venv/*"             -x "*/__pycache__/*"
+
+      - name: Upload install package
+        uses: actions/upload-artifact@v4
+        with:
+          name: acq-foundry-3d-mcp
+          path: dist/Acq_Foundry_3D_MCP.zip
+          if-no-files-found: error
