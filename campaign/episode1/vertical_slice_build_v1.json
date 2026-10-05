@@ -1,0 +1,243 @@
+{
+  "version": "1.0.0-draft",
+  "build_id": "ep1-world-slice-asset-first-v1",
+  "seed": 18427,
+  "target_scene": {
+    "id": "7ADiF7HRrUbOsibQ",
+    "name": "Ep1 - World Slice",
+    "baseline_revision": "cbde9aa249e4a7bfb0c1b48034df6c38b7f88d81e7506cc9991cdd4572c23e70"
+  },
+  "phases": [
+    {
+      "id": "A",
+      "name": "surface_context",
+      "zones": [
+        "dock_ward_environs",
+        "warehouse"
+      ],
+      "acceptance": [
+        "Street reads as lower Dock Ward rather than an isolated encounter platform.",
+        "Jolly's Lamp Emporium and neighboring ramshackle frontage visually frame the collapsed warehouse.",
+        "Warehouse interior is sparse and cargo-free.",
+        "Collapsed envelope and fissure are the dominant warehouse set piece."
+      ]
+    },
+    {
+      "id": "B",
+      "name": "fissure_transition",
+      "zones": [
+        "fissure_transition",
+        "area1_rats"
+      ],
+      "acceptance": [
+        "Warehouse construction transitions visibly into rubble/exposed earth and then worked stone.",
+        "Area 1 has dust, rubble, warehouse wood, subtle boot prints and blocked/non-traversable side cracks.",
+        "No hidden encounter timing or trap semantics are exposed visually."
+      ]
+    },
+    {
+      "id": "C",
+      "name": "area2_trials",
+      "zones": [
+        "area2_trials"
+      ],
+      "acceptance": [
+        "Rectangular chamber appears structurally intact and reinforced.",
+        "Four distinct floor-set pools surround/support a readable central-column composition.",
+        "Wall reliefs and the ornate far double door make the chamber's ritual purpose legible without exposing mechanics."
+      ]
+    }
+  ],
+  "semantic_objects": [
+    {
+      "semantic_id": "ep1.surface.street.primary",
+      "zone": "dock_ward_environs",
+      "role": "dock_street_surface",
+      "classification": "platform-adaptation",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.surface.context.facades",
+      "zone": "dock_ward_environs",
+      "role": "dock_building_facade",
+      "classification": "original-connective-worldbuilding",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.surface.jolly.exterior",
+      "zone": "dock_ward_environs",
+      "role": "dock_building_facade",
+      "classification": "source-grounded-location",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.warehouse.shell",
+      "zone": "warehouse",
+      "role": "warehouse_wall",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.warehouse.roof_damage",
+      "zone": "warehouse",
+      "role": "warehouse_roof",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.warehouse.broken_timber",
+      "zone": "warehouse",
+      "role": "broken_timber",
+      "classification": "source-grounded-dressing",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.warehouse.rubble",
+      "zone": "warehouse",
+      "role": "rubble",
+      "classification": "source-grounded-dressing",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.warehouse.descent_rope",
+      "zone": "warehouse",
+      "role": "rope",
+      "classification": "source-grounded-prop",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.fissure.custom_geometry",
+      "zone": "fissure_transition",
+      "role": "fissure_rock",
+      "classification": "source-specific-custom-geometry",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area1.floor",
+      "zone": "area1_rats",
+      "role": "worked_stone_floor",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area1.walls",
+      "zone": "area1_rats",
+      "role": "worked_stone_wall",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area1.debris",
+      "zone": "area1_rats",
+      "role": "rubble",
+      "classification": "source-grounded-dressing",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area1.bootprints",
+      "zone": "area1_rats",
+      "role": "custom-decal",
+      "classification": "source-grounded-clue",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area1.side_cracks",
+      "zone": "area1_rats",
+      "role": "fissure_rock",
+      "classification": "source-grounded-hazard-geometry",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.floor",
+      "zone": "area2_trials",
+      "role": "worked_stone_floor",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.walls",
+      "zone": "area2_trials",
+      "role": "worked_stone_wall",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.buttresses",
+      "zone": "area2_trials",
+      "role": "buttress",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.columns",
+      "zone": "area2_trials",
+      "role": "column",
+      "classification": "source-grounded-architecture",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.pool.blue",
+      "zone": "area2_trials",
+      "role": "pool_basin",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.pool.green",
+      "zone": "area2_trials",
+      "role": "pool_basin",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.pool.clear",
+      "zone": "area2_trials",
+      "role": "pool_basin",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.pool.cloudy",
+      "zone": "area2_trials",
+      "role": "pool_basin",
+      "classification": "source-grounded-set-piece",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.reliefs",
+      "zone": "area2_trials",
+      "role": "wall_relief",
+      "classification": "source-specific-custom-detail",
+      "interactive": false
+    },
+    {
+      "semantic_id": "ep1.area2.double_door",
+      "zone": "area2_trials",
+      "role": "ornate_double_door",
+      "classification": "source-grounded-interactive-door",
+      "interactive": true
+    }
+  ],
+  "replacement_policy": {
+    "legacy_tiles_prefix": "ep1_ws_v06_",
+    "strategy": "Do not delete legacy monolithic GLB tiles until each phase passes structural and visual QA. Build new modular objects hidden or in an isolated layer/position where practical, capture, then atomically swap visibility/removal phase by phase.",
+    "rollback": "Use scene revision checks and a pre-phase snapshot before destructive replacement."
+  },
+  "qa": {
+    "structural": [
+      "semantic IDs unique",
+      "no unexpected player-visible debug materials",
+      "source-required props/features represented",
+      "interactive door kept separate from static merge candidates",
+      "scene revision matches expected before each phase"
+    ],
+    "canonical_views": [
+      "dock_ward_approach_wide",
+      "warehouse_exterior_medium",
+      "warehouse_fissure_close",
+      "area1_descent_medium",
+      "area2_entry_wide",
+      "area2_pools_door_close"
+    ]
+  }
+}
