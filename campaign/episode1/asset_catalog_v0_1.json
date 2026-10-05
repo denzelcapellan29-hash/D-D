@@ -1,0 +1,104 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-10-05",
+  "source_modules": [
+    "canvas3dcompendium"
+  ],
+  "notes": [
+    "Catalog stores installed Foundry asset paths only; third-party binaries are not copied into GitHub.",
+    "Filename discovery is followed by live disposable placement before production use.",
+    "Current candidate sweep focused on Episode 1 vertical-slice roles rather than exhaustive module enumeration."
+  ],
+  "roles": {
+    "dock_building_facade": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Buildings/Shop.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_1.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_2.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_3.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/House_4.glb"
+      ],
+      "validation": "Shop.glb and House_1.glb loaded successfully in disposable test placement."
+    },
+    "worked_stone_wall": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Wall_Modular.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Decorative_Wall.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/WallCover_Modular.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Stairs_SideCoverWall.glb"
+      ],
+      "validation": "Wall_Modular.glb loaded successfully in disposable test placement."
+    },
+    "column": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Column.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Column2.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Column_SquareBig.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Column_SquareSmall.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Column_Round1.glb"
+      ],
+      "validation": "Medieval Dungeon Column.glb loaded successfully in disposable test placement."
+    },
+    "door": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Door_7.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Door_8.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Arch_Door.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Arch_Door_bottompivot.glb"
+      ],
+      "validation": "Door_7.glb loaded successfully in disposable test placement.",
+      "caveat": "Area 2 source calls for a large ornate double door; installed single-door pieces may need paired composition or a bespoke/custom detail layer."
+    },
+    "rubble_rock": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Rocks_highend/Boulder_01.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Rocks_highend/Boulder_02.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Rocks_highend/Boulder_03.glb",
+        "modules/canvas3dcompendium/assets/Terrains/rocky-desert.glb"
+      ],
+      "validation": "Boulder_01.glb loaded successfully in disposable test placement."
+    },
+    "cave_transition": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Terrains/dwarven-cave.glb",
+        "modules/canvas3dcompendium/assets/Terrains/small-cave.glb"
+      ],
+      "validation": "Discovered by live module search; not yet placement-tested."
+    },
+    "lighting_prop": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Lamp.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Lamp2.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Torch.glb"
+      ],
+      "validation": "Discovered by live module search; not yet placement-tested."
+    },
+    "water_surface": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Nature/water_tile.glb"
+      ],
+      "validation": "Discovered by live module search; suitable as a liquid-surface candidate, but Area 2 pool basins still need geometry."
+    }
+  },
+  "gaps": {
+    "dock_street_surface": "No convincing cobble/street model found by filename search. Prefer a material/terrain primitive or custom semantic surface rather than forcing an unrelated model.",
+    "warehouse_roof_and_beams": "No strong roof/beam/plank candidates found by filename search in the initial sweep.",
+    "descent_rope": "No useful rope model found in initial sweep.",
+    "pool_basin": "No basin/pool geometry found in initial sweep.",
+    "wall_relief": "No suitable ritual relief found; likely custom detail.",
+    "area2_double_door": "Likely composed from two installed doors plus custom lock/relief, or custom source-specific geometry.",
+    "fissure": "Keep custom source-specific geometry; installed cave/rock assets can dress the rupture but should not define its topology."
+  },
+  "disposable_probe": {
+    "scenes": [
+      "Test - Acq Neutral Lit Calibration",
+      "Test"
+    ],
+    "build_ids": [
+      "asset-catalog-probe-2026-10-05",
+      "asset-catalog-probe2-2026-10-05"
+    ],
+    "result": "Selected building, wall, column, door and boulder candidates instantiated successfully.",
+    "qa_note": "Calibration/Test captures contain pre-existing dark environment and helper/wireframe clutter, so these scenes are adequate for load/scale smoke tests but not final art-direction review."
+  }
+}
