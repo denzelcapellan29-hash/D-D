@@ -78,11 +78,36 @@
         "modules/canvas3dcompendium/assets/Tiles/Nature/water_tile.glb"
       ],
       "validation": "Discovered by live module search; suitable as a liquid-surface candidate, but Area 2 pool basins still need geometry."
+    },
+    "warehouse_collapse_timber": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Kenney/Graveyard/debrisWood.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Kenney/Urban%202/detailBeam.glb",
+        "modules/canvas3dcompendium/assets/Tiles/KayKitPack/Dungeon/Remastered/scaffold_beams_connected.glb",
+        "modules/canvas3dcompendium/assets/Tiles/KayKitPack/Dungeon/Remastered/scaffold_beam_corner.glb",
+        "modules/canvas3dcompendium/assets/Tiles/KayKitPack/Dungeon/Remastered/scaffold_beam_wall.glb"
+      ],
+      "validation": "debrisWood, detailBeam, scaffold beam wall/corner instantiated successfully in the live Warehouse/Area 1 dressing pass."
+    },
+    "street_lighting": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/KayKitPack/Spooktober/lampPost.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Lamp.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Furniture/Lamp2.glb"
+      ],
+      "validation": "Placed successfully in the live Dock Ward surface pass."
+    },
+    "street_cart": {
+      "preferred": [
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Medieval%20Buildings/Props/Cart.glb",
+        "modules/canvas3dcompendium/assets/Tiles/Modular%20Ruins/Cart.glb"
+      ],
+      "validation": "Placed successfully as non-source-specific Dock Ward context outside the empty warehouse."
     }
   },
   "gaps": {
     "dock_street_surface": "No convincing cobble/street model found by filename search. Prefer a material/terrain primitive or custom semantic surface rather than forcing an unrelated model.",
-    "warehouse_roof_and_beams": "No strong roof/beam/plank candidates found by filename search in the initial sweep.",
+    "warehouse_roof_and_beams": "Beam/debris dressing candidates are now validated; a convincing modular roof shell still needs selection or custom treatment.",
     "descent_rope": "No useful rope model found in initial sweep.",
     "pool_basin": "No basin/pool geometry found in initial sweep.",
     "wall_relief": "No suitable ritual relief found; likely custom detail.",
