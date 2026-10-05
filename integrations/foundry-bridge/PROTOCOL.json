@@ -66,6 +66,9 @@
     },
     "validate_scene_manifest": {
       "expected_manifest": "{semantic_ids?:[], counts?:{}, allow_unexpected?:boolean}"
+    },
+    "delete_semantic_objects": {
+      "semantic_ids": "array of stable flags.acq.semantic_id values"
     }
   },
   "direct_rpc": {
