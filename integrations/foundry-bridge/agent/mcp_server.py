@@ -210,6 +210,28 @@ def apply_semantic_objects(
     )
 
 
+
+@mcp.tool()
+def delete_semantic_objects(
+    semantic_ids: list[str],
+    scene_id: str | None = None,
+    expected_revision: str | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Delete Scene documents previously created by this MCP using stable flags.acq.semantic_id."""
+    if not semantic_ids:
+        raise ValueError("semantic_ids must not be empty")
+    return _operation(
+        _rpc(
+            [{"op": "delete_semantic_objects", "semantic_ids": semantic_ids}],
+            scene_id=scene_id,
+            expected_revision=expected_revision,
+            dry_run=dry_run,
+            timeout_seconds=90.0,
+        )
+    )
+
+
 @mcp.tool()
 def validate_scene_manifest(
     expected_manifest: dict[str, Any],
