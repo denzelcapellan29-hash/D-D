@@ -27,7 +27,7 @@ Live world editing is operational against the current save.
 - Street surfaces are continuous; both rowhouse pinch points were widened into covered passages.
 
 ## Immediate next milestone
-v0.3 structural cleanup is complete. Continue from this controlled coordinate world: improve urban grammar/material fidelity inside the authored envelope, then run end-to-end warehouse → fissure → dungeon QA before promotion.
+v0.4 context-shell build is complete. Continue replacing the remaining procedural/sandbox feel with stronger urban grammar, elevation, landmarks and resource-pack/material polish while preserving the verified Episode 1 core, then run end-to-end warehouse → fissure → dungeon QA.
 
 ## Scope gate
 Do not expand to full Waterdeep or D&D gameplay systems until the Dock Ward waterfront → warehouse → fissure → dungeon vertical slice is convincingly playable and can be maintained autonomously.
@@ -88,3 +88,18 @@ Structural cleanup release: `Acq_Waterdeep_DockWard_WORLD_v0_3.zip`.
 - All 300 pregenerated chunks reopen successfully with 0 NBT parse failures.
 - Verified live corridor remains an exact block match: 0 mismatches.
 - Existing Episode 1 warehouse/fissure/dungeon content remains preserved.
+
+
+## Prebuilt world release v0.4
+World-feel/context-shell release: `Acq_Waterdeep_DockWard_WORLD_v0_4.zip`.
+- Drive artifact ID: `1YEFlM2H_4jS62UBFrHacqkykeI5X6ddm`.
+- Entire existing pregenerated footprint is now treated as authored city/harbor context: x=-144..175, z=-96..143.
+- Added 111 deterministic background buildings, 3 skyline towers, 6 piers, 3 context vessels and 5 cranes.
+- Added ~88k blocks of connected background architecture plus ~9.6k road cells.
+- Replaced the large neutral sandbox plate with continuous urban ground and a broad harbor/shoreline shell.
+- Default new-chunk flat worldgen no longer includes dirt/grass layers; it falls back to the neutral stone datum.
+- Verified protected Episode 1 core is preserved exactly: 0 block mismatches over x=-120..40, z=-60..65, y=96..127.
+- 300 pregenerated chunks reopen successfully with 0 parse failures.
+- 0 grass blocks remain in the checked surface volume.
+- Structural graph: 210 above-ground components, only 2 unsupported components / 29 blocks; both are the pre-existing explicitly allowed small sail vessels in the protected core.
+- This is still procedural connective/background world-building, not canonical survey geometry for all of Waterdeep.
