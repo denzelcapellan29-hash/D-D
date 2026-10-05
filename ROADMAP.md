@@ -12,8 +12,8 @@
 5. Keep automatic structural readback active during edits.
 6. ~~Replace Minecraft-camera dependency with headless colored voxel reconstruction for visual QA.~~
 6a. ~~Infrastructure QA v0.1: read-only Anvil reader, direct VTK renderer, BlueMap runner, Amulet probe, and CI smoke validation.~~
-7. BlueMap-render the actual lower-Dock save with resource-pack support after explicit Mojang asset-download approval.
-8. Run the Amulet load/save/reopen probe against the actual world before considering replacement of the current low-level compiler.
+7. BlueMap-render the actual lower-Dock save with resource-pack support. **Mojang asset-download approval received 2026-10-04; non-destructive actual-world run staged, result pending.**
+8. Run the Amulet load/save/reopen probe against the actual world before considering replacement of the current low-level compiler. **Disposable-copy runner staged; result pending.**
 9. Upgrade live region readback to include block-state properties for stairs/slabs/panes/orientation.
 10. Add resource-pack/model resolution so visual profiles can be swapped without rebuilding geometry.
 11. Continue bounded world-feel iteration:
