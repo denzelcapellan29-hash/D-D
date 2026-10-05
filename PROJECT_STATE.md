@@ -309,3 +309,26 @@ Any infrastructure choice must be evaluated on:
 
 ### 3D Canvas dependency correction
 Published 3D Canvas documentation is inconsistent about legacy dependencies: the current V14 wiki still lists libWrapper/socketLib/Levels/Wall Height as required, while the current public source manifest lists only libWrapper as a hard requirement and marks Mapmaking Pack/Token Collection/Advanced Tools as recommendations. Therefore do **not** add or remove Levels/Wall Height/socketLib based on assumptions. Inspect the actual installed 9.0.35 manifest/runtime dependency state before changing the module stack.
+
+
+## Live Foundry MCP validation — 2026-10-05
+Direct ChatGPT -> Foundry MCP -> live Foundry has now passed end-to-end.
+- `get-world-info` returned live world `Acq WorldGen Test`, Foundry 14.368, D&D5e 6.0.5, 9 scenes, 5 actors and 3 journals.
+- A live `1d20` roll executed through Foundry and returned 7.
+- The account is currently at **Guest**, not the free Patreon membership tier. Guest exposes only world-info and dice-level proof functions.
+- Live permission probes confirmed:
+  - Free Patreon membership: actors/items/folders/effects/chat/initiative family.
+  - Adventurer (€3): journals and roll tables.
+  - Dungeon Master (€10): scenes/doors, tokens, combat, compendiums/import, time/pause/UI.
+- For this campaign's prep workflow the Dungeon Master tier is functionally justified because scene inspection, token/encounter setup and compendium import are core requirements, not conveniences.
+
+### Important boundary discovered
+The hosted Foundry MCP is not the 3D authoring engine.
+- The 121-tool ChatGPT surface does not expose 3D Canvas-specific Tile flags/environment/camera controls.
+- Its current scene screenshot path captures Foundry's 2D Pixi canvas (`canvas.app.view`), not the 3D Canvas renderer.
+- The underlying bridge wire protocol has more generic Scene/wall/note CRUD than the current 121-tool ChatGPT surface, but it still does not replace project-specific 3D Canvas semantics.
+- 3D Canvas itself exposes the live `game.Levels3DPreview` object, including the Three.js scene, renderer, camera and controls. Its own `export2d.js` demonstrates deterministic rendering through `game.Levels3DPreview.renderer`.
+- Therefore the selected split remains correct: pay for generic Foundry/D&D5e automation; keep a small private Acq 3D MCP for 3D Tile/environment/camera/capture/idempotent semantic scene operations.
+
+### Subscription recommendation
+Upgrade to the Dungeon Master tier once the DM chooses to proceed. Connectivity is already proven, so the subscription is no longer an infrastructure gamble. Do not enable script macros. Do not make non-transactional code-mode execute the production world-build path.
