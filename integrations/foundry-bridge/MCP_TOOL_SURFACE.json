@@ -131,6 +131,19 @@
         "dry_run"
       ],
       "notes": "Deletes only documents carrying matching flags.acq.semantic_id."
+    },
+    "reload_3d_scene": {
+      "write": false,
+      "ephemeral_ui_action": true,
+      "inputs": [
+        "scene_id",
+        "dry_run"
+      ],
+      "returns": [
+        "before",
+        "after"
+      ],
+      "notes": "Calls the supported 3D Canvas runtime reload/toggle API to repopulate the active Three.js scene after scene switches or stale live updates; does not mutate canonical Scene documents."
     }
   },
   "non_goals": [
