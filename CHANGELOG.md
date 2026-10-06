@@ -139,3 +139,8 @@
 - Full-scene inspection now completes reliably at 61 Tiles, and canonical 3D captures are clean enough for art-direction review.
 - QA confirmed the remaining visual problems are scene-content problems, not capture-helper problems.
 - Foundry MCP and the Secure MCP tunnel disconnected immediately before the next cobble-surface probe; no production write was made after disconnect.
+
+- Resumed production after runtime recovery and confirmed both Foundry MCP and Acq 3D MCP live.
+- Replaced the warehouse's white-grid opening with a three-piece irregular dark fissure mouth and retuned collapse dressing toward wood rather than metal.
+- Added simple solid sidewalk slabs and replaced cyan generic shop shells with textured medieval building assets.
+- Tested and fully rolled back unsuitable crater, thick cobbled-path and thin textured basin-lip probes after visual QA.
