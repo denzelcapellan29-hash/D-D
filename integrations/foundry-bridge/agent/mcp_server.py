@@ -153,6 +153,34 @@ def reload_3d_scene(
 
 
 @mcp.tool()
+def resize_scene(
+    width: int,
+    height: int,
+    padding: float | None = None,
+    scene_id: str | None = None,
+    expected_revision: str | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Safely resize the active Foundry Scene with revision checking."""
+    op: dict[str, Any] = {
+        "op": "resize_scene",
+        "width": width,
+        "height": height,
+    }
+    if padding is not None:
+        op["padding"] = padding
+    return _operation(
+        _rpc(
+            [op],
+            scene_id=scene_id,
+            expected_revision=expected_revision,
+            dry_run=dry_run,
+            timeout_seconds=45.0,
+        )
+    )
+
+
+@mcp.tool()
 def capture_3d_view(
     position: dict[str, float] | None = None,
     target: dict[str, float] | None = None,
