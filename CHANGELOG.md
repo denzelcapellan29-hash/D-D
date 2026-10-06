@@ -152,3 +152,12 @@
 - Verified modular Medieval Dungeon floor and wall GLBs through live Three.js runtime bounds and actual 3D captures.
 - Established a measured coordinate mapping for the proven asset family.
 - Opened the production gate for a modular Episode 1 rebuild; document/API success alone is no longer accepted as visual QA.
+
+
+## 2026-10-06 — Acq Foundry Bridge v0.2.7 runtime recovery
+- Bumped the Foundry bridge module to v0.2.7.
+- Added automatic 3D Canvas runtime recovery before camera and renderer capture operations.
+- Camera/capture now attempt direct 3D Canvas runtime activation, wait for a stable ready state, and perform one reload/toggle-cycle recovery before failing.
+- Recovery is ephemeral UI/runtime behavior; it does not require persistent Scene `auto3d` changes.
+- Capture results now include runtime-recovery diagnostics.
+- Upgrade target remains the existing Windows stack layout under `Acq_Foundry_3D_MCP_build_2026-10-05\Acq_Foundry_3D_MCP` and the installed Foundry module under `%LOCALAPPDATA%\FoundryVTT\Data\modules\acq-foundry-bridge`.
