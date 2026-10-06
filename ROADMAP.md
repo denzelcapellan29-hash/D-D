@@ -100,3 +100,17 @@
 - **DONE:** reversible fissure-mouth and surface-context visual pass.
 - **REJECTED/ROLLED BACK:** stretched-texture sidewalk/basin strips, crater model as fissure, thick cobbled-path model tiles.
 - **NEXT:** refine Area 2 basins/door with solid/model geometry, then source-specific rope/bootprints/reliefs; legacy monolith remains until canonical QA passes.
+
+
+### Episode 1 modular rebuild — ACTIVE
+The `Example` scratch-scene renderer gate has passed. Resume production using the proven modular model-backed Tile method.
+
+Immediate order:
+1. replace/hide legacy full-dungeon visual Tiles while preserving Regions/notes/tokens/lights;
+2. rebuild Areas 1–10 on their existing Region footprint coordinates using modular floors/walls;
+3. add source-grounded landmarks per room;
+4. capture and visually accept each major room/cluster;
+5. preserve `Ep1 - World Slice` as the polished surface/warehouse transition and return scene;
+6. finish Acquisitions Incorporated HQ after dungeon visual acceptance.
+
+Do not return to monolithic GLB-first construction.
