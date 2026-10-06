@@ -1,5 +1,31 @@
 # Project State
 
+Updated: 2026-10-06
+
+## Current production gate — Foundry/3D Canvas knowledge baseline
+Production visual authoring is deliberately paused while the Foundry/3D Canvas construction path is re-baselined after the blank-render failure on the experimental full Episode 1 dungeon scene.
+
+Durable domain knowledge is now recorded in:
+- `docs/FOUNDRY_3D_CANVAS_DOMAIN_KNOWLEDGE.md`
+- `DECISIONS.md` ADR-010
+
+Study basis includes the DM-supplied 3D Canvas tutorial playlist, Baileywiki Foundry VTT Basics playlist, current 3D Canvas V14 documentation, Foundry MCP documentation/tool inventory, and the actual Acq Foundry Bridge v0.2.0 / Acq 3D MCP release code and protocol.
+
+Mandatory gate before resuming production Areas 3-10:
+1. disposable scratch Scene;
+2. one natively-correct 3D floor Tile;
+3. one model-backed Tile;
+4. one light and known environment;
+5. inspect live runtime bounds;
+6. frame camera from runtime coordinates;
+7. obtain a visibly correct 3D renderer capture.
+
+Document counts/API success alone no longer qualify as visual QA.
+
+Foundry + 3D Canvas remains the primary campaign runtime. Visual quality remains higher priority than mechanical automation for the current DM.
+
+---
+
 Updated: 2026-10-04
 
 ## Active runtime
