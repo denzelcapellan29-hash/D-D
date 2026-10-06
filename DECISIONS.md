@@ -282,3 +282,34 @@ Each write carries scene/build identity and expected revision where applicable.
 
 ### Dependency verification correction
 Do not assume V14 core Scene Levels eliminated every 3D Canvas legacy dependency. Current published sources disagree: the 3D Canvas V14 wiki still names Levels/Wall Height/socketLib while the public V14 source manifest lists only libWrapper as required. Verify the installed 9.0.35 manifest/runtime before changing dependencies.
+
+
+## ADR-010 — Render-verified Foundry/3D Canvas authoring doctrine
+**Status:** Accepted  
+**Date:** 2026-10-06
+
+### Decision
+Treat `docs/FOUNDRY_3D_CANVAS_DOMAIN_KNOWLEDGE.md` as required project domain knowledge before any production Foundry/3D Canvas authoring.
+
+The operational standard is:
+
+1. use hosted Foundry MCP for generic Foundry/D&D5e operations;
+2. use the actually connected Acq 3D MCP tool surface for specialized 3D Canvas inspection/authoring/QA;
+3. use the underlying Drive bridge protocol only as an explicit fallback for capabilities not exposed by MCP;
+4. use 3D Tiles as the normal 3D architecture primitive;
+5. prefer installed assets/materials before procedural meshes and custom GLBs;
+6. reproduce the supported 3D Canvas Tile initialization lifecycle instead of assuming arbitrary valid Tile JSON is runtime-equivalent;
+7. require live runtime bounds and a visible 3D renderer capture before declaring visual work complete;
+8. test new construction techniques on a disposable scratch Scene before production;
+9. use revision-checked writes and recoverable state for meaningful changes;
+10. treat V14 installed runtime behavior as authoritative when older tutorial material conflicts with current behavior.
+
+### Why
+The Episode 1 full-dungeon attempt demonstrated that Foundry document validity and Tile counts can coexist with a blank or malformed live 3D Canvas render. The project therefore requires render-verified acceptance rather than document-level acceptance.
+
+### Consequences
+- No production Area 3-10 rebuild resumes until a scratch Scene with a floor, model Tile, light, environment and camera passes live 3D capture.
+- Serialized Scene JSON is useful for inspection/import/debugging but is not the canonical proof of a working 3D Scene.
+- Camera targets are derived from live 3D runtime bounds, not raw Foundry Scene pixel positions.
+- Bulk authoring follows small reversible proof batches before scaling.
+- Tutorial concepts are retained, but version-sensitive UI/dependency instructions are checked against Foundry V14 and the installed 3D Canvas version.
