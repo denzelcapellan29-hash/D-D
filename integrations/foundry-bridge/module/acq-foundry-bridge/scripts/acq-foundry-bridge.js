@@ -851,6 +851,43 @@ async function applyOperation(scene, op, dryRun = false) {
     return {op: type, ok: true, changes};
   }
 
+  if (type === "resize_scene") {
+    const width = Number(op.width);
+    const height = Number(op.height);
+    const padding = op.padding === undefined ? undefined : Number(op.padding);
+
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
+      throw new Error("resize_scene requires finite width and height.");
+    }
+    if (width < 1000 || height < 1000 || width > 100000 || height > 100000) {
+      throw new Error(`resize_scene dimensions out of safe range: ${width}x${height}.`);
+    }
+    if (padding !== undefined && (!Number.isFinite(padding) || padding < 0 || padding > 1)) {
+      throw new Error("resize_scene padding must be between 0 and 1.");
+    }
+
+    const before = {
+      width: Number(scene.width),
+      height: Number(scene.height),
+      padding: Number(scene.padding ?? 0)
+    };
+    const changes = {width, height};
+    if (padding !== undefined) changes.padding = padding;
+
+    if (!dryRun) await scene.update(changes);
+    return {
+      op: type,
+      ok: true,
+      dry_run: dryRun,
+      before,
+      after: dryRun ? {...before, ...changes} : {
+        width: Number(scene.width),
+        height: Number(scene.height),
+        padding: Number(scene.padding ?? 0)
+      }
+    };
+  }
+
   if (type === "scene_update") {
     const changes = op.changes ?? {};
     const allowedPrefixes = ["flags.", "name", "environment", "darkness", "grid", "background", "foreground", "tokenVision", "fog"];
