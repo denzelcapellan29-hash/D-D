@@ -615,3 +615,87 @@ For Acquisitions Incorporated Episode 1:
 10. **Player-visible capture is the final QA gate.**
 11. **No production-scene experimentation until a disposable scratch test proves the technique.**
 12. **Never rely on chat memory as the only persistence for this knowledge.**
+
+
+---
+
+# 15. Proven scratch-scene construction method — 2026-10-06
+
+The `Example` scratch Scene established the first repeatable, render-verified 3D construction method for this project.
+
+## Proven runtime stack
+
+Scene: `Example`  
+Foundry: 14.368  
+D&D5e: 6.0.5  
+3D Canvas runtime: live/available through Acq 3D MCP
+
+Environment used successfully:
+- EXR: `modules/canvas3dcompendium/assets/Beautiful-Sky/2K/Sky_LowPoly_01_Day_a.webp`
+- `renderTable: false`
+- `renderBackground: true`
+- `enableFog: false`
+- `exposure: 1.05`
+- `ambientLightIntensity: 0.75`
+- `ambientLightColor: #fff4e8`
+- `renderSceneLights: true`
+
+## Proven model-backed Tile schema
+
+The reliable modular construction assets are:
+- floor: `modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Floor_Modular.glb`
+- wall: `modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Wall_Modular.glb`
+- 2D placeholder: `modules/levels-3d-preview/assets/blank.webp`
+
+Key Tile settings:
+- `autoGround: true`
+- `autoCenter: false`
+- model-backed Tile, not Dynamic Mesh
+- explicit collision/sight intent
+- stable `flags.acq.semantic_id`
+- stable build ID
+- normal 3D Canvas model fields preserved
+
+## Measured coordinate behavior
+
+For these modular assets in the current runtime, Foundry Scene coordinates map cleanly to 3D runtime coordinates:
+
+- `3D x ≈ Foundry x / 1000`
+- `3D z ≈ Foundry y / 1000`
+
+Example:
+- Foundry Tile center `(2000, 2000)`
+- live 3D runtime center approximately `(2.0, *, 2.0)`
+
+Do not assume this for arbitrary assets. Measure runtime bounds after first placement of each asset family.
+
+## Proven modular dimensions
+
+With a Foundry Tile size of 600×600:
+- `Floor_Modular.glb` produced a live footprint of ~0.6×0.6 world units.
+- `Wall_Modular.glb` at 600×200 produced ~0.6×0.2 footprint and ~0.6 world-unit height.
+- 90° rotation correctly swaps the wall footprint axes.
+
+This supports deterministic room construction on a 600 px modular lattice.
+
+## Proven visual QA sequence
+
+1. activate scratch Scene;
+2. inspect current revision;
+3. place 1–5 model-backed Tiles using known schema;
+4. wait briefly for 3D runtime initialization;
+5. inspect runtime bounds;
+6. derive camera from runtime coordinates;
+7. capture actual 3D renderer;
+8. visually accept/reject;
+9. only then scale the pattern.
+
+## Confirmed result
+
+A 3×3 floor grid plus perimeter modular walls, entrance gap, installed altar prop and one AmbientLight rendered successfully in the actual 3D Canvas capture.
+
+This passes the scratch-scene gate defined by ADR-010.
+
+## Production consequence
+
+Episode 1 Areas 3–10 may now be rebuilt using this exact modular method. The old monolithic/full-dungeon GLB path is deprecated for production. Existing legacy/full-dungeon geometry may remain only as hidden reference until the modular rebuild replaces it visually.
