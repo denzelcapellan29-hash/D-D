@@ -641,3 +641,24 @@ The disposable `Example` scene passed the scratch-scene gate:
 The proven method is documented in `docs/FOUNDRY_3D_CANVAS_DOMAIN_KNOWLEDGE.md` section 15.
 
 Production gate is now OPEN for an Episode 1 modular rebuild. The old monolithic full-dungeon visual path is deprecated; encounter tokens, Regions, notes, actors and GM prep remain reusable.
+
+
+## Acq Foundry Bridge v0.2.7 verified — 2026-10-06
+The live control plane is now upgraded and runtime-verified.
+
+Local stack layout:
+- build root: `C:\Users\denze\Downloads\Acq_Foundry_3D_MCP_build_2026-10-05\Acq_Foundry_3D_MCP`
+- Foundry module: `%LOCALAPPDATA%\FoundryVTT\Data\modules\acq-foundry-bridge`
+- bridge agent: `agent\acq_bridge_agent.py`
+- MCP server: `agent\mcp_server.py`
+- transport: `G:\My Drive\D&D\Foundry Bridge`
+
+v0.2.7 adds automatic 3D Canvas runtime recovery for camera/capture operations. Verified behavior:
+1. `inspect_3d_scene` reported `levels3d_active=false`;
+2. `capture_3d_view` automatically toggled 3D Canvas on;
+3. the bridge waited until renderer/camera/controls were ready and stable;
+4. capture completed successfully;
+5. subsequent captures detected the runtime as already ready.
+
+The retired scratch Tiles on `Example` were deleted, leaving only Episode 1 production geometry.
+Area 2 currently has 9 modular floor Tiles + 10 perimeter wall Tiles and renders correctly in 3D Canvas.
