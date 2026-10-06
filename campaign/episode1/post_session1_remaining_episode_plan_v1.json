@@ -1,0 +1,225 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-10-05",
+  "session_state": {
+    "completed_through": "Area 1 - Rats",
+    "player_state": "Session 1 ended immediately after the party defeated the giant rats in Area 1.",
+    "development_freeze": [
+      "Dock Ward approach",
+      "warehouse/fissure entrance",
+      "Area 1 encounter"
+    ],
+    "freeze_rule": "Do not spend further polish time on completed content unless a defect blocks continuity or later backtracking."
+  },
+  "source_basis": {
+    "file": "Acq_Inc_Ep1.pdf",
+    "reviewed_pages": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    ],
+    "source_priority": "Private adventure source remains canonical for authored facts. Any scaling or presentation changes for the 2-PC party must be recorded separately as deliberate playability adaptations."
+  },
+  "production_priority": [
+    {
+      "priority": 1,
+      "area": "Area 2 - Trials",
+      "source_grounded": [
+        "Intact rectangular ritual chamber with buttresses/columns.",
+        "Four 10-foot-deep floor-set pools: blue, green, clear, cloudy.",
+        "Wall carvings depict robed figures submerging in the pools.",
+        "Large ornate double door at the far end; room mechanics remain hidden."
+      ],
+      "build_focus": [
+        "finish pool basins",
+        "ritual reliefs",
+        "ornate double door and lock presentation",
+        "hidden trial/trap mechanics",
+        "GM aid"
+      ]
+    },
+    {
+      "priority": 2,
+      "area": "Area 3 - Traps",
+      "source_grounded": [
+        "Passage widens for roughly ninety feet, then narrows to an ornate double door.",
+        "Four distinct trap zones protect the room.",
+        "Beyond the door is a stone chamber with wall slabs holding cloth-wrapped bodies.",
+        "Four zombies rise; creatures affected by the door can appear wrapped and temporarily paralyzed.",
+        "Treasure includes a potion of healing and a spell scroll of bless."
+      ],
+      "build_focus": [
+        "trap-zone geometry without player-visible debug cues",
+        "pit/water/fish trap presentation",
+        "rune/dye trap presentation",
+        "mummy chamber slabs and wrapped bodies",
+        "zombie encounter staging"
+      ]
+    },
+    {
+      "priority": 3,
+      "area": "Area 4 - Tunnels",
+      "source_grounded": [
+        "Off-map maze of crisscrossing/collapsed passages and earthquake-weakened sections.",
+        "Navigation follows Teeshe and Boot's trail.",
+        "A cave-in must be cleared.",
+        "A circular passage is overgrown with blood weeds.",
+        "The final maze passage contains an obligatory weak-acid pit with floating bones."
+      ],
+      "build_focus": [
+        "represent as a compact navigable montage rather than literal huge maze",
+        "trail/collapse environmental storytelling",
+        "blood-weed hazard set piece",
+        "acid pit"
+      ]
+    },
+    {
+      "priority": 4,
+      "area": "Area 5 - Death",
+      "source_grounded": [
+        "Natural cavern with ceiling obscured by thick dusty webs.",
+        "Five web cocoons hang down, including one larger suspicious humanoid-shaped cocoon.",
+        "A giant spider hides in a floor depression.",
+        "Constable Yander Boot's corpse hangs suspended in webs."
+      ],
+      "build_focus": [
+        "web volume",
+        "cocoons",
+        "hidden spider depression",
+        "Boot corpse/loot staging"
+      ]
+    },
+    {
+      "priority": 5,
+      "area": "Area 6 - Goblin",
+      "source_grounded": [
+        "Natural cavern with stalactites/stalagmites.",
+        "Gorkoh the goblin hides behind a stalagmite and bluffs with driftwood as a magic wand.",
+        "A wounded carrion crawler waits in the next section.",
+        "A fragile stalactite cluster can be dropped onto the crawler.",
+        "Bones/gear and a +1 longsword are visible treasure."
+      ],
+      "build_focus": [
+        "Gorkoh roleplay staging",
+        "crawler chamber",
+        "weak-ceiling interaction",
+        "treasure pile"
+      ]
+    },
+    {
+      "priority": 6,
+      "area": "Area 7 - Stomp",
+      "source_grounded": [
+        "Room contains hundreds of rotting severed humanoid feet with no blood.",
+        "Ten feet are stomping-foot creatures.",
+        "A suspended granite 'Big Foot' hazard attacks from above.",
+        "Rune-carved footprints on north and south walls power/deactivate the hazard."
+      ],
+      "build_focus": [
+        "macabre foot clutter without excessive visual noise",
+        "stomping-foot encounter tokens",
+        "overhead granite hazard",
+        "north/south rune footprints"
+      ]
+    },
+    {
+      "priority": 7,
+      "area": "Area 8 - Tentacle",
+      "source_grounded": [
+        "Round sewer room with pipes in the ceiling feeding a central cesspool.",
+        "Outer ten feet of pool is 3 feet deep; inner area is 10 feet deep.",
+        "A ten-foot-wide walkway skirts the pool to a passage opposite.",
+        "An enormous extraplanar tentacle reaches through a weak planar barrier."
+      ],
+      "build_focus": [
+        "tiered cesspool geometry",
+        "sewer pipes",
+        "walkway",
+        "tentacle reveal/animation candidate"
+      ]
+    },
+    {
+      "priority": 8,
+      "area": "Area 9 - Dragon",
+      "source_grounded": [
+        "Brass dragon wyrmling Dabshabah is trapped beneath earthquake rubble.",
+        "Two darkmantles are waiting out the dragon and attack the party when engaged.",
+        "Teeshe and a large armored female human passed east through here earlier."
+      ],
+      "build_focus": [
+        "trapped wyrmling rubble composition",
+        "darkmantle staging",
+        "rescue interaction",
+        "NPC conversation aid"
+      ]
+    },
+    {
+      "priority": 9,
+      "area": "Area 10 - Shrine of Destruction",
+      "source_grounded": [
+        "Dead dwarf Caerhan Coalsmith, Sergeant Teeshe, altar, and damaged Orrey housing are present.",
+        "Teeshe is possessed by a spirit loyal to That-Which-Endures and attacks if the shrine is disturbed.",
+        "An entropy guardian above the altar animates and attacks throughout the room.",
+        "The granite altar is covered in runes.",
+        "The magical destruction here caused the earthquake; the Orrey housing is the key campaign artifact."
+      ],
+      "build_focus": [
+        "altar/shrine architecture",
+        "Caerhan body",
+        "possessed Teeshe encounter",
+        "entropy guardian animation/hazard",
+        "Orrey handout/prop",
+        "investigation GM aids"
+      ]
+    },
+    {
+      "priority": 10,
+      "area": "Exit + Dock Ward Ambush",
+      "source_grounded": [
+        "Captain Truff meets the party after they climb out and inventories recovered goods.",
+        "A Xanathar Guild thug named Stork leads three bandits in an ambush for the recovered treasure.",
+        "Captain Truff fights alongside the party; rescued Gorkoh/Teeshe and Otis may also assist.",
+        "Episode concludes with the party returning to Acquisitions Incorporated, reaching 2nd level, receiving payment if successful, and being sent toward Phandalin."
+      ],
+      "build_focus": [
+        "surface ambush setup",
+        "ally contingencies",
+        "post-mission journal/read-aloud",
+        "episode transition"
+      ]
+    }
+  ],
+  "next_session_readiness": {
+    "target_hours": 3,
+    "prepare_first": [
+      "Area 2",
+      "Area 3",
+      "Area 4",
+      "Area 5"
+    ],
+    "reason": "These are the most probable contents for the next 3-hour session from the current stopping point; later areas still receive structural prep but are second-pass polish.",
+    "party_specific_note": "Encounter/trap difficulty for two 1st-level PCs must be reviewed explicitly before release. Do not silently change source mechanics."
+  },
+  "advanced_tools_strategy": {
+    "status": "installed and activated by DM",
+    "immediate_use": [
+      "Material Browser and Effects for faster room dressing where results still resolve to ordinary 3D Canvas scene content.",
+      "Dungeons & Interiors as a layout accelerator for Areas 3-10 when it produces geometry consistent with the semantic model.",
+      "Environment controls for subterranean atmosphere."
+    ],
+    "later_use": [
+      "Cutscene Panel for episode openings, reveals, Area 8 tentacle emergence, Area 9 dragon reveal, Area 10 shrine/Orrey reveal, and episode transition."
+    ],
+    "integration_rule": "Do not rebuild generic infrastructure. Add only the smallest Acq 3D MCP adapter needed to inspect/use Advanced Tools features that are not already represented as normal Foundry/3D Canvas documents."
+  }
+}
