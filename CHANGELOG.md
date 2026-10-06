@@ -161,3 +161,11 @@
 - Recovery is ephemeral UI/runtime behavior; it does not require persistent Scene `auto3d` changes.
 - Capture results now include runtime-recovery diagnostics.
 - Upgrade target remains the existing Windows stack layout under `Acq_Foundry_3D_MCP_build_2026-10-05\Acq_Foundry_3D_MCP` and the installed Foundry module under `%LOCALAPPDATA%\FoundryVTT\Data\modules\acq-foundry-bridge`.
+
+
+## 2026-10-06 — Acq Foundry Bridge v0.2.7 runtime recovery
+- Upgraded the project bridge module from v0.2.6 to v0.2.7.
+- Added automatic 3D Canvas activation/readiness recovery before camera and capture operations.
+- Verified recovery from `levels3d_active=false` to a valid 3D capture without manual DM intervention.
+- Deleted 25 retired `Example` scratch/test Tiles.
+- Resumed Episode 1 modular Area 2 construction; floor + perimeter walls passed live renderer QA.
