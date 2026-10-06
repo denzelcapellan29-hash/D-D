@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0",
+  "episode": "Acquisitions Incorporated Episode 1",
+  "runtime_target": "Foundry VTT 14.368 + 3D Canvas",
+  "build_id": "ep1-modular-rebuild-v1",
+  "method": {
+    "floor_model": "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Floor_Modular.glb",
+    "wall_model": "modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Wall_Modular.glb",
+    "placeholder": "modules/levels-3d-preview/assets/blank.webp",
+    "module_px": 600,
+    "floor_elevation": -30,
+    "coordinate_mapping_note": "For the proven modular asset family, live 3D x/z approximately equal Foundry x/y divided by 1000. Runtime bounds remain the acceptance authority."
+  },
+  "source_classification": "Official/private source controls room identity and set pieces; footprints are the project's existing semantic/runtime interpretation.",
+  "areas": [
+    {
+      "area": 1,
+      "name": "Rats",
+      "footprints": [
+        {
+          "x": 934,
+          "y": 934,
+          "width": 620,
+          "height": 2200
+        }
+      ],
+      "visual_landmarks": [
+        "rubble/debris",
+        "disturbed passage context"
+      ],
+      "style": "worked/subterranean transition"
+    },
+    {
+      "area": 2,
+      "name": "Trials",
+      "footprints": [
+        {
+          "x": 2343.2,
+          "y": 1461.8,
+          "width": 2201.6,
+          "height": 1744.4
+        }
+      ],
+      "visual_landmarks": [
+        "four distinct pools",
+        "support columns/buttresses",
+        "large ornate exit door"
+      ],
+      "style": "intact worked chamber"
+    },
+    {
+      "area": 3,
+      "name": "Traps",
+      "footprints": [
+        {
+          "x": 4774,
+          "y": 1877,
+          "width": 2740,
+          "height": 914
+        },
+        {
+          "x": 7564,
+          "y": 2181.5,
+          "width": 500,
+          "height": 305
+        },
+        {
+          "x": 8194,
+          "y": 1884,
+          "width": 700,
+          "height": 900
+        }
+      ],
+      "visual_landmarks": [
+        "long trapped passage",
+        "mummy/zombie side chamber",
+        "ornate door"
+      ],
+      "style": "worked trap corridor"
+    },
+    {
+      "area": 4,
+      "name": "Tunnels",
+      "footprints": [
+        {
+          "x": 8794,
+          "y": 2034,
+          "width": 2500,
+          "height": 1800
+        }
+      ],
+      "visual_landmarks": [
+        "damaged maze",
+        "cave-in rubble",
+        "blood weeds cue",
+        "acid-pit cue"
+      ],
+      "style": "broken natural/ruined tunnels"
+    },
+    {
+      "area": 5,
+      "name": "Death",
+      "footprints": [
+        {
+          "x": 10944,
+          "y": 3114,
+          "width": 1800,
+          "height": 1240
+        }
+      ],
+      "visual_landmarks": [
+        "web canopy",
+        "five hanging cocoons",
+        "spider hiding depression"
+      ],
+      "style": "webbed natural cavern"
+    },
+    {
+      "area": 6,
+      "name": "Goblin",
+      "footprints": [
+        {
+          "x": 12414,
+          "y": 5134,
+          "width": 1460,
+          "height": 1400
+        },
+        {
+          "x": 13214,
+          "y": 4374,
+          "width": 1060,
+          "height": 920
+        }
+      ],
+      "visual_landmarks": [
+        "stalagmite/rock clusters",
+        "bone and gear heap",
+        "weak ceiling cue"
+      ],
+      "style": "connected natural caverns"
+    },
+    {
+      "area": 7,
+      "name": "Stomp",
+      "footprints": [
+        {
+          "x": 15044,
+          "y": 4714,
+          "width": 1600,
+          "height": 1440
+        }
+      ],
+      "visual_landmarks": [
+        "suspended giant granite foot",
+        "north/south footprint rune cues",
+        "severed-feet floor dressing"
+      ],
+      "style": "large circular ritual chamber"
+    },
+    {
+      "area": 8,
+      "name": "Tentacle",
+      "footprints": [
+        {
+          "x": 18004,
+          "y": 4494,
+          "width": 1680,
+          "height": 1680
+        }
+      ],
+      "visual_landmarks": [
+        "central cesspool",
+        "sewer inflow pipes",
+        "walkway ring"
+      ],
+      "style": "round sewer chamber"
+    },
+    {
+      "area": 9,
+      "name": "Dragon",
+      "footprints": [
+        {
+          "x": 19644,
+          "y": 7034,
+          "width": 1400,
+          "height": 2000
+        },
+        {
+          "x": 20364,
+          "y": 7714,
+          "width": 960,
+          "height": 1240
+        }
+      ],
+      "visual_landmarks": [
+        "pinned dragon position",
+        "large boulder collapse",
+        "blocked north passages"
+      ],
+      "style": "irregular cavern"
+    },
+    {
+      "area": 10,
+      "name": "Shrine",
+      "footprints": [
+        {
+          "x": 17044,
+          "y": 8984,
+          "width": 2200,
+          "height": 1300
+        }
+      ],
+      "visual_landmarks": [
+        "granite altar",
+        "gearwork/maul guardian landmark",
+        "Orrery housing/debris",
+        "collapse rubble"
+      ],
+      "style": "crumbling shrine"
+    }
+  ],
+  "qa": {
+    "acceptance": "Each area must have live runtime bounds and a nonblank player-facing 3D capture.",
+    "batch_policy": "Build in reversible room or room-cluster batches; do not accept document counts as visual completion."
+  }
+}
