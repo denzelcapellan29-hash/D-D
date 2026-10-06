@@ -144,3 +144,11 @@
 - Replaced the warehouse's white-grid opening with a three-piece irregular dark fissure mouth and retuned collapse dressing toward wood rather than metal.
 - Added simple solid sidewalk slabs and replaced cyan generic shop shells with textured medieval building assets.
 - Tested and fully rolled back unsuitable crater, thick cobbled-path and thin textured basin-lip probes after visual QA.
+
+
+## 2026-10-06 — Foundry 3D construction method proven
+- Added durable Foundry/3D Canvas domain knowledge and ADR-010.
+- Built and visually captured a disposable `Example` scene using the supported model-backed Tile pattern.
+- Verified modular Medieval Dungeon floor and wall GLBs through live Three.js runtime bounds and actual 3D captures.
+- Established a measured coordinate mapping for the proven asset family.
+- Opened the production gate for a modular Episode 1 rebuild; document/API success alone is no longer accepted as visual QA.
