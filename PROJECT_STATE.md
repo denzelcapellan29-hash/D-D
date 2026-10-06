@@ -628,3 +628,16 @@ Next-session polish order for a ~3-hour session:
 Areas 6-10 and the Dock Ward ambush should still receive structural prep now, but second-pass art polish follows the likely play order above.
 
 Advanced Tools is installed/activated by the DM. Treat it as an accelerator, not a new canonical layer: use Dungeons & Interiors, Material/Effects and Environment tooling where useful; add only the smallest bridge adapter needed for Advanced-Tools-only state/actions. Cutscenes are a planned runtime feature for later reveals/transitions rather than a blocker for immediate map completion.
+
+
+## Render-verified modular 3D method passed — 2026-10-06
+The disposable `Example` scene passed the scratch-scene gate:
+- model-backed modular floor Tiles render correctly;
+- model-backed modular wall Tiles render correctly;
+- live runtime bounds map predictably from Foundry coordinates for this asset family;
+- a 3×3 floor grid, perimeter walls, entrance gap, altar prop, environment and AmbientLight rendered in the actual 3D Canvas capture;
+- measured mapping for the proven modular asset family is approximately `3D x = Foundry x / 1000`, `3D z = Foundry y / 1000`.
+
+The proven method is documented in `docs/FOUNDRY_3D_CANVAS_DOMAIN_KNOWLEDGE.md` section 15.
+
+Production gate is now OPEN for an Episode 1 modular rebuild. The old monolithic full-dungeon visual path is deprecated; encounter tokens, Regions, notes, actors and GM prep remain reusable.
