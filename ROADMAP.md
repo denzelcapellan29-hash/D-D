@@ -93,3 +93,10 @@
 - **PASS:** clean player-neutral capture path; large light helpers and hidden rat meshes are suppressed.
 - **ART DIRECTION FAIL (expected at this stage):** legacy white/grid surface, sparse warehouse rupture dressing, and schematic Area 2 still require replacement/tuning.
 - Runtime disconnected before the next reversible cobble probe could execute. Restore connections, then continue small visual probes before destructive legacy replacement.
+
+
+### Runtime-back continuation
+- **DONE:** recover live Foundry + Acq 3D MCP.
+- **DONE:** reversible fissure-mouth and surface-context visual pass.
+- **REJECTED/ROLLED BACK:** stretched-texture sidewalk/basin strips, crater model as fissure, thick cobbled-path model tiles.
+- **NEXT:** refine Area 2 basins/door with solid/model geometry, then source-specific rope/bootprints/reliefs; legacy monolith remains until canonical QA passes.
