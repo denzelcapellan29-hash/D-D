@@ -313,3 +313,24 @@ The Episode 1 full-dungeon attempt demonstrated that Foundry document validity a
 - Camera targets are derived from live 3D runtime bounds, not raw Foundry Scene pixel positions.
 - Bulk authoring follows small reversible proof batches before scaling.
 - Tutorial concepts are retained, but version-sensitive UI/dependency instructions are checked against Foundry V14 and the installed 3D Canvas version.
+
+
+## ADR-011 — Bridge owns 3D Canvas runtime recovery
+**Status:** Accepted  
+**Date:** 2026-10-06
+
+### Decision
+Camera and capture calls must not assume that 3D Canvas is already active. The Acq Foundry Bridge is responsible for ensuring the runtime is active and ready before operating on the 3D camera or renderer.
+
+The recovery sequence is:
+1. inspect runtime availability/readiness;
+2. if already stable, continue;
+3. if inactive, call the installed 3D Canvas runtime toggle API;
+4. wait for active + ready + renderer + scene graph + camera + controls + zero loading Tiles;
+5. if the first activation attempt does not stabilize, use the runtime reload/toggle-cycle recovery path;
+6. fail with explicit runtime-state diagnostics rather than returning black/stale captures.
+
+### Consequences
+- The DM should not be asked to manually toggle 3D Canvas during normal prep.
+- Black or unavailable captures are treated as control-plane/runtime faults first, not scene-art faults.
+- Production build loops remain fail-fast: small write -> inspect -> rendered capture -> continue.
