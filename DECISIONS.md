@@ -334,3 +334,37 @@ The recovery sequence is:
 - The DM should not be asked to manually toggle 3D Canvas during normal prep.
 - Black or unavailable captures are treated as control-plane/runtime faults first, not scene-art faults.
 - Production build loops remain fail-fast: small write -> inspect -> rendered capture -> continue.
+
+
+## ADR-012 — Fail-fast execution is the default prep standard
+**Status:** Accepted  
+**Date:** 2026-10-06
+
+### Decision
+Use fail-fast execution for Foundry/3D Canvas, bridge/infrastructure work, exporters, and other risky campaign-prep changes.
+
+The mandatory loop is:
+1. inspect current state/revision;
+2. apply the smallest meaningful reversible batch;
+3. inspect structural/runtime state;
+4. validate the actual player-facing result;
+5. accept the checkpoint before continuing.
+
+For 3D Canvas, a rendered capture is the acceptance test. API success, valid JSON, document counts, and created Tiles are insufficient by themselves.
+
+At the first unexpected failure, stop production changes and diagnose only the failing layer. Do not stack speculative fixes. Allow at most one targeted recovery/retry unless the DM explicitly authorizes deeper troubleshooting. If that retry fails or local DM action is required, return immediately with the last known-good checkpoint, exact failed operation, verified/uncertain state, and smallest required DM action.
+
+Black/blank 3D captures or inability to inspect/frame/capture the live 3D runtime are hard stops.
+
+Recurring manual recovery steps should be moved into bridge/tooling automation. Known local infrastructure paths, versions, launch commands, and bridge topology must be persisted and consulted rather than rediscovered.
+
+### Rationale
+This standard materially shortened fault isolation during the Episode 1 rebuild:
+- stale revisions were separated from malformed scene objects;
+- 3D runtime failures were separated from geometry failures;
+- bad pool asset choices were caught before propagation;
+- scene-bound coordinate clamping was discovered before later Areas were built on corrupted coordinates;
+- bridge gaps were upgraded rather than repeatedly offloaded to the DM.
+
+### Persistence
+The same standard is recorded in the Google Drive `PROJECT_INSTRUCTIONS` document and should remain synchronized with the ChatGPT Project Instructions field.
