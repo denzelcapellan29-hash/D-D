@@ -1,10 +1,10 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "generated_at": "2026-10-05",
   "scene_id": "7ADiF7HRrUbOsibQ",
   "scene_name": "Ep1 - World Slice",
-  "current_revision": "1c92c40e1fe5a25604aebf6f572953dbdb8ca6194450c272e441cf02a2d5c9c8",
-  "tile_count": 61,
+  "current_revision": "b344519184bf9251541b0232729698814dc2d534c8538eea489acd56c65664b5",
+  "tile_count": 86,
   "token_count": 10,
   "status": "active production; legacy geometry retained",
   "surface": {
@@ -18,7 +18,9 @@
     "notes": [
       "Three City Watch tokens are neutral-disposition semantic Tokens.",
       "The Gray Hands agent is player-facing only as 'Drunken Halfling Passerby'; hidden identity remains GM-side.",
-      "Warehouse interior remains cargo-free; new dressing is rubble/broken timber only."
+      "Warehouse interior remains cargo-free; new dressing is rubble/broken timber only.",
+      "Added solid stone-color sidewalk slabs bordering the main cobbled street to reduce exposed white-grid surface.",
+      "Replaced the cyan generic Shop shells for Jolly's Lamp Emporium and the north context shop with textured modular medieval house assets."
     ]
   },
   "area1": {
@@ -42,15 +44,23 @@
     ]
   },
   "qa": {
-    "structural": "PASS for counts and source-hidden token semantics.",
-    "visual": "User confirmed the surface scene visibly changed and approved continuation.",
-    "capture_issue": "Loaded v0.2.4 still shows 3D Canvas GM helper wireframes in automated captures.",
+    "structural": "PASS for current live scene after reversible visual probes; all failed visual probes were removed.",
+    "visual": "PASS for continued iteration: road is readable, Jolly/context buildings are materially improved, warehouse fissure now reads as a dark jagged rupture instead of white grid.",
+    "capture_issue": "Resolved sufficiently for canonical art-direction QA under v0.2.6.",
     "staged_fix": "Acq Foundry Bridge v0.2.5 fixes nested scene-light helper suppression and prefers Tile3D precomputed world bounds; CI pending/next gate."
   },
   "next": [
-    "Load v0.2.5 at a convenient checkpoint and retest clean 3D captures.",
-    "Tune surface facade/warehouse scale visually.",
-    "Add source-specific fissure rope/Area 1 bootprint and Area 2 relief/lock details through custom generated assets rather than unrelated stock props.",
-    "Only after clean QA consider retiring overlapping legacy monolithic tiles."
-  ]
+    "Continue visual tuning of the street/warehouse transition using small reversible changes only.",
+    "Improve Area 2 pool basins and ornate double-door treatment; avoid thin textured dynamic-mesh strips because UV stretching failed QA.",
+    "Add source-specific descent rope, Area 1 bootprints and Area 2 robed-figure reliefs using bespoke/custom details rather than unrelated stock props.",
+    "Do not remove legacy monolithic tiles until the current modular replacements pass canonical close/medium/wide captures."
+  ],
+  "warehouse": {
+    "fissure_mouth_tiles": 3,
+    "notes": [
+      "Three overlapping dark solid dynamic meshes now define an irregular fissure mouth over the legacy white-grid opening.",
+      "Warehouse collapse wood/beam dressing was retuned toward dark timber; two silver scaffold-style pieces were replaced with wood beam assets.",
+      "Disposable crater and cobbled-sidewalk model probes were tested and removed after visual QA showed they were unsuitable."
+    ]
+  }
 }
