@@ -558,3 +558,25 @@ Current production revision:
 `b344519184bf9251541b0232729698814dc2d534c8538eea489acd56c65664b5`
 
 No legacy monolithic World Slice geometry has been deleted.
+
+
+## Session 1 completed through Area 1; production scope pivot (2026-10-05)
+The DM reported that Session 1 ended immediately after the two-PC party defeated the giant rats in Area 1.
+
+Development priority is now explicitly **the remainder of Episode 1**, not further polishing already-played material. Completed content is frozen unless a continuity/backtracking defect requires a fix:
+- Dock Ward approach;
+- warehouse/fissure entry;
+- Area 1 rat encounter.
+
+Reviewed the private Episode 1 source through the remainder of the episode (Areas 2-10, exiting the fissure, Dock Ward ambush, conclusion/downtime) and persisted the source-grounded production order in:
+`campaign/episode1/post_session1_remaining_episode_plan_v1.json`
+
+Next-session polish order for a ~3-hour session:
+1. Area 2 - Trials
+2. Area 3 - Traps / mummy chamber
+3. Area 4 - Tunnels
+4. Area 5 - Death / giant spider
+
+Areas 6-10 and the Dock Ward ambush should still receive structural prep now, but second-pass art polish follows the likely play order above.
+
+Advanced Tools is installed/activated by the DM. Treat it as an **accelerator**, not a new canonical layer: use Dungeons & Interiors, Material/Effects and Environment tooling where useful; add only the smallest bridge adapter needed for Advanced-Tools-only state/actions. Cutscenes are a planned runtime feature for later reveals/transitions rather than a blocker for immediate map completion.
