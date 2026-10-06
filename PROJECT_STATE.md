@@ -662,3 +662,9 @@ v0.2.7 adds automatic 3D Canvas runtime recovery for camera/capture operations. 
 
 The retired scratch Tiles on `Example` were deleted, leaving only Episode 1 production geometry.
 Area 2 currently has 9 modular floor Tiles + 10 perimeter wall Tiles and renders correctly in 3D Canvas.
+
+
+## Operating standard — fail fast (2026-10-06)
+Fail-fast execution is now a durable project rule; see ADR-012 and the Google Drive `PROJECT_INSTRUCTIONS` document.
+
+For risky Foundry/3D/infrastructure work: small reversible batch -> inspect -> rendered/functional validation -> accept -> continue. On the first unexplained failure, stop production mutations, perform at most one targeted recovery/retry, and return to the DM immediately if unresolved or if local action is required. Black/blank 3D output is a hard stop.
