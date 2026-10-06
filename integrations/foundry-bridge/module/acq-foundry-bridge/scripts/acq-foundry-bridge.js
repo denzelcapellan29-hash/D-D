@@ -172,6 +172,125 @@ function environment3dFlags(scene) {
   return out;
 }
 
+function sleepMs(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function threeRuntimeState(scene) {
+  const l3d = levels3d();
+  const loading = l3d?.loadingTiles;
+  let loadingCount = 0;
+  try {
+    loadingCount = Number(
+      loading?.size ??
+      loading?.length ??
+      (loading && typeof loading === "object" ? Object.keys(loading).length : 0)
+    ) || 0;
+  } catch {}
+
+  return {
+    available: Boolean(l3d),
+    active: Boolean(l3d?._active),
+    ready: Boolean(l3d?._ready),
+    finalizing: Boolean(l3d?._finalizingLoad),
+    env_ready: Boolean(l3d?._envReady),
+    lights_ok: Boolean(l3d?._lightsOk),
+    loading_count: loadingCount,
+    scene_id: canvas?.scene?.id ?? null,
+    target_scene_id: scene?.id ?? null,
+    renderer: Boolean(l3d?.renderer),
+    scene_graph: Boolean(l3d?.scene),
+    camera: Boolean(l3d?.camera),
+    controls: Boolean(l3d?.controls)
+  };
+}
+
+async function waitFor3dReady(scene, {timeoutMs = 15000, stableMs = 500} = {}) {
+  const started = Date.now();
+  let stableSince = null;
+  let last = threeRuntimeState(scene);
+
+  while (Date.now() - started < timeoutMs) {
+    last = threeRuntimeState(scene);
+    const usable = (
+      last.available &&
+      last.active &&
+      last.ready &&
+      last.scene_id === scene.id &&
+      last.renderer &&
+      last.scene_graph &&
+      last.camera &&
+      last.controls &&
+      last.loading_count === 0
+    );
+
+    if (usable) {
+      if (stableSince === null) stableSince = Date.now();
+      if (Date.now() - stableSince >= stableMs) {
+        return {ok: true, waited_ms: Date.now() - started, state: last};
+      }
+    } else {
+      stableSince = null;
+    }
+    await sleepMs(100);
+  }
+
+  throw new Error(
+    `3D Canvas did not become ready within ${timeoutMs}ms. Last runtime state: ${JSON.stringify(last)}`
+  );
+}
+
+async function ensure3dRuntime(scene, {reason = "3d-operation"} = {}) {
+  let before = threeRuntimeState(scene);
+  if (!before.available) {
+    throw new Error("3D Canvas runtime is unavailable. Verify the 3D Canvas module is enabled.");
+  }
+
+  if (
+    before.active && before.ready && before.scene_id === scene.id &&
+    before.renderer && before.scene_graph && before.camera && before.controls &&
+    before.loading_count === 0
+  ) {
+    const ready = await waitFor3dReady(scene, {timeoutMs: 3000, stableMs: 250});
+    return {reason, action: "already-ready", before, after: ready.state, waited_ms: ready.waited_ms};
+  }
+
+  const l3d = levels3d();
+  let action = "wait";
+
+  if (!l3d?._active) {
+    if (typeof l3d?.toggle !== "function") {
+      throw new Error(
+        `3D Canvas is inactive and no runtime toggle API is available. State: ${JSON.stringify(before)}`
+      );
+    }
+    action = "toggle-on";
+    await Promise.resolve(l3d.toggle(true));
+  }
+
+  try {
+    const ready = await waitFor3dReady(scene, {timeoutMs: 8000, stableMs: 500});
+    return {reason, action, before, after: ready.state, waited_ms: ready.waited_ms};
+  } catch (firstError) {
+    const current = levels3d();
+    if (typeof current?.reload === "function") {
+      action = action === "toggle-on" ? "toggle-on+reload" : "reload";
+      await Promise.resolve(current.reload());
+    } else if (typeof current?.toggle === "function") {
+      action = action === "toggle-on" ? "toggle-cycle" : "toggle-cycle";
+      if (current._active) await Promise.resolve(current.toggle(false));
+      await sleepMs(300);
+      await Promise.resolve(current.toggle(true));
+    } else {
+      throw firstError;
+    }
+
+    const ready = await waitFor3dReady(scene, {timeoutMs: 15000, stableMs: 700});
+    return {reason, action, before, after: ready.state, waited_ms: ready.waited_ms};
+  }
+}
+
+
 async function inspect3dScene(scene) {
   const THREE3D = await getThreeModule();
   const l3d = levels3d();
@@ -224,9 +343,12 @@ async function inspect3dScene(scene) {
 }
 
 async function set3dCamera(scene, op, dryRun = false) {
+  const runtimeRecovery = dryRun
+    ? null
+    : await ensure3dRuntime(scene, {reason: "set_3d_camera"});
   const l3d = levels3d();
   if (!l3d?._active || !l3d.camera || !l3d.controls) {
-    throw new Error("3D Canvas is not active or its camera controls are unavailable.");
+    throw new Error("3D Canvas camera controls are unavailable after runtime recovery.");
   }
 
   const before = {
@@ -258,7 +380,8 @@ async function set3dCamera(scene, op, dryRun = false) {
       target: vectorToObject(l3d.controls.target),
       first_person_mode: Boolean(l3d.firstPersonMode)
     },
-    saved_as_initial: Boolean(op.save_as_initial && !dryRun)
+    saved_as_initial: Boolean(op.save_as_initial && !dryRun),
+    runtime_recovery: runtimeRecovery
   };
 }
 
@@ -323,9 +446,10 @@ async function getThreeModule() {
 }
 
 async function capture3dView(scene, op) {
+  const runtimeRecovery = await ensure3dRuntime(scene, {reason: "capture_3d_view"});
   const l3d = levels3d();
   if (!l3d?._active || !l3d.renderer || !l3d.scene || !l3d.camera || !l3d.controls) {
-    throw new Error("3D Canvas is not active or its renderer/camera is unavailable.");
+    throw new Error("3D Canvas renderer/camera is unavailable after runtime recovery.");
   }
 
   const THREE3D = await getThreeModule();
@@ -413,6 +537,7 @@ async function capture3dView(scene, op) {
       ...canvasToBase64(captureCanvas, op.format, op.quality),
       scene_id: scene.id,
       scene_name: scene.name,
+      runtime_recovery: runtimeRecovery,
       camera: {
         position: vectorToObject(l3d.camera.position),
         target: vectorToObject(l3d.controls.target),
