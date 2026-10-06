@@ -540,3 +540,21 @@ v0.2.6 was loaded successfully and the active World Slice remained structurally 
 - A new cobble-surface probe was queued next, but before that write executed both the hosted Foundry MCP connection and Secure MCP tunnel disconnected. No write occurred after the disconnect.
 
 Current next action: restore the live Foundry + tunnel connections, then continue with small reversible surface/warehouse probes rather than broad bulk replacement.
+
+
+## Runtime restored; World Slice visual pass continued — 2026-10-05
+After the runtime returned, live Foundry MCP and Acq 3D MCP both passed again. The current scene was already further along than the previous checkpoint (83 semantic/legacy Tiles before the new pass), including modular warehouse shell/floors, cobbled street, Area 1/2 floors and Area 2 masonry.
+
+New production changes applied and visually QA'd:
+- tested and removed unsuitable cobbled-path and crater model probes;
+- added three overlapping dark dynamic meshes to turn the warehouse's white-grid opening into an irregular readable fissure mouth;
+- retuned warehouse collapse dressing toward dark timber, replacing two silver scaffold-like pieces with wood beams;
+- added simple solid sidewalk slabs along the main street to reduce exposed white-grid ground;
+- replaced the cyan generic Shop shells for Jolly's Lamp Emporium and the north context shop with textured modular medieval building assets.
+
+A thin textured basin-lip experiment for Area 2 produced severe UV stretching and was rolled back completely. This is now a known rejected technique for narrow dynamic-mesh strips.
+
+Current production revision:
+`b344519184bf9251541b0232729698814dc2d534c8538eea489acd56c65664b5`
+
+No legacy monolithic World Slice geometry has been deleted.
