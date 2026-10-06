@@ -72,6 +72,12 @@
     },
     "reload_3d_scene": {
       "dry_run": "boolean optional"
+    },
+    "resize_scene": {
+      "width": "scene width in pixels, safe range 1000-100000",
+      "height": "scene height in pixels, safe range 1000-100000",
+      "padding": "optional 0-1",
+      "result": "before/after dimensions; supports expected_revision at command level"
     }
   },
   "direct_rpc": {
