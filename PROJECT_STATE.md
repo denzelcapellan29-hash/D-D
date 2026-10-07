@@ -668,3 +668,13 @@ Area 2 currently has 9 modular floor Tiles + 10 perimeter wall Tiles and renders
 Fail-fast execution is now a durable project rule; see ADR-012 and the Google Drive `PROJECT_INSTRUCTIONS` document.
 
 For risky Foundry/3D/infrastructure work: small reversible batch -> inspect -> rendered/functional validation -> accept -> continue. On the first unexplained failure, stop production mutations, perform at most one targeted recovery/retry, and return to the DM immediately if unresolved or if local action is required. Black/blank 3D output is a hard stop.
+
+
+## Episode 1 underground visual baseline — 2026-10-06
+- `Example` resized to 22649×11218; the prior x≈6000 coordinate clamp is resolved.
+- Verified intended placement beyond the old scene bounds with live 3D capture.
+- Replaced the white Foundry/tabletop ground under the underground footprint with accepted dark dirt/rock context.
+- Rejected an initial striped/tiled ground treatment before promotion.
+- Areas 2–4 now read as structures embedded in subterranean terrain.
+- Area 4 broken-maze shell passed rendered QA; cave-in rubble schema is valid and the accepted retry created the rubble batch.
+- Next visual target: Area 5 natural cavern, webs/cocoons, spider space, and surrounding cave context.
