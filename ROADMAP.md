@@ -127,3 +127,10 @@ Do not return to monolithic GLB-first construction.
 2. Verify absence with inspect + actual 3D capture; if it persists after one recovery, stop.
 3. Fix the bridge package `persistentStorage` capability through a versioned upgrade and validate upload of an original cocoon GLB.
 4. Place five source-grounded hanging cocoon props + webs and stage giant spider/occupants as GM-only encounter state. Run close + wide visual QA before continuing.
+
+
+## Immediate visual next steps — 2026-10-07
+1. Restore/verify healthy live 3D inspection on `Example`; no scene mutations until this passes.
+2. Rebuild Area 5 with proven boulder-based cavern boundaries and organic cocoon props; one coherent write + one capture.
+3. Continue Areas 6–10 using the same underground-context visual language and fast fail-fast cadence.
+4. Revisit warehouse/fissure presentation after underground Areas 1–10 reach coherent visual completeness.
