@@ -687,3 +687,10 @@ For risky Foundry/3D/infrastructure work: small reversible batch -> inspect -> r
 - Current hard stop: rejected hidden cocoon Tile remains instantiated in live 3D runtime even after `reload_3d_scene`.
 - Verified mismatch: Foundry document has `hidden=true`, while `inspect_3d_scene` still reports non-null runtime bounds.
 - Resume only after stale runtime geometry is cleared.
+
+
+## 2026-10-06 — Verified persistence and Area 5 runtime checkpoint
+- Durable technical method documented in Google Drive `PROJECT_INSTRUCTIONS`, repo domain knowledge, and decisions: scene-size/clamp diagnosis, v0.2.8 resizing, ground-first Dynamic Mesh recipe, visual material rejection, and Area 5 natural cave assets.
+- Live scene `Example` = `CDScXPQiLvL3tKCL`, already resized to 22649×11218, with six underground ground zones. Current inspection reports 104 Tiles and 2 lights, runtime active.
+- Area 5 has an accepted cavern floor and high-end boulder boundary, but the rejected cocoon test Tile `ep1.a5.cocoon.test` remains `hidden=true` **and** has non-null Three.js runtime bounds.
+- Production hard stop remains in effect: do not extend Area 5 until deterministic runtime cleanup is proven. Missing `persistentStorage` bridge capability separately blocks uploading the purpose-built cocoon asset.
