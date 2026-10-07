@@ -187,3 +187,11 @@
 - Generated a purpose-built cocoon GLB; upload exposed a missing `persistentStorage` capability in the bridge module.
 - Recorded hidden-document/live-runtime divergence after a rejected Tile remained visible despite `reload_3d_scene`.
 - Stopped further Area 5 production per fail-fast standard.
+
+
+## 2026-10-06 — Formalized verified 3D construction domain knowledge
+- Recorded the proven v0.2.8 `Example` scene resize and x>6000 clamp acceptance.
+- Persisted exact underground Dynamic Mesh dirt-surface configuration and the rejected striped Ground010 texture attempt.
+- Documented the stone-floor/pool-height calibration through live Three.js runtime bounds.
+- Preserved the accepted Area 5 boulder-boundary method and the unresolved hidden-Tile/live-mesh divergence as a production hard stop.
+- Synced detailed guidance to Google Drive `PROJECT_INSTRUCTIONS` and GitHub domain knowledge; ChatGPT Project Instructions still require the user's UI edit.
