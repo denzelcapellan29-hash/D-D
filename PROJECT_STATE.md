@@ -1,5 +1,36 @@
 # Project State
 
+Updated: 2026-10-07
+
+## Blender semantic-authoring setup — ACTIVE
+The cross-runtime scene contract is now established in GitHub.
+
+Created:
+- `scene/semantic_scene.schema.json`: canonical runtime-independent scene schema.
+- `scene/README.md`: coordinate, provenance, layering and QA rules.
+- `integrations/blender/README.md`: Blender responsibilities, safe MCP surface, metadata and fail-fast policy.
+- `integrations/blender/blender_scene_contract.schema.json`: GLB/export-manifest contract.
+- `campaign/episode1/pipeline_smoke_test.scene.json`: disposable non-canonical end-to-end test scene with room, door, elevation feature, light, marker and four QA cameras.
+
+Architecture decision recorded in ADR-015. README corrected: Foundry + 3D Canvas is primary runtime; Blender is authoring/render/QA; Minecraft is a secondary exporter; TaleSpire remains optional.
+
+### Current gate
+The Blender MCP exists locally according to the DM but is not yet exposed in this ChatGPT tool surface. No Blender production build has been attempted.
+
+Next acceptance sequence once the Blender MCP is visible:
+1. inspect Blender version/current file/tool surface;
+2. build only `ep1.pipeline-smoke-test`;
+3. verify semantic IDs, units, Z-up transform and object bounds;
+4. render `qa.overhead`, `qa.iso`, `qa.player`, `qa.wide`;
+5. export one GLB + manifest;
+6. import/place into a disposable Foundry 3D Canvas scene;
+7. capture the actual 3D renderer and verify scale/orientation/material survival;
+8. only after PASS, adapt the real Episode 1 vertical-slice semantics.
+
+No released Episode 1 assets/scenes are to be overwritten during this gate.
+
+---
+
 Updated: 2026-10-06
 
 ## Current production gate — Foundry/3D Canvas knowledge baseline
