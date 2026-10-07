@@ -447,3 +447,34 @@ The faster cadence preserves fail-fast acceptance while reducing unnecessary bri
 - A white/default tabletop under intended underground environments is treated as unfinished.
 - Proven construction primitives are batched by semantic layer rather than re-tested object by object.
 - Renderer capture remains the final acceptance gate.
+
+
+## ADR-015 — Blender is a deterministic authoring/QA stage above runtime exporters
+**Status:** Accepted  
+**Date:** 2026-10-07
+
+### Decision
+Add Blender to the campaign architecture as a deterministic procedural 3D authoring, asset-generation, render-QA and GLB export stage. Blender is not the canonical campaign/world model and does not own D&D mechanics.
+
+The canonical flow is:
+adventure/source -> semantic campaign/world model -> deterministic spatial engine -> platform-independent semantic scene -> Blender authoring/QA when useful -> runtime exporters.
+
+Foundry + 3D Canvas remains the primary campaign runtime. Minecraft remains a verified procedural/export target. TaleSpire remains optional/fallback.
+
+### Contracts
+- `scene/semantic_scene.schema.json` defines runtime-independent spaces, features, entities, presentation intent, provenance and stable semantic IDs.
+- `integrations/blender/blender_scene_contract.schema.json` defines the versioned Blender export manifest.
+- Generated Blender objects carry stable `acq.*` semantic/build/provenance metadata.
+- Runtime adapters perform their own axis/scale conversion; no runtime may become the implicit coordinate authority.
+
+### Visual acceptance
+Blender changes follow the same fail-fast rule as 3D Canvas:
+inspect -> one reversible semantic batch -> structural validation -> named-camera render -> visual accept/reject.
+
+A successful Blender API call, saved .blend file or GLB export is insufficient without a valid render. A black/blank/malformed render is a hard stop.
+
+### Consequences
+- Custom geometry and difficult art-direction work can be proven in Blender before 3D Canvas sees it.
+- 3D Canvas becomes primarily the player-facing runtime/acceptance layer rather than the modeling environment.
+- TaleSpire-style modular readability is treated as a design grammar, not a required runtime dependency.
+- Existing Foundry asset-first modular construction remains valid; Blender is used where it improves quality or determinism rather than forcing every object through a custom-GLB pipeline.
