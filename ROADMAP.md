@@ -114,3 +114,9 @@ Immediate order:
 6. finish Acquisitions Incorporated HQ after dungeon visual acceptance.
 
 Do not return to monolithic GLB-first construction.
+
+
+## Bridge / Area 5 follow-up
+- Enable Foundry package `persistentStorage` for `acq-foundry-bridge`, validate `asset_upload`, and release as a versioned bridge upgrade before depending on generated runtime assets.
+- Add a deterministic runtime cleanup/delete path that proves rejected/hidden 3D objects are removed from the live Three.js scene.
+- After runtime cleanup is proven, resume Area 5 with five purpose-built hanging cocoon assets, then webs, hidden spider encounter state, and final QA capture.
