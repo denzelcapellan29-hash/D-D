@@ -16,23 +16,33 @@ Adventure / campaign source
 
 ## Active runtime
 
-**Minecraft Java 26.3 + Fabric + WorldEdit** is the active primary campaign runtime.
+**Foundry VTT + 3D Canvas** is the primary campaign runtime.
 
-The Acq Minecraft Bridge provides live-world control and inspection through:
+**Blender** is the deterministic 3D authoring/render/QA stage for geometry or assets that benefit from procedural construction, stronger materials/lighting, or independent visual validation. Blender is not canonical and does not own D&D mechanics.
+
+**Minecraft Java + Fabric + WorldEdit** remains a verified procedural/export target and engineering reference, not the current visual target.
+
+**TaleSpire** remains an optional fallback/export candidate and a useful reference for modular tabletop readability.
+
+The active control split is:
 
 ```
 ChatGPT
-→ Google Drive command/result transport
-→ local bridge agent
-→ Fabric bridge mod
-→ Minecraft world
-→ live region state / QA results
-→ ChatGPT
+├─ hosted Foundry MCP -> generic Foundry/D&D5e documents and mechanics
+├─ Acq 3D MCP -> 3D Canvas inspection/assets/semantic placement/camera/capture
+└─ Blender MCP -> deterministic scene build/materials/lighting/render/export
 ```
 
-Current bridge capabilities include bounded live block edits, compressed region inspection, coordinate-controlled authoring, and automated structural readback.
+The canonical data flow remains runtime-independent:
 
-Foundry VTT + 3D Canvas remains an evaluated exporter/runtime path rather than the current production target. TaleSpire remains a possible future exporter if a later campaign need justifies it.
+```
+Adventure/source
+→ Semantic Campaign + World Model
+→ Deterministic Spatial / Geometry Engine
+→ Platform-independent Scene
+→ Blender authoring/QA when useful
+→ Runtime exporters
+```
 
 ## Current Episode 1 scope
 
@@ -44,29 +54,28 @@ Full Waterdeep is a stretch goal.
 
 ## QA architecture
 
-Minecraft client screenshots are diagnostic only. Normal QA is headless and layered:
+QA is layered and runtime-specific:
 
-- **Direct VTK renderer:** fast engineering views from the actual world save.
-- **BlueMap:** resource-pack-aware visual truth check against the actual Minecraft world before release.
-- **PyVista:** optional higher-level analysis/visualization layer.
-- **Amulet Core:** candidate safer world-I/O backend, gated by a non-destructive real-world load/save/reopen probe.
-- **Structural validators:** support/connectivity, terrain bleed, protected-core integrity, and block-state checks.
-
-World geometry and visual appearance are intentionally decoupled: stable block/state geometry can be evaluated under multiple visual/resource profiles without rebuilding the campaign world.
+- **Semantic/structural validation:** dimensions, connectivity, clearance, provenance, stable semantic IDs and deterministic seeds.
+- **Blender:** fixed overhead/isometric/player-height/wide-context renders validate geometry, materials, lighting and dressing before export.
+- **Foundry/3D Canvas:** live Three.js inspection plus actual renderer capture is the player-facing acceptance test.
+- **Minecraft:** VTK/BlueMap remain available for the Minecraft exporter.
+- A blank, black, malformed or uninspectable visual result is a hard stop; API success alone never counts as visual acceptance.
 
 ## Release workflow
 
 ```
-semantic world model
-→ deterministic world build
-→ Minecraft save compiler
-→ structural QA
-→ VTK/PyVista engineering QA
-→ BlueMap resource-pack-aware QA
-→ packaged direct-import world release
+semantic campaign/world model
+→ deterministic spatial build
+→ platform-independent semantic scene
+→ Blender procedural authoring + visual QA when required
+→ versioned GLB/assets + export manifest
+→ Foundry/3D Canvas semantic import
+→ live 3D renderer QA
+→ released campaign scene
 ```
 
-The DM should normally receive a finished world save rather than manually assembling schematics or debugging generated geometry.
+Runtime exporters may also target Minecraft or a future TaleSpire path from the same semantic scene. Never convert Minecraft/Foundry/TaleSpire output into another runtime.
 
 ## Persistence
 
