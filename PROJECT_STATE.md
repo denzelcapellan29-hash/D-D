@@ -678,3 +678,12 @@ For risky Foundry/3D/infrastructure work: small reversible batch -> inspect -> r
 - Areas 2–4 now read as structures embedded in subterranean terrain.
 - Area 4 broken-maze shell passed rendered QA; cave-in rubble schema is valid and the accepted retry created the rubble batch.
 - Next visual target: Area 5 natural cavern, webs/cocoons, spider space, and surrounding cave context.
+
+
+## Episode 1 Area 5 checkpoint — 2026-10-06
+- Accepted visual shell: blended subterranean dirt floor + high-end boulder cavern boundary.
+- Rejected cave/cocoon experiments are hidden/rejected and must not be promoted.
+- A generated cocoon GLB was produced successfully, but bridge upload failed because the Foundry package lacks persistentStorage.
+- Current hard stop: rejected hidden cocoon Tile remains instantiated in live 3D runtime even after `reload_3d_scene`.
+- Verified mismatch: Foundry document has `hidden=true`, while `inspect_3d_scene` still reports non-null runtime bounds.
+- Resume only after stale runtime geometry is cleared.
