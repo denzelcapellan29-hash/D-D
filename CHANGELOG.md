@@ -195,3 +195,13 @@
 - Documented the stone-floor/pool-height calibration through live Three.js runtime bounds.
 - Preserved the accepted Area 5 boulder-boundary method and the unresolved hidden-Tile/live-mesh divergence as a production hard stop.
 - Synced detailed guidance to Google Drive `PROJECT_INSTRUCTIONS` and GitHub domain knowledge; ChatGPT Project Instructions still require the user's UI edit.
+
+
+## 2026-10-07 — Large-scene + underground-context workflow
+- Verified and documented Foundry Scene-bound coordinate clamping as the cause of missing/collapsed distant Episode 1 geometry.
+- Resized `Example` to approximately 22649×11218 and verified x>6000 rendering.
+- Replaced the white tabletop look with an accepted broad dirt/rock underground context layer.
+- Rejected a striped high-repeat ground material mapping.
+- Completed/accepted Area 4 broken-maze shell and cave-in rubble against the underground context.
+- Adopted faster fail-fast cadence: one inspect, one coherent revision-checked semantic-layer write, one rendered acceptance capture.
+- Area 5 initial cavern/cocoon visual pass rejected; subsequent correction halted on runtime inspection failure in accordance with fail-fast policy.
