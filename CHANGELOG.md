@@ -178,3 +178,12 @@
 - Rejected a first-pass striped ground material and promoted the simpler accepted treatment only after rendered QA.
 - Completed and visually accepted Area 4 broken-maze shell; added cave-in rubble after revision-checked retry.
 - Documented the reusable scene-bounds, ground-first, and layered fail-fast workflow in ADR-013 and 3D Canvas domain knowledge.
+
+
+## 2026-10-06 — Area 5 natural cavern QA
+- Established high-end boulders as the accepted cavern-boundary asset family.
+- Rejected stretched terrain/cave-cliff assets that failed live visual QA.
+- Rejected bag, dynamic-sphere, and egg cocoon substitutes after rendered inspection.
+- Generated a purpose-built cocoon GLB; upload exposed a missing `persistentStorage` capability in the bridge module.
+- Recorded hidden-document/live-runtime divergence after a rejected Tile remained visible despite `reload_3d_scene`.
+- Stopped further Area 5 production per fail-fast standard.
