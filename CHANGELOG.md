@@ -205,3 +205,12 @@
 - Completed/accepted Area 4 broken-maze shell and cave-in rubble against the underground context.
 - Adopted faster fail-fast cadence: one inspect, one coherent revision-checked semantic-layer write, one rendered acceptance capture.
 - Area 5 initial cavern/cocoon visual pass rejected; subsequent correction halted on runtime inspection failure in accordance with fail-fast policy.
+
+
+## 2026-10-07 — Blender semantic-authoring pipeline foundation
+- Added runtime-independent semantic scene schema with spaces, structural/tactical/decorative features, entities, provenance, presentation profiles and fixed QA cameras.
+- Added Blender authoring/QA contract and versioned Blender GLB export-manifest schema.
+- Added a disposable, explicitly non-canonical Episode 1 pipeline smoke-test scene for scale/metadata/render/export validation.
+- Recorded ADR-015: Blender is an authoring/render/QA stage; Foundry + 3D Canvas remains primary runtime.
+- Corrected the stale repository README that still described Minecraft as the active primary runtime.
+- Blender runtime execution remains gated until the local Blender MCP is exposed to this ChatGPT tool surface.
