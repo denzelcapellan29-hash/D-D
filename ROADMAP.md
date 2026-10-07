@@ -134,3 +134,34 @@ Do not return to monolithic GLB-first construction.
 2. Rebuild Area 5 with proven boulder-based cavern boundaries and organic cocoon props; one coherent write + one capture.
 3. Continue Areas 6–10 using the same underground-context visual language and fast fail-fast cadence.
 4. Revisit warehouse/fissure presentation after underground Areas 1–10 reach coherent visual completeness.
+
+
+## Blender authoring/QA integration — 2026-10-07
+
+1. **Expose the existing Blender MCP to this ChatGPT project.**
+   - Verify health/version/current .blend and enumerate actual MCP operations.
+   - Do not design around assumed Blender tool names.
+
+2. **Run the disposable semantic smoke test.**
+   - Input: `campaign/episode1/pipeline_smoke_test.scene.json`.
+   - Build structural room, doorway, raised platform, one light and one medium-scale marker.
+   - Preserve stable semantic IDs as Blender custom properties.
+   - Render all four named QA cameras.
+   - Hard stop on black/blank/malformed output.
+
+3. **Validate Blender export contract.**
+   - Export a versioned GLB.
+   - Produce `blender_scene_contract.schema.json`-conformant manifest with bounds, scale/axis transform, semantic IDs, collision intent and QA references.
+   - Re-open/inspect exported artifact when the MCP permits.
+
+4. **Validate Foundry round-trip on disposable content.**
+   - Upload/place the accepted GLB through Acq 3D MCP.
+   - Use revision-checked writes.
+   - Inspect live Three.js bounds.
+   - Capture the actual 3D Canvas renderer.
+   - Compare orientation/scale/material read against Blender reference.
+
+5. **Promote only after PASS.**
+   - Adapt the real Waterdeep street -> warehouse -> fissure -> subterranean -> Area 1 -> Area 2 vertical slice into semantic scene data.
+   - Keep source-grounded, procedural, adaptation and original-connective provenance explicit.
+   - Use Blender where it materially improves world-feel; retain proven native 3D Canvas assets where they are already superior.
