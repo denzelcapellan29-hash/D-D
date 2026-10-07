@@ -765,3 +765,20 @@ A generated cocoon GLB was successfully created, but bridge `asset_upload` faile
 A rejected cocoon Tile was updated to `hidden=true`, but `inspect_3d_scene` continued to report live runtime bounds and captures still showed the mesh. `reload_3d_scene` did not clear it.
 
 Operational rule: hidden Foundry document state does not prove live Three.js removal. If a rejected object persists after one bridge reload, hard-stop production and repair runtime cleanup rather than stacking scene edits.
+
+
+## Verified Episode 1 scene-extent, ground-first, and Area 5 visual methods (2026-10-06)
+
+**Scene bounds are authoritative.** `Example` previously clamped requested x positions beyond ~6000 to exactly x=6000, overlapping distant Areas 3–4. The real fix was `resize_scene` in the v0.2.8 bridge module: resize `Example` to **22649×11218** before building the full Episode 1 footprint, inspect actual Tile coordinates/runtime bounds, and require a real 3D capture of far geometry (x≈9200) before accepting. A successful write does not prove coordinates were honored.
+
+**Underground material recipe, visually accepted.** Six broad native 3D Canvas Dynamic Mesh box ground Tiles were used under the extended underground footprint. Configuration: `flags["levels-3d-preview"].dynaMesh="box"`, `model3d=""`, `depth=4`, `elevation=1`, `collision=false`, `sight=false`, `autoGround=true`, `autoCenter=false`, `imageTexture="modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Dirt.webp"`, `textureRepeat=4–6`, `fillType="stretch"`, muted dark brown/gray tints, `castShadow=false`. Validated first as ONE material test patch in Area 2–3, then six large ground zones; capture proved the white plane no longer dominated the dungeon. Do not mistake these flat grounding surfaces for completed volumetric cave walls/ceilings.
+
+**Rejected alternative.** `Ground010_Color.webp` with `fillType="tile"` and `textureRepeat=14` generated severe striping. Stop immediately on a malformed material capture; adjust only that Tile; repeat visual QA before expanding the treatment.
+
+**Runtime depth/elevation calibration.** For `Floor_Modular.glb`, 600-pixel floor module at `elevation=-0.6` has runtime maximum vertical y≈0.588. Thin pool meshes placed at y≈0 were occluded. Four 10-ft-scale pools were realized with shallow colored Dynamic Mesh boxes plus dark basin rims, elevated just above the model's actual top surface. Use runtime bounds, not document elevation alone.
+
+**Area 5 source-grounded visual baseline and blocker.** Current accepted assets: cave floor + high-end boulder GLBs `Boulder_01/02/03` surrounding the natural cavern. Rejected stretched cave-terrain props, bag/sphere/egg cocoon surrogates after actual rendered captures. A custom cocoon asset was generated but cannot yet be reliably uploaded because the Foundry bridge package needs `persistentStorage` enabled. Do not resort to unrelated substitute props merely to increase object count.
+
+**Hard stop: hidden document != removed runtime object.** The rejected Tile `ep1.a5.cocoon.test` is `hidden=true` in Foundry while `inspect_3d_scene` reports non-null runtime bounds for its 3D mesh. A previous 3D runtime reload failed to clear it. Halt further scene production until a targeted cleanup removes it and both live state inspection and rendered capture confirm absence. Do not silently assume hidden/deleted documents are gone from the Three.js scene.
+
+**Nonnegotiable loop:** inspect live revision and extent -> one small reversible write -> inspect actual runtime bounds -> rendered 3D capture -> accept; on unexpected failure stop, diagnose only that layer, permit at most one targeted recovery/retry, report precise checkpoint and blocker if unresolved.
