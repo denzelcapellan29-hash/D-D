@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/acq/semantic_scene.schema.json",
+  "title": "Acquisitions Incorporated Semantic Scene",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scene_id", "name", "units", "spaces", "features", "entities", "presentation"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "scene_id": { "type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provenance": { "enum": ["source-grounded", "procedural-interpretation", "platform-adaptation", "playability-change", "original-connective"] },
+        "references": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["distance", "grid_size"],
+      "properties": {
+        "distance": { "enum": ["ft", "m"] },
+        "grid_size": { "type": "number", "exclusiveMinimum": 0 },
+        "up_axis": { "const": "z" }
+      }
+    },
+    "origin": {
+      "type": "array",
+      "prefixItems": [{"type":"number"},{"type":"number"},{"type":"number"}],
+      "items": false,
+      "default": [0,0,0]
+    },
+    "seed": { "type": "integer", "minimum": 0 },
+    "spaces": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/space" }
+    },
+    "features": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/feature" }
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entity" }
+    },
+    "presentation": { "$ref": "#/$defs/presentation" },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "foundry": { "$ref": "#/$defs/runtimeBinding" },
+        "blender": { "$ref": "#/$defs/runtimeBinding" },
+        "minecraft": { "$ref": "#/$defs/runtimeBinding" },
+        "talespire": { "$ref": "#/$defs/runtimeBinding" }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "prefixItems": [{"type":"number"},{"type":"number"},{"type":"number"}],
+      "items": false
+    },
+    "vec2": {
+      "type": "array",
+      "prefixItems": [{"type":"number"},{"type":"number"}],
+      "items": false
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position"],
+      "properties": {
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotation_deg": { "$ref": "#/$defs/vec3", "default": [0,0,0] },
+        "scale": { "$ref": "#/$defs/vec3", "default": [1,1,1] }
+      }
+    },
+    "polygon2d": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/vec2" }
+    },
+    "space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "footprint", "floor_z", "ceiling_z", "classification"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["exterior", "room", "corridor", "cavern", "transition", "void"] },
+        "footprint": { "$ref": "#/$defs/polygon2d" },
+        "floor_z": { "type": "number" },
+        "ceiling_z": { "type": ["number", "null"] },
+        "classification": { "enum": ["tactical", "inhabitable-context", "world-context"] },
+        "material_family": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "classification", "provenance"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["wall", "door", "window", "stairs", "platform", "column", "hazard", "cover", "terrain", "prop-zone", "light-source", "sound-source", "transition"] },
+        "classification": { "enum": ["structural", "tactical", "decorative", "atmospheric", "gm-only"] },
+        "provenance": { "enum": ["source-grounded", "procedural-interpretation", "platform-adaptation", "playability-change", "original-connective"] },
+        "space_id": { "type": "string" },
+        "transform": { "$ref": "#/$defs/transform" },
+        "path": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/vec3" } },
+        "footprint": { "$ref": "#/$defs/polygon2d" },
+        "dimensions": { "$ref": "#/$defs/vec3" },
+        "asset_role": { "type": "string" },
+        "material_family": { "type": "string" },
+        "collision": { "enum": ["none", "solid", "walkable", "vision-only"] },
+        "visibility": { "enum": ["player", "gm", "hidden-until-revealed"] },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "parameters": { "type": "object" }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "transform", "visibility", "provenance"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["pc", "npc", "creature", "hazard", "marker"] },
+        "name": { "type": "string" },
+        "actor_ref": { "type": "string" },
+        "asset_role": { "type": "string" },
+        "transform": { "$ref": "#/$defs/transform" },
+        "visibility": { "enum": ["player", "gm", "hidden-until-revealed"] },
+        "provenance": { "enum": ["source-grounded", "procedural-interpretation", "platform-adaptation", "playability-change", "original-connective"] },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "position", "target"],
+      "properties": {
+        "id": { "type": "string" },
+        "position": { "$ref": "#/$defs/vec3" },
+        "target": { "$ref": "#/$defs/vec3" },
+        "purpose": { "enum": ["overhead", "isometric", "player-height", "wide-context", "detail"] }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["style_profile", "qa_cameras"],
+      "properties": {
+        "style_profile": { "type": "string" },
+        "lighting_profile": { "type": "string" },
+        "atmosphere_profile": { "type": "string" },
+        "miniature_readability": { "type": "boolean", "default": true },
+        "qa_cameras": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/camera" } }
+      }
+    },
+    "runtimeBinding": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "scene_ref": { "type": "string" },
+        "revision": { "type": "string" }
+      }
+    }
+  }
+}
