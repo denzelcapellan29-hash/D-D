@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.1.0",
+  "scene_id": "ep1.pipeline-smoke-test",
+  "name": "Episode 1 3D Pipeline Smoke Test",
+  "source": {
+    "provenance": "platform-adaptation",
+    "notes": "Non-canonical disposable scene used only to validate semantic -> Blender -> GLB -> Foundry/3D Canvas scale, metadata and visual QA."
+  },
+  "units": {
+    "distance": "ft",
+    "grid_size": 5,
+    "up_axis": "z"
+  },
+  "origin": [0, 0, 0],
+  "seed": 1729,
+  "spaces": [
+    {
+      "id": "smoke.room",
+      "kind": "room",
+      "footprint": [[0,0],[30,0],[30,20],[0,20]],
+      "floor_z": 0,
+      "ceiling_z": 15,
+      "classification": "tactical",
+      "material_family": "test.stone"
+    }
+  ],
+  "features": [
+    {
+      "id": "smoke.wall.north",
+      "kind": "wall",
+      "classification": "structural",
+      "provenance": "platform-adaptation",
+      "space_id": "smoke.room",
+      "path": [[0,20,0],[30,20,0]],
+      "dimensions": [30,1,10],
+      "material_family": "test.stone",
+      "collision": "solid",
+      "visibility": "player"
+    },
+    {
+      "id": "smoke.door.north",
+      "kind": "door",
+      "classification": "tactical",
+      "provenance": "platform-adaptation",
+      "space_id": "smoke.room",
+      "transform": {
+        "position": [15,20,0],
+        "rotation_deg": [0,0,0],
+        "scale": [1,1,1]
+      },
+      "dimensions": [5,1,8],
+      "asset_role": "door.test",
+      "collision": "solid",
+      "visibility": "player"
+    },
+    {
+      "id": "smoke.platform",
+      "kind": "platform",
+      "classification": "tactical",
+      "provenance": "platform-adaptation",
+      "space_id": "smoke.room",
+      "transform": {
+        "position": [22.5,10,2.5],
+        "rotation_deg": [0,0,0],
+        "scale": [1,1,1]
+      },
+      "dimensions": [10,10,5],
+      "material_family": "test.stone",
+      "collision": "walkable",
+      "visibility": "player"
+    },
+    {
+      "id": "smoke.light",
+      "kind": "light-source",
+      "classification": "atmospheric",
+      "provenance": "platform-adaptation",
+      "space_id": "smoke.room",
+      "transform": {
+        "position": [5,5,8],
+        "rotation_deg": [0,0,0],
+        "scale": [1,1,1]
+      },
+      "asset_role": "light.test.warm",
+      "collision": "none",
+      "visibility": "player"
+    }
+  ],
+  "entities": [
+    {
+      "id": "smoke.creature-marker",
+      "kind": "marker",
+      "name": "Scale Marker",
+      "asset_role": "miniature.test.medium",
+      "transform": {
+        "position": [10,10,0],
+        "rotation_deg": [0,0,0],
+        "scale": [1,1,1]
+      },
+      "visibility": "gm",
+      "provenance": "platform-adaptation"
+    }
+  ],
+  "presentation": {
+    "style_profile": "talespire-readable-test",
+    "lighting_profile": "test-high-contrast-warm",
+    "atmosphere_profile": "none",
+    "miniature_readability": true,
+    "qa_cameras": [
+      {"id":"qa.overhead","position":[15,10,45],"target":[15,10,0],"purpose":"overhead"},
+      {"id":"qa.iso","position":[45,-35,35],"target":[15,10,4],"purpose":"isometric"},
+      {"id":"qa.player","position":[5,-8,6],"target":[15,10,4],"purpose":"player-height"},
+      {"id":"qa.wide","position":[55,-55,45],"target":[15,10,4],"purpose":"wide-context"}
+    ]
+  },
+  "runtime": {
+    "foundry": {"enabled": true},
+    "blender": {"enabled": true},
+    "minecraft": {"enabled": false},
+    "talespire": {"enabled": false}
+  }
+}
