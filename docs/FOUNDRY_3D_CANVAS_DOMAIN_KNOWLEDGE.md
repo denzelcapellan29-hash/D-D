@@ -738,3 +738,30 @@ For each underground area, prefer:
 - hidden mechanics/encounter state.
 
 Run the fail-fast loop after each meaningful layer. Rendered 3D capture remains the acceptance test.
+
+
+## Natural cavern and custom-prop findings
+
+### Accepted natural cavern primitive
+For Episode 1 Area 5, the `Rocks_highend/Boulder_01..03.glb` family reads convincingly in 3D Canvas and is currently preferred for irregular cavern boundaries. Arrange varied sizes/rotations around a blended dirt/rock ground patch while preserving authored entrances/exits.
+
+### Rejected cave-shell assets
+Do not reuse without a new controlled test:
+- `Terrains/small-cave.glb` stretched as a Tile rendered as a plain white block.
+- `Kenney/Nature/cliff_cave_rock.glb` read as an obviously stylized crown-like prop at encounter scale.
+
+### Cocoon surrogate tests
+Rejected:
+- `Bag_Standing.glb`: unmistakably a tied sack.
+- `dynaMesh: sphere`: rendered as a wedge in this runtime.
+- `Egg_Whole_White.glb`: rendered as a wedge when stretched vertically.
+
+Conclusion: Area 5 cocoons need a purpose-built asset or a separately proven model.
+
+### Generated asset upload limitation
+A generated cocoon GLB was successfully created, but bridge `asset_upload` failed at Foundry `FilePicker.uploadPersistent` because package `acq-foundry-bridge` does not have persistent storage enabled. Do not repeatedly retry uploads until the manifest/tooling is fixed and versioned.
+
+### Hidden document vs live 3D runtime
+A rejected cocoon Tile was updated to `hidden=true`, but `inspect_3d_scene` continued to report live runtime bounds and captures still showed the mesh. `reload_3d_scene` did not clear it.
+
+Operational rule: hidden Foundry document state does not prove live Three.js removal. If a rejected object persists after one bridge reload, hard-stop production and repair runtime cleanup rather than stacking scene edits.
