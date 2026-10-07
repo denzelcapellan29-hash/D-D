@@ -120,3 +120,10 @@ Do not return to monolithic GLB-first construction.
 - Enable Foundry package `persistentStorage` for `acq-foundry-bridge`, validate `asset_upload`, and release as a versioned bridge upgrade before depending on generated runtime assets.
 - Add a deterministic runtime cleanup/delete path that proves rejected/hidden 3D objects are removed from the live Three.js scene.
 - After runtime cleanup is proven, resume Area 5 with five purpose-built hanging cocoon assets, then webs, hidden spider encounter state, and final QA capture.
+
+
+## Resume gate — Area 5 after domain-knowledge persistence
+1. Clear rejected `ep1.a5.cocoon.test` from the **live** Three.js runtime via a deterministic, targeted bridge cleanup (not merely `hidden=true`).
+2. Verify absence with inspect + actual 3D capture; if it persists after one recovery, stop.
+3. Fix the bridge package `persistentStorage` capability through a versioned upgrade and validate upload of an original cocoon GLB.
+4. Place five source-grounded hanging cocoon props + webs and stage giant spider/occupants as GM-only encounter state. Run close + wide visual QA before continuing.
