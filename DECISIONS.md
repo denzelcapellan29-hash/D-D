@@ -418,3 +418,9 @@ When an authored prop does not exist, prefer a purpose-built generated asset ove
 The bridge's generated-asset upload operation currently fails because `acq-foundry-bridge` does not enable Foundry package `persistentStorage`. Fix that bridge capability before relying on custom-asset upload in production.
 
 A hidden Foundry Tile is not proof that its live 3D object was removed. If a hidden/rejected Tile remains visible after `reload_3d_scene`, treat the 3D runtime as stale and stop scene mutations until runtime state is clean.
+
+
+### Verified implementation addendum to ADR-013/014 (2026-10-06)
+For the accepted Episode 1 ground treatment, use six broad Dynamic Mesh boxes at elevation=1 and depth=4 with collision/sight disabled; set `imageTexture` to `modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Dirt.webp`, `fillType="stretch"`, `textureRepeat=4–6`, and muted dark earth tints. An earlier `Ground010_Color.webp` attempt with `fillType="tile"` and `textureRepeat=14` produced severe striping and was rejected. Check real runtime surface heights when adding props: 600px `Floor_Modular.glb` at elevation=-0.6 reached y≈0.588, occluding pools placed at y≈0.
+
+Area 5's accepted cavern-floor/high-end-boulder boundary must remain unchanged while rejected cocoon test `ep1.a5.cocoon.test` remains hidden in the Foundry document but instantiated in live Three.js. Do not add cocoons until runtime cleanup and `persistentStorage`-enabled generated asset upload have been separately proven.
