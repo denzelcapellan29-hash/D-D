@@ -169,3 +169,12 @@
 - Verified recovery from `levels3d_active=false` to a valid 3D capture without manual DM intervention.
 - Deleted 25 retired `Example` scratch/test Tiles.
 - Resumed Episode 1 modular Area 2 construction; floor + perimeter walls passed live renderer QA.
+
+
+## 2026-10-06 — Large-scene bounds + underground visual baseline
+- Resolved Episode 1 scene-bound coordinate clamping by enlarging `Example` to 22649×11218.
+- Verified x>6000 geometry renders at intended runtime coordinates.
+- Established a dark dirt/rock underground ground layer across the Episode 1 footprint.
+- Rejected a first-pass striped ground material and promoted the simpler accepted treatment only after rendered QA.
+- Completed and visually accepted Area 4 broken-maze shell; added cave-in rubble after revision-checked retry.
+- Documented the reusable scene-bounds, ground-first, and layered fail-fast workflow in ADR-013 and 3D Canvas domain knowledge.
