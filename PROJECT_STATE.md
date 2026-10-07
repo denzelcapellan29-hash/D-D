@@ -694,3 +694,15 @@ For risky Foundry/3D/infrastructure work: small reversible batch -> inspect -> r
 - Live scene `Example` = `CDScXPQiLvL3tKCL`, already resized to 22649×11218, with six underground ground zones. Current inspection reports 104 Tiles and 2 lights, runtime active.
 - Area 5 has an accepted cavern floor and high-end boulder boundary, but the rejected cocoon test Tile `ep1.a5.cocoon.test` remains `hidden=true` **and** has non-null Three.js runtime bounds.
 - Production hard stop remains in effect: do not extend Area 5 until deterministic runtime cleanup is proven. Missing `persistentStorage` bridge capability separately blocks uploading the purpose-built cocoon asset.
+
+
+## Episode 1 underground rebuild status — 2026-10-07
+- `Example` resized to ~22649×11218, resolving the x>6000 coordinate clamp.
+- Out-of-bounds geometry now renders at intended world coordinates.
+- Broad dark dirt/rock underground ground layer accepted across the Episode 1 footprint; white tabletop no longer dominates the dungeon.
+- Area 2 accepted with stone floor, four colored 10-ft pools, columns, light, and east double door.
+- Area 3 corridor/mummy-chamber shell exists; earlier eastern pieces require continued QA now that clamping is fixed.
+- Area 4 broken-maze shell accepted against underground context; cave-in boulders accepted after stale-revision recovery.
+- Area 5 first visual pass was rejected: cave-boundary models were too chunky and cocoon placeholders read as white debug blocks.
+- Area 5 correction attempt then encountered a live 3D inspection/control-plane failure. Per fail-fast standard, further Foundry mutations are paused until runtime inspection is healthy.
+- Normal authoring cadence is now `inspect once -> coherent semantic layer -> rendered capture -> accept/stop`.
