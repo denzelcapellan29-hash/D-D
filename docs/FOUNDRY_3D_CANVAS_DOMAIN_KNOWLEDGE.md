@@ -699,3 +699,42 @@ This passes the scratch-scene gate defined by ADR-010.
 ## Production consequence
 
 Episode 1 Areas 3–10 may now be rebuilt using this exact modular method. The old monolithic/full-dungeon GLB path is deprecated for production. Existing legacy/full-dungeon geometry may remain only as hidden reference until the modular rebuild replaces it visually.
+
+
+## Large-scene bounds and underground environment workflow
+
+### Scene extent is a first-class constraint
+Foundry Scene dimensions can constrain Tile placement. In the Episode 1 `Example` scene, requested Tiles beyond the original working extent were clamped to x≈6000, making later rooms appear missing or collapsed. Diagnose this by comparing requested coordinates, persisted Foundry document coordinates, and live 3D runtime bounds.
+
+Correct response:
+1. stop production placement;
+2. verify Scene width/height;
+3. resize the Scene through revision-checked tooling;
+4. place one distant proof object;
+5. inspect its persisted/runtime coordinates;
+6. capture the actual 3D result before resuming.
+
+Do not compensate for spatial clamping by distorting semantic geometry.
+
+### Ground-first underground visual strategy
+A blank/white table plane strongly breaks underground world-feel. Establish broad subterranean context before polishing all rooms.
+
+Accepted Episode 1 sequence:
+1. create/verify room floor geometry;
+2. add a broad dirt/rock context layer beneath and around the playable architecture;
+3. test texture mapping on one local patch;
+4. reject visible UV striping, banding, or repetition;
+5. promote only the accepted material treatment scene-wide;
+6. add cavern walls, cliffs, rubble, webs, fog/dust, and other contextual layers afterward.
+
+The accepted Episode 1 baseline uses a simple dark dirt/rock texture as broad context, while authored dungeon floors remain visually distinct above it.
+
+### Layered room construction
+For each underground area, prefer:
+- environmental ground/context;
+- room/cavern shell;
+- structural landmarks;
+- source-visible dressing;
+- hidden mechanics/encounter state.
+
+Run the fail-fast loop after each meaningful layer. Rendered 3D capture remains the acceptance test.
