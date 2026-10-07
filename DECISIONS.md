@@ -391,3 +391,30 @@ The `Example` scene originally clamped distant Episode 1 Tiles to x≈6000. Afte
 
 ### Consequences
 Do not compensate for scene-bound clamping with distorted geometry. Fix scene extent or bridge/tooling first. Underground environment context is now a first-class build layer, not post-polish.
+
+
+## ADR-014 — Natural cavern construction and asset QA policy
+**Status:** Accepted
+**Date:** 2026-10-06
+
+### Decision
+Natural cavern visuals must use asset families that pass live 3D capture, not merely assets that exist in the installed library.
+
+Current accepted Episode 1 approach:
+- broad dirt/rock environment context;
+- high-end boulder models for irregular cavern boundaries;
+- source-visible dressing added only after the shell passes rendered QA.
+
+Rejected for Area 5 after capture:
+- stretched `small-cave.glb` terrain: white block;
+- Kenney cave-cliff model: wrong/stylized silhouette;
+- standing-bag cocoon surrogate: visibly a sack;
+- dynamic `sphere` cocoon primitive: invalid wedge;
+- white-egg cocoon surrogate: invalid wedge.
+
+When an authored prop does not exist, prefer a purpose-built generated asset over an obviously wrong substitute.
+
+### Runtime/tooling consequence
+The bridge's generated-asset upload operation currently fails because `acq-foundry-bridge` does not enable Foundry package `persistentStorage`. Fix that bridge capability before relying on custom-asset upload in production.
+
+A hidden Foundry Tile is not proof that its live 3D object was removed. If a hidden/rejected Tile remains visible after `reload_3d_scene`, treat the 3D runtime as stale and stop scene mutations until runtime state is clean.
