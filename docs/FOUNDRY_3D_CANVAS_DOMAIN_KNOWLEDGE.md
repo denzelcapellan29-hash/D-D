@@ -782,3 +782,63 @@ Operational rule: hidden Foundry document state does not prove live Three.js rem
 **Hard stop: hidden document != removed runtime object.** The rejected Tile `ep1.a5.cocoon.test` is `hidden=true` in Foundry while `inspect_3d_scene` reports non-null runtime bounds for its 3D mesh. A previous 3D runtime reload failed to clear it. Halt further scene production until a targeted cleanup removes it and both live state inspection and rendered capture confirm absence. Do not silently assume hidden/deleted documents are gone from the Three.js scene.
 
 **Nonnegotiable loop:** inspect live revision and extent -> one small reversible write -> inspect actual runtime bounds -> rendered 3D capture -> accept; on unexpected failure stop, diagnose only that layer, permit at most one targeted recovery/retry, report precise checkpoint and blocker if unresolved.
+
+
+## Large-scene extent, underground context, and fast fail-fast cadence — 2026-10-07
+
+### Scene extent is a first-class 3D constraint
+Large Foundry Scenes must be sized for the semantic footprint before distant geometry is authored. The Episode 1 `Example` scene originally clamped Tiles beyond its extent: semantic x positions greater than the usable scene width collapsed onto the same Foundry/runtime edge coordinate. The visible symptom looked like missing or overlapping geometry, but the root cause was Scene bounds, not the semantic layout.
+
+Diagnostic rule:
+1. inspect the requested Foundry x/y and live `runtime_bounds.center`;
+2. if multiple increasing coordinates collapse onto the same edge coordinate, suspect Scene clamping;
+3. resize the Scene;
+4. re-check an out-of-bounds probe;
+5. accept only after a real 3D capture renders the probe at the intended world coordinate.
+
+Current accepted Episode 1 working extent on `Example`: approximately `22649 × 11218` px.
+
+### Underground context before room polish
+For Areas 1–10, establish the subterranean world layer before excessive room dressing. A room floating on Foundry's white/tabletop plane reads as a test stage even when its local geometry is correct.
+
+Accepted sequence:
+`scene extent -> underground ground/context -> room shells -> room dressing -> lighting/atmosphere`.
+
+Accepted Episode 1 ground direction:
+- broad dark dirt/rock ground under the dungeon footprint;
+- simple stable texture mapping;
+- modest tint variation across large zones;
+- room floors remain visually distinct above the surrounding earth.
+
+Rejected direction:
+- high-repeat tiled ground mapping that produced obvious stripe/UV artifacts.
+
+### Efficient fail-fast authoring
+Fail-fast does not mean object-by-object mutation. Once a construction primitive is proven, author at the semantic-layer level.
+
+Preferred normal loop:
+`inspect once -> apply one coherent revision-checked semantic layer -> capture once -> accept/stop`.
+
+Examples of a coherent layer:
+- one room shell;
+- one room's dressing pass;
+- one environment/ground layer;
+- one lighting pass.
+
+Only branch into additional inspection/dry-runs when the write or rendered capture fails. Batch asset searches and persist accepted asset mappings. Direct Acq MCP is the normal authoring path; Drive command files are a fallback transport.
+
+### Current asset findings
+Accepted/proven:
+- `Medieval Dungeon/Floor_Modular.glb`
+- `Medieval Dungeon/Wall_Modular.glb`
+- `Furniture/Door1.glb`
+- `Furniture/Column_SquareBig.glb`
+- `Rocks_highend/Boulder_01/02/03.glb`
+- `TheMadCartographerTexturePack/Texture-Dirt.webp` for broad underground context
+- dynamic-mesh shallow boxes for colored Area 2 pools
+
+Rejected or use with caution:
+- `Nature/water_tile.glb` for Area 2 pools: rendered as raised translucent blocks at the tested scale
+- high-repeat Ground010 tiling: visible striping
+- `Kenney/Nature/cliff_cave_rock.glb` at the tested Area 5 scale: visually too chunky/angular for the intended cavern boundary
+- plain dynamic-mesh white boxes as cocoons: read as debug blocks, not organic props
