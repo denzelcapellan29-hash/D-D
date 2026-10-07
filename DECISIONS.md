@@ -424,3 +424,26 @@ A hidden Foundry Tile is not proof that its live 3D object was removed. If a hid
 For the accepted Episode 1 ground treatment, use six broad Dynamic Mesh boxes at elevation=1 and depth=4 with collision/sight disabled; set `imageTexture` to `modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Dirt.webp`, `fillType="stretch"`, `textureRepeat=4–6`, and muted dark earth tints. An earlier `Ground010_Color.webp` attempt with `fillType="tile"` and `textureRepeat=14` produced severe striping and was rejected. Check real runtime surface heights when adding props: 600px `Floor_Modular.glb` at elevation=-0.6 reached y≈0.588, occluding pools placed at y≈0.
 
 Area 5's accepted cavern-floor/high-end-boulder boundary must remain unchanged while rejected cocoon test `ep1.a5.cocoon.test` remains hidden in the Foundry document but instantiated in live Three.js. Do not add cocoons until runtime cleanup and `persistentStorage`-enabled generated asset upload have been separately proven.
+
+
+## ADR-013 — Size large Scenes first; establish underground context before room polish
+**Status:** Accepted  
+**Date:** 2026-10-07
+
+### Decision
+For large Foundry/3D Canvas dungeon builds:
+1. verify and, if necessary, resize the Foundry Scene to contain the semantic world footprint before authoring distant rooms;
+2. verify distant coordinates using live runtime bounds and an actual rendered capture;
+3. establish broad environment context (ground/cavern surroundings) before heavily dressing individual rooms;
+4. use the production cadence `inspect -> coherent revision-checked layer -> rendered capture -> accept/stop`.
+
+### Rationale
+Episode 1 geometry beyond the original `Example` Scene extent was clamped to the scene edge, making correct semantic geometry appear broken. Resizing resolved the coordinate failure. Replacing the white tabletop base with a broad dark dirt/rock layer produced a larger visual improvement than adding isolated props to rooms floating on a test plane.
+
+The faster cadence preserves fail-fast acceptance while reducing unnecessary bridge round trips.
+
+### Consequences
+- Scene dimensions are validated before large layouts.
+- A white/default tabletop under intended underground environments is treated as unfinished.
+- Proven construction primitives are batched by semantic layer rather than re-tested object by object.
+- Renderer capture remains the final acceptance gate.
