@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/acq/blender_scene_contract.schema.json",
+  "title": "Acq Blender Export Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "semantic_scene_id", "build_id", "semantic_revision", "artifact", "transform", "bounds", "semantic_ids", "qa"],
+  "properties": {
+    "contract_version": { "const": "0.1.0" },
+    "semantic_scene_id": { "type": "string", "minLength": 1 },
+    "build_id": { "type": "string", "minLength": 1 },
+    "semantic_revision": { "type": "string", "minLength": 1 },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "path"],
+      "properties": {
+        "format": { "enum": ["glb", "gltf"] },
+        "path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["units_per_semantic_unit", "up_axis"],
+      "properties": {
+        "units_per_semantic_unit": { "type": "number", "exclusiveMinimum": 0 },
+        "up_axis": { "enum": ["Y", "Z"] },
+        "handedness": { "enum": ["right", "left"] }
+      }
+    },
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "$ref": "#/$defs/vec3" },
+        "max": { "$ref": "#/$defs/vec3" }
+      }
+    },
+    "semantic_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "materials": { "type": "array", "items": { "type": "string" } },
+    "collision": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["semantic_id", "intent"],
+        "properties": {
+          "semantic_id": { "type": "string" },
+          "intent": { "enum": ["none", "solid", "walkable", "vision-only"] }
+        }
+      }
+    },
+    "qa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "renders"],
+      "properties": {
+        "status": { "enum": ["unverified", "pass", "fail"] },
+        "renders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["camera_id", "path"],
+            "properties": {
+              "camera_id": { "type": "string" },
+              "path": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "prefixItems": [{"type":"number"},{"type":"number"},{"type":"number"}],
+      "items": false
+    }
+  }
+}
