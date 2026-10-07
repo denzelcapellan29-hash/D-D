@@ -368,3 +368,26 @@ This standard materially shortened fault isolation during the Episode 1 rebuild:
 
 ### Persistence
 The same standard is recorded in the Google Drive `PROJECT_INSTRUCTIONS` document and should remain synchronized with the ChatGPT Project Instructions field.
+
+
+## ADR-013 — Large-scene bounds and underground ground-first workflow
+**Status:** Accepted
+**Date:** 2026-10-06
+
+### Decision
+For large Foundry/3D Canvas scenes, scene dimensions must be validated before extending geometry beyond the initial footprint. Unexpected relocation, stacking, or compression of distant geometry must be treated as a spatial/control-plane fault until live Foundry coordinates and 3D runtime bounds prove otherwise.
+
+For Episode 1 and similar underground builds:
+1. resize the Scene to the intended footprint before large-area placement;
+2. prove out-of-bounds placement with one test object and rendered capture;
+3. establish believable environmental ground/context before completing all encounter rooms;
+4. replace exposed white/tabletop surfaces early with broad dirt/rock/cavern context;
+5. test one material treatment before promoting it scene-wide and reject obvious UV striping/repetition;
+6. build each area in accepted layers: ground/shell -> structure -> source-visible dressing -> encounter/mechanics;
+7. use rendered 3D captures as the acceptance test after each meaningful batch.
+
+### Evidence
+The `Example` scene originally clamped distant Episode 1 Tiles to x≈6000. After resizing the Scene to 22649×11218, x>6000 geometry rendered at the intended coordinates. A first ground material test produced obvious striping and was rejected; a simpler dirt texture treatment passed visual QA and was promoted across the underground footprint.
+
+### Consequences
+Do not compensate for scene-bound clamping with distorted geometry. Fix scene extent or bridge/tooling first. Underground environment context is now a first-class build layer, not post-polish.
