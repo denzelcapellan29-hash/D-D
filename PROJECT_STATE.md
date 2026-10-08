@@ -1,5 +1,37 @@
 # Project State
 
+Updated: 2026-10-08
+
+## Area 2 visual benchmark / pipeline lab — ACTIVE
+Area 2 is now the sole production visual gate. Areas 3-10 are paused until the DM approves Area 2 quality.
+
+Current Blender benchmark:
+- Official Blender Lab MCP is connected and callable from ChatGPT.
+- Source-grounded Area 2 geometry is working in Blender.
+- Real rendered QA is working; API success alone is not accepted.
+- Current hero checkpoint: `C:\\Users\\denze\\Documents\\AcqInc_Blender\\AcqInc_Ep1_Area2_HERO_v006_lockfocus.blend`.
+- Current phone-review render is mirrored to Drive: `D&D/Foundry Bridge/captures/AcqInc_Area2_HERO_v006_lockfocus.png`.
+- The concept-first hybrid workflow materially outperformed the earlier primitive/blockout approach: source/map controls spatial truth; generated concept art controls visual target; Blender reconstructs editable geometry/materials/lighting against that target.
+- Visual QA has already driven multiple accepted/rejected iterations: camera cutaway, lighting, column architecture, pool presentation, wall relief rhythm, braziers, door/lock focal treatment and procedural materials.
+- No Area 3+ production work resumes until the DM explicitly green-lights this benchmark.
+
+Infrastructure findings:
+- 3D Canvas Mapmaking Pack is confirmed useful as a runtime asset/material vocabulary, not as the canonical scene. Live asset search found usable dungeon pillars, decorative walls, modular walls, doors, torches and dungeon textures/materials.
+- Current 3D Canvas docs expose 3000+ tiles and 1000+ materials; runtime-native assets remain valuable for a Foundry-side comparison/fallback.
+- Current 2026 image-to-3D options are strongest for isolated assets rather than whole tactical rooms. Tripo/Meshy/Hunyuan/Pixal-style providers can return textured GLB assets; whole-scene reconstruction research (Lumera, LEGO-Anything/SEIG-style approaches, Mira-Scene/One2Scene) is promising but not yet a dependable production dependency for this campaign.
+- Near-term production hypothesis: semantic layout + concept target + deterministic Blender reconstruction + selective AI-generated 3D props + Foundry runtime assets where licensed/appropriate.
+
+Next gate:
+1. continue Area 2 concept-match refinement only;
+2. produce hero, tactical-oblique and focal-detail renders;
+3. test selective imported/generated prop workflow if it can be automated without exposing secrets or requiring DM-side babysitting;
+4. compare Blender result against the generated Area 2 concept and Foundry native asset-first alternative;
+5. DM approval chooses the production workflow.
+
+---
+
+# Project State
+
 Updated: 2026-10-07
 
 ## Blender semantic-authoring setup — ACTIVE
