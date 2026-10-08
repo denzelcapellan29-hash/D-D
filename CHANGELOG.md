@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-08
+
+### Area 2 visual workflow
+- Area 2 remains the sole visual benchmark before any further Episode 1 production.
+- Record every successful visual iteration as a repeatable process: numbered Blender checkpoint, QA render, exact visual delta, and relevant failure lesson.
+- Current leading workflow: source/map for spatial truth, concept art for visual target, Blender for editable reconstruction, rendered QA for acceptance, Foundry/3D Canvas for runtime.
+
+
 ## 2026-10-04
 
 ### Minecraft Bridge
