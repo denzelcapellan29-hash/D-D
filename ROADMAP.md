@@ -1,5 +1,36 @@
 # Roadmap
 
+## NOW — Area 2 visual benchmark before any further Episode 1 production
+
+1. **Area 2 is the only active visual production scene.**
+   - Do not proceed to Areas 3-10 until explicit DM approval.
+   - Source/map remains spatial truth; concept art is visual target; Blender is editable reconstruction/QA.
+   - Current hero checkpoint: `AcqInc_Ep1_Area2_HERO_v006_lockfocus.blend`.
+
+2. **Converge Area 2 on the approved concept quality bar.**
+   - Hero isometric cutaway.
+   - Tactical oblique.
+   - Door/lock focal close view.
+   - Carved/masonry architectural language.
+   - Distinct blue/green/clear/cloudy pools with readable depth and material separation.
+   - Warm practical light + pool bounce + controlled cool fill.
+   - Real rendered QA after every meaningful batch.
+
+3. **Infrastructure bake-off.**
+   - Blender concept-guided reconstruction is the current leading workflow.
+   - 3D Canvas native asset-first construction remains the runtime benchmark/fallback; installed dungeon pillars, walls, doors, torches and materials were confirmed by live asset search.
+   - Evaluate image-to-3D selectively for isolated props/ornament, not blindly for whole rooms.
+   - Whole-scene AI reconstruction is research-track only until code/runtime maturity and editability are proven locally.
+
+4. **Approval gate.**
+   - DM reviews Area 2 renders.
+   - If approved: freeze Area 2 style/material/lighting kit and scale to Areas 3-10.
+   - If rejected: improve the pipeline/infrastructure, not the episode production count.
+
+---
+
+# Roadmap
+
 ## NOW — Foundry asset-first vertical slice
 
 1. **Bring the existing Foundry instance back online; do not reinstall by default.**
