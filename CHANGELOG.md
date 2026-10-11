@@ -1,3 +1,6 @@
+## 2026-10-10 — v020 Drive verification completed
+Google Drive API direct folder listing + metadata independently confirmed the saved v020 Blender checkpoint (537,880,295 bytes) and real hero/rune/vault PNGs. Earlier search returned no results even though cloud files existed, so use direct folder fetch/metadata if Drive title search is stale. URLs stored in CURRENT_HANDOFF.md. Visual DM acceptance pending.
+---
 ## 2026-10-10 — Area 7 v020 cold-vault/rune lookdev QA (not DM approved)
 - Restored official Area 7 description and prior-chat decision history; verified live Blender on v019 before editing.
 - On an isolated shader/light pass only: changed 4 vault area lights from 740W amber to 480W blue-slate, 4 amber indirect accent points from 285W to 115W desaturated, each north/south rune area light 415W to 340W; emission max 2.5→1.45 and inward bump normal 0.46/.042→0.64/.063.
