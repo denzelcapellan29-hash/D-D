@@ -478,3 +478,6 @@ A successful Blender API call, saved .blend file or GLB export is insufficient w
 - 3D Canvas becomes primarily the player-facing runtime/acceptance layer rather than the modeling environment.
 - TaleSpire-style modular readability is treated as a design grammar, not a required runtime dependency.
 - Existing Foundry asset-first modular construction remains valid; Blender is used where it improves quality or determinism rather than forcing every object through a custom-GLB pipeline.
+
+## 2026-10-10 — Area 7 shader and ceiling decision
+Use connected Blender MCP and existing Meshy architectural meshes for modular vault/clerestory assembly, allowing minimal dark connector/backing surfaces. AREA lights default emission normal points downward, which created a sharp horizontal blue split across rune walls; rotate toward rune wall, inspect actual close render. Keep QA-PENDING separate from DM visual acceptance; large full-res PNGs may exceed inline base64 transport: derive a review preview from the actual rendered source file while retaining original and verify Drive sync. Current verified but not approved v019 file: https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view. No-foot/no-claw/no-floor constraints remain. Source/handoff: CURRENT_HANDOFF.md.
