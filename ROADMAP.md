@@ -196,3 +196,11 @@ Do not return to monolithic GLB-first construction.
    - Adapt the real Waterdeep street -> warehouse -> fissure -> subterranean -> Area 1 -> Area 2 vertical slice into semantic scene data.
    - Keep source-grounded, procedural, adaptation and original-connective provenance explicit.
    - Use Blender where it materially improves world-feel; retain proven native 3D Canvas assets where they are already superior.
+
+## 2026-10-10 — Context recovery protocol and Area 7 scope
+- [x] Mirror CURRENT_HANDOFF between GitHub and Drive and add required startup/resume reads to full instructions.
+- [x] Document cross-source freshness checks, verified last checkpoint vs DM acceptance, live MCP discovery and reference/source reads.
+- [ ] Ongoing: every substantial milestone updates CURRENT_HANDOFF + PROJECT_STATE, CHANGELOG, ROADMAP, DECISIONS; synchronize GitHub code/config and handoff as appropriate.
+- [ ] DM-authorized Area 7: rune-wall carved-glow and imposing ceiling match first-person entrance reference; leave claws untouched; verify actual rendered Blender QA and Drive sync; obtain DM approval. Saved v018 is NOT accepted.
+- [ ] Broader Waterdeep→Area 2 world-feel gate remains separate for campaign rollout.
+See https://github.com/denzelcapellan29-hash/D-D/blob/main/CURRENT_HANDOFF.md .
