@@ -1,3 +1,17 @@
+## LATEST CONTINUATION — Area 7 v020 / 2026-10-10 / DM REVIEW PENDING
+Live Blender MCP verified healthy. Reviewed complete 2026-10-10 exported prior chat five times top-to-bottom and bottom-to-top; rehydrated both long instructions, both handoffs, Drive project state/logs, official full source and installed Meshy cinematic skill before editing.
+NEW SAVED VERSION, NOT DM APPROVED: G:\My Drive\D&D\Foundry Bridge\assets\Area7_Modular_Assembly_v020_RunesColdVault_QA_PENDING.blend (537,880,295 bytes). Previous v019 saved QA checkpoint remains preserved and separately cloud verified: https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view. v018 was visually rejected. Do not call v019 or v020 artistically approved.
+Scope: reversible light/material-only improvement over v019. Four upper vault area lights 740->480 energy each and amber-dominant RGB -> neutral blue-slate; four indirect lower accent point lights 285->115 each, desaturated; north/south rune AREA lights 415->340 each; shared original Meshy rune wall material map strength max 2.5->1.45; inward normal bump strength .46->.64, distance .042->.063. NO mesh/geometric edits, no asset spend, no Foundry. Scene object count 715 and all 206 CrawlingClaw objects preserved; Mesh_0 suspended foot and both integrated rune-wall objects present. Existing floor/doorway and claws no-touch.
+New REAL Blender/Cycles PNGs saved at G:\My Drive\D&D\Foundry Bridge\captures\:
+- Area7_v020_EntranceHero_ColdVault_BlueFootprints_QA.png — 1600x900, 2,991,152 bytes; nonblack pixel validation passed.
+- Area7_v020_NorthRune_ShadedGrooves_QA.png — 896x672, 1,236,998 bytes; inspected close-up.
+- Area7_v020_VaultHeight_ColdIllumination_QA.png — 936x702, 1,339,038 bytes; inspected close-up.
+- Area7_v020_EntranceLightingRune_DIAGNOSTIC.png — 960x540 exploratory QA only.
+These files exist on the local G: Drive-sync path and were visually inspected, but Google Drive connector search has NOT YET independently confirmed remote sync. DO NOT invent cloud URLs. Independent Drive listing/readback remains outstanding.
+Visual assessment: room is cooler/darker and retains vault height and two visible runes; footprint outlines still appear like lit strokes. Normal bump changes are shader-based appearance only, not independently verified physically recessed geometry. Giant foot still appears small in hero composition, but foot mesh is explicitly no-touch this pass. v020 therefore QA_PENDING and awaiting DM review, not final.
+NEXT: verify v020 cloud sync and obtain real Drive links; show DM these three QA images and request visual review. If approved, record acceptance; if rejected, change only DM-requested authorized rune/ceiling elements. Before any later pass inspect currently loaded .blend, version and scene. Never separate 1M+-poly crawling-claw mesh into loose parts; that previously crashed Blender. Preserve v018, v019, v020.
+---
+
 # CURRENT_HANDOFF — Acquisitions Incorporated
 
 ## LATEST HANDOFF — Area 7 v019 / 2026-10-10 / QA PENDING DM ACCEPTANCE
