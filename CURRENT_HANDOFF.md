@@ -1,3 +1,9 @@
+## AREA 7 ACTUAL BLENDER A/B COMPARISON SHEETS — CLOUD VERIFIED — 2026-10-10
+Created two NEW side-by-side contact sheets from the ACTUAL saved Blender/Cycles PNGs, without fabricated images. LEFT panel is A v025A dark stone feet; RIGHT panel is B v024B muted rotting feet; identical architecture and camera in both.
+- Entrance/hero comparison 2560x720, 2,768,458 bytes local=cloud: https://drive.google.com/file/d/1WsBDifY4U22aO2AfAhvc170qonwBgjKU/view
+- Creature close-up comparison 1600x600, 1,440,874 bytes local=cloud: https://drive.google.com/file/d/1nqe4tkOQw-4V-ngtE5arcmHI1tpeGQdT/view
+Both independently cloud confirmed in Foundry Bridge/captures by Drive folder listing and metadata (hero file size rechecked against live Blender G: asset path); prior individual renders and .blend paths are in the handoff below. All scene checkpoints remain saved and DM QA_PENDING; remaining hollow/incomplete cropped-feet anatomy requires review or independently approved asset improvement. No new Meshy spend. NEXT DM directly evaluates these 2 side-by-side images and chooses preferred styling / requests changes.
+---
 ## AREA 7 A/B COMPARISON — CLOUD VERIFIED & B CLOSE-UP QA REVIEWED — 2026-10-10
 This supersedes earlier cloud-sync PENDING statements for the latest A/B checkpoints. Live Blender MCP rechecked healthy and saved: Area7_Modular_Assembly_v025A_DarkStoneFeet_MonolithicFloor_Crusher_QA_PENDING.blend, 847 scene objects; continuous wall-PBR stone floor and ceiling crusher piston visible, 126 original Meshy GLB-derived cropped source foot instances. Original 206 composite instances preserved/hidden. User's A/B scope and prior versions preserved. No new Meshy credits and no Foundry.
 Independent Drive folder listing PLUS per-file Drive metadata checked:
