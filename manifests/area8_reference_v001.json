@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "NEW_PIPES_V002_MESHY_INITIAL_JOB_SUBMITTED__QA_PENDING",
+  "status": "PIPE_DOMINANT_V002_MESHY_GLb_AND_4_CAMERA_QA_COMPLETE__DM_ACCEPTANCE_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "Poll exact task 01a12973-9108-7109-8be7-3966efeb55cd, do not re-submit; only on SUCCEEDED download GLB, validate independent Blender isolated scene, 4 true iso captures, Drive sync and DM acceptance.",
+  "next": "Verify Drive sync of v002 true4iso contact sheet, add exact file ID, then DM reviews new three-pipe QA and accepts or requests corrections. All four Area8 GLBs except new pipe are DM accepted. Save accepted scene and assemble only after visual gate. No further paid tasks.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -177,12 +177,12 @@
         "glb"
       ]
     },
-    "actual_consumption": 120,
+    "actual_consumption": 150,
     "retry_count": 0,
     "not_an_approved_multiview_input": true,
     "comment": "These are original single-image GLBs. Four genuine camera-only Blender isometric views will be rendered FROM each resulting single mesh, for QA; no unapproved secondary paid multiview regeneration.",
     "balance_before": 2487,
-    "balance_after": 2367,
+    "balance_after": 2337,
     "completed_utc": "2026-10-11"
   },
   "qa": {
@@ -301,8 +301,67 @@
         "target_formats": [
           "glb"
         ],
-        "status": "SUBMITTED_PENDING",
-        "duplicate_submissions": 0
+        "status": "SUCCEEDED_AND_QA_RENDERED",
+        "duplicate_submissions": 0,
+        "consumed_credits": 30,
+        "initial_credit_balance": 2367,
+        "current_balance": 2337,
+        "actual_glb": {
+          "drive_id": "1cVDOz1CwbpLp1EaLeuRODSVFFLdfgupn",
+          "bytes": 145330264,
+          "path": "G:/My Drive/D&D/Foundry Bridge/assets/Area8_CorrodedSewerOutflows_PipeDominant_Meshy71_v002.glb",
+          "url": "https://drive.google.com/file/d/1cVDOz1CwbpLp1EaLeuRODSVFFLdfgupn/view"
+        },
+        "blender_qa": {
+          "drive_id": "11369cZRR2AAET5NGEunVkP0-l-dVtFwJ",
+          "bytes": 233933980,
+          "url": "https://drive.google.com/file/d/11369cZRR2AAET5NGEunVkP0-l-dVtFwJ/view",
+          "mesh_count": 1,
+          "vertices": 2494458,
+          "faces": 4587936,
+          "iso_azimuths": [
+            45,
+            135,
+            225,
+            315
+          ],
+          "elevation_degrees": 30,
+          "render_resolution": [
+            800,
+            800
+          ],
+          "qa_pngs": [
+            {
+              "view": "front_left",
+              "drive_id": "115a2GQp6_waCXBZFc2KgKJgmiAPSa1sg",
+              "bytes": 741244
+            },
+            {
+              "view": "front_right",
+              "drive_id": "1WGMO1H4skyrQg0--me5rVIsiDISGgM4-",
+              "bytes": 744782
+            },
+            {
+              "view": "rear_right",
+              "drive_id": "1Hx9tCM4zFwYUaYziKynqS76PfH3mgmwg",
+              "bytes": 767379
+            },
+            {
+              "view": "rear_left",
+              "drive_id": "1umzYK12OgjI3axwNpiAY8r2DD4V9-qsY",
+              "bytes": 739435
+            }
+          ],
+          "contact_filename": "Area8_PipeDominant_v002_True4Iso_ContactQA.png",
+          "contact_local_bytes": 2967166,
+          "contact_drive_id": "PENDING_SYNC_CHECK"
+        },
+        "visual_qa": {
+          "status": "TECHNICALLY_COMPLETE_DM_PENDING",
+          "success": "Clear three cylindrical projecting metal pipes with hollow mouths and full backs, unlike rejected wall-dominant v001",
+          "limitation": "Water streams from source reference NOT modeled; plan separate dynamic sewage mesh/particles during Blender scene assembly; do not silently change this GLB"
+        },
+        "retry_used": 0
       }
     },
     "wall_walkway": {
