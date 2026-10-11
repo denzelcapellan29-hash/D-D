@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_v005_ASSET_ONLY_QUARANTINE_SAVED_VISUAL_QA_AND_DRIVE_SYNC_PENDING",
+  "status": "AREA8_v028_CONNECTED_RING_SAVED_QA_PENDING_DM_ACCEPTANCE",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -612,5 +612,31 @@
       }
     ],
     "balance_after": 2157
+  },
+  "latest_blender_checkpoint": {
+    "version": "v028",
+    "path": "G:/My Drive/D&D/Foundry Bridge/assets/Area8_Cesspool_Scene_Assembly_v028_WalkwayBandJoined.blend",
+    "saved_clean": true,
+    "dm_accepted": false,
+    "geometry_rule": "Only original genuine Meshy GLBs and linked instancing; no procedural geometry",
+    "qa": {
+      "outer_wall_modules": 16,
+      "inner_walkway_modules": 12,
+      "middle_walkway_modules": 16,
+      "outer_walkway_modules": 18,
+      "outer_wall_sample_join_m": 0.029,
+      "inner_walkway_join_m": 0.034,
+      "middle_walkway_join_m": 0.039,
+      "outer_walkway_join_m": 0.024,
+      "representative_inner_to_middle_join_m": 0.004,
+      "representative_middle_to_outer_join_m": 0.008,
+      "source_10ft_walkable_width": "not independently measured clear width",
+      "source_pool_depths": "not verified",
+      "collision": "not verified",
+      "hero_capture": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v028_WalkwayBandJoined_Hero_QA.png",
+      "wide_capture": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v028_WalkwayBandJoined_Wide_QA.png",
+      "cloud_sync": "not verified"
+    },
+    "cause": "Imported Meshy GLB objects use rotation_mode QUATERNION; old Euler rotation writes were ignored. Corrected quaternion orientation in v024."
   }
 }
