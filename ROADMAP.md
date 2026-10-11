@@ -204,3 +204,12 @@ Do not return to monolithic GLB-first construction.
 - [ ] DM-authorized Area 7: rune-wall carved-glow and imposing ceiling match first-person entrance reference; leave claws untouched; verify actual rendered Blender QA and Drive sync; obtain DM approval. Saved v018 is NOT accepted.
 - [ ] Broader Waterdeep→Area 2 world-feel gate remains separate for campaign rollout.
 See https://github.com/denzelcapellan29-hash/D-D/blob/main/CURRENT_HANDOFF.md .
+
+## 2026-10-10 — Area 7 v019 review gate
+- [x] Loaded full context, inspected source/reference/skill and healthy saved v018 scene.
+- [x] Corrected rune-wall bays and lighting direction; added engraved shading.
+- [x] Built high enclosed chamber roof from linked Meshy pieces with architectural backing; preserved claw population, suspended foot, floor.
+- [x] Actual hero, N/S rune and ceiling images visually inspected and verified in Drive; v019 .blend saved separately/cloud verified. File: https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view .
+- [ ] DM review/acceptance v019 visual against entrance reference; DO NOT assume QA render equals approval.
+- [ ] Defer crawling feet, floor/tile redesign, crusher scale/composition to later DM-authorized scope.
+- Details and next action: https://github.com/denzelcapellan29-hash/D-D/blob/main/CURRENT_HANDOFF.md .
