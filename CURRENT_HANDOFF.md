@@ -1,4 +1,21 @@
 # CURRENT_HANDOFF — Acquisitions Incorporated
+
+## LATEST HANDOFF — Area 7 v019 / 2026-10-10 / QA PENDING DM ACCEPTANCE
+LAST VERIFIED SAVED (NOT APPROVED): G:\My Drive\D&D\Foundry Bridge\assets\Area7_Modular_Assembly_v019_RunesVault_QA_PENDING.blend (537,879,467 bytes; Drive verified https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view). v018 remains preserved and was rejected aesthetically; no final accepted Area 7 scene has been established.
+Current task performed: DM-authorized Area 7 runes + upper ceiling only, visually guided by DM first-person entrance montage and official Area 7 Stomp source. Both rune panels fitted to north/south cardinal wall bays at y=+/-12.06; restored earlier displaced wall sections W_13/W_27, hid wall bays W_10/W_30. Fixed sharp horizontal blue light cutoff by reorienting AREA rune lights toward engravings rather than downward. A copied emissive material adds mask-driven inward bump shading (actual physical groove-depth NOT independently measured). Built upper masonry from 38 linked existing Meshy wall objects; high vault from 170 linked Meshy ceiling wedge pieces and one 1,728-face dark textured backing/mating surface. Added indirect warm masonry fill (no torches) and cold crown fill; first-person QA camera created.
+QA ACTUAL RENDERS (inspected and Drive verified):
+- Hero full-resolution 1600x900: https://drive.google.com/file/d/1e5PJqhcA2cJjPfysiQvuKJHGAmRccUHD/view
+- North rune: https://drive.google.com/file/d/1HYa8M0YiqEqdqWBsnuvVGbn4A9mnZ3Z0/view
+- South rune: https://drive.google.com/file/d/1foJcDc1Zw2BbAmdg6nLs6yQh_ayA3wkb/view
+- Ceiling/height: https://drive.google.com/file/d/1hPe5HPGS_i1v0G1oHF-6WdPVO4Ckkump/view
+- Small preview from actual hero PNG (full-image API response exceeded tool limit): https://drive.google.com/file/d/1cZn-uRiDLi5cfNqc0MI1RVLZLysfJ_4j/view
+All QA files are in Foundry Bridge/captures, all source Meshy GLBs and .blends in assets. Exact v019 original full-res file remains intact; only preview resized for tool inspection. Render API success + actual pixel inspection + independent Drive cloud listing complete. Additional v019 diagnostics exist but are not approved artifacts.
+No-touch audit: 206 CrawlingClaw objects preserved (eight known foreground transforms checked), 185 Meshy stone floor tiles preserved, Mesh_0 suspended granite foot unchanged. Floor void/checkerboard and photo-like clustered feet remain uncorrected, per explicit DM no-touch scope. No Meshy credits were spent. Reference composition improves ceiling/rune readability but hanging foot still reads smaller than the approved montage; DM evaluation required, do not call approved.
+SOURCE: official book section 7 STOMP describes high roughly circular chamber, suspended granite foot and footprint runes scribed into north/south walls. Scene edits are source-compatible interpretation of vaulted architecture. Warm indirect illumination is artistic adaptation without visible braziers/torches.
+NEXT ACTION: DM reviews above four verified images. If adjustments requested, discover live MCP, read BOTH long project instructions, both handoffs, Drive PROJECT_STATE/CHANGELOG/ROADMAP/DECISIONS, official source/reference and skill; inspect live v019 saved state before reversible next batch. Feet remain no-touch until DM changes scope. Never repeat destructive high-poly loose-parts separation that crashed Blender. Do not overwrite v018/v019 or declare v019 accepted without DM statement.
+NOTE: When retrieving full-resolution ~3.2 MB PNG via base64 through MCP, gRPC transport failed (renderer/scene stayed healthy). Targeted recovery succeeded: downsampled a copy from actual disk PNG to 850x478 and inspected that; original high-res PNG and Drive sync verified. Screenshot GUI default cube mismatch remains separate from bpy scene state.
+---
+
 Updated: 2026-10-10 (based on latest explicitly recorded DM direction)
 Status: Resume pointer, NOT an approval or production release.
 ## STARTUP / CONTEXT RESTORATION — MANDATORY
