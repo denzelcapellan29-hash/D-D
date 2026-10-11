@@ -1,3 +1,6 @@
+## DM OVERRIDE 2026-10-11 — STRICT ASSET-ONLY BLENDER VISUAL GEOMETRY
+All visible cinematic/scene geometry must be genuine approved Meshy GLB or verified existing-library model. Absolutely no procedural/primitives/mesh/curve generation of visible floors, shells, pools, roofs, water/sewage or geometry effects in Blender or substituted external scripts. Deterministic code ONLY for spatial coordinates/placement, not authoring rendered geometry. Preserve accepted original geometry, quarantine preexisting procedural geometry in new numbered checkpoint, do not fabricate a library source. Missing assets require reuse of verified models or new approved Meshy reference/cost scope. Installed plugin ai-3d-asset-workflow v1.3.5 controls this. See docs/ASSET_ONLY_BLENDER_SCENE_POLICY_2026-10-11.md. Most recent DM decision overrides conflicting older guidance.
+
 # Acquisitions Incorporated 3D Campaign Prep — ChatGPT Project Instructions
 
 ## MANDATORY: Context bootstrap and verified continuity (2026-10-10)
