@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "four_Meshy71_standard_GLBS_saved_Drive_verified__16_blender_iso_render_QA_PENDING_DM",
+  "status": "AREA8_TENTACLE_DM_VISUALLY_ACCEPTED__PIPES_DM_REJECTED__WALL_AND_RIM_DM_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -43,7 +43,7 @@
       "bytes": 2388541,
       "width": 1254,
       "height": 1254,
-      "status": "Meshy GLB saved; DM QA pending",
+      "status": "DM_VISUALLY_ACCEPTED_INITIAL_MESHY_GLB",
       "input_geometry": "isolated green liquid tentacle, no surrounding architecture"
     },
     {
@@ -54,7 +54,7 @@
       "bytes": 2773331,
       "width": 1254,
       "height": 1254,
-      "status": "Meshy GLB saved; DM QA pending"
+      "status": "DM_REJECTED_INITIAL_MESHY_GLB__REPLACEMENT_NOT_YET_AUTHORIZED"
     },
     {
       "semantic_id": "a8.pool.rift",
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "DM reviews the four cloud-verified contact sheets; approve/target corrections, especially sewer outflows missing three dominant pipes. No paid retries yet. Then assemble room from official map using versioned reversible Blender scene; exclude Foundry.",
+  "next": "Preserve tentacle accepted GLB unchanged; preserve rejected pipe GLB for provenance but exclude from Area8 accepted build. Prepare more pipe-forward isolated reference grounded in approved area anchor with large projecting hollow corroded outlets and minimal masonry, seek DM approval of exact new image and separately display Meshy charged 30 credits before any replacement job. Wall and rim await DM assessment. No paid retries without explicit authorization.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -186,7 +186,7 @@
     "completed_utc": "2026-10-11"
   },
   "qa": {
-    "status": "COMPLETED_TECHNICAL__CONDITIONAL_ART__AWAIT_DM",
+    "status": "MIXED_DM_VISUAL_ACCEPTANCE__TENTACLE_ACCEPTED__PIPES_REJECTED__OTHER_TWO_PENDING",
     "geometry_basis": "Each set's four 30-degree-elevation isometric 3/4 viewpoints rendered from one original immutable Meshy GLB mesh using actual Blender Cycles, orthographic camera azimuth 45/135/225/315. No 2D-generated fake views.",
     "isolated_checkpoint": true,
     "samples": 16,
@@ -212,7 +212,8 @@
         "contact_bytes": 2413546,
         "verts": 1289700,
         "faces": 2373358,
-        "qa": "CONDITIONAL: continuous curl and detailed rear but dark mossy green opaque material, less translucent/brilliant than source reference"
+        "qa": "DM VISUAL ACCEPTED AS IS (supersedes prior consultant concern re muted/opaque green appearance). Do not adjust approved GLB.",
+        "dm_status": "ACCEPTED"
       },
       {
         "id": "a8.corroded_sewer_outflows",
@@ -225,7 +226,8 @@
         "contact_bytes": 2169746,
         "verts": 983933,
         "faces": 1856854,
-        "qa": "CONDITIONAL_FAIL source match: mainly arched/corroded masonry wall; three dominant outgoing sewer pipes not evident as in exact reference; requires DM direction/authorized retry"
+        "qa": "DM REJECTED; missing three clearly articulated projecting pipe outlets; do not release as outflow cluster.",
+        "dm_status": "REJECTED"
       },
       {
         "id": "a8.wall_walkway",
@@ -238,7 +240,8 @@
         "contact_bytes": 2356302,
         "verts": 1156178,
         "faces": 2177356,
-        "qa": "CONDITIONAL: actual rounded architectural wall/walkway and arched doorway with detailed rear; structural mating edges / exact radius/scale not yet assembled or validated"
+        "qa": "CONDITIONAL: actual rounded architectural wall/walkway and arched doorway with detailed rear; structural mating edges / exact radius/scale not yet assembled or validated",
+        "dm_status": "PENDING"
       },
       {
         "id": "a8.cesspool_rim",
@@ -251,8 +254,33 @@
         "contact_bytes": 1956151,
         "verts": 650037,
         "faces": 1190538,
-        "qa": "CONDITIONAL: curved stone rim with railing recognizable, though green liquid/wet glow under-represented; precise modular dimensions not validated"
+        "qa": "CONDITIONAL: curved stone rim with railing recognizable, though green liquid/wet glow under-represented; precise modular dimensions not validated",
+        "dm_status": "PENDING"
       }
     ]
+  },
+  "dm_decisions_2026_10_11": {
+    "source": "DM response after viewing real four-angle Blender contact sheets",
+    "tentacle": {
+      "semantic_id": "a8.planar_sludge_tentacle",
+      "visual_status": "DM_ACCEPTED",
+      "user_feedback": "Tentacle looks good.",
+      "scope": "accept original Meshy GLB and present texture/material; no further retexturing or model changes"
+    },
+    "outflows": {
+      "semantic_id": "a8.corroded_sewer_outflows",
+      "visual_status": "DM_REJECTED",
+      "user_feedback": "I agree that sewer outflows didn’t turn out good.",
+      "observed_defect": "GLB reads as masonry wall rather than distinct large projecting hollow pipe outlets",
+      "scope": "preserve failed original for provenance; do not include as accepted ceiling sewer pipes; a corrected pipe-dominant reference then a separately authorized paid Meshy replacement or technical recovery is needed"
+    },
+    "wall_walkway": {
+      "visual_status": "PENDING_DM",
+      "scope": "do not silently assume approved"
+    },
+    "basin_rim": {
+      "visual_status": "PENDING_DM",
+      "scope": "do not silently assume approved"
+    }
   }
 }
