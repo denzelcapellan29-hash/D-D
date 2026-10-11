@@ -1,3 +1,11 @@
+## CLOUD SYNC VERIFIED — Area 7 v020 — 2026-10-10
+Supersedes the earlier "cloud sync pending" notice directly below. Checked the actual Drive assets/captures folders and each uploaded file's metadata (ID, size and parent).
+- v020 .blend (537,880,295 bytes): https://drive.google.com/file/d/1cTHOvTunzQ-PdZ_0fXePflfu1j4TFG52/view
+- v020 full-resolution entrance hero (1600x900): https://drive.google.com/file/d/1ujGOhFnMNsWPgaL8oEdexPijRoBkB0iO/view
+- v020 north rune close-up: https://drive.google.com/file/d/1tHNWFOywsCJ2AoYYB1Jfi7aMcf1Jdumq/view
+- v020 high vaulted ceiling close-up: https://drive.google.com/file/d/1viD8OLSf087CUUprn07pby8zkYp3UvBE/view
+All four links independently verified through Google Drive, not inferred from local G: filenames. Blender saved v020; original v019 remains preserved. No new assets/credits or geometry touched. **QA_PENDING DM visual acceptance**, not released/approved. Next: present these actual captures to DM and collect accept/revise decision; keep foot/floor/doorway/claws no-touch.
+---
 ## LATEST CONTINUATION — Area 7 v020 / 2026-10-10 / DM REVIEW PENDING
 Live Blender MCP verified healthy. Reviewed complete 2026-10-10 exported prior chat five times top-to-bottom and bottom-to-top; rehydrated both long instructions, both handoffs, Drive project state/logs, official full source and installed Meshy cinematic skill before editing.
 NEW SAVED VERSION, NOT DM APPROVED: G:\My Drive\D&D\Foundry Bridge\assets\Area7_Modular_Assembly_v020_RunesColdVault_QA_PENDING.blend (537,880,295 bytes). Previous v019 saved QA checkpoint remains preserved and separately cloud verified: https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view. v018 was visually rejected. Do not call v019 or v020 artistically approved.
