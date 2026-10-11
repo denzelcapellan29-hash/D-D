@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "art_direction_selected__exact_pngs_cloud_verified__meshy_paid_gate_pending",
+  "status": "four_standard_mesHy_7_1_initial_tasks_submitted__QA_pending",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -43,7 +43,7 @@
       "bytes": 2388541,
       "width": 1254,
       "height": 1254,
-      "status": "selected first asset; waiting for explicit 30-credit paid Meshy consent",
+      "status": "initial_30_credit_Meshy_job_submitted",
       "input_geometry": "isolated green liquid tentacle, no surrounding architecture"
     },
     {
@@ -54,7 +54,7 @@
       "bytes": 2773331,
       "width": 1254,
       "height": 1254,
-      "status": "art concept held; mesh decomposition/credit decision deferred"
+      "status": "initial_30_credit_Meshy_job_submitted"
     },
     {
       "semantic_id": "a8.pool.rift",
@@ -65,6 +65,22 @@
       "width": 1254,
       "height": 1254,
       "status": "integrated environment concept, NOT single Meshy source; contains tentacle; plan separate scene geometry"
+    },
+    {
+      "semantic_id": "a8.wall_walkway",
+      "drive_id": "1DG6kOPXZG24-XsirmoaROnLs3AVYVhg2",
+      "file": "Area8_v001_APPROVED_Feature_CurvedWallWalkway_Standalone.png",
+      "bytes": 2645496,
+      "sha256": "d2eb17110711dae798f75fe54020454b564b03e52cf84b65cb3044ae93b8ce14",
+      "status": "initial_30_credit_Meshy_job_submitted"
+    },
+    {
+      "semantic_id": "a8.cesspool_rim",
+      "drive_id": "11nAg-9na6emIQnlmi_JdspQffutXnS3Q",
+      "file": "Area8_v001_APPROVED_Feature_CesspoolRimBasinEdge_Standalone.png",
+      "bytes": 2641512,
+      "sha256": "296858829a85667c1492deb4c0ad49cb9f2fd4b0cb2753f07a3a23828103a19a",
+      "status": "initial_30_credit_Meshy_job_submitted"
     }
   ],
   "meshy_configuration": {
@@ -90,9 +106,9 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "Prepare common-geometry 4-isometric references for four DM-approved Area 8 assets; do not spend Meshy credits or submit four AI-generated lookalike images as same-object until true 3D source and DM batch/cost approval.",
+  "next": "Poll only these four exact Meshy task IDs, save GLB files/Drive, import isolated Blender each, create four camera orbit 3/4 views from each SAME model, actual QA and DM review; do not run secondary paid multi-image task without separate approval.",
   "multiview": {
-    "status": "BLOCKED_NEEDS_SINGLE_3D_SOURCE",
+    "status": "NOT_YET_RENDERED_FROM_SOURCE_GLBS",
     "required_camera_views": [
       "front-left 3/4 isometric",
       "front-right 3/4 isometric",
@@ -102,5 +118,51 @@
     "policy": "same one immutable source 3D mesh and pose; four camera azimuths, consistent elevation and lighting; no top/down or straight-on shots; not four separately generated approximations",
     "generated_concepts": "three recent tentacle images are 2D-generated variations and NOT verified turntable images; do not send as a compliant Meshy multi-image reference",
     "next_step": "Use a verified common 3D source for isometric turntable, or obtain explicit paid approval to first generate a single-image Meshy GLB from approved green-liquid tentacle, then derive four true isometric camera renders; paid multi-view regeneration requires separate consent."
+  },
+  "mesHy_paid_batch": {
+    "batch": [
+      {
+        "semantic_id": "a8.planar_sludge_tentacle",
+        "name": "Area8_Tentacle_GreenLiquid_v001",
+        "image_id": "1bOPNn-HOeTcfU9Dy47k_7cxvjfjVm6cD",
+        "task_id": "01a12941-d5b8-736b-87e1-ccf70cb47810"
+      },
+      {
+        "semantic_id": "a8.corroded_sewer_outflows",
+        "name": "Area8_CorrodedSewerOutflowCluster_v001",
+        "image_id": "1QtdxIYdhuj70xRVWY6Z26rwARIab86q8",
+        "task_id": "01a12942-1680-7528-a1c4-6331414a4bfe"
+      },
+      {
+        "semantic_id": "a8.wall_walkway",
+        "name": "Area8_CurvedWallWalkway_v001",
+        "image_id": "1DG6kOPXZG24-XsirmoaROnLs3AVYVhg2",
+        "task_id": "01a12942-42e8-7059-ad75-b90bdb5e22b1"
+      },
+      {
+        "semantic_id": "a8.cesspool_rim",
+        "name": "Area8_CesspoolRimBasinEdge_v001",
+        "image_id": "11nAg-9na6emIQnlmi_JdspQffutXnS3Q",
+        "task_id": "01a12942-63b4-723d-9d2c-463498e60611"
+      }
+    ],
+    "initial_credit_budget": 120,
+    "initial_approved_user_intent": "User requested 'Generate the meshy assets' after reviewing 120-credit four-asset quote; followed up to invoke MCP",
+    "model_settings": {
+      "ai_model": "meshy-7.1",
+      "model_type": "standard",
+      "geometry_resolution": "standard",
+      "should_texture": true,
+      "enable_pbr": true,
+      "texture_resolution": "2k",
+      "image_enhancement": false,
+      "target_formats": [
+        "glb"
+      ]
+    },
+    "actual_consumption": "pending final status",
+    "retry_count": 0,
+    "not_an_approved_multiview_input": true,
+    "comment": "These are original single-image GLBs. Four genuine camera-only Blender isometric views will be rendered FROM each resulting single mesh, for QA; no unapproved secondary paid multiview regeneration."
   }
 }
