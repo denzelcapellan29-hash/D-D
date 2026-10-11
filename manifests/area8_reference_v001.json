@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_v037_ARCHITECTURE_FIRST_ASSET_ONLY_FLOOR_ROOF_SAVED_PROVISIONAL_DM_ACCEPTANCE_PENDING",
+  "status": "AREA8_FROMSCRATCH_v007_TECHNICAL_BENCHMARK_SAVED_DM_VISUAL_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -643,5 +643,32 @@
     "credits_this_pass": 0,
     "cloud_sync": "UNVERIFIED",
     "remaining": "tile seams/repetition/edge architectural fit, entrance transition, depth fidelity and DM visual review"
+  },
+  "from_scratch_v160": {
+    "plugin_release": "pluginrel_6acb4d4ba5bc8191b7553603cbce05bf",
+    "checkpoint": "G:/My Drive/D&D/Foundry Bridge/assets/Area8_FromScratch_v007_EnclosureCompleteCandidate.blend",
+    "source": "official_8_TENTACLE",
+    "beginning": "empty Blender startup not prior v037",
+    "approved_meshy_sources": 9,
+    "no_procedural_geometry": true,
+    "new_meshy_credits": 0,
+    "primary_hero": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_FromScratch_v007_FinalHero.png",
+    "secondary_cutaway": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_FromScratch_v007_CutawayQA.png",
+    "floor_sampled": {
+      "hits": 324,
+      "tested": 324
+    },
+    "roof_sampled": {
+      "hits": 504,
+      "tested": 504
+    },
+    "limitations": [
+      "ray support not collision/navigation",
+      "source pool physical depths unverified",
+      "art reference perceptual fidelity below target",
+      "DM final acceptance pending",
+      "Drive cloud sync unverified"
+    ],
+    "status": "SAVED_CLEAN_PROVISIONAL_NOT_ACCEPTED"
   }
 }
