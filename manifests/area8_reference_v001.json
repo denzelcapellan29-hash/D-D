@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "PIPE_DOMINANT_V002_MESHY_GLb_AND_4_CAMERA_QA_COMPLETE__DM_ACCEPTANCE_PENDING",
+  "status": "PIPES_V002_MESHY_SUCCESS_BLENDER_TRUE4ISO_CLOUD_VERIFIED__DM_QA_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "Verify Drive sync of v002 true4iso contact sheet, add exact file ID, then DM reviews new three-pipe QA and accepts or requests corrections. All four Area8 GLBs except new pipe are DM accepted. Save accepted scene and assemble only after visual gate. No further paid tasks.",
+  "next": "DM review replacement pipe v002 4-angle contact; accept or request targeted art correction. Preserve all assets and no further Meshy credits without consent.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -183,7 +183,8 @@
     "comment": "These are original single-image GLBs. Four genuine camera-only Blender isometric views will be rendered FROM each resulting single mesh, for QA; no unapproved secondary paid multiview regeneration.",
     "balance_before": 2487,
     "balance_after": 2337,
-    "completed_utc": "2026-10-11"
+    "completed_utc": "2026-10-11",
+    "balance_after_replacement_expected": 2337
   },
   "qa": {
     "status": "MIXED_DM_VISUAL_ACCEPTANCE__TENTACLE_ACCEPTED__PIPES_REJECTED__OTHER_TWO_PENDING",
@@ -301,7 +302,7 @@
         "target_formats": [
           "glb"
         ],
-        "status": "SUCCEEDED_AND_QA_RENDERED",
+        "status": "SUCCEEDED_QA_PENDING_DM",
         "duplicate_submissions": 0,
         "consumed_credits": 30,
         "initial_credit_balance": 2367,
@@ -361,7 +362,26 @@
           "success": "Clear three cylindrical projecting metal pipes with hollow mouths and full backs, unlike rejected wall-dominant v001",
           "limitation": "Water streams from source reference NOT modeled; plan separate dynamic sewage mesh/particles during Blender scene assembly; do not silently change this GLB"
         },
-        "retry_used": 0
+        "retry_used": 0,
+        "glb": {
+          "id": "1cVDOz1CwbpLp1EaLeuRODSVFFLdfgupn",
+          "bytes": 145330264
+        },
+        "blender": {
+          "id": "11369cZRR2AAET5NGEunVkP0-l-dVtFwJ",
+          "bytes": 233933980
+        },
+        "contact": {
+          "id": "1FvLHjGhgOn_TZTZDejUKz4QKcn1_xoNq",
+          "bytes": 2967166
+        },
+        "camera_angles": [
+          "FrontLeft",
+          "FrontRight",
+          "RearRight",
+          "RearLeft"
+        ],
+        "qa_finding": "All three hollow pipes clearly generated from front angles, significantly improved vs rejected v001; runoff appears baked onto projecting brick ledge rather than dynamic falling wastewater; DM visual approval pending."
       }
     },
     "wall_walkway": {
