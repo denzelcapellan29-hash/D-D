@@ -1,3 +1,13 @@
+## 2026-10-11 — Area8 pipe v002 generated and real Blender QA captured
+[x] User explicitly authorized 30-credit NEW v002 pipe generation, not same-image v001 retry
+[x] One Meshy 7.1 standard textured PBR2K image job succeeded, 30 credits charged; balance 2337; zero retries
+[x] Saved verified new GLB, isolated .blend, 4 true 3/4-isometric actual 800px Cycles PNGs and 1600px contact sheet https://drive.google.com/file/d/1FvLHjGhgOn_TZTZDejUKz4QKcn1_xoNq/view
+[x] QA observed 3 prominent hollow pipe mouths / full rear; v001 wall-dominant defect corrected
+[ ] DM visually accepts new v002 pipe model or gives smallest specific correction; omit assumption of accepted status
+[ ] After accept, create source-map-based Area8 whole-room Blender scene (10-ft walkway and correct pool depth topology), procedural dirty-water flows and subtle planar magic; actual cinematic hero/wide close QA to Drive
+[ ] Keep all previously approved models and Area7 unchanged; no Foundry
+Details https://github.com/denzelcapellan29-hash/D-D/blob/main/manifests/area8_reference_v001.json.
+---
 ## 2026-10-11 — AREA8 PIPE V002 MESHY SUCCESS AND TRUE FOUR-ISO QA VERIFIED, DM REVIEW PENDING
 Following DM explicit separate approval of 30 Meshy credits, submitted exact DM-approved v002 pipe-dominant PNG (Drive 12aSqKmSe-wsc9xjShIn1AMnBhVe-uLpF, 2,661,842B) to ONE new Meshy 7.1 Standard textured PBR 2K GLB task 01a12973-9108-7109-8be7-3966efeb55cd. API confirms SUCCEEDED, consumed 30 credits. No duplicate/no retry. GLB 145,330,264B Drive https://drive.google.com/file/d/1cVDOz1CwbpLp1EaLeuRODSVFFLdfgupn/view . Blender isolated studio v002 (saved clean) 233,933,980B Drive https://drive.google.com/file/d/11369cZRR2AAET5NGEunVkP0-l-dVtFwJ/view . Four real 800x800 isometric angle renders front-left/front-right/rear-right/rear-left FROM SAME single imported mesh; complete 1600x1600 contact 2,967,166B Drive https://drive.google.com/file/d/1FvLHjGhgOn_TZTZDejUKz4QKcn1_xoNq/view . Verified file byte sizes and Drive sync. Visual QA: three separate large projecting hollow corroded pipe mouths clearly visible (substantially better than rejected v001). However apparent wastewater hangs onto flat projecting masonry runoff shelf rather than falling into cesspool, needs DM assessment; no Meshy retry. Existing tentacle/wall/rim accepted untouched, old pipes rejected checkpoint preserved; Area7 and Foundry untouched. GitHub manifest https://github.com/denzelcapellan29-hash/D-D/blob/main/manifests/area8_reference_v001.json includes task+IDs. NEXT DM reviews contact sheet and approves/rejects, then possible source-grounded Area8 Blender assembly when accepted.
 ---
