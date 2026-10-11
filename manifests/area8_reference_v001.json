@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "PIPES_V002_MESHY_SUCCESS_BLENDER_TRUE4ISO_CLOUD_VERIFIED__DM_QA_PENDING",
+  "status": "AREA8_ASSEMBLY_v004_SAVED_DRIVE_VERIFIED__VISUAL_QA_PROVISIONAL",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "DM reviews real v002 pipe cluster four-angle sheet in Drive, accepts or flags defects. No additional paid task without approval. v002 QA is technically complete with three visible projecting hollow pipe mouths, but no geometry waterfall; animate filthy brown outflow in subsequent source-based room cinematic assembly if approved. Preserve accepted tentacle/wall/rim/Area7 and rejected v001 pipes.",
+  "next": "DM review actual v004 Blender hero/layout/pipe renders. v004 saved, do not overwrite. Further work only via reversible new v005, priority align 3 wastewater falls with pipe mouths and make visibly fluid, improve stone/water contact, continuous inhabitable walkway, ceiling and module seams. Source map-derived approximate radii require calibration before final acceptance. No Foundry or Meshy charges.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -302,7 +302,7 @@
         "target_formats": [
           "glb"
         ],
-        "status": "SUCCEEDED_QA_PENDING_DM",
+        "status": "DM_ACCEPTED_FOR_ASSEMBLY__SCENE_QA_PENDING",
         "duplicate_submissions": 0,
         "consumed_credits": 30,
         "initial_credit_balance": 2367,
@@ -383,7 +383,8 @@
           "RearRight",
           "RearLeft"
         ],
-        "qa_finding": "All three hollow pipes clearly generated from front angles, significantly improved vs rejected v001; runoff appears baked onto projecting brick ledge rather than dynamic falling wastewater; DM visual approval pending."
+        "qa_finding": "All three hollow pipes clearly generated from front angles, significantly improved vs rejected v001; runoff appears baked onto projecting brick ledge rather than dynamic falling wastewater; DM visual approval pending.",
+        "acceptance_note": "DM replied 'Yes create the blender scene' after question 'Does this replacement meet your expectations?', treated as authorization to integrate v002; scene visual acceptance separate."
       }
     },
     "wall_walkway": {
@@ -395,6 +396,100 @@
       "visual_status": "DM_ACCEPTED",
       "user_feedback": "Everything else is approved",
       "scope": "Preserve existing Meshy GLB unchanged; integration QA separate."
+    }
+  },
+  "scene_assembly": {
+    "status": "SAVED_PROVISIONAL_NOT_DM_ACCEPTED",
+    "source": "official full adventure Episode1 Area8 TENTACLE + map ep1_map13_reference_test.png (1 grid square = 5ft)",
+    "engine": "Blender 5.2 Cycles",
+    "layout_engineering_interpretations": {
+      "unit_scale_ft_per_blender_unit": 5,
+      "outer_chamber_radius_bu": 6,
+      "pool_radius_bu": 4,
+      "deep_inner_radius_bu": 2,
+      "walkway_width_ft": 10,
+      "shallow_annulus_radial_width_ft": 10,
+      "shallow_depth_ft": 3,
+      "inner_depth_ft": 10,
+      "entries_deg": [
+        150,
+        330
+      ],
+      "map_note": "Chamber radii/placement approximations constrained by source description; not proven exact traced map coordinates"
+    },
+    "versioned_checkpoints": [
+      {
+        "version": 1,
+        "description": "accepted asset intake wall+rim",
+        "drive_id": "1A9m1JfeMDUXrGmGO-Glz_2tnyEtFByLZ",
+        "bytes": 176347264
+      },
+      {
+        "version": 2,
+        "description": "four original Meshy GLBs intake; v002 pipe model provisional at assembly time",
+        "drive_id": "18wgdhkEZdBEG-mhKubbQGOJXRHho5Grj",
+        "bytes": 533459498
+      },
+      {
+        "version": 3,
+        "description": "spatial ring layout stage; visual QA rejected due foreground structural wall occlusion and washed-out lighting",
+        "drive_id": "1UB4shsPsxMovmilR4qbPnhPfuss2m8eY",
+        "bytes": 533567073
+      },
+      {
+        "version": 4,
+        "description": "corrected cinematic cutaway lighting/pool tones, current editable assembly; QA provisional",
+        "drive_id": "176jbNghu_H4TM8XgDZnFn4nL7_s2IZeV",
+        "bytes": 533572024
+      }
+    ],
+    "scene_v004": "https://drive.google.com/file/d/176jbNghu_H4TM8XgDZnFn4nL7_s2IZeV/view",
+    "captures": [
+      {
+        "name": "Hero",
+        "drive_id": "1mXBa5T_R-Ypw1m_AZ9FTRtbkDVe5-Dac",
+        "bytes": 1144553,
+        "url": "https://drive.google.com/file/d/1mXBa5T_R-Ypw1m_AZ9FTRtbkDVe5-Dac/view"
+      },
+      {
+        "name": "LayoutWide",
+        "drive_id": "1aM0eyIT2PI9utatGPM-JG0BoZCZS4qd7",
+        "bytes": 1064303,
+        "url": "https://drive.google.com/file/d/1aM0eyIT2PI9utatGPM-JG0BoZCZS4qd7/view"
+      },
+      {
+        "name": "PipeCesspoolClose",
+        "drive_id": "1wp9Me9B9w31VDdd-OxkYWT6Ot--zO-Ae",
+        "bytes": 1355034,
+        "url": "https://drive.google.com/file/d/1wp9Me9B9w31VDdd-OxkYWT6Ot--zO-Ae/view"
+      }
+    ],
+    "construction": {
+      "accepted_Meshy_source_meshes": 4,
+      "linked_wall_instances": 10,
+      "linked_rim_instances": 10,
+      "additional_procedural_structural_objects": 11,
+      "FX_objects": 7,
+      "lights": 4,
+      "cameras": 3
+    },
+    "visual_qa": {
+      "status": "TECHNICALLY_RENDERED__NO_DM_VISUAL_ACCEPTANCE",
+      "passes": [
+        "glb files preserved and imported",
+        "10ft walkway semantic width and separate 3ft/10ft pool floors created",
+        "source map circular ring and opposed passage approximation represented",
+        "real Cycles 1120x720 nonblack PNG renders",
+        "cloud sync asset and 3 previews verified"
+      ],
+      "failures": [
+        "visible wall/rim segmentation and module seams are too prominent",
+        "waterfall procedural ribbons resemble light solid fabric, not liquid; position does not align perfectly with pipe mouths",
+        "walkway and shallow/deep transitions appear too smooth/flat; dark subterranean ground and stone integration incomplete",
+        "ceiling is partial cinematic cutaway, not sealed fully inhabitable room"
+      ],
+      "halt_reason": "v003 initial hero had occluding cylindrical backfill and washed-out lighting; one targeted v004 recovery improved visibility but other visual/world-feel defects persist; user approval needed before broader editing",
+      "dm_acceptance": "PENDING"
     }
   }
 }
