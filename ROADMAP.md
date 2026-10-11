@@ -1,3 +1,11 @@
+## 2026-10-10 — Area 7 v021 interrupted checkpoint
+[x] Rendered actual v021 entrance, creature close-up, overhead coverage, all independently found in Google Drive.
+[x] Hero shows larger suspended foot, checkerboard without apparent holes and 126 Meshy-derived scattered foot meshes with near/far size progression.
+[ ] BLOCKED: Blender MCP session terminated on initial read-only health and once on targeted retry; do not write to Blender until reconnected and live scene inspected.
+[ ] Determine whether unsaved live v021 scene survives; if yes save separate numbered v021 .blend; if no reconstruct from preserved cloud-verified v020.
+[ ] Inspect close-up artifact quality; UV-preserving cropped MesHy bundle still looks rough. DM visual acceptance required.
+See CURRENT_HANDOFF.md for exact links and operational safety.
+---
 ## 2026-10-10 — Area 7 v021 checkpoint recovery and DM gate
 [x] DM approved giant-foot scale change, no-hole checkerboard restoration, and Meshy crawling-feet scattering.
 [x] Test real source UV/PBR-preserving Meshy crops, 126 foreground-to-far placements and actual Cycles hero/close QA in Drive.
