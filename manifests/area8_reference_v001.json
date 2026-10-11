@@ -83,12 +83,24 @@
   },
   "skill": {
     "plugin_id": "plugins_6ac99807af3c81918a869eb5e2710a6b",
-    "version": "1.3.3",
-    "current_release_id": "pluginrel_6acb04a02b38819198b4e67c0146525e"
+    "version": "1.3.4",
+    "current_release_id": "pluginrel_6acb0e2598788191afb6149c81f5e018"
   },
   "protection": {
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "DM explicitly authorizes standard 30-credit Meshy tentacle job; immediately before submission fetch Drive raw signed URL, verify exact PNG ID and monitor task, then Blender isolated QA; no paid calls until authorized"
+  "next": "Prepare common-geometry 4-isometric references for four DM-approved Area 8 assets; do not spend Meshy credits or submit four AI-generated lookalike images as same-object until true 3D source and DM batch/cost approval.",
+  "multiview": {
+    "status": "BLOCKED_NEEDS_SINGLE_3D_SOURCE",
+    "required_camera_views": [
+      "front-left 3/4 isometric",
+      "front-right 3/4 isometric",
+      "rear-right 3/4 isometric",
+      "rear-left 3/4 isometric"
+    ],
+    "policy": "same one immutable source 3D mesh and pose; four camera azimuths, consistent elevation and lighting; no top/down or straight-on shots; not four separately generated approximations",
+    "generated_concepts": "three recent tentacle images are 2D-generated variations and NOT verified turntable images; do not send as a compliant Meshy multi-image reference",
+    "next_step": "Use a verified common 3D source for isometric turntable, or obtain explicit paid approval to first generate a single-image Meshy GLB from approved green-liquid tentacle, then derive four true isometric camera renders; paid multi-view regeneration requires separate consent."
+  }
 }
