@@ -1,3 +1,11 @@
+## 2026-10-10 — Area 7 v026B natural crusher refinement
+[x] Live Blender MCP discovery/health, both project instructions/handoffs, skill and official Area 7 source restored
+[x] DM selected B rotting-foot material and accepted 126 source-derived feet as they appear; no further foot improvement authorized/required
+[x] Remove apparent thin ceiling piston (hidden, preserved) and grow Meshy foot uniformly to meet central vault using ankle (scale 6.75, z7.60)
+[x] Actual Cycles hero + ceiling close render inspected and cloud verified, separate v026B saved/Drive verified
+[ ] DM approves v026B updated ceiling/crusher aesthetic, then promote acceptance status; preserve all earlier checkpoints
+Artifacts and provenance in CURRENT_HANDOFF.md.
+---
 ## 2026-10-10 — Area 7 side-by-side review delivery
 [x] Two actual Blender A-left/B-right comparison sheets rendered from existing QA, cloud verified, links in CURRENT_HANDOFF.md.
 [ ] DM selects A, B, or directs asset quality correction; original composite MesHy cropped feet look hollow in close-up.
