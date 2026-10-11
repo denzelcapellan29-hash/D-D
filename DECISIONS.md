@@ -1,3 +1,6 @@
+## D-021 review artifact note — 2026-10-10
+A/B comparison controls geometry, camera, lighting, floor and crusher while varying foot material only. Two cloud-verified contact sheets present actual Cycles output side-by-side (stone A left; rotting B right); these are visual QA artifacts, NOT approval. See CURRENT_HANDOFF.md.
+---
 ## D-021 delivery clarification — 2026-10-10
 v023/v024B/v025A .blend checkpoints and all requested real A/B QA renders are now verified in cloud Drive by actual metadata. B interrupted close-up is complete and was visually inspected. Technical delivery accepted; ARTISTIC ACCEPTANCE STILL PENDING. The cropped original Meshy source produces incomplete/hollow foot anatomy in both alternatives; changing materials alone cannot fix this. New single-foot Meshy generation is separate paid scope requiring explicit approval after exact image review. Older artifacts remain preserved.
 ---
