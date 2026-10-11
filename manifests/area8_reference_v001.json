@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_v031_SAVED_FLOOR_RAY_COVERAGE_PASS_SAMPLED_DEPTHS_UNVERIFIED_DM_ACCEPTANCE_PENDING",
+  "status": "AREA8_v037_ARCHITECTURE_FIRST_ASSET_ONLY_FLOOR_ROOF_SAVED_PROVISIONAL_DM_ACCEPTANCE_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -614,41 +614,34 @@
     "balance_after": 2157
   },
   "latest_blender_checkpoint": {
-    "file": "Area8_Cesspool_Scene_Assembly_v031_FloorCoverageCalibrated.blend",
-    "local_asset_folder": "G:/My Drive/D&D/Foundry Bridge/assets",
+    "file": "Area8_Cesspool_Scene_Assembly_v037_StaggeredSolidArchitecture.blend",
     "status": "SAVED_CLEAN_PROVISIONAL_NOT_DM_ACCEPTED",
-    "previous_best": "Area8_Cesspool_Scene_Assembly_v028_WalkwayBandJoined.blend",
-    "skill_version": "1.4.1",
-    "plugin_release": "pluginrel_6acb43ff10f081918de7d2fccb18db6b",
-    "scene_units_m_per_BU": 1.524,
-    "official_walkway_width_m": 3.048,
-    "walkway_raycast": {
-      "baseline_supported": 144,
-      "v030_supported": 178,
-      "current_supported": 180,
-      "tested": 180,
-      "angles_degrees": "0-340 step 20",
-      "radii_BU": [
-        4.15,
-        4.5,
-        4.85,
-        5.2,
-        5.55,
-        5.9,
-        6.25,
-        6.6,
-        6.95,
-        7.3
-      ],
-      "interpretation": "Sparse downward mesh ray hits; NOT continuous walkability/collision proof"
+    "skill_version": "1.5.0",
+    "previous_baseline": "Area8_Cesspool_Scene_Assembly_v031_FloorCoverageCalibrated.blend",
+    "floor_source": "Area7_FloorTile_Meshy71_v001.glb",
+    "floor_primary_linked_tiles": 204,
+    "floor_underlay_linked_tiles": 204,
+    "ceiling_primary_linked_tiles": 293,
+    "ceiling_backing_linked_tiles": 293,
+    "disallowed_arch_floor_hidden": 52,
+    "rejected_ceiling_wedge": "Area7_CeilingWedge_Meshy71_v001.glb",
+    "qa": {
+      "floor_ray_hits": 823,
+      "floor_ray_total": 831,
+      "floor_pct": 99.04,
+      "ceiling_ray_hits": 1291,
+      "ceiling_ray_total": 1293,
+      "ceiling_pct": 99.85,
+      "grid_spacing_BU": 0.35,
+      "coverage_interpretation": "sampled downward mesh hits only; no complete solidity or DM acceptance"
     },
-    "approved_source_GLBS_unchanged": true,
-    "procedural_scene_geometry_added": false,
-    "paid_meshy_credits_this_pass": 0,
-    "depth_gate": "UNVERIFIED_3FT_OUTER_10FT_INNER",
-    "source_walkway_width_gate": "UNVERIFIED_EFFECTIVE_TRAVERSABLE_WIDTH",
+    "hero_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v037_StaggeredArchitecture_Hero_QA.png",
+    "wide_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v037_StaggeredArchitecture_Wide_QA.png",
+    "qa_json_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v037_ArchitectureFirst_QA.json",
+    "geometry_origin": "approved Meshy/library only",
+    "new_procedural_geometry": false,
+    "credits_this_pass": 0,
     "cloud_sync": "UNVERIFIED",
-    "hero_qa_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v031_FloorCoverage_Hero_QA.png",
-    "structural_qa_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v031_FloorCoverage_Wide_QA.png"
+    "remaining": "tile seams/repetition/edge architectural fit, entrance transition, depth fidelity and DM visual review"
   }
 }
