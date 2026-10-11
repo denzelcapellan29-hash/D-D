@@ -42,4 +42,4 @@ Drive state: https://docs.google.com/document/d/1QIPXGaH4KVFFvnZSMqEXXdk4DqjKRpx
 Drive changelog: https://docs.google.com/document/d/1RKfbj4MK45Ha321bkbFQy8HXhvEUAR-0svLVyWJrGgQ/edit
 Drive roadmap: https://docs.google.com/document/d/1GV62dDjojN13JtNVTRPh_GDSXSyTcwg2fMdDPzq1cH0/edit
 Drive decisions: https://docs.google.com/document/d/1HpAlu11p9gf7eiNMwXvJIVEFCRCkH1cclYLGcS31VRo/edit
-GitHub PROJECT_STATE.md and CHANGELOG.md lagged the October 10 Drive updates at this checkpoint. For live production status use newer Drive handoff/state/DM decision, GitHub remains canonical code/config. Reverify freshness at each resume.
+GitHub PROJECT_STATE.md, CHANGELOG.md and ROADMAP.md now include October 10 continuity pointers; Drive PROJECT_STATE and the newest handoff hold the fuller active-state record. GitHub remains canonical for code/config. Reverify both stores for freshness at each resume.
