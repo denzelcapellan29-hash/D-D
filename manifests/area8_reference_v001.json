@@ -1,0 +1,94 @@
+{
+  "schema": "acq.inc.reference_batch.v1",
+  "area": "Episode 1 Area 8 — Tentacle",
+  "status": "art_direction_selected__exact_pngs_cloud_verified__meshy_paid_gate_pending",
+  "source": {
+    "type": "private_official_adventure",
+    "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
+    "section": "8. TENTACLE",
+    "canonical_facts": [
+      "round chamber",
+      "10-foot-wide walkway",
+      "sewage from ceiling pipes",
+      "cesspool outer 10 feet 3-foot-deep",
+      "inner area 10-foot-deep",
+      "demiplane of filth",
+      "long tentacle through weakened planar barrier"
+    ]
+  },
+  "interpretation": [
+    "semi-fluid green sludge / planar tentacle derived from DM direction and source artwork rather than explicit source prose",
+    "sewer textures, warm accents, rusted pipes and pool glow are art-direction adaptation; scene must use map for geometry",
+    "separate asset images do not dictate exact placement or game mechanics"
+  ],
+  "folder": {
+    "id": "1b9YSgIQ6W2LgS_po-V-mpRbHTTu02xSR",
+    "url": "https://drive.google.com/drive/folders/1b9YSgIQ6W2LgS_po-V-mpRbHTTu02xSR"
+  },
+  "style_anchor": {
+    "drive_id": "1775xutmn4chejs09QhknaOL4FyyG-Tch",
+    "sha256": "d49585962a473f26ef7e3e4aaf187375c2c430c42cbca387fa66f2fc349eabb1",
+    "file": "Area8_v001_APPROVED_EnvironmentStyleAnchor_GreenLiquidTentacle.png",
+    "bytes": 2869446,
+    "width": 1672,
+    "height": 941,
+    "dm_status": "approved visual art direction"
+  },
+  "asset_references": [
+    {
+      "semantic_id": "a8.planar_sludge_tentacle",
+      "drive_id": "1bOPNn-HOeTcfU9Dy47k_7cxvjfjVm6cD",
+      "file": "Area8_v001_APPROVED_Feature_Tentacle_GreenLiquid_Standalone.png",
+      "sha256": "0739b0e837d3f3727a7b96f44eb6e330481296e1235337dfc59e255e162676ca",
+      "bytes": 2388541,
+      "width": 1254,
+      "height": 1254,
+      "status": "selected first asset; waiting for explicit 30-credit paid Meshy consent",
+      "input_geometry": "isolated green liquid tentacle, no surrounding architecture"
+    },
+    {
+      "semantic_id": "a8.corroded_sewer_outflows",
+      "drive_id": "1QtdxIYdhuj70xRVWY6Z26rwARIab86q8",
+      "file": "Area8_v001_Feature_CorrodedSewerOutflows_Standalone.png",
+      "sha256": "d1236397e1a05fd61db7b0f8f76393a36d34b66cd7f2c3f5cca7f8e6a14f3eb8",
+      "bytes": 2773331,
+      "width": 1254,
+      "height": 1254,
+      "status": "art concept held; mesh decomposition/credit decision deferred"
+    },
+    {
+      "semantic_id": "a8.pool.rift",
+      "drive_id": "1Rv6VdHQ1PP7WHuNsCu7BIPXhtWRnN9u6",
+      "file": "Area8_v001_Feature_CesspoolRift_Concept.png",
+      "sha256": "b20ad2ad8b4f585c54024b96a91b25c82f9f0099cca45a77fa15eddadc77ca66",
+      "bytes": 2668507,
+      "width": 1254,
+      "height": 1254,
+      "status": "integrated environment concept, NOT single Meshy source; contains tentacle; plan separate scene geometry"
+    }
+  ],
+  "meshy_configuration": {
+    "ai_model": "meshy-7.1",
+    "model_type": "standard",
+    "geometry_resolution": "standard",
+    "should_texture": true,
+    "enable_pbr": true,
+    "texture_resolution": "2k",
+    "image_enhancement": false,
+    "output": "glb",
+    "estimated_initial_credits": 30,
+    "credits_spent": 0,
+    "consent": "pending explicit cost approval",
+    "account_balance_at_preflight": 2487
+  },
+  "skill": {
+    "plugin_id": "plugins_6ac99807af3c81918a869eb5e2710a6b",
+    "version": "1.3.3",
+    "current_release_id": "pluginrel_6acb04a02b38819198b4e67c0146525e"
+  },
+  "protection": {
+    "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
+    "do_not_touch": true
+  },
+  "next": "DM explicitly authorizes standard 30-credit Meshy tentacle job; immediately before submission fetch Drive raw signed URL, verify exact PNG ID and monitor task, then Blender isolated QA; no paid calls until authorized"
+}
