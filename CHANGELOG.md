@@ -1,3 +1,6 @@
+## 2026-10-11 — Source-first approved pipe v002 archived, new charge still pending
+Recovered live MCP after prior false unavailable claim. DM approves existing wall/walkway+rim and new pipe-dominant reference; exact 2,661,842-byte PNG uploaded to private Drive with hash recorded in GitHub manifest. Three older accepted Meshy GLBs untouched; old pipe output remains rejected. Read-only Meshy balance 2367. No new paid job or credits; separate 30-credit cost authorization must precede paid replacement. Full CURRENT_HANDOFF.
+---
 ## 2026-10-11 — DM approval/rejection recorded for Area8 actual Meshy assets
 DM says "Tentacle looks good" => first generated tentacle GLB visually accepted unchanged; consultant concern re low green glow no longer blocks it. DM agrees sewer outflow asset is poor => rejected as pipe cluster, preserves source GLB as failed provenance and excludes it from accepted assembly. Wall and rim have no new DM verdict. No Blender mesh edits, retries, or additional paid Meshy calls. Updated manifest https://github.com/denzelcapellan29-hash/D-D/blob/main/manifests/area8_reference_v001.json; next revised pipe-forward reference image (not charged) followed by exact art and paid generation authorization.
 ---
