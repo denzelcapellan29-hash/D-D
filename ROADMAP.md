@@ -1,3 +1,12 @@
+## 2026-10-11 — Four-angle geometry-verified asset input gate
+[x] DM approved Area8 green-liquid tentacle, corroded outflows, curved wall+walkway and pool rim concepts (art only).
+[x] Installed plugin v1.3.4: EXACT 4 front-left/front-right/rear-right/rear-left isometric camera views, same real 3D source; QA checklist updated/readback verified.
+[x] Reject 3 independent AI-generated tentacle angle concepts as geometrically UNVERIFIED; no fourth or Meshy multiview submission.
+[ ] Establish one real immutable 3D source per asset, then render matching four-view isometric turntable with geometry/landmark continuity and synced files; otherwise explicitly authorize initial single-image paid Meshy model (and any later multi-image cost separately).
+[ ] Gather all approved exact four-view sets for a ONE-BATCH DM review, quote verified total Meshy costs, obtain explicit paid consent.
+[ ] Run paid Meshy jobs only when all gates pass; isolated Blender multi-angle actual QA and Drive review; no Foundry.
+Full details CURRENT_HANDOFF; https://github.com/denzelcapellan29-hash/D-D/blob/main/manifests/area8_reference_v001.json.
+---
 ## 2026-10-10 — Area 8 source-first preproduction advanced to paid Meshy gate
 [x] Official source text/map crosscheck; DM accepted revised integrated green-fluid tentacle whole-room look.
 [x] Fix installed private Meshy skill and checklist to v1.3.3, area art image FIRST mandatory, readback verified.
