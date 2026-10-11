@@ -1,3 +1,13 @@
+## 2026-10-10 — Area 8 source-first preproduction advanced to paid Meshy gate
+[x] Official source text/map crosscheck; DM accepted revised integrated green-fluid tentacle whole-room look.
+[x] Fix installed private Meshy skill and checklist to v1.3.3, area art image FIRST mandatory, readback verified.
+[x] Isolated style-matched tentacle, sewage pipe cluster and pool/rift references; store exact 4 PNGs in private Drive; independent metadata sizes and SHA256 manifest GitHub.
+[x] Read-only Meshy balance / standard 7.1 settings; no credit spend yet.
+[ ] Await DM explicit 30-credit charge confirmation for selected single green-liquid tentacle PNG. The preceding 'Great continue' did NOT authorize paid submission by itself.
+[ ] Submit one standard PBR 2K image-to-3D Meshy job; poll original task ID, download GLB immutably; isolated multi-angle Blender render QA then DM visual review in Drive; no Foundry.
+[ ] Later evaluate pipe-cluster asset splitting and pool/rift procedural scene structure against source/map; obtain separate cost approvals for any extra Meshy jobs.
+Links and precise hash/provenance in CURRENT_HANDOFF and manifests/area8_reference_v001.json.
+---
 ## 2026-10-10 — Area 8 source-first safe reference gate
 [x] Read official Area 8 encounter/source map and verify no existing Area 8 GLB in inventory.
 [x] Update EXISTING installed ai-3d-asset-workflow MesHy skill to v1.3.2 with mandatory image-policy preflight and source QA checklist, verify source readback.
