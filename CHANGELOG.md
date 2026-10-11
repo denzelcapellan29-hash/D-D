@@ -1,3 +1,10 @@
+## 2026-10-10 — Area 7 v020 cold-vault/rune lookdev QA (not DM approved)
+- Restored official Area 7 description and prior-chat decision history; verified live Blender on v019 before editing.
+- On an isolated shader/light pass only: changed 4 vault area lights from 740W amber to 480W blue-slate, 4 amber indirect accent points from 285W to 115W desaturated, each north/south rune area light 415W to 340W; emission max 2.5→1.45 and inward bump normal 0.46/.042→0.64/.063.
+- Rendered real Cycles entrance (1600x900), north-rune (896x672) and vault (936x702) PNGs to Drive-synced captures path, visually inspected and validated entrance nonblack pixels. Saved separate 537,880,295-byte v020 .blend. No geometry edit, no claw/foot/floor/door edit, no Meshy spend.
+- Local G: outputs verified; cloud Drive sync and DM approval remain PENDING. Existing v019 cloud links and exact v020 filenames recorded in CURRENT_HANDOFF.md.
+- QA caveat: carved-line depth is an optical normal-map/bump treatment, not proven recessed mesh carving.
+---
 # Changelog
 
 ## 2026-10-08
