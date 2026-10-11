@@ -1,3 +1,11 @@
+## 2026-10-10 — Area 7 v021 checkpoint recovery and DM gate
+[x] DM approved giant-foot scale change, no-hole checkerboard restoration, and Meshy crawling-feet scattering.
+[x] Test real source UV/PBR-preserving Meshy crops, 126 foreground-to-far placements and actual Cycles hero/close QA in Drive.
+[ ] CRITICAL: new Blender read-only health after session terminated; establish whether unsaved v021 work survived.
+[ ] If alive, checkpoint v021 separately with QA/Drive verification; if lost, reproduce from v020 using exact recipe in CURRENT_HANDOFF; NEVER claim v021 .blend exists until verified.
+[ ] DM evaluates verified actual render links and individual foot close-up; conditional visual fidelity.
+[ ] If source composite cannot meet intended single-foot quality, seek DM approval of new exact isolated reference and paid scope before Meshy work.
+---
 ## 2026-10-10 — v020 QA cloud-delivery gate updated
 [x] Independently verify v020 .blend and 3 real Cycles PNGs in Google Drive via direct folder listing and metadata, with verified links in CURRENT_HANDOFF.md.
 [ ] DM visually reviews v020 and explicitly accepts or requests scoped correction; no other production edits authorized on foot/floor/doorway/claws.
