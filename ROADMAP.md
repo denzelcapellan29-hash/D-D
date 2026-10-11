@@ -1,3 +1,9 @@
+## 2026-10-10 — Area 7 A/B Drive delivery gate CLOSED; aesthetics still pending
+[x] Independently cloud-verify 547.8MB v023 shared, v024B rotting and v025A stone Blender checkpoints (actual Drive metadata; links in CURRENT_HANDOFF)
+[x] Verify/read B close-up after stream interruption and full hero A/B and crusher ceiling renders
+[ ] DM review A/B stylistic choice, with explicit warning that both reuse imperfect shallow/hollow Meshy claw source crops
+[ ] If neither looks natural, require separate explicit authorization for an isolated new standalone foot GLB (30 credits initial standard Meshy job) with approved exact image; do not silently generate
+---
 ## 2026-10-10 — Area 7 two-variant comparison acceptance gate
 [x] Live Blender MCP discovered and healthy; unsaved v021 recovered and saved as immutable v022 in Drive.
 [x] Common scene: original Meshy crusher enlarged and connected to ceiling, one monolithic stone floor using Meshy wall PBR, old 185 squares hidden but preserved.
