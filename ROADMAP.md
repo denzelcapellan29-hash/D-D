@@ -1,3 +1,11 @@
+## 2026-10-11 — Area8 art approval completed, only replacement pipe job charge pending
+[x] Tentacle, wall/walkway and basin rim GLBs DM visually accepted, preserve as-is
+[x] Original bad pipes GLB rejected and preserved
+[x] New pipe-dominant three-outlet source image DM approved, exact PNG uploaded/cloud verified and hashed: https://drive.google.com/file/d/12aSqKmSe-wsc9xjShIn1AMnBhVe-uLpF/view
+[ ] Confirm one NEW 30-credit Meshy 7.1 Standard PBR 2K GLB charge for replacement because changed image cannot be same-image retry
+[ ] Fresh Drive RAW signed URL → Meshy paid job → status/GLB → isolated true 4-isometric Blender QA → cloud Drive/DM acceptance
+[ ] Later assemble accepted assets into Area8 cinematic room from official map, keep Area7 and Foundry untouched
+---
 ## 2026-10-11 — Area8 review gate partial acceptance
 [x] DM visually ACCEPTED green-liquid tentacle GLB unchanged (existing task/source/render in CURRENT_HANDOFF).
 [x] DM explicitly REJECTED corroded sewer outflow GLB because pipe cluster not convincingly reconstructed.
