@@ -1,3 +1,6 @@
+## D-022 — Accept Version B feet; integrate crusher by original ankle, no beam (2026-10-10)
+DM explicitly prefers Version B rotting feet and considers their current appearance good; prior "re-generate anatomically perfect foot" suggestions are no longer active. DM rejects narrow shaft attaching crusher to roof and requests original granite foot scaled larger until its own ankle reaches vault. This is intentional visual adaptation of source's suspended foot. Implementation checkpoint v026B: original Meshy foot object uniformly scale 6.75, z7.60, ztop12.476, narrow prior piston hidden not deleted; chosen B PBR, full 126 feet, monolithic wall-matched floor, rune walls untouched; real render/source evidence and cloud links in CURRENT_HANDOFF. No Meshy credits or Foundry. DM approval of new crusher-specific change pending.
+---
 ## D-021 review artifact note — 2026-10-10
 A/B comparison controls geometry, camera, lighting, floor and crusher while varying foot material only. Two cloud-verified contact sheets present actual Cycles output side-by-side (stone A left; rotting B right); these are visual QA artifacts, NOT approval. See CURRENT_HANDOFF.md.
 ---
