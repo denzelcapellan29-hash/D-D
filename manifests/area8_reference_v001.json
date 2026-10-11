@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "TENTACLE_WALL_RIM_ACCEPTED__OLD_PIPES_REJECTED__NEW_PIPES_PNG_APPROVED__PAID_REPLACEMENT_PENDING",
+  "status": "NEW_PIPES_V002_MESHY_INITIAL_JOB_SUBMITTED__QA_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "New exact DM-approved pipe image uploaded and sha256/bytes verified. Confirm user approves 30 Meshy credits for NEW image-to-3D Meshy7.1 Standard PBR 2K GLB (not same-image retry) before paid tool call; then fresh signed Drive URL, submit once, poll/save new GLB, isolated Blender true4iso QA to Drive. Do not touch accepted other three GLBs or Area7.",
+  "next": "Poll exact task 01a12973-9108-7109-8be7-3966efeb55cd, do not re-submit; only on SUCCEEDED download GLB, validate independent Blender isolated scene, 4 true iso captures, Drive sync and DM acceptance.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -282,9 +282,27 @@
         "bytes": 2661842,
         "sha256": "dec348bc573b9068fbffd9c44297c2a320db154484ddb19b9f46dc2b787123e9",
         "generated_reference_asset": "three distinct hollow protruding corroded pipe mouths, brown sewage runoff, small masonry base",
-        "paid_credits": "PENDING_SEPARATE_EXPLICIT_30_CREDIT_COST_CONFIRMATION",
+        "paid_credits": "AUTHORIZED_30_CREDITS_IN_CONVERSATION_2026_10_11",
         "new_reference_requires_new_job": true,
         "original_30_credit_same_image_retry_ineligible": true
+      },
+      "replacement_generation": {
+        "task_id": "01a12973-9108-7109-8be7-3966efeb55cd",
+        "image_id": "12aSqKmSe-wsc9xjShIn1AMnBhVe-uLpF",
+        "image_bytes": 2661842,
+        "cost_estimate": 30,
+        "model": "meshy-7.1",
+        "model_type": "standard",
+        "geometry_resolution": "standard",
+        "should_texture": true,
+        "enable_pbr": true,
+        "texture_resolution": "2k",
+        "image_enhancement": false,
+        "target_formats": [
+          "glb"
+        ],
+        "status": "SUBMITTED_PENDING",
+        "duplicate_submissions": 0
       }
     },
     "wall_walkway": {
