@@ -519,5 +519,61 @@
       "ceiling pipe effluent/waterfalls"
     ],
     "paid_meshy_credits_for_this_change": 0
+  },
+  "latest_meshy_batch_2026_10_11": {
+    "status": "SIX_SUBMITTED_QA_PENDING",
+    "authorized_credits": 180,
+    "charged_reported": 180,
+    "starting_balance": 2337,
+    "settings": {
+      "ai_model": "meshy-7.1",
+      "model_type": "standard",
+      "geometry_resolution": "standard",
+      "should_texture": true,
+      "enable_pbr": true,
+      "texture_resolution": "2k",
+      "image_enhancement": false,
+      "target_formats": [
+        "glb"
+      ]
+    },
+    "assets": [
+      {
+        "name": "walkway",
+        "reference_drive_id": "1XhtgJQN6CVmXUJ3NVj0Osr1yRZ1cLyjY",
+        "task_id": "01a129bd-1c8e-7274-9026-50aabd9dc6e9",
+        "qa": "PENDING"
+      },
+      {
+        "name": "vault",
+        "reference_drive_id": "1MuZd18xtV4g6WlteuahGUKMCyrFyiclA",
+        "task_id": "01a129bd-4c08-73b9-98ef-e5cde3d25851",
+        "qa": "PENDING"
+      },
+      {
+        "name": "basin_steps",
+        "reference_drive_id": "1l2DkvYHwgycpxhrmv1y3DSrInQOxGpyd",
+        "task_id": "01a129bd-5cc2-7574-b6b3-71dab3eb82a9",
+        "qa": "PENDING"
+      },
+      {
+        "name": "cesspool",
+        "reference_drive_id": "1KEZAj2cLjYK09t8BXgORh8Cd8YQQVe_P",
+        "task_id": "01a129bd-6bd9-7208-8508-71ccb106ed07",
+        "qa": "PENDING"
+      },
+      {
+        "name": "sewage",
+        "reference_drive_id": "1GzH8uq2HV5YDRgvNbqn6Q36vXp2oABgg",
+        "task_id": "01a129bd-7d3d-761c-a681-9b84f0a5ecc5",
+        "qa": "PENDING"
+      },
+      {
+        "name": "rift",
+        "reference_drive_id": "19xwBiRP6kE6OxH6eqclQMpyKPgTzfptJ",
+        "task_id": "01a129bd-9273-75e2-bc8d-5cd64008082b",
+        "qa": "PENDING"
+      }
+    ]
   }
 }
