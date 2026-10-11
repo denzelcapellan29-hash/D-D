@@ -1,3 +1,13 @@
+## 2026-10-10 — Area 7 two-variant comparison acceptance gate
+[x] Live Blender MCP discovered and healthy; unsaved v021 recovered and saved as immutable v022 in Drive.
+[x] Common scene: original Meshy crusher enlarged and connected to ceiling, one monolithic stone floor using Meshy wall PBR, old 185 squares hidden but preserved.
+[x] Save Version A dark stone-foot v025A and Version B muted rotting-foot v024B as distinct local .blend checkpoints; original 206 claw composites preserved hidden, 126 Meshy source-derived feet in both.
+[x] Render/visually inspect actual A/B entrance hero and matching foot close-ups plus crusher ceiling view, verify cloud PNGs.
+[ ] Independently verify v023/v024B/v025A Blender files are cloud-synced and get URLs (v022 already cloud verified).
+[ ] DM reviews A vs B and accepts/rejects style; known shallow Meshy crop silhouette flaws remain.
+[ ] If neither is acceptable, propose exact isolated replacement Meshy reference and ask explicit 30-credit initial approval before generation.
+See CURRENT_HANDOFF.md for source/QAs and no overwrite.
+---
 ## 2026-10-10 — Area 7 v021 interrupted checkpoint
 [x] Rendered actual v021 entrance, creature close-up, overhead coverage, all independently found in Google Drive.
 [x] Hero shows larger suspended foot, checkerboard without apparent holes and 126 Meshy-derived scattered foot meshes with near/far size progression.
