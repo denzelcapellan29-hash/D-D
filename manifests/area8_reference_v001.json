@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_TENTACLE_DM_VISUALLY_ACCEPTED__PIPES_DM_REJECTED__WALL_AND_RIM_DM_PENDING",
+  "status": "TENTACLE_WALL_RIM_ACCEPTED__OLD_PIPES_REJECTED__NEW_PIPES_PNG_APPROVED__PAID_REPLACEMENT_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -72,7 +72,7 @@
       "file": "Area8_v001_APPROVED_Feature_CurvedWallWalkway_Standalone.png",
       "bytes": 2645496,
       "sha256": "d2eb17110711dae798f75fe54020454b564b03e52cf84b65cb3044ae93b8ce14",
-      "status": "Meshy GLB saved; DM QA pending"
+      "status": "DM_VISUALLY_ACCEPTED_INITIAL_MESHY_GLB"
     },
     {
       "semantic_id": "a8.cesspool_rim",
@@ -80,7 +80,7 @@
       "file": "Area8_v001_APPROVED_Feature_CesspoolRimBasinEdge_Standalone.png",
       "bytes": 2641512,
       "sha256": "296858829a85667c1492deb4c0ad49cb9f2fd4b0cb2753f07a3a23828103a19a",
-      "status": "Meshy GLB saved; DM QA pending"
+      "status": "DM_VISUALLY_ACCEPTED_INITIAL_MESHY_GLB"
     }
   ],
   "meshy_configuration": {
@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "Preserve tentacle accepted GLB unchanged; preserve rejected pipe GLB for provenance but exclude from Area8 accepted build. Prepare more pipe-forward isolated reference grounded in approved area anchor with large projecting hollow corroded outlets and minimal masonry, seek DM approval of exact new image and separately display Meshy charged 30 credits before any replacement job. Wall and rim await DM assessment. No paid retries without explicit authorization.",
+  "next": "New exact DM-approved pipe image uploaded and sha256/bytes verified. Confirm user approves 30 Meshy credits for NEW image-to-3D Meshy7.1 Standard PBR 2K GLB (not same-image retry) before paid tool call; then fresh signed Drive URL, submit once, poll/save new GLB, isolated Blender true4iso QA to Drive. Do not touch accepted other three GLBs or Area7.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -240,8 +240,8 @@
         "contact_bytes": 2356302,
         "verts": 1156178,
         "faces": 2177356,
-        "qa": "CONDITIONAL: actual rounded architectural wall/walkway and arched doorway with detailed rear; structural mating edges / exact radius/scale not yet assembled or validated",
-        "dm_status": "PENDING"
+        "qa": "DM visual acceptance: Everything else is approved; scale/fit integration QA remains.",
+        "dm_status": "ACCEPTED"
       },
       {
         "id": "a8.cesspool_rim",
@@ -254,8 +254,8 @@
         "contact_bytes": 1956151,
         "verts": 650037,
         "faces": 1190538,
-        "qa": "CONDITIONAL: curved stone rim with railing recognizable, though green liquid/wet glow under-represented; precise modular dimensions not validated",
-        "dm_status": "PENDING"
+        "qa": "DM visual acceptance: Everything else is approved; scale/fit integration QA remains.",
+        "dm_status": "ACCEPTED"
       }
     ]
   },
@@ -272,15 +272,30 @@
       "visual_status": "DM_REJECTED",
       "user_feedback": "I agree that sewer outflows didn’t turn out good.",
       "observed_defect": "GLB reads as masonry wall rather than distinct large projecting hollow pipe outlets",
-      "scope": "preserve failed original for provenance; do not include as accepted ceiling sewer pipes; a corrected pipe-dominant reference then a separately authorized paid Meshy replacement or technical recovery is needed"
+      "scope": "preserve failed original for provenance; do not include as accepted ceiling sewer pipes; a corrected pipe-dominant reference then a separately authorized paid Meshy replacement or technical recovery is needed",
+      "replacement_reference": {
+        "status": "EXACT_IMAGE_DM_APPROVED",
+        "user_feedback": "Great image, approved for meshy. Approved for meshy.",
+        "drive_file_id": "12aSqKmSe-wsc9xjShIn1AMnBhVe-uLpF",
+        "drive_url": "https://drive.google.com/file/d/12aSqKmSe-wsc9xjShIn1AMnBhVe-uLpF/view",
+        "name": "Area8_v002_DM_APPROVED_PipeDominant_ThreeSewerOutflows.png",
+        "bytes": 2661842,
+        "sha256": "dec348bc573b9068fbffd9c44297c2a320db154484ddb19b9f46dc2b787123e9",
+        "generated_reference_asset": "three distinct hollow protruding corroded pipe mouths, brown sewage runoff, small masonry base",
+        "paid_credits": "PENDING_SEPARATE_EXPLICIT_30_CREDIT_COST_CONFIRMATION",
+        "new_reference_requires_new_job": true,
+        "original_30_credit_same_image_retry_ineligible": true
+      }
     },
     "wall_walkway": {
-      "visual_status": "PENDING_DM",
-      "scope": "do not silently assume approved"
+      "visual_status": "DM_ACCEPTED",
+      "user_feedback": "Everything else is approved",
+      "scope": "Preserve existing Meshy GLB unchanged; integration QA separate."
     },
     "basin_rim": {
-      "visual_status": "PENDING_DM",
-      "scope": "do not silently assume approved"
+      "visual_status": "DM_ACCEPTED",
+      "user_feedback": "Everything else is approved",
+      "scope": "Preserve existing Meshy GLB unchanged; integration QA separate."
     }
   }
 }
