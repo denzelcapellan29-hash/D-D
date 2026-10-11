@@ -228,3 +228,10 @@
 - Updated long-form GitHub PROJECT_INSTRUCTIONS.md and Google Drive PROJECT_INSTRUCTIONS, PROJECT_STATE, CHANGELOG, ROADMAP and DECISIONS to mandate cross-source hydration (plus tools and source material) before substantive production work.
 - The user identified context loss and false MCP inaccessibility claims as recurring issues: discovery and handoff are required startup actions, not requests for user recap.
 - Latest accepted-vs-saved distinction: Area 7 v018 is saved but did not satisfy DM visual reference; rune/ceiling-only work next; claws deferred. GitHub earlier status may lag more recent Drive state.
+
+## 2026-10-10 — Blender Area 7 v019
+- Context bootstrap: long GitHub+Drive instructions, both handoffs, current state/log/roadmap/decisions, full source section 7 Stomp, reference montage and Meshy workflow loaded before production.
+- Replaced misplaced north/south rune-wall positions with flush cardinal bays, restored obsolete wall gaps. Oriented rune area lights toward walls (prior downward emitters caused split blue band), added subtle engraved-shader shading.
+- Linked 38 approved Meshy curved walls and 170 Meshy ceiling wedge segments into high enclosed vault; one texture-matched backing skin closes voids. Warm/cold indirect architectural lighting and QA cameras; no feet/foot/floor edits; 0 Meshy credits.
+- Saved v019 QA-pending Blender in Drive https://drive.google.com/file/d/1I6Ujnwed8k_FLQGamgTG_Y-8Eohny92n/view; actual hi-res hero and north/south rune and vault captures verified in Drive (links in CURRENT_HANDOFF.md). DM approval pending.
+- Live renderer fine; >3MB image base64 failed grpc once. Recovered via a smaller review PNG created from full-res render; source file retained.
