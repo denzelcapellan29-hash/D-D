@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_v028_CONNECTED_RING_SAVED_QA_PENDING_DM_ACCEPTANCE",
+  "status": "AREA8_v031_SAVED_FLOOR_RAY_COVERAGE_PASS_SAMPLED_DEPTHS_UNVERIFIED_DM_ACCEPTANCE_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -614,29 +614,41 @@
     "balance_after": 2157
   },
   "latest_blender_checkpoint": {
-    "version": "v028",
-    "path": "G:/My Drive/D&D/Foundry Bridge/assets/Area8_Cesspool_Scene_Assembly_v028_WalkwayBandJoined.blend",
-    "saved_clean": true,
-    "dm_accepted": false,
-    "geometry_rule": "Only original genuine Meshy GLBs and linked instancing; no procedural geometry",
-    "qa": {
-      "outer_wall_modules": 16,
-      "inner_walkway_modules": 12,
-      "middle_walkway_modules": 16,
-      "outer_walkway_modules": 18,
-      "outer_wall_sample_join_m": 0.029,
-      "inner_walkway_join_m": 0.034,
-      "middle_walkway_join_m": 0.039,
-      "outer_walkway_join_m": 0.024,
-      "representative_inner_to_middle_join_m": 0.004,
-      "representative_middle_to_outer_join_m": 0.008,
-      "source_10ft_walkable_width": "not independently measured clear width",
-      "source_pool_depths": "not verified",
-      "collision": "not verified",
-      "hero_capture": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v028_WalkwayBandJoined_Hero_QA.png",
-      "wide_capture": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v028_WalkwayBandJoined_Wide_QA.png",
-      "cloud_sync": "not verified"
+    "file": "Area8_Cesspool_Scene_Assembly_v031_FloorCoverageCalibrated.blend",
+    "local_asset_folder": "G:/My Drive/D&D/Foundry Bridge/assets",
+    "status": "SAVED_CLEAN_PROVISIONAL_NOT_DM_ACCEPTED",
+    "previous_best": "Area8_Cesspool_Scene_Assembly_v028_WalkwayBandJoined.blend",
+    "skill_version": "1.4.1",
+    "plugin_release": "pluginrel_6acb43ff10f081918de7d2fccb18db6b",
+    "scene_units_m_per_BU": 1.524,
+    "official_walkway_width_m": 3.048,
+    "walkway_raycast": {
+      "baseline_supported": 144,
+      "v030_supported": 178,
+      "current_supported": 180,
+      "tested": 180,
+      "angles_degrees": "0-340 step 20",
+      "radii_BU": [
+        4.15,
+        4.5,
+        4.85,
+        5.2,
+        5.55,
+        5.9,
+        6.25,
+        6.6,
+        6.95,
+        7.3
+      ],
+      "interpretation": "Sparse downward mesh ray hits; NOT continuous walkability/collision proof"
     },
-    "cause": "Imported Meshy GLB objects use rotation_mode QUATERNION; old Euler rotation writes were ignored. Corrected quaternion orientation in v024."
+    "approved_source_GLBS_unchanged": true,
+    "procedural_scene_geometry_added": false,
+    "paid_meshy_credits_this_pass": 0,
+    "depth_gate": "UNVERIFIED_3FT_OUTER_10FT_INNER",
+    "source_walkway_width_gate": "UNVERIFIED_EFFECTIVE_TRAVERSABLE_WIDTH",
+    "cloud_sync": "UNVERIFIED",
+    "hero_qa_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v031_FloorCoverage_Hero_QA.png",
+    "structural_qa_local": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v031_FloorCoverage_Wide_QA.png"
   }
 }
