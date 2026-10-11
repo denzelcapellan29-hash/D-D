@@ -1,3 +1,11 @@
+## 2026-10-10 — Area 8 source-first safe reference gate
+[x] Read official Area 8 encounter/source map and verify no existing Area 8 GLB in inventory.
+[x] Update EXISTING installed ai-3d-asset-workflow MesHy skill to v1.3.2 with mandatory image-policy preflight and source QA checklist, verify source readback.
+[ ] Resolve image mode ambiguity: user identifies/uploads an edit target, or explicitly confirms from-scratch new non-graphic single-tentacle reference. Earlier refusal and retry produced NO image.
+[ ] Generate isolated safe PNG and upload exact bytes privately to Drive; DM visual approval needed.
+[ ] Only after approved image and separate 30-credit standard Meshy authorization, generate, Blender QA and scene assembly. No new credits yet.
+Do not touch accepted Area 7.
+---
 ## 2026-10-10 — Area 7 v026B natural crusher refinement
 [x] Live Blender MCP discovery/health, both project instructions/handoffs, skill and official Area 7 source restored
 [x] DM selected B rotting-foot material and accepted 126 source-derived feet as they appear; no further foot improvement authorized/required
