@@ -1,3 +1,6 @@
+## D-020 — Area 7 foot/floor/creature user-requested revision (2026-10-10)
+Newest DM instruction authorizes adjusting giant suspended foot size, checkerboard floor backing and crawling feet despite earlier v019/v020 no-touch limits. Reuse actual Meshy-authored source geometry and PBR/UV, with source-preserving bounded crops and linked instances; avoid the proven crashing Blender loose-parts separation operator. The 206 old composite objects should remain available for provenance but are visually rejected. Distinguish actual QA images stored in Drive from an unsaved Blender scene; an MCP crash after a successful render does NOT establish a saved .blend. Last saved checkpoint v020; v021 visual candidate pending QA/recovery and explicit DM approval. No paid Meshy scope granted by this instruction.
+---
 ## D-019 Verification note (2026-10-10)
 The v020 cloud QA-sync acceptance substep is now confirmed by direct Drive-folder listing plus metadata reads, despite prior empty name-search queries. Real Drive links are recorded in CURRENT_HANDOFF.md. This verifies delivery only, not visual approval or true mesh-cut rune grooves. All D-019 no-touch/DM-gate requirements remain in force.
 ---
