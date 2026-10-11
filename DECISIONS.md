@@ -1,3 +1,6 @@
+## D-019 — Area 7 lookdev checkpoints are non-destructive and visually gated (2026-10-10)
+Decision: A runes/ceiling-only lighting or material experiment may be captured as a NEW versioned Blender QA candidate without promoting it to a release or asserting source-perfect carved geometry. Preserve prior .blend versions; do not modify crawling claws, suspended foot, floor or doorway during this narrow authorized pass. Actual Cycles QA renders must be visually inspected; local file existence is not evidence of cloud sync; no cloud links or DM acceptance may be inferred. v020 is QA_PENDING; the footprint bump shader is not the same as a physically recessed stone groove. No new Meshy credits or Foundry use.
+---
 # Decisions
 
 ## ADR-001 — Decouple Minecraft geometry from visual material profiles
