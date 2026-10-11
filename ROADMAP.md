@@ -1,3 +1,11 @@
+## 2026-10-11 — Area8 review gate partial acceptance
+[x] DM visually ACCEPTED green-liquid tentacle GLB unchanged (existing task/source/render in CURRENT_HANDOFF).
+[x] DM explicitly REJECTED corroded sewer outflow GLB because pipe cluster not convincingly reconstructed.
+[ ] DM reviews wall/walkway and rim GLBs (still QA_PENDING).
+[ ] Prepare new source/approved-room-matched pipe-first isolated ref emphasizing projecting hollow drainage mouths and minimal stone; obtain DM exact-image approval before paid replacement.
+[ ] Confirm new paid Meshy replacement credit cost separately; don't use automatic same-image retry for a changed reference. Zero retry credits spent.
+[ ] Once visually accepted, assemble full Area8 geometry from official map in new reversible Blender checkpoint and QA in Drive.
+---
 ## 2026-10-11 — Area 8 Meshy batch and real 4-isometric QA DELIVERED (art QA pending)
 [x] Four approved isolated references independently stored in private Drive (tentacle, outflows, wall/walkway, rim)
 [x] Standard Meshy 7.1 batch submitted; 4/4 SUCCEEDED; 120 total credits spent, 0 retries, balance 2367
