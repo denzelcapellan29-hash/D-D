@@ -106,7 +106,7 @@
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "DM review replacement pipe v002 4-angle contact; accept or request targeted art correction. Preserve all assets and no further Meshy credits without consent.",
+  "next": "DM reviews real v002 pipe cluster four-angle sheet in Drive, accepts or flags defects. No additional paid task without approval. v002 QA is technically complete with three visible projecting hollow pipe mouths, but no geometry waterfall; animate filthy brown outflow in subsequent source-based room cinematic assembly if approved. Preserve accepted tentacle/wall/rim/Area7 and rejected v001 pipes.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -355,7 +355,9 @@
           ],
           "contact_filename": "Area8_PipeDominant_v002_True4Iso_ContactQA.png",
           "contact_local_bytes": 2967166,
-          "contact_drive_id": "PENDING_SYNC_CHECK"
+          "contact_drive_id": "1FvLHjGhgOn_TZTZDejUKz4QKcn1_xoNq",
+          "contact_url": "https://drive.google.com/file/d/1FvLHjGhgOn_TZTZDejUKz4QKcn1_xoNq/view",
+          "contact_drive_bytes": 2967166
         },
         "visual_qa": {
           "status": "TECHNICALLY_COMPLETE_DM_PENDING",
