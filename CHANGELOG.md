@@ -1,3 +1,6 @@
+## 2026-10-10 — Finished Area 7 A/B side-by-side comparison
+Using ACTUAL saved Cycles images, assembled a left-A / right-B hero contact sheet (2560x720) and left-A / right-B creature close sheet (1600x600) via Blender pixel array compositing, independently verified synced Drive files and byte parity with local originals. Link list in CURRENT_HANDOFF.md. No geometry or material changed, no new .blend overwrite. Source composite remains anatomically imperfect in both. Await DM.
+---
 ## 2026-10-10 — Area 7 A/B final delivery verification and conditional QA
 Confirmed through independent Google Drive metadata the saved v023/v024B/v025A .blend files and full-res actual A/B QA PNGs. Reopened/interpreted the interrupted B foot close-up: 800x600 real render exists and source Meshy crop produces hollow/unconvincing foot morphology, shared with stone A. Source-faithful B and stone-atmospheric A saved, but both DM QA_PENDING pending explicit comparison feedback. v020 and later checkpoints preserved. Links in CURRENT_HANDOFF.md.
 ---
