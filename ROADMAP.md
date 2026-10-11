@@ -1,3 +1,7 @@
+## 2026-10-10 — v020 QA cloud-delivery gate updated
+[x] Independently verify v020 .blend and 3 real Cycles PNGs in Google Drive via direct folder listing and metadata, with verified links in CURRENT_HANDOFF.md.
+[ ] DM visually reviews v020 and explicitly accepts or requests scoped correction; no other production edits authorized on foot/floor/doorway/claws.
+---
 ## Area 7 v020 QA acceptance gate — 2026-10-10
 [x] Rehydrate official source, both handoffs/project docs, skill, conversation decisions and live Blender v019.
 [x] Apply small reversible rune/ceiling lighting/material correction only; preserve foot, all 206 claws, floor, doorway and v019.
