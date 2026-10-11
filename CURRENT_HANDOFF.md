@@ -1,3 +1,17 @@
+## AREA 7 A/B COMPARISON — CLOUD VERIFIED & B CLOSE-UP QA REVIEWED — 2026-10-10
+This supersedes earlier cloud-sync PENDING statements for the latest A/B checkpoints. Live Blender MCP rechecked healthy and saved: Area7_Modular_Assembly_v025A_DarkStoneFeet_MonolithicFloor_Crusher_QA_PENDING.blend, 847 scene objects; continuous wall-PBR stone floor and ceiling crusher piston visible, 126 original Meshy GLB-derived cropped source foot instances. Original 206 composite instances preserved/hidden. User's A/B scope and prior versions preserved. No new Meshy credits and no Foundry.
+Independent Drive folder listing PLUS per-file Drive metadata checked:
+- v023 shared floor + crusher piston 547,828,061 bytes: https://drive.google.com/file/d/1PMlTQdsBV0pqXQ07ZI7W54DJzp1NQ469/view
+- v024B rotting feet .blend 547,828,663 bytes: https://drive.google.com/file/d/18Z3vf3c_7ZmluaWSMZf96ug1lTyqw7PU/view
+- v025A dark stone feet .blend 547,828,904 bytes: https://drive.google.com/file/d/1OZaMhKRTq_F2c-tE6eK5cwiRw5ir9M3c/view
+- A hero 1280x720: https://drive.google.com/file/d/1HBnTBxGhD4h6anRse0CmupQ1NyFkLmXD/view
+- B hero 1280x720: https://drive.google.com/file/d/100ULBHxqo1I8eOQrdvhKfo2mRkKF9LeU/view
+- A 800x600 close-up: https://drive.google.com/file/d/1HrK2W2xJ2s3D9dCkBcxfZkaNUd8rBAW0/view
+- B 800x600 close-up: https://drive.google.com/file/d/1frHR71twFIr6R_bMd3KGnCg4nDxQ_Ida/view
+- Crusher vault low-angle QA: https://drive.google.com/file/d/1U6-9eDR-Um99DgF-2vWakn_N2xj22dRM/view
+The interrupted B close-up did render successfully, 800x600/934,050 bytes, and was inspected from actual rendered pixels, not concept art. QUALIFIED/NOT ACCEPTED: source GLB contains shallow, disconnected geometry; safe bounded crops form rough incomplete/hollow-looking individual feet in both variants. A stone coloration blends with chamber but departs from official rotting-feet source; B more source-aligned and dark enough but still has same morphological defect. This is not a polished/source-correct individual-feet asset. Foot/ceiling connection and solid floor are rendered and structurally present. DM to select A/B styling or direct geometry change. New MesHy generation requires approved isolated image and explicit cost, do not spend from this comparative pass.
+NEXT: DM compares verified A/B hero and close-up; accept a style or request target corrections. If neither acceptable, plan exact isolated single-foot source reference + paid approval before new Meshy generation. Do NOT overwrite v020/v022/v023/v024B/v025A.
+---
 ## AREA 7 v025A / v024B — TWO DM-REQUESTED VISUAL COMPARISONS — 2026-10-10
 CURRENT LIVE Blender MCP CONFIRMED HEALTHY by discovery (26 Blender operations) and get_blendfile_summary_path_info. Recovered v021 scene had 845 objects despite filename showing v020 and is_saved=true; protected it as a NEW v022 recoverable backup without overwriting v020.
 NEW USER AUTHORIZED GOAL: BOTH variant A stone-like and variant B rotting Meshy-foot looks, same camera/placement; REPLACE checkerboard with ONE continuous wall-matched stone floor; ENLARGE giant granite foot and visibly connect it to ceiling, playing as an oppressive crushing device. This latest DM scope supersedes older "preserve checker floor / never modify foot" passes. Official Area 7 Stomp source: enormous high circular chamber, massive suspended granite foot, north/south footprint runes and hundreds of rotting severed feet. Stone A is explicit noncanon artistic comparison; B follows source more closely. No Foundry or new Meshy credit spend.
