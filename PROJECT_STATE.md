@@ -1,3 +1,6 @@
+## 2026-10-10 — A/B comparison sheets prepared and verified
+Side-by-side actual Blender hero and creature close-up contact sheets: A dark stone LEFT, B muted rotting RIGHT. Hero 2560x720 and close 1600x600, cloud verified with byte parity. Links and conditional anatomical QA in CURRENT_HANDOFF.md. v023/v024B/v025A preserved, no approval yet, no credits.
+---
 ## 2026-10-10 — Area 7 A/B cloud artifacts CONFIRMED, B close-up QA complete
 v023 shared, v024B rotting, and v025A stone .blends all independently confirmed in Drive assets with exact bytes and URLs in CURRENT_HANDOFF.md. All A/B 1280x720 hero and 800x600 close plus vaulted crusher rendering verified; B close inspected after stream interruption (actual PNG) and shows incomplete/hollow crawling foot crop morphology. Both saved candidates remain DM QA_PENDING; do not call anatomical rendering accepted. No credits/Foundry; next step DM compares versions. See handoff for exact visual links.
 ---
