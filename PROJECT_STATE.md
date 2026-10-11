@@ -1,3 +1,6 @@
+## 2026-10-10 — Area 7 v026B candidate saved and cloud verified; B feet accepted
+The DM selected rotting-foot B and positively accepted how the feet look; only crusher roof connection was targeted. Blender MCP live/healthy; saved v026B https://drive.google.com/file/d/1VkciO7Rp3JUeqvJ4oo3LSHVouabpWqd5/view (547,828,858 bytes) with original Meshy foot scale 6.75 and z 7.60, seamless original ankle reaching vault roof at z~12.48 and separate narrow piston hidden. Continuous stone wall-matched floor, 126 B textured feet, rune walls/atmosphere preserved. Actual inspected hero https://drive.google.com/file/d/16DEjbjILIYApe7FSJbrbrAANMufBN747/view and low-angle https://drive.google.com/file/d/1ytmRAH0tcDeebfQ7RdNGoFqHHdtAzRkp/view verified in Drive with sizes and parents. v026B new roof-connection artwork pending explicit DM approval, not released; previous versions intact. Details in CURRENT_HANDOFF.md.
+---
 ## 2026-10-10 — A/B comparison sheets prepared and verified
 Side-by-side actual Blender hero and creature close-up contact sheets: A dark stone LEFT, B muted rotting RIGHT. Hero 2560x720 and close 1600x600, cloud verified with byte parity. Links and conditional anatomical QA in CURRENT_HANDOFF.md. v023/v024B/v025A preserved, no approval yet, no credits.
 ---
