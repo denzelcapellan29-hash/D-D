@@ -1,3 +1,6 @@
+## 2026-10-10 — Area 7 v021 foot/floor/creature-scatter QA; unsaved Blender session
+DM changed scope to allow giant foot/floor/claw corrections. Enlarged Meshy granite crusher scale 3.7 and z6.85, made solid checker floor using original 185 tiled Meshy assets and object-level PBR material overrides, and created 126 perspective-tapered feet from three safely bounded/UV-copied actual CrawlingClaw Meshy source regions. Preserved/hid all 206 original composite render instances; avoided expensive destructive separation. Rejected stone mini crushers and white underlay. Actual full-res hero and close-up PNGs in Drive, links in handoff. Final render function response failed post-write and Blender MCP ultimately reported Session terminated; v021 .blend not saved. v020 last saved; no credits/Foundry; visual quality conditional.
+---
 ## 2026-10-10 — v020 Drive verification completed
 Google Drive API direct folder listing + metadata independently confirmed the saved v020 Blender checkpoint (537,880,295 bytes) and real hero/rune/vault PNGs. Earlier search returned no results even though cloud files existed, so use direct folder fetch/metadata if Drive title search is stale. URLs stored in CURRENT_HANDOFF.md. Visual DM acceptance pending.
 ---
