@@ -1,7 +1,7 @@
 {
   "schema": "acq.inc.reference_batch.v1",
   "area": "Episode 1 Area 8 — Tentacle",
-  "status": "AREA8_ASSEMBLY_v004_SAVED_DRIVE_VERIFIED__VISUAL_QA_PROVISIONAL",
+  "status": "AREA8_v005_ASSET_ONLY_QUARANTINE_SAVED_VISUAL_QA_AND_DRIVE_SYNC_PENDING",
   "source": {
     "type": "private_official_adventure",
     "drive_file_id": "1amfybsizYOvD_2VSfDfw8wX1wtjDUArk",
@@ -99,14 +99,14 @@
   },
   "skill": {
     "plugin_id": "plugins_6ac99807af3c81918a869eb5e2710a6b",
-    "version": "1.3.4",
-    "current_release_id": "pluginrel_6acb0e2598788191afb6149c81f5e018"
+    "version": "1.3.5",
+    "current_release_id": "pluginrel_6acb2e35d75c819180140384e60efecc"
   },
   "protection": {
     "area7_latest_accepted": "Area7_Modular_Assembly_v027B_AcceptedImpactCameras.blend",
     "do_not_touch": true
   },
-  "next": "DM review actual v004 Blender hero/layout/pipe renders. v004 saved, do not overwrite. Further work only via reversible new v005, priority align 3 wastewater falls with pipe mouths and make visibly fluid, improve stone/water contact, continuous inhabitable walkway, ceiling and module seams. Source map-derived approximate radii require calibration before final acceptance. No Foundry or Meshy charges.",
+  "next": "VERIFY v005 Drive sync and actual v005 render screenshot (Blender MCP screenshot currently stale Area7). Then source-match approved-library/Meshy geometry ONLY; no procedural modeling or paid Meshy without cost approval.",
   "multiview": {
     "status": "ONE_GLb_per_asset__FOUR_GENUINE_CAMERA_RENDERS__NO_PAID_SECOND_PASS",
     "required_camera_views": [
@@ -491,5 +491,33 @@
       "halt_reason": "v003 initial hero had occluding cylindrical backfill and washed-out lighting; one targeted v004 recovery improved visibility but other visual/world-feel defects persist; user approval needed before broader editing",
       "dm_acceptance": "PENDING"
     }
+  },
+  "asset_only_policy": {
+    "dm_decision": "2026-10-11",
+    "strict_no_procedural_visible_geometry": true,
+    "source": "docs/ASSET_ONLY_BLENDER_SCENE_POLICY_2026-10-11.md",
+    "new_checkpoint": "G:/My Drive/D&D/Foundry Bridge/assets/Area8_Cesspool_Scene_Assembly_v005_AssetOnly_Quarantine.blend",
+    "bytes": 533578130,
+    "saved_clean": true,
+    "original_baseline_v004_immutable": true,
+    "noncompliant_objects_quarantined": 18,
+    "approved_mesh_instances_visible": 22,
+    "source_glb_mesh_edited": false,
+    "hero_qa_local_path": "G:/My Drive/D&D/Foundry Bridge/captures/Area8_v005_AssetOnly_Quarantine_Hero_Thumbnail_QA.png",
+    "hero_qa_bytes": 1351751,
+    "hero_qa_resolution": [
+      1120,
+      720
+    ],
+    "render_nonblack": true,
+    "visual_review": "BLOCKED screenshot API stale Area7 image",
+    "drive_sync": "UNVERIFIED",
+    "missing_assets": [
+      "pool surfaces/depth/transition",
+      "continuous wet walkway/floor",
+      "ceiling and surrounding shell",
+      "ceiling pipe effluent/waterfalls"
+    ],
+    "paid_meshy_credits_for_this_change": 0
   }
 }
