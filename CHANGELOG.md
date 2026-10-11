@@ -222,3 +222,9 @@
 - Recorded ADR-015: Blender is an authoring/render/QA stage; Foundry + 3D Canvas remains primary runtime.
 - Corrected the stale repository README that still described Minecraft as the active primary runtime.
 - Blender runtime execution remains gated until the local Blender MCP is exposed to this ChatGPT tool surface.
+
+## 2026-10-10 — Durable context bootstrap
+- Added a concise CURRENT_HANDOFF.md as mandatory new-chat/work-session resume pointer and a Google Drive mirror; includes current Area 7 task, live checkpoint link, rejection history, next QA and pending issues.
+- Updated long-form GitHub PROJECT_INSTRUCTIONS.md and Google Drive PROJECT_INSTRUCTIONS, PROJECT_STATE, CHANGELOG, ROADMAP and DECISIONS to mandate cross-source hydration (plus tools and source material) before substantive production work.
+- The user identified context loss and false MCP inaccessibility claims as recurring issues: discovery and handoff are required startup actions, not requests for user recap.
+- Latest accepted-vs-saved distinction: Area 7 v018 is saved but did not satisfy DM visual reference; rune/ceiling-only work next; claws deferred. GitHub earlier status may lag more recent Drive state.
