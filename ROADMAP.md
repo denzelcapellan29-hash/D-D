@@ -1,3 +1,12 @@
+## 2026-10-11 — Area 8 Meshy batch and real 4-isometric QA DELIVERED (art QA pending)
+[x] Four approved isolated references independently stored in private Drive (tentacle, outflows, wall/walkway, rim)
+[x] Standard Meshy 7.1 batch submitted; 4/4 SUCCEEDED; 120 total credits spent, 0 retries, balance 2367
+[x] Preserve immutable four GLBs and 4 isolated studio .blends; verify synced Drive file sizes
+[x] Actual 16 Blender/Cycles 3/4 iso 720x720 views across four 3D sources, four 1440x1440 contact sheets cloud synced: links CURRENT_HANDOFF
+[ ] DM reviews all 4 contact sheets, calls out deviations: pipes lack prominent 3 nozzle outlets, tentacle subdued/opaque compared to liquid art, modular radius/join QA pending
+[ ] Choose reversible Blender material correction or approve specific same-reference paid retry for actual generation defect; NO further paid jobs without explicit scope/cost
+[ ] After acceptance, deterministic source-map-based Area8 chamber assembly in NEW Blender checkpoint and wide/close visual QA; not Foundry
+---
 ## 2026-10-11 — Four-angle geometry-verified asset input gate
 [x] DM approved Area8 green-liquid tentacle, corroded outflows, curved wall+walkway and pool rim concepts (art only).
 [x] Installed plugin v1.3.4: EXACT 4 front-left/front-right/rear-right/rear-left isometric camera views, same real 3D source; QA checklist updated/readback verified.
