@@ -1,3 +1,12 @@
+## Area 7 v020 QA acceptance gate — 2026-10-10
+[x] Rehydrate official source, both handoffs/project docs, skill, conversation decisions and live Blender v019.
+[x] Apply small reversible rune/ceiling lighting/material correction only; preserve foot, all 206 claws, floor, doorway and v019.
+[x] Render and visually inspect hero/rune/vault; validate 1600x900 real hero PNG nonblack and save v020 separately.
+[ ] Independently verify v020 .blend/PNGs are synchronized to Google Drive and obtain exact cloud URLs; local G: files alone are insufficient.
+[ ] DM reviews v020 visuals and explicitly accepts or requests a targeted correction. v020 remains QA_PENDING and shader bump does not prove actual carved wall geometry.
+[ ] Only after DM instruction, consider new rune geometry/ceiling improvements; never rerun destructive claw mesh separation.
+See CURRENT_HANDOFF.md. General Area 2 world-feel gate and Foundry deferral unchanged.
+---
 # Roadmap
 
 ## NOW — Area 2 visual benchmark before any further Episode 1 production
