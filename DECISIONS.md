@@ -1,3 +1,6 @@
+## D-019 Verification note (2026-10-10)
+The v020 cloud QA-sync acceptance substep is now confirmed by direct Drive-folder listing plus metadata reads, despite prior empty name-search queries. Real Drive links are recorded in CURRENT_HANDOFF.md. This verifies delivery only, not visual approval or true mesh-cut rune grooves. All D-019 no-touch/DM-gate requirements remain in force.
+---
 ## D-019 — Area 7 lookdev checkpoints are non-destructive and visually gated (2026-10-10)
 Decision: A runes/ceiling-only lighting or material experiment may be captured as a NEW versioned Blender QA candidate without promoting it to a release or asserting source-perfect carved geometry. Preserve prior .blend versions; do not modify crawling claws, suspended foot, floor or doorway during this narrow authorized pass. Actual Cycles QA renders must be visually inspected; local file existence is not evidence of cloud sync; no cloud links or DM acceptance may be inferred. v020 is QA_PENDING; the footprint bump shader is not the same as a physically recessed stone groove. No new Meshy credits or Foundry use.
 ---
