@@ -20,3 +20,6 @@ Before updating, fetch current versions/revisions of BOTH PROJECT_INSTRUCTIONS, 
 
 ## Known historical contradictions
 GitHub PROJECT_INSTRUCTIONS.md still starts with v1.3.5 as of audit; Drive PROJECT_INSTRUCTIONS starts with v1.3.5 and v005; skill main document carries old v1.9.0 title and v021 migration examples. These are HISTORY, not latest operational authority. Latest plugin release and live verified handoff take precedence; future consolidation should replace stale *current* pointers with versioned index links, retaining full archival history.
+
+## Consolidated skill release — 2026-10-12
+Installed AI 3D Asset Workflow v2.3.0, release pluginrel_6accf4bdc0a0819187f216c01c7ce0ce, verified published with `SKILL.md` reduced from 83,332 to 7,936 bytes and original versioned reference files retained (15 files in release). v2.3.0 is the current entry point; v2.2/v2.1/v2.0 reference policies remain binding where called out. Old version numbers elsewhere are historical. Blender area8 blueprint-first v011 saved experimental and unchanged. Numerical solver remains specified but unimplemented; do not claim fixture certification. GitHub, Drive handoffs and Project UI may contain historical v2.2.0 references: this register supersedes them for current skill version.
