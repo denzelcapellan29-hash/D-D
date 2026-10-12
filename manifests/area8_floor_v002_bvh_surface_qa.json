@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-12",
+  "skill": "v2.5.0",
+  "scene": "Area8_Rebuild_v005_FloorSurfaceQA.blend",
+  "glb": "Area8_ModularFloorSquare_A_Meshy71_v002.glb",
+  "method": "Blender BVHTree raycasts from world Z=1 down through two uniformly scaled, grid-snapped linked copies; local source mesh vertices immutable",
+  "results": {
+    "sample_grid_points": 1740,
+    "top_surface_hit_count": 1732,
+    "missed_points": 8,
+    "sampled_seam_crossings": 29,
+    "seam_crossings_with_both_hits": 29,
+    "max_cross_seam_top_height_difference_m": 0.0003,
+    "median_cross_seam_top_height_difference_m": 0,
+    "missing_interior_samples": [
+      [
+        -0.42,
+        2.748
+      ],
+      [
+        0.08,
+        2.748
+      ],
+      [
+        1.63,
+        2.748
+      ],
+      [
+        -0.42,
+        2.798
+      ],
+      [
+        -0.42,
+        2.848
+      ],
+      [
+        -0.42,
+        2.898
+      ],
+      [
+        -0.42,
+        2.948
+      ],
+      [
+        0.38,
+        3.048
+      ]
+    ],
+    "missing_bidirectional_samples": "at four representative interior coordinates, no surface hit either downward from z=1 or upward from z=-1",
+    "microprobe": "13x13 grid at 5mm spacing about 5 missing sites detected 4,29,25,13,14 misses respectively"
+  },
+  "interpretation": "Previous 28mm vertex distance should NOT reject seam; BVH demonstrates excellent seamless cross-tile walkable-height continuity at sampled 29 crossings. However both top and underside absence at reproducible interior cells suggests true perforations in the Meshy GLB. Unintended holes remain disqualifying for certified structural floor, pending further fine-resolution full-surface QA.",
+  "status": "SEAM_PROVISIONAL_PASS_FLOOR_COVERAGE_FAIL",
+  "next": "Do not replicate into full room. Compare precision manufactured library tile or generate another actual watertight floor asset only using fundamentally different structural manufacturing strategy. Meshy can remain source of decorative textures."
+}
