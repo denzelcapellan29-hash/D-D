@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-12",
+  "source": "Official Acq_Inc_Ep1.pdf map Area8",
+  "workbench": "Area8_Rebuild_v016_RadialWedgeIntake.blend",
+  "reference_task": "01a13186-6f99-767d-8f1a-07592c82cfc9",
+  "meshy_task": "01a13186-b419-720f-b37b-cfa928d13391",
+  "credits": 33,
+  "asset": "Area8_ModularWalkwayRadial30_Meshy71_v001.glb",
+  "raw_dimensions_m": [
+    1.903,
+    0.8585,
+    0.136
+  ],
+  "prototype_radius_ft": {
+    "outer": 35,
+    "inner": 25
+  },
+  "target_sector_degrees": 30,
+  "nominal_outer_chord_m": 5.5222,
+  "required_uniform_scale_for_depth": 3.5503,
+  "outer_chord_after_that_scale_m": 6.7563,
+  "required_uniform_scale_for_outer_chord": 2.9018,
+  "radial_depth_after_that_scale_m": 2.4912,
+  "axis_scale_trial": [
+    2.902,
+    3.55
+  ],
+  "actual_render_path": "G:\\My Drive\\D&D\\Foundry Bridge\\captures\\Area8_v016_RadialTwoSector_Test.png",
+  "visual_inspection": "Actual PNG shows each source model is a broad horseshoe / near half-annulus arc, rather than a 30-degree ring segment. Two transforms cannot meet as designed. This is a shape/silhouette failure that cannot be solved by position or scale.",
+  "verdict": "REJECT_AS_STRUCTURAL_ASSET",
+  "next": "Build a much more constrained 30-degree sector reference depicting just one twelfth of full circle with explicit dimension lines, radial cut face normals and marked circle center; audit reference shape before Meshy credit spend; perhaps multi-view reference and technical blueprint; do not reuse old aesthetic structural GLBs."
+}
