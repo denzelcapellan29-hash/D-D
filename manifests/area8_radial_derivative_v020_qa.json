@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-12",
+  "skill": "v2.6.3 derivative editing authorized",
+  "source": "Area8_ModularWalkwayRadial30_Meshy71_v003.glb",
+  "source_vertices": 207929,
+  "first_derivative": "Area8_Rebuild_v019_RadialDerivativeTrial.blend",
+  "second_checkpoint": "Area8_Rebuild_v020_RadialPivotCorrected.blend",
+  "technique": "Independent Meshy source-data copy transformed vertices via polar mapping; no independent procedural mesh or source asset mutation; mapped x to +/-15 degree and local y to radius 7.62-10.668m; two linked instances with 30 degree quaternion and ring center pivot correction",
+  "qa": "Actual v020 render inspected. Two wedge copies remain visibly separated at their radial cut boundaries. FAIL connector/mating test; not DM approved and not usable for full radial replication.",
+  "issues": [
+    "Meshy silhouette not precision-defined for repeated radial connectors",
+    "One-piece vertex polar correction does not automatically create matched radial end surfaces",
+    "local object origin versus room origin and quaternion require verified world transforms"
+  ],
+  "next": "Extract actual endpoint surface patches and solver-correct their geometry in derivative mesh with reversible edits; do not extend full ring until measured two-piece seam passes.",
+  "status": "FAILED_TWO_SECTOR_CONNECTION"
+}
