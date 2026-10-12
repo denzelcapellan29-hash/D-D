@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-12",
+  "kind": "prototype_only",
+  "source": "Acq_Inc_Ep1.pdf map Area 8",
+  "estimated_radii_ft": {
+    "outer": 35,
+    "pool": 25,
+    "inner_deep": 15
+  },
+  "walkway_source_width_ft": 10,
+  "sector_count_design_choice": 12,
+  "sector_angle_deg": 30,
+  "radial_ring": {
+    "inner_m": 7.62,
+    "outer_m": 10.668,
+    "centerline_m": 9.144
+  },
+  "mesh_requirements": [
+    "true annular wedge floor not rectangular tile stretched into curve",
+    "radial planar left and right join faces with constant 30-degree separation",
+    "continuous flat walkable top along ring",
+    "inner/outer curved edges with no unintended protrusions",
+    "original GLB geometry never edited",
+    "post-generation calibrate transforms and mesh interface; do not claim prompt guarantees exact CAD dimensions"
+  ],
+  "status": "UNVERIFIED_PROTOTYPE_NOT_FINAL_ROOM"
+}
