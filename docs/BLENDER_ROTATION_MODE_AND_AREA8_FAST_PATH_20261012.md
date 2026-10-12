@@ -1,0 +1,9 @@
+# 2026-10-12 — Quaternion transform rule and Area8 acceleration
+
+Installed **AI 3D Asset Workflow v2.6.1**, release `pluginrel_6acd2db20a048191baf8e16646d93aa7`, verified by plugin readback. Its `ROTATION_AND_FAST_PATH_V261.md` is binding.
+
+**Blender GLB rotation incident:** Area8 v013 wall copy had `rotation_mode='QUATERNION'`. Assigning `rotation_euler.z` alone did not change `matrix_world`; setting `rotation_quaternion` and calling `bpy.context.view_layer.update()` gave the intended 90-degree world rotation. For each placed model, inspect `rotation_mode`, parent and *evaluated* matrix, then assert transformed world-space bounds/orientation. Do not claim a join from bounding boxes alone. Never edit original GLB vertices.
+
+**Latest DM visual acceptance:** Floor v008, stacked walls v012 and perpendicular corner v014 look good. DM specifically approved v014 corner visually and directed a faster return to constructing Area 8. Preserve v014 as the current saved-clean visually approved corner checkpoint, not as structural certification or whole-room approval. Current corner visual: https://drive.google.com/file/d/149K9PCnFlaH2E6BU4a_Xkrk23pwYwiF-/view ; v014 corner QA `manifests/area8_corner_v014_qa.json`. Other modular libraries (Kenney/Quaternius) are for learning their engineering construction conventions, never style replacements.
+
+**Next immediate production work:** Area8 official circular cesspool/map-grounded footprint and entrances; perimeter, pool, pipe discharge, curved walls/roof source-tagged radial blueprint; purpose-built Meshy assets and grid+connector constraints; quick representative test fixture with real contact and walkability QA, reviewable hero and structural renders. Focus on consequential gaps, navigability and genuine sewage into pool. No need to repeat transform explanation except actual failure.
