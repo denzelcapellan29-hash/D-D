@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-12",
+  "asset": "Area8_ModularWallStraight_A_Meshy71_v001.glb",
+  "reference_task": "01a1314e-a42c-738d-9a60-e5369efc9016",
+  "mesh_task": "01a1314e-f1fb-771c-9d6e-4ec978984fee",
+  "cost_credits": 33,
+  "raw_dimensions_m": [
+    1.903169,
+    0.279992,
+    0.968694
+  ],
+  "uniform_factor": 0.8007696485404674,
+  "normalized_dimensions_m": [
+    1.524,
+    0.224209,
+    0.775701
+  ],
+  "baseline": "Area8_Rebuild_v008_FourTileVisibleReview.blend (DM accepted floor visual)",
+  "checkpoint": "Area8_Rebuild_v009_WallCourseReview.blend",
+  "review_png": "https://drive.google.com/file/d/1Yj_iOzameszTUJs_g-7kD8vOzC8gNa1e/view",
+  "assessment": "GLB shows aged block, moss visual vocabulary compatible with DM accepted floor. Two instances appear side by side; separate wall course rather than full-height wall. Actual PNG visibly shows a dark band separating wall base and floor: interface NOT certified. Further mating patch extraction, exact evaluated transforms and wall height family planning pending. No DM approval of wall.",
+  "status": "VISUAL_PROTOTYPE_NOT_ACCEPTED"
+}
