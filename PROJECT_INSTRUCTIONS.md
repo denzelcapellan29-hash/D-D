@@ -1,3 +1,6 @@
+## Current policy index (2026-10-12; supersedes historical release references)
+AI 3D Asset Workflow v2.2.0 is the current verified installed Blender/Meshy skill. Follow docs/DOCUMENTATION_AUTHORITY.md for precedence and synchronization. Absolute asset-only geometry rule remains binding. Historical v1.3.5/v021 statements below are archived and not active checkpoint selection. No executable connector solver has yet been certified; v2.2.0 is a method specification requiring an implementation benchmark.
+
 ## DM OVERRIDE 2026-10-11 — STRICT ASSET-ONLY BLENDER VISUAL GEOMETRY
 All visible cinematic/scene geometry must be genuine approved Meshy GLB or verified existing-library model. Absolutely no procedural/primitives/mesh/curve generation of visible floors, shells, pools, roofs, water/sewage or geometry effects in Blender or substituted external scripts. Deterministic code ONLY for spatial coordinates/placement, not authoring rendered geometry. Preserve accepted original geometry, quarantine preexisting procedural geometry in new numbered checkpoint, do not fabricate a library source. Missing assets require reuse of verified models or new approved Meshy reference/cost scope. Installed plugin ai-3d-asset-workflow v1.3.5 controls this. See docs/ASSET_ONLY_BLENDER_SCENE_POLICY_2026-10-11.md. Most recent DM decision overrides conflicting older guidance.
 
