@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-12",
+  "asset": "Area8_ModularWalkwayRadial30_Meshy71_v002.glb",
+  "reference_task": "01a1318e-1650-73c8-8011-22eab08aab0b",
+  "mesh_task": "01a1318f-1f75-7007-98b6-4e3243900188",
+  "cost_credits": 39,
+  "source": "Acq_Inc_Ep1.pdf Area8 map",
+  "reference": "technical 30-degree 1/12 annular sector with explicit R25/R35 feet",
+  "blender_checkpoint": "Area8_Rebuild_v017_RadialWedgeV002_VisualTest.blend",
+  "render": "Area8_v017_RadialV002_Compare.png",
+  "raw_bounds_m": [
+    0.7739,
+    1.4108,
+    0.2724
+  ],
+  "visual_qa": "Actual PNG inspected: narrow pie/wedge shapes with rounded convex end but apparently no concave inner cutout. Could obstruct pool. Test instances were separated for shape QA, not joint-certified.",
+  "status": "REJECT_PROVISIONAL_ANNULAR_MESH",
+  "requirements": [
+    "visible inner arc opening preserved",
+    "two true radial end faces",
+    "outer arc and inner arc concentric",
+    "validated two-instance seam",
+    "no generated Blender visible geometry"
+  ],
+  "next": "Change Meshy input approach: isolated texture-free isometric asset on white background without dimension lines, centered annular hole clearly visible; inspect output silhouette before spending on 3D, or find an approved authored radial kit library solely as structural exemplar and create purpose-built Meshy assets that match."
+}
