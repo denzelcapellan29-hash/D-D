@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-12",
+  "scene": "Area8_Rebuild_v056_ArchitectureHero.blend",
+  "status": "ARCHITECTURE_QA_PROVISIONAL_NOT_DM_FINAL",
+  "hero_png": "https://drive.google.com/file/d/10j9Yn-KUIAlnGGU-AtjMeBADwmRlQNCm/view",
+  "visual_qa": "Actual PNG inspected: vaulted stone roof, radial walls, circular sewage pool, one foreground tentacle, ceiling pipe discharge. Hero framing minimizes visible passages; artistic polish intentionally frozen.",
+  "measured": {
+    "pool_water_r_m_approx": 7.706,
+    "walkway_inner_m_approx": 7.62,
+    "water_or_deck_hits_at_36_angles_at_r_7_55_7_62_7_70_7_80": "36/36 per radius; at r7.70 both water and deck hit 32/36",
+    "roof_underside_at_r10_668_m_8_samples": [
+      3.1479,
+      3.1479,
+      3.148,
+      3.148,
+      3.1478,
+      3.1474,
+      3.1481,
+      3.1479
+    ],
+    "upper_wall_course_top_m_approx": 3.1443,
+    "roof_bearing_gap_mm_approx": 3.6,
+    "discharge_count": 3,
+    "discharge_world_z_m": [
+      -0.225,
+      4.275
+    ],
+    "pool_surface_world_z_m": [
+      -0.084,
+      -0.066
+    ],
+    "roof_underside_at_discharge_center_m": 4.224,
+    "deep_basin_bottom_m": -3.048
+  },
+  "known_open_checks": [
+    "source-map-exact entrance/passage alignment remains provisional",
+    "dense sampling plus navigability through walkway and both entrances, not just circumferential sample rays",
+    "roof bearing real mesh contact beyond sampled vertical gap",
+    "basin outer and inner wall continuous surface and shallow-to-deep junction",
+    "pipe outlet attachment to roof true surface not merely AABB overlap"
+  ],
+  "governance": "No further art changes until DM approves architecture. All meshes originate from Meshy approved assets or traced Meshy derivatives. Saved clean v056 confirmed. Structural camera change blocked; do not claim it rendered.",
+  "previous_accepted_visual_kit": "v014 square floor, stacked walls and corner"
+}
