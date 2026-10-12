@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-12",
+  "checkpoint": "Area8_Rebuild_v011_WallBearingTrial.blend",
+  "render": "https://drive.google.com/file/d/1sJOtUxSkADRcZZ2aCSJ1oUycdkne0SnA/view",
+  "source": "Area8_Rebuild_v009_WallCourseReview.blend",
+  "asset": "Area8_ModularWallStraight_A_Meshy71_v001.glb",
+  "transforms": {
+    "wall_00_and_01_z_m": 0.429347,
+    "wall_00_and_01_y_m": 5.334
+  },
+  "measurements": {
+    "v009_vertical_gap_estimate_m": 0.054,
+    "v010_y_bearing_aabb_m": 0.0061,
+    "v011_y_bearing_aabb_m": 0.1122,
+    "v011_vertical_aabb_overlap_m": 0.0012
+  },
+  "qa": "Visually inspected actual v011 PNG; wall looks seated on floor edge; AABB bearing is not proof of physical contact, evaluated mesh patch QA and stacking pending.",
+  "status": "BEST_VISUAL_PLACEMENT_TRIAL_NOT_STRUCTURALLY_CERTIFIED_NOT_DM_ACCEPTED"
+}
