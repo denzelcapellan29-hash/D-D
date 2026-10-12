@@ -1,0 +1,32 @@
+{
+  "schema": "acq.structural_asset_intake.v1",
+  "asset": "Area8_ModularFloorSquare_A_Meshy71_v001.glb",
+  "meshy": {
+    "reference_task": "01a13122-14fa-723b-ad83-42f1d4520114",
+    "mesh_task": "01a13124-0390-7556-a597-e6c026e09ec7",
+    "credits": 33,
+    "model": "meshy-7.1",
+    "pbr": true
+  },
+  "fixture": "Area8_Rebuild_v003_MeshyFloorSnapTest.blend",
+  "results": {
+    "raw_dimensions_m": [
+      1.903465,
+      1.902996,
+      0.179969
+    ],
+    "scale_uniform": 0.8006451,
+    "snapped_centers_m": 1.524,
+    "scaled_dimensions_m": [
+      1.524,
+      1.523625,
+      0.144091
+    ],
+    "boundary_top_height_difference_max_sampled_m": 0.0308,
+    "threshold_m": 0.01,
+    "bin_count": 16
+  },
+  "status": "REJECTED_AS_CERTIFIED_FLOOR_MODULE",
+  "reason": "upper contact band not within strict level tolerance; 3.08 cm sampled mismatch in 16 bins, true continuous contact unproven; visual generation dimensional drift",
+  "next": "Avoid duplicating noncompliant modules. Revise floor reference to constant manufactured smooth planar top at outer joining strips, rerun costed pilot and measure; if fails switch to verified precision-made structural library geometry."
+}
