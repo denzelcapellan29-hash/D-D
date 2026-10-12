@@ -1,0 +1,45 @@
+{
+  "schema": "acq.structural_asset_comparison.v1",
+  "date": "2026-10-12",
+  "grid_m": 1.524,
+  "tolerance_m": 0.01,
+  "first": {
+    "asset": "Area8_ModularFloorSquare_A_Meshy71_v001.glb",
+    "task": "01a13124-0390-7556-a597-e6c026e09ec7",
+    "raw_xy_m": [
+      1.903465,
+      1.902996
+    ],
+    "scale_factor": 0.8006451,
+    "seam_median_height_delta_max_16bands_m": 0.0308,
+    "verdict": "REJECT"
+  },
+  "second": {
+    "asset": "Area8_ModularFloorSquare_A_Meshy71_v002.glb",
+    "task": "01a13127-9ec5-703c-a746-3eca643e1ab6",
+    "raw_xy_m": [
+      1.903038,
+      1.903137
+    ],
+    "uniform_scale": 0.80078314,
+    "scaled_xy_m": [
+      1.523921,
+      1.524
+    ],
+    "max_horizontal_edge_gap_16bands_m": 0.00069,
+    "max_median_height_delta_16bands_m": 0.0097,
+    "near_seam_nearest_vertex_median_m": 0.00968,
+    "near_seam_nearest_vertex_p95_m": 0.028,
+    "near_seam_fraction_within_tolerance": 0.514,
+    "nearest_vertex_sample_counts": [
+      387,
+      402
+    ],
+    "verdict": "REJECT_UNCERTIFIED_PHYSICAL_INTERFACE",
+    "note": "Coarse extrema and heights are not continuous proof. 95th percentile discrepancy 2.8x tolerance and only 51.4% near seam samples within 1cm."
+  },
+  "total_credits": 66,
+  "decision": "Stop repeating aesthetic Meshy structural tile generation without a precision-built or verified compatible asset substrate; keep Meshy as decorative source. Under asset-only rule, seek verified library modular kit, or ask DM to authorize precision manufacturing pipeline change if unavailable.",
+  "blender_checkpoint": "Area8_Rebuild_v004_MeshyFloorComparison.blend",
+  "scene_approval": "NOT ACCEPTED"
+}
