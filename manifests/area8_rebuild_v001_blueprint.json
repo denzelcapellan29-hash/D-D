@@ -1,0 +1,131 @@
+{
+  "schema": "acq.modular_room_blueprint.v1",
+  "area": "Episode 1 Area 8 — Tentacle",
+  "workflow": "AI 3D Asset Workflow v2.4.0",
+  "status": "PLAN_AND_ASSET_INTAKE_UNVERIFIED",
+  "previous_scene": "Area8_v020_VisualReviewCandidate.blend — archival visual-only not construction base",
+  "source": {
+    "official_pdf_drive_id": "1qAKCnkF5LZZ2I1vIoryg17wcf1K5PGye",
+    "legacy_manifest": "manifests/area8_reference_v001.json",
+    "facts": [
+      {
+        "id": "plan",
+        "value": "round chamber",
+        "kind": "source_fact"
+      },
+      {
+        "id": "walkway",
+        "value": "10-foot-wide perimeter walkway",
+        "kind": "source_fact"
+      },
+      {
+        "id": "outer_pool",
+        "value": "outer 10 ft of pool is 3 ft deep",
+        "kind": "source_fact"
+      },
+      {
+        "id": "inner_pool",
+        "value": "inner pool is 10 ft deep",
+        "kind": "source_fact"
+      },
+      {
+        "id": "pipes",
+        "value": "sewage enters from ceiling pipes",
+        "kind": "source_fact"
+      },
+      {
+        "id": "planar",
+        "value": "demiplane of filth with emergent tentacle",
+        "kind": "source_fact"
+      }
+    ],
+    "unverified": [
+      "official full map boundary coordinates, door/exit angles, room diameter and pipe locations remain to be rechecked against PDF artwork before final assembly"
+    ]
+  },
+  "interfaces": [
+    {
+      "role": "floor.walkway",
+      "needed": [
+        "floor.outer",
+        "floor.inner",
+        "floor.cw",
+        "floor.ccw"
+      ],
+      "status": "FAIL_NOT_CERTIFIED"
+    },
+    {
+      "role": "wall.curved",
+      "needed": [
+        "wall.left",
+        "wall.right",
+        "wall.bottom",
+        "wall.top"
+      ],
+      "status": "FAIL_NOT_CERTIFIED"
+    },
+    {
+      "role": "roof.curved",
+      "needed": [
+        "roof.left",
+        "roof.right",
+        "roof.wall_bearing"
+      ],
+      "status": "FAIL_NOT_CERTIFIED"
+    },
+    {
+      "role": "wall.pipe_penetration",
+      "needed": [
+        "wall.left",
+        "wall.right",
+        "pipe.outlet",
+        "pipe.mount",
+        "roof.bearing"
+      ],
+      "status": "MISSING_CERTIFIED_ASSET"
+    },
+    {
+      "role": "pool.rim",
+      "needed": [
+        "rim.cw",
+        "rim.ccw",
+        "rim.floor",
+        "rim.pool"
+      ],
+      "status": "FAIL_NOT_CERTIFIED"
+    },
+    {
+      "role": "waterfall",
+      "needed": [
+        "fall.pipe_start",
+        "fall.pool_end"
+      ],
+      "status": "FAIL_NOT_CERTIFIED"
+    },
+    {
+      "role": "tentacle",
+      "needed": [],
+      "status": "EXISTING_ART_APPROVED_DECORATIVE"
+    }
+  ],
+  "kit_available_glb": [
+    "Area8_Tentacle_GreenLiquid_Meshy71_v001.glb",
+    "Area8_CurvedWallWalkway_Meshy71_v001.glb",
+    "Area8_CesspoolRimBasinEdge_Meshy71_v001.glb",
+    "Area8_WetWalkway_Meshy71_v001.glb",
+    "Area8_Vault_Meshy71_v001.glb",
+    "Area8_CesspoolSurface_Meshy71_v001.glb",
+    "Area8_SewageFalls_Meshy71_v001.glb",
+    "Area8_ThreeCorrodedOutflows_Meshy71_v003.glb"
+  ],
+  "structural_tests": [
+    "two-floor-tile seam and walkability",
+    "two-wall end mating and floor bearing",
+    "adjacent roof pair and supported wall-to-roof contact",
+    "pipe-wall penetration and flow to waterline",
+    "complete ring closure including intentional portals",
+    "floor/roof missing-region rejection"
+  ],
+  "planned_geometry_policy": "no generated visible meshes; only actual approved Meshy/library GLB instances may be transformed",
+  "go_no_go": "DO NOT BUILD FULL ROOM until asset connector fixtures and structural validation pass; commission purpose-built compatible Meshy family after cost confirmation if necessary"
+}
