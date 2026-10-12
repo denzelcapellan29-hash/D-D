@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-12",
+  "baseline": "Area8_Rebuild_v012_StackedWallCoursesTrial.blend",
+  "trial_v013": "Area8_Rebuild_v013_CornerJointFixture.blend",
+  "trial_v014": "Area8_Rebuild_v014_FlushCornerTrial.blend",
+  "render": "https://drive.google.com/file/d/149K9PCnFlaH2E6BU4a_Xkrk23pwYwiF-/view",
+  "geometry": "Only duplicated linked source Meshy wall GLB, source vertices immutable",
+  "findings": {
+    "rotation_mode": "QUATERNION; Euler rotation assignment did not affect effective world rotation until proper quaternion used",
+    "v013": "90 degree wall copies caused significant AABB overlap at corner",
+    "v014_x_face_gap_m": 0.000088,
+    "v014_shared_y_bearing_band_m": 0.111332,
+    "v014_shared_vertical_extent_m": 0.775701,
+    "visual": "Actual v014 PNG inspected, clean L-shaped two-course corner visually fits floor/wall aesthetic"
+  },
+  "status": "BEST_VISUAL_CORNER_TRIAL_STRUCTURAL_SURFACE_JOINT_UNCERTIFIED_NOT_DM_ACCEPTED",
+  "next": "BVHTree physical patch and floor bearing QA then roof-bearing design; do not claim AABB face gap establishes real watertight connection"
+}
