@@ -1,3 +1,6 @@
+## Current verified skill release — 2026-10-12
+Installed and read-back verified AI 3D Asset Workflow v2.4.0, release `pluginrel_6acd10d5a42081918e71a7afa65c1a69`, mandatory modular-kit fabrication and acceptance gate. This supersedes older v2.2/v2.3 references below. New Area8 plan: `manifests/area8_rebuild_v001_blueprint.json` GitHub commit b2366e4d9ee6c0a557ba27631beb5fa07674e72e; Blender saved-clean `G:\My Drive\D&D\Foundry Bridge\assets\Area8_Rebuild_v001_ModularKitIntake.blend`, active construction scene zero visible objects, old v020 archived. Structural kit uncertified; no claimed ready room. Meshy account balance 2127 credits, no new charged tasks, model/cost confirmation required.
+
 # Documentation Authority and Synchronization — 2026-10-12
 
 ## Current precedence (read before writes)
