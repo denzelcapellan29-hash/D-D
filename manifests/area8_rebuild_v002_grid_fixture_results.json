@@ -1,0 +1,45 @@
+{
+  "schema": "acq.fixture_qa.v1",
+  "timestamp": "2026-10-12",
+  "skill": "AI 3D Asset Workflow v2.5.0",
+  "scene": "Area8_Rebuild_v002_GridJointFixture.blend",
+  "purpose": "Read-only real GLB intake fixture, not an approved assembly",
+  "source_assets": [
+    "Area8_CurvedWallWalkway_Meshy71_v001.glb",
+    "Area8_WetWalkway_Meshy71_v001.glb",
+    "Area8_Vault_Meshy71_v001.glb"
+  ],
+  "geometry_immutability": true,
+  "tests": [
+    {
+      "id": "floor_old_instance_centers_grid_snap",
+      "expected": "centers at integer multiples of 1.524 m",
+      "actual_center_spacing_m": 1.799999,
+      "actual_grid_pitch_ratio": 1.1811,
+      "status": "FAIL"
+    },
+    {
+      "id": "floor_old_instances_world_aabb_x_overlap",
+      "actual_overlap_m": 0.4839,
+      "interpretation": "Axis-aligned bounding-box overlap only; no certified contact or walkability",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "floor_module_nominal_grid_width",
+      "world_dimension_m": 2.2839,
+      "grid_m": 1.524,
+      "ratio": 1.4986,
+      "status": "FAIL_FOR_ONE_CELL_ASSUMPTION"
+    },
+    {
+      "id": "wall_contact_patch",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "vault_wall_bearing",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "stop_reason": "Non-grid prior layout and missing verified interface contracts. Do not replicate full circular room.",
+  "next": "Extract true floor mesh seam and wall end patches, design explicit grid or radial footprints, determine compatible GLB family; Meshy credit confirmation required for new paid task."
+}
