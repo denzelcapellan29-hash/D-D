@@ -1,0 +1,20 @@
+# Area 9 v035–v039 iterative structural trials — 2026-10-13
+
+## Decision and stop
+Executed reversible 2×2 Meshy-derived geometry trials using installed AI 3D Asset Workflow v2.7.7. No Meshy credits. Source GLBs unchanged. Latest live saved clean QA fixture: `G:\My Drive\D&D\Foundry Bridge\assets\Area9_Prototype2x2_v039_JointDetailQAFixture.blend`, **derived from preferred v037**, not the rejected v038. No whole-room replication. Area8 DM-accepted untouched.
+
+## Measurements and pixel-inspected evidence
+- v034 baseline 50% connector-region-protected Decimate modifier on copied wall/roof, 12 wall-roof paired ray samples / 8 within 5cm; FAIL.
+- v035 broader localized +0.115m upper-wall derivative on right region, 34,203 wall vertices moved: 8/12 within 5cm, 10/12 within 10cm, gained penetration approx -0.072m, player PNG visually inspected; REJECTED.
+- v036 narrower localized +0.085m right-wall adjustment, 10,327 wall vertices: **9/12** within 5cm, 9/12 within 10cm; residual `[1.703,.006,-.014,.006,-.036,.014,.167,.033,.023,.112,-.042,.043]` m. Actual player `Area9_v036_NarrowBearing_PlayerQA.png` and structural `Area9_v036_NarrowBearing_StructuralQA.png` inspected. A 1.703m anomalous ray is from lower opening at X=-0.5 Y=1.8, not trustworthy as normal contact: classify missing/unsupported wall patch. Still FAIL.
+- v036 structural screenshot revealed long **roof-to-roof black seam** not visible in hero. Exact roof tile bounds touch x≈0.762m but no shared surface. v037 independently copied source-backed roof1 mesh and extended localized left seam x by up to 0.075m (64,811 verts moved), preserving grid origin and other asset source. Visual structural screenshot `Area9_v037_RoofSideSeam_Structural.png` visibly closes long dark slot; roof heights across 20 of 35 sampled overlap points, 16/20 within 3cm, max 5.7cm; roof-to-roof contact not yet physically certified. **Prefer v037 as provisional best structural baseline**, not approved.
+- v038 profile-guided matched wall-top-to-roof-bottom deformation on independent v037-derived wall mesh, 169 field ray samples, 24,656 verts moved max 0.081m: regressed 5cm criterion to **8/12**, though 10/12 within 10cm. Structural screenshot `Area9_v038_ProfileGuided_StructuralQA.png` visually inspected. REJECTED.
+- v039 copied preferred v037 unchanged geometry and only repositioned closeup camera; `Area9_v039_WallRoof_JointDetail.png` rendered, byte verified and inspected. It shows large dark void above sculpted wall/roof interface, indicating lack of bearing envelope in some bands. Does not imply exact 3D measurements from image alone.
+
+## Process health
+Two nearby local wall deformation experiments did not converge or certify roof bearing. Stop ad hoc wall vertex nudges/pitch; return to **connector architecture**: establish physically valid support patch/normal/bearing/contact bands, and whether existing Meshy rock volume can yield an independent versioned derivative with full support. Roof-to-roof, wall-floor, floor-floor and player path remain FAIL/UNVERIFIED; do not equate sparse ray intersections, world AABB touch, or overlapped render with watertight/load-bearing contact. No extra Meshy unless structural incompatibility proven and DM reviews. Current preferred geometry v037, v039 closeup-only branch.
+
+## Next reversible action
+A distinct **measured bearing interface fixture** (not another global transform or smooth Z warp): identify missing wall-top patches using ray validity masks, inspect original nonmanifold boundaries and candidate source volume, define connector frames/tolerances and target support area, make explicit source-derived cut/retopology/extension only if existing rock volume supports a visually acceptable contact; test against real mesh normals and full spatial sampling, path/roof-roof closure and stable fixed player/structural/joint views. If architecture fundamentally incompatible, take DM review before commissioning new matched GLBs. No claimed solver implementation or passed structural gate.
+
+Captures were copied/byte verified locally in `G:\My Drive\D&D\Foundry Bridge\captures`; cloud Drive sync **not independently verified**.
