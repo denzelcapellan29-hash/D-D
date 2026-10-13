@@ -1,0 +1,12 @@
+# Area 9 v041 — Forward upper-rock envelope derivative (2026-10-13)
+
+Saved independent clean `G:\My Drive\D&D\Foundry Bridge\assets\Area9_Prototype2x2_v041_ForwardRockEnvelopeTrial.blend`, preserving v040, v039, v037 and original Meshy GLBs. Decimate mod remains unapplied; no new Meshy credits.
+
+## Explicitly changed method
+To test whether available source rock volume could close the visible upper-wall void, **not** another Z nudge, physically advanced the existing Meshy-derived upper-wall vertices up to **0.105m toward the front (-Y)** in a smoothly weighted local envelope (x +-0.72, y1.78..2.25, z>1.85). 107,624 vertices moved on new unique wall mesh derivative; zero new primitives or procedural filler. This is an investigational source-derived shape change, not a certified connector.
+
+## Measured change and visual QA
+Prior v039 broad 11x9=99 sample grid: 81 valid upper wall/roof pairs, 54 within 5cm, 14 missing upper wall hits, 4 low-wall hits. v041 same grid: **88 valid**, **58 within ±5cm**, **53 also with wall normal z>+.2 and roof underside z<-.2**, 11 missing; no low-wall hits. Some coverage improvement, **still 30 residual open or penetrated usable sample regions** and 11 missing. Actual fixed-closeup `G:\My Drive\D&D\Foundry Bridge\captures\Area9_v041_ForwardEnvelope_JointQA.png` rendered, copied and visually inspected against v040/v039: dark exposed roof-wall cavity substantially unchanged. **Artistic seam FAIL; structural G3 roof-wall FAIL.** A ray sample increase is insufficient evidence to keep. Capture sync to Drive cloud has not been confirmed by Google Drive search.
+
+## Conclusion and next appropriate layer
+Multiple vertical and XY deform-only strategies (v035/v038/v040/v041) have shown limited numerical improvements but have NOT visually resolved the void. The source wall and roof require true *joint architecture*, not more localized nudges. Preserve **v037 geometry/v039 joint camera** as closest visibly coherent roof-roof ceiling seam, and **v040** separately as best tested central-band structural support prototype (30/33 central normal-compatible points, but art FAIL). Do not overwrite with v041. Next action is a clearly specified measured bearing frame and truly source-derived rock extension/cut with UV/PBR viability, rather than high-density soft reshaping. If existing source cannot produce acceptable transition without wholesale reconstruction, submit imagery for DM review before commissioning a new matched Meshy wall/roof family. No final/room-ready DM acceptance.
