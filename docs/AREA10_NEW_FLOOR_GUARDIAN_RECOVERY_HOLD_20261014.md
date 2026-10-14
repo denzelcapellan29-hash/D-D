@@ -1,0 +1,9 @@
+# Area 10 new floor and guardian assets — recovery hold (2026-10-14)
+
+DM approved overall Area 10 architecture and chose purpose-built limestone floor and more source-faithful ceiling-mounted entropy guardian. No full-room edit accepted.
+
+New Meshy jobs, 78 credits total: floor GPT-image-2 isolated reference 01a13b87-18cc-70dd-8a34-ff6378392f44 (9 credits), floor Meshy 7.1 PBR 2K textured GLB 01a13b88-2674-7429-a185-85b22cd4513a (30 credits, 20,581,196 bytes); guardian GPT-image-2 isolated reference 01a13b88-5065-733c-b61c-9151a142c02b (9 credits), guardian Meshy 7.1 PBR 2K GLB 01a13b89-e6d8-77c7-908a-f171d6daeb56 (30 credits, 80,895,596 bytes). Downloaded under C:/Users/denze/Downloads/Area10_LimestoneFloor_Meshy71_v001.glb and Area10_EntropyGuardianGearwork_Meshy71_v002.glb, PBR textures present. Both references were inspected and passed isolated one-object image input visual preflight.
+
+CRITICAL v028 failed intake: code compared old set of Blender object references with new object name strings, mistakenly renamed all existing objects in newly saved Area10_v028_NewFloorAssetIntake.blend. Quarantine v028; DO NOT RESUME from it. Immediately recovered Area10_v027_LightHierarchyArtTrial.blend via open_mainfile, saved clean, verified original altar and floor names present. No successful import or replacement of new floor or guardian in room. STOP under process-health rule after single recovery, no further edits this turn.
+
+Next: read-only health check; start new v029 from untouched v027 with object name set comparison, import real GLB into isolated QA scene and inspect actual render; genuine 2x2 walkability and joins, floor composition comparison, separate guardian model orientation, wall/roof mounting and maul legibility; preserve v027 geometry and old assets as rollback. Never call floor/guardian installed or DM approved without render evidence. Cloud sync unverified.
