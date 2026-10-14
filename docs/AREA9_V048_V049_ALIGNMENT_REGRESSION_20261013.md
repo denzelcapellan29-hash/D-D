@@ -1,0 +1,13 @@
+# Area 9 v048/v049 — fast QA alignment correction (2026-10-13)
+
+## Situation
+DM requested autonomous iteration following skill v2.7.9. Blender clean v047 at start. Read evaluated world AABBs for every 3x4 tile and wall. Found systematic **Y offset**: floor row0 Y=-.762..+.762 but matching roof row0 Y=+.818..+2.343 (difference +1.58m ~ one tile). Last row floor ends Y=5.334, north-wall began Y=5.83, leaving an approx 0.50m uncovered end segment. These are **direct** bounds, not guesswork from appearance.
+
+## v048 action
+Saved clean numbered `G:\My Drive\D&D\Foundry Bridge\assets\Area9_Prototype2x2_v048_RoofFloorDatumTrial.blend` from v047. Roof tiles shifted in world Y by -1.524m (all 3x4 roof modules), making first roof end/start -0.706..0.819, closer to floor -0.762..0.762. North end wall panels moved world Y -0.55m, aligning with north floor. No Meshy mesh data/source or accepted Area8 altered. Actual `G:\My Drive\D&D\Foundry Bridge\captures\Area9_v048_Entrance_Draft.png` rendered, locally copied and inspected; passage and creatures readable; black vertical north wall seams remain. Actual structural `Area9_v048_Structural_Draft.png` rendered/copied/inspected: 3x4 roof now covers floor footprint more coherently though still presents a rectangular slab and uneven wall edges. Source's irregular cave silhouette not realized. **Provisional best current layout v048, NOT DM ACCEPTED**.
+
+## v049 single hypothesis and rejection
+On new numbered v049 `Area9_Prototype2x2_v049_NorthWallOverlapTrial.blend`, scaled three north wall instance X by 1.08 and shifted north another -0.10m. Real `Area9_v049_Entrance_Draft.png` rendered and inspected. No meaningful dark-seam improvement. **Rejected as a solution**; retained checkpoint for comparison, reopened clean v048 after structural QA. Do not repeatedly move whole north wall; likely real irregular edge profile/position and incomplete rock panel mating. Scene is saved clean v048, camera restored to saved player perspective.
+
+## Gates and next
+Player cavern improved over v045 and v047; darkmantle silhouettes readable and room wider, but north dark vertical seams and simplified slab roof remain FAIL. Dragon true forward axis, ceiling clearance, walkable area, source natural contour and G3 connector contact UNVERIFIED. No HQ render until draft gate passes. Next create a source-derived wall edge connector/architectural rock-joint solution based on actual mesh surface and matched player / side / structural render, or use alternate already-approved Meshy structural wall module if demonstrably better. No new Meshy charges, no Foundry release. All captures locally byte verified, Drive cloud sync not independently confirmed. Skill v2.7.9 required, no false PASS.
