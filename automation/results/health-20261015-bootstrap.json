@@ -1,0 +1,18 @@
+{
+  "job_id": "health-20261015-bootstrap",
+  "completed_at": "2026-10-15T20:31:13.253790+00:00",
+  "status": "ok",
+  "result": {
+    "ports": {
+      "18747": "listening",
+      "18748": "listening",
+      "8083": "listening"
+    },
+    "modules": {
+      "acq-foundry-bridge": true,
+      "canvas3d-premium": true,
+      "canvas3dcompendium": true,
+      "levels-3d-preview": true
+    }
+  }
+}
