@@ -1,0 +1,16 @@
+{
+  "job_id": "inventory-20261015-bridge-scripts",
+  "completed_at": "2026-10-15T20:36:31.505261+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "scripts",
+    "entries": [
+      {
+        "name": "acq-foundry-bridge.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
