@@ -1,0 +1,11 @@
+# Foundry 3D first visually inspected renderer capture — 2026-10-15
+
+**Evidence status**: READ-ONLY baseline **PASS** for a renderer image; not campaign construction or 3D assembly acceptance.
+
+Environment: public Foundry MCP live world `acquisitions-incorporated`, Foundry 14.368. Custom `inspect_3d_scene` reported `levels3d_active=true`, camera position (2.88,1,1.92), target (1.92,~0,0.96), `tile_count=0`, `light_count=5`, `region_count=0`. Default scene `NUEDEFAULTSCENE0`, revision `d93c7518ac199375b7705715c1faf124b5cd35136ba8e8707ddc326ac15546ad`.
+
+`capture_3d_view({format:"webp",restore_camera:true})` succeeded, actual WebP **1920×992**. Returned image data forwarded directly for visual inspection in the conversation. Image visibly displays the Foundry Virtual Tabletop branded default artwork lying as a plane in a brown surrounding 3D space; has meaningful nonblack texture and perspective; no custom geometry yet. Capture's runtime_recovery reported action `already-ready`, `ready=true`, `renderer=true`, `scene_graph=true`, `camera=true`, `controls=true`, `loading_count=0` both before and after; waited ~953ms. Preserve camera = true. No gameplay, architectural closure, lighting aesthetics, material consistency, GLB scale or player fog PASS follows from this.
+
+Empty-scene manifest verification also PASS with unchanged before and after revision. One earlier intermittent manifest request failed despite eventual PASS, so classify command availability as potentially intermittent rather than consistently reliable. No scene modifications performed.
+
+**Next**: obtain actual installed `acq-foundry-bridge` v0.2.8 and 3D Canvas 9.0.35 runtime source read-only (tool surface does not expose arbitrary Foundry filesystem access). Add allowlisted diagnostic method exposing evaluated Three.js object matrixWorld/Box3 bounds, autoGround/center state, model path and load readiness; implement tested full snapshot/restore for disposable scenes. Only after this establish measured calibration with approved authentic GLB, fixed test cameras, true player visibility, lighting QA, collision, and performance. Treat archived Oct 5 source as historical only. Existing private skill v2.7.15 integrates Foundry requirements. Freeze Area9; preserve DM accepted Area8 v082.
