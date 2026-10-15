@@ -1,0 +1,9 @@
+# Area 8 wall fixture: visible runtime and exact rollback — 2026-10-15
+
+User supplied Foundry screenshot showing active responsive 3D Canvas with enlarged default Foundry Virtual Tabletop artwork. This screenshot alone does NOT establish Area8 wall loaded.
+
+Live custom MCP inspect PASS while Wall01 tile was present: Tile id nftash4MVTfHVRpH, semantic area8:v082:wall01-fixture, path assets/acq-inc/Area8_v082_Wall01_JPEG_DracoFixture.glb. Runtime bounds: min (1.7385,~0,0.8725), max (1.8615,0.0008,0.9275), size (0.1230000,0.0008,0.0550000) renderer units. This is a small Tile footprint / fallback-scale-like result and not evidence the approved Blender wall (~1.879×0.263×0.776m) loaded at the correct scale. No verified wall visible in independently captured 1920×992 WebP at temporary camera (2.65,1.1,1.75), target (1.8,0,.9) with restored camera; screenshot showed default artwork only. Runtime ready/loads 0 at time of capture, but loader error diagnostics were not returned. Engine cause remains UNKNOWN: GLB Draco, material compatibility, Tile size/depth auto behavior, path resolution, coordinate conversion all candidates. No test scene acceptance.
+
+Targeted rollback COMPLETED: Acq_3D_Map.apply_semantic_objects delete semantic id area8:v082:wall01-fixture with expected revision 7793ea17387d632dc157590479c8f078acbe4b70049991fa040410802657b89b returned deleted id nftash4MVTfHVRpH; revision after d93c7518ac199375b7705715c1faf124b5cd35136ba8e8707ddc326ac15546ad equals pre-test baseline. validate_scene_manifest empty PASS. One follow-up inspect intermittently errored, so tool reliability not guaranteed.
+
+Original approved Blender v082 untouched, test GLB retained for debugging only. Next: version- and reference-specific loaded model introspection/loader diagnostics and tiny verified plain-GLB A/B before further environment assembly. Do not misdescribe default tabletop textured rectangle as an Area8 asset.
