@@ -1,0 +1,9 @@
+# Foundry 3D read-only runtime recovery — 2026-10-15
+
+## Verified live, no scene construction
+World acquisitions-incorporated, Foundry v14.368, dnd5e 6.0.5, one default active scene NUEDEFAULTSCENE0. Custom Acq_3D_Map `inspect_3d_scene` succeeded: levels3d_active=true and available=true, camera position {x:2.88,y:1,z:1.92}, target {x:1.92,y:~0,z:0.96}, first_person_mode=false, 0 tiles, light_count=5, 0 regions. `search_3d_assets` returned actual path modules/levels-3d-preview/assets/effect.glb. `capture_3d_view` succeeded and returned base64 WebP payload; exact pixel inspection NOT performed. `set_3d_environment({values:{},dry_run:true})` succeeded with changes={}, `validate_scene_manifest({expected_manifest:{}})` succeeded with empty inventory and no mismatches. Scene revision before/after unchanged d93c7518ac199375b7705715c1faf124b5cd35136ba8e8707ddc326ac15546ad. Earlier failures to inspect/capture/environment are not reproducible at this moment; cause unconfirmed, runtime-init or connectivity transient possible but NOT proven.
+
+## Boundaries and next tests
+The above establishes read-only renderer command reachability, NOT image quality, accurate model transforms, source-to-Foundry metric calibration, movement/sight and player view, module API introspection, asset import, frame/performance QA or reversible recovery. Installed Acq Bridge v0.2.8 JS and 3D Canvas v9.0.35 code remain uninspected (no arbitrary local-file read tool through public Foundry MCP or 7 custom 3D tools); archived Oct5 package is not proof of installed code. Need dedicated read-only diagnostics and installed-code access, plus rollback before fixture writes. Skill AI 3D Asset Workflow v2.7.15 already published, recorded as policy, not runtime acceptance. Preserve Area8 v082 and discontinue Area9 work.
+
+Prior audit docs/FOUNDRY_3D_RUNTIME_API_CONTRACT_AUDIT_20261015.md.
