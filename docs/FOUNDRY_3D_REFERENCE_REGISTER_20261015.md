@@ -1,0 +1,11 @@
+# Foundry 3D knowledge-base register (2026-10-15)
+
+The full working reference register is `FOUNDRY_3D_KNOWLEDGE_BASE_V1_20261015.md` supplied as a conversation artifact. It inventories **all source URLs supplied by the DM**, prioritizes 3D Canvas, **3D Canvas Mapmaking Pack (free asset/material library)**, **3D Canvas – Advanced Tools (premium authoring panels)** and 121-tool Foundry MCP, and maps requirements to the 7 custom Acq_3D_Map tools. The entire creator wiki and external learning references are a searchable knowledge base; catalogued links are *not* proof that each module is installed, read exhaustively or tested. Verify public documentation against actual v14 / 3D Canvas 9.0.35 / installed Advanced Tools and custom bridge runtime before implementation.
+
+Important correction to previous project notes: the **Advanced Tools** premium module owns environment, terrain, effects, dungeon/interior generator, and cutscene tool functionality; the **Mapmaking Pack** is predominantly the bundled models/materials, although its wiki page describes toolbar interactions.
+
+Primary sources: https://wiki.theripper93.com/levels-3d-preview , https://wiki.theripper93.com/levels-3d-preview/canvas3dcompendium , https://theripper93.com/module/canvas3d-premium , https://foundryvtt.com/packages/canvas3d-premium , https://wiki.theripper93.com/levels , https://wiki.theripper93.com/premium .
+
+Official technical sections include Getting Started, Tiles, Lights, Templates, Notes, Walls, Drawings, Fog/Vision, Particles, Shaders. Auxiliary references include 3D Portraits, Token Collection, Community Maps, Terrascape, all DM-listed premium wiki links, creator YouTube and Baileywiki.
+
+Research next: compare precise installed module manifests/runtime API and custom MCP implementation, reconnect tunnel, then disposable real calibration fixture for GLB center/ground, transform, material, camera, lighting, collision, fog, and rollback. Do not create campaign scenes before proven skill gates. Area9 frozen by DM decision. Previous research: docs/FOUNDRY_3D_SKILL_DISCOVERY_AUDIT_20261015.md and docs/FOUNDRY_3D_CREATOR_WIKI_GAP_ANALYSIS_20261015.md.
