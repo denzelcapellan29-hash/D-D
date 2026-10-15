@@ -1,0 +1,11 @@
+{
+  "job_id": "bridge-js-hash-area8-pilot-20261015",
+  "completed_at": "2026-10-15T20:38:15.861661+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "scripts/acq-foundry-bridge.js",
+    "size": 36439,
+    "sha256": "c6f0a4e21beae724abe8a751033df201001276874d097c056d02b17267352008"
+  }
+}
