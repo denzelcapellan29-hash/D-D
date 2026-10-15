@@ -1,0 +1,20 @@
+{
+  "job_id": "inventory-20261015-modules",
+  "completed_at": "2026-10-15T20:34:36.480888+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "",
+    "entries": [
+      {
+        "name": "module.json",
+        "directory": false
+      },
+      {
+        "name": "scripts",
+        "directory": true
+      }
+    ],
+    "truncated": false
+  }
+}
