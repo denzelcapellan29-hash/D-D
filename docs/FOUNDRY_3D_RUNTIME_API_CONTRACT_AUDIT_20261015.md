@@ -1,0 +1,13 @@
+# Foundry 3D runtime/API contract — 2026-10-15
+
+Phase B read-only investigation. Full detailed artifact: `FOUNDRY_3D_RUNTIME_API_CONTRACT_AUDIT_20261015.md` in conversation. Do not equate archived code to installed v0.2.8.
+
+Live public Foundry MCP SUCCESS: world `acquisitions-incorporated`, Foundry 14.368, D&D5e 6.0.5, one default scene. Custom Acq 3D MCP `inspect_3d_scene` FAILED: Error executing tool; renderer/runtime NOT verified. Blender read-only healthy, Area9 v069 saved clean and NOT TOUCHED.
+
+Oct 5 archived `Acq_Foundry_3D_MCP (3).zip` inspected in source. JS `inspect3dScene` reads authored Foundry Tile x/y/width/height/elevation/rotation and 3D flags but **NOT evaluated Three.js GLB world matrices/bounds**; `set3dCamera` uses `game.Levels3DPreview.camera.position` + `controls.target`; `capture3dView` requires active Three renderer and usually restores camera; `set3dEnvironment` writes allowlisted scene flags. `validateSceneManifest` checks semantic IDs/counts only, not contact/collision/performance. Internal `asset_upload` and `tile_set_model3d` exist in archived JS op switch, **not exposed in seven current MCP tools**. Archived `snapshot` op returns ack, **not** full rollback. v0.2.7 hotfix ZIP exists; actual installed patch status unknown. Deployed JS/agent v0.2.8 uninspected, so do not assume behavior.
+
+Official creator references: https://wiki.theripper93.com/levels-3d-preview/3D-Canvas-Getting-Started , /info/entities/tiles , /info/entities/lights , /info/fow , /canvas3dcompendium . 3D Tile as GLB render and collision/sight element; center/ground, tint/PBR and case-sensitive embedded GLB collision/door metadata require calibration. Mapmaking Pack assets/materials vs Advanced Tools premium authoring panels are distinct. Founder v14 Levels migration needs actual-version verification.
+
+**Prioritized custom tool backlog:** P0 get_3d_runtime_health (renderer/camera/models readiness), installed code/versions/hash and robust tunnel error diagnostics, real snapshot export/restore or clone; P1 inspect_3d_object evaluated 3D matrix/bounds/autoground, calibrated projection/screenshots, explicit GLB upload/Tile link, collision/visibility and player-view tests, performance timings; P2 deterministic scene batches, player-correct fog/shaders/perf, rollback verified.
+
+No scene writing until an isolated genuine asset fixture passes coordinates, camera/pixel QA, materials, movement/sight, performance and rollback. No skill published as tested, no Area9 revival.
