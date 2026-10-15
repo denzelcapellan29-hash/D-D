@@ -1,0 +1,11 @@
+{
+  "job_id": "bridge-manifest-area8-pilot-20261015",
+  "completed_at": "2026-10-15T20:38:18.808752+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "module.json",
+    "size": 546,
+    "content": "{\n  \"id\": \"acq-foundry-bridge\",\n  \"title\": \"Acq Foundry Bridge\",\n  \"description\": \"Local revision-checked 3D Canvas authoring bridge for the Acq semantic world workflow, with automatic 3D runtime recovery and safe scene resizing.\",\n  \"version\": \"0.2.8\",\n  \"compatibility\": {\n    \"minimum\": \"14\",\n    \"verified\": \"14\"\n  },\n  \"authors\": [\n    {\n      \"name\": \"Acq WorldGen Project\"\n    }\n  ],\n  \"esmodules\": [\n    \"scripts/acq-foundry-bridge.js\"\n  ],\n  \"socket\": false,\n  \"url\": \"https://github.com/denzelcapellan29-hash/D-D\",\n  \"license\": \"MIT\"\n}\n"
+  }
+}
