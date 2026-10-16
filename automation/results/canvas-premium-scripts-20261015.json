@@ -1,0 +1,32 @@
+{
+  "job_id": "canvas-premium-scripts-20261015",
+  "completed_at": "2026-10-16T01:36:25.764642+00:00",
+  "status": "ok",
+  "result": {
+    "module": "canvas3d-premium",
+    "path": "scripts",
+    "entries": [
+      {
+        "name": "app",
+        "directory": true
+      },
+      {
+        "name": "config.js",
+        "directory": false
+      },
+      {
+        "name": "lib",
+        "directory": true
+      },
+      {
+        "name": "main.js",
+        "directory": false
+      },
+      {
+        "name": "settings.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
