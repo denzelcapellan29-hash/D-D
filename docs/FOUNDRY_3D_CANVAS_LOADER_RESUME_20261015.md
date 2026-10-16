@@ -29,3 +29,11 @@ Dynamic Mesh setting, asset-path fetch, GLB loader errors, 3D Canvas initialisat
 - A staged-only code change explicitly marks mesh evidence as NOT proof of requested GLB loading, avoiding false positives from fallback meshes. Verified GitHub commit e2369a61e6d216b013b6cc47f031ab164df1101c and syntax parse. No deployment.
 - Independent world-space geometry bounds remain pending. Attempted broad edit did not land; GitHub readback confirmed absence.
 - Next gate is authorized, read-only installed tile3d.js inspection and a rollback-capable local bridge deployment path. Do not mutate approved Blender Area8 v082 or frozen Area9.
+
+## 2026-10-16 live control Tile create anomaly
+- Read-only baseline: Foundry scene NUEDEFAULTSCENE0, 3D Canvas active, zero semantic 3D Tiles, revision d93c7518ac199375b7705715c1faf124b5cd35136ba8e8707ddc326ac15546ad. Foundry public scene_get reports one Tile total; these counts have different scopes. Approved Blender Area8 v082 clean.
+- Built-in canvas3dcompendium Medieval Dungeon Wall_Modular.glb diagnostic fixture passed revision-guarded apply_semantic_objects dry run.
+- A subsequent apply_semantic_objects request with dry_run:false returned ok:true and created Tile with id:null, but identical before/after revision. This is NOT proof of a Tile creation and must be treated as a no-op/bridge anomaly.
+- First post-operation inspect_3d_scene errored; one recovery inspection PASS confirmed 0 semantic 3D Tiles and unchanged baseline revision. No renderer QA or GLB load success is claimed. No further scene edits pursued.
+- First-party staged bridge code now explicitly throws if createEmbeddedDocuments returns no ID; GitHub commit 8d469ea93b51d91f76b3de1ec76c185592597b54, JS syntax PASS. This is NOT deployed and does not by itself explain no-op response from currently running bridge.
+- Next: investigate actual bridge response correlation, dry_run forwarding and create path against installed runtime; only repeat test once a returned non-null document ID, post-create manifest and revision guard are enforced.
