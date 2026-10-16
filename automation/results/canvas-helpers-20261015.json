@@ -1,0 +1,72 @@
+{
+  "job_id": "canvas-helpers-20261015",
+  "completed_at": "2026-10-16T01:37:08.468321+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "scripts/helpers",
+    "entries": [
+      {
+        "name": "applyHeightmap.js",
+        "directory": false
+      },
+      {
+        "name": "conflict-manager.js",
+        "directory": false
+      },
+      {
+        "name": "dynaMesh.js",
+        "directory": false
+      },
+      {
+        "name": "export2d.js",
+        "directory": false
+      },
+      {
+        "name": "exporter.js",
+        "directory": false
+      },
+      {
+        "name": "geometryUtils.js",
+        "directory": false
+      },
+      {
+        "name": "GradientPicker.js",
+        "directory": false
+      },
+      {
+        "name": "helpers.js",
+        "directory": false
+      },
+      {
+        "name": "imageTo3D.js",
+        "directory": false
+      },
+      {
+        "name": "performanceMonitor.js",
+        "directory": false
+      },
+      {
+        "name": "presetMaterials.js",
+        "directory": false
+      },
+      {
+        "name": "ProceduralVines.js",
+        "directory": false
+      },
+      {
+        "name": "raycastWorker.js",
+        "directory": false
+      },
+      {
+        "name": "utils.js",
+        "directory": false
+      },
+      {
+        "name": "workers.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
