@@ -1,0 +1,36 @@
+{
+  "job_id": "canvas-main-inventory-20261015",
+  "completed_at": "2026-10-16T01:35:47.098067+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "",
+    "entries": [
+      {
+        "name": "assets",
+        "directory": true
+      },
+      {
+        "name": "languages",
+        "directory": true
+      },
+      {
+        "name": "module.json",
+        "directory": false
+      },
+      {
+        "name": "scripts",
+        "directory": true
+      },
+      {
+        "name": "styles",
+        "directory": true
+      },
+      {
+        "name": "templates",
+        "directory": true
+      }
+    ],
+    "truncated": false
+  }
+}
