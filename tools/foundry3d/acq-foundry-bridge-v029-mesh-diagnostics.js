@@ -150,6 +150,8 @@ function setVector(target, value) {
 function relevant3dFlags(flags = {}) {
   const allowed = [
     "model3d", "material", "color", "scale",
+    "dynamesh", "autoCenter", "autoGround", "depth",
+    "tiltX", "tiltY", "offsetX", "offsetY", "offsetZ",
     "collision", "sight", "cameraCollision",
     "doorType", "doorState", "doorStyle",
     "doorAnimationDuration", "doorAnimateAngle", "doorSlidePercent",
