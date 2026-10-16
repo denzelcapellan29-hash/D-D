@@ -1,0 +1,32 @@
+{
+  "job_id": "canvas-handlers-inventory-20261015",
+  "completed_at": "2026-10-16T01:39:45.766883+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "scripts/handlers",
+    "entries": [
+      {
+        "name": "GameCamera.js",
+        "directory": false
+      },
+      {
+        "name": "GroupSelectHandler.js",
+        "directory": false
+      },
+      {
+        "name": "interactionManager.js",
+        "directory": false
+      },
+      {
+        "name": "OutlineHandler.js",
+        "directory": false
+      },
+      {
+        "name": "TileCreationQueue.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
