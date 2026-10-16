@@ -1,0 +1,48 @@
+{
+  "job_id": "canvas-entities-inventory-20261015",
+  "completed_at": "2026-10-16T01:39:43.361164+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "scripts/entities",
+    "entries": [
+      {
+        "name": "effects",
+        "directory": true
+      },
+      {
+        "name": "light3d.js",
+        "directory": false
+      },
+      {
+        "name": "note3d.js",
+        "directory": false
+      },
+      {
+        "name": "region3d.js",
+        "directory": false
+      },
+      {
+        "name": "shape3d.js",
+        "directory": false
+      },
+      {
+        "name": "sound3d.js",
+        "directory": false
+      },
+      {
+        "name": "template3d.js",
+        "directory": false
+      },
+      {
+        "name": "tile3d.js",
+        "directory": false
+      },
+      {
+        "name": "wall3d.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
