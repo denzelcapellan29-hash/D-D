@@ -1,0 +1,28 @@
+{
+  "job_id": "canvas-pack-inventory-20261015",
+  "completed_at": "2026-10-16T01:36:04.029690+00:00",
+  "status": "ok",
+  "result": {
+    "module": "canvas3dcompendium",
+    "path": "",
+    "entries": [
+      {
+        "name": "assets",
+        "directory": true
+      },
+      {
+        "name": "languages",
+        "directory": true
+      },
+      {
+        "name": "module.json",
+        "directory": false
+      },
+      {
+        "name": "scripts",
+        "directory": true
+      }
+    ],
+    "truncated": false
+  }
+}
