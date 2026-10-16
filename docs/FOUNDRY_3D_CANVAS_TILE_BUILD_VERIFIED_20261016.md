@@ -18,3 +18,10 @@ DM reports newly created Scenes show a plain white background instead of the bra
 3. Port source-approved Area8 floor/wall/roof/pool/pipe/tentacle assets as optimized derivative GLBs, fixed camera visual and collision QA, eventually gameplay ready.
 
 Source precedence: `docs/DOCUMENTATION_AUTHORITY.md`, DM approved Area8 v082, skill v2.7.16. DM acceptance is NOT implied by a screenshot or persisted Tile.
+
+## Scene isolation development 2026-10-16
+- Live scene list returned only default scene `NUEDEFAULTSCENE0`; 8 test 3D Tiles still present; accepted Blender v082 remained clean.
+- Creator guidance/user observation: creating a new Foundry Scene yields an unbranded background; this is USER observation, not yet runtime verified by our bridge.
+- In current first-party staged bridge source `tools/foundry3d/acq-foundry-bridge-v029-mesh-diagnostics.js`, added `scene_create` handler for an **inactive**, non-navigation Area8 scene, white background, `renderTable:false`/`renderBackground:false`, strict dimensions and unique names; no existing Scene deleted or activated. JavaScript parsed; GitHub commit `6fe1f4e36e2f50700d3b27f15bc6e116f9520503`.
+- **NOT DEPLOYED / NOT RUNTIME VERIFIED**: installed live bridge remains v0.2.8 and custom map MCP does not expose scene_create. A safe module backup/reload/deploy or bridge command extension is required before the handler can be invoked. Do not claim a new scene exists.
+- Attempt to dry-run `set_3d_environment({renderTable:false})` failed intermittently, no write made. Avoid experimenting on the default scene in the meantime.
