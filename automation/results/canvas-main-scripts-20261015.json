@@ -1,0 +1,72 @@
+{
+  "job_id": "canvas-main-scripts-20261015",
+  "completed_at": "2026-10-16T01:36:21.220440+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "scripts",
+    "entries": [
+      {
+        "name": "apps",
+        "directory": true
+      },
+      {
+        "name": "compatibility",
+        "directory": true
+      },
+      {
+        "name": "config.js",
+        "directory": false
+      },
+      {
+        "name": "entities",
+        "directory": true
+      },
+      {
+        "name": "generators",
+        "directory": true
+      },
+      {
+        "name": "handlers",
+        "directory": true
+      },
+      {
+        "name": "helpers",
+        "directory": true
+      },
+      {
+        "name": "lib",
+        "directory": true
+      },
+      {
+        "name": "main.js",
+        "directory": false
+      },
+      {
+        "name": "settings",
+        "directory": true
+      },
+      {
+        "name": "shaders",
+        "directory": true
+      },
+      {
+        "name": "systems",
+        "directory": true
+      },
+      {
+        "name": "threejsmodifications.js",
+        "directory": false
+      },
+      {
+        "name": "tours",
+        "directory": true
+      },
+      {
+        "name": "wrappers.js",
+        "directory": false
+      }
+    ],
+    "truncated": false
+  }
+}
