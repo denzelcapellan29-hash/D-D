@@ -929,6 +929,30 @@ async function applyOperation(scene, op, dryRun = false) {
     };
   }
 
+  if (type === "scene_create") {
+    // Safe preview scene only; never replace or activate the current scene.
+    const name = String(op.name ?? "").trim();
+    if (!/^Area 8 [a-zA-Z0-9 _-]{4,60}$/.test(name)) throw new Error("Scene name must identify a distinct Area 8 test scene.");
+    if (game.scenes?.some?.(s => s.name === name)) throw new Error("Scene with this name already exists.");
+    const width = Number(op.width ?? 3840);
+    const height = Number(op.height ?? 1920);
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1000 || height < 1000 || width > 8192 || height > 8192) {
+      throw new Error("Invalid Area 8 test scene dimensions.");
+    }
+    const data = {
+      name, width, height, active: false, navigation: false,
+      background: {color:"#ffffff"},
+      flags: {"levels-3d-preview": {renderTable:false, renderBackground:false}},
+      grid: {size:100, type:1}
+    };
+    if (dryRun) return {op:type, ok:true, dry_run:true, planned_name:name, scene_id:null};
+    const doc = await Scene.create(data);
+    if (!doc?.id) throw new Error("Foundry did not return an ID for the new Area 8 scene.");
+    const verified = game.scenes?.get?.(doc.id);
+    if (!verified || verified.active) throw new Error("Scene created but independent inactive verification failed.");
+    return {op:type, ok:true, dry_run:false, scene_id:doc.id, scene_name:verified.name, active:false};
+  }
+
   if (type === "scene_update") {
     const changes = op.changes ?? {};
     const allowedPrefixes = ["flags.", "name", "environment", "darkness", "grid", "background", "foreground", "tokenVision", "fog"];
