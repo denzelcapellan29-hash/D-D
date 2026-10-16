@@ -347,6 +347,8 @@ async function inspect3dScene(scene) {
       }
     } catch {}
     const mesh_evidence=acqReadOnlyMeshEvidence(entity3d);
+    mesh_evidence.model_load_proven = false;
+    mesh_evidence.evidence_caveat = "Mesh count cannot confirm that the requested GLB loaded; fallback geometry is possible.";
     return {
       id: tile.id,
       x: tile.x,
