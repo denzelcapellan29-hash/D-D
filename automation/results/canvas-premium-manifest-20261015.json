@@ -1,0 +1,11 @@
+{
+  "job_id": "canvas-premium-manifest-20261015",
+  "completed_at": "2026-10-16T01:36:23.411184+00:00",
+  "status": "ok",
+  "result": {
+    "module": "canvas3d-premium",
+    "path": "module.json",
+    "size": 899,
+    "sha256": "3f258ebc5a93dea4feb1d4ecba97b7c21bd8705df2ac19d78c223c51dcc2b809"
+  }
+}
