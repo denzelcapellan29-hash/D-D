@@ -23,3 +23,9 @@ Retrieved GitHub tools/foundry3d/acq-foundry-bridge-v029-mesh-diagnostics.js and
 
 ## Unknowns
 Dynamic Mesh setting, asset-path fetch, GLB loader errors, 3D Canvas initialisation, 0.1 apparent bound factor, ground/center transformations, and camera occlusion remain hypotheses. Draco and PBR alone did not resolve prior tests. Area8 accepted Blender v082 and Area9 frozen work remain protected.
+## 2026-10-16 incremental bridge audit
+- Read-only runtime reconfirmed: Foundry 14.368, scene NUEDEFAULTSCENE0 empty, 3D Canvas active, accepted Blender Area8 v082 saved clean; no scene write.
+- The staged bridge diagnostics include additional 3D Tile flags (dynamesh, autoCenter, autoGround, depth, tilt, offsets); exact v9.0.35 names still need installed-source corroboration.
+- A staged-only code change explicitly marks mesh evidence as NOT proof of requested GLB loading, avoiding false positives from fallback meshes. Verified GitHub commit e2369a61e6d216b013b6cc47f031ab164df1101c and syntax parse. No deployment.
+- Independent world-space geometry bounds remain pending. Attempted broad edit did not land; GitHub readback confirmed absence.
+- Next gate is authorized, read-only installed tile3d.js inspection and a rollback-capable local bridge deployment path. Do not mutate approved Blender Area8 v082 or frozen Area9.
