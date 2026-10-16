@@ -1,0 +1,40 @@
+{
+  "job_id": "canvas-premium-inventory-20261015",
+  "completed_at": "2026-10-16T01:35:49.411425+00:00",
+  "status": "ok",
+  "result": {
+    "module": "canvas3d-premium",
+    "path": "",
+    "entries": [
+      {
+        "name": "index.js",
+        "directory": false
+      },
+      {
+        "name": "languages",
+        "directory": true
+      },
+      {
+        "name": "module.json",
+        "directory": false
+      },
+      {
+        "name": "scripts",
+        "directory": true
+      },
+      {
+        "name": "signature.json",
+        "directory": false
+      },
+      {
+        "name": "styles",
+        "directory": true
+      },
+      {
+        "name": "templates",
+        "directory": true
+      }
+    ],
+    "truncated": false
+  }
+}
