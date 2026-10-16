@@ -744,7 +744,9 @@ async function applySemanticObjects(scene, op, dryRun = false) {
     if (matches.length === 0) {
       if (!dryRun) {
         const docs = await scene.createEmbeddedDocuments(document, [payload]);
-        created.push({document, semantic_id: semanticId, id: docs?.[0]?.id ?? null});
+        const createdId = docs?.[0]?.id ?? null;
+        if (!createdId) throw new Error(`Create returned no document ID for ${document}:${semanticId}; inspect scene before retry.`);
+        created.push({document, semantic_id: semanticId, id: createdId});
       } else {
         created.push({document, semantic_id: semanticId, id: null});
       }
