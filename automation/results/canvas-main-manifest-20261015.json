@@ -1,0 +1,11 @@
+{
+  "job_id": "canvas-main-manifest-20261015",
+  "completed_at": "2026-10-16T01:36:18.704258+00:00",
+  "status": "ok",
+  "result": {
+    "module": "levels-3d-preview",
+    "path": "module.json",
+    "size": 1876,
+    "sha256": "98c54bd73c9657d13938d737a976d57ffb4f71d535d1e839b759ae024e31bd56"
+  }
+}
