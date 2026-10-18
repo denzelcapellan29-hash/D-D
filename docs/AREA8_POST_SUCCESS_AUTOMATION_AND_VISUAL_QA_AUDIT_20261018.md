@@ -1,0 +1,33 @@
+# Area 8 post-success / Episode 2 automation audit — 2026-10-18
+
+**Status: historical milestone verified; shared 3D Canvas runtime STILL failing; scheduled task paused. No new Foundry scene, Blender or third-party module writes performed by this audit.**
+
+## User question
+DM away from local computer wants independent visual QA and an accounting of what the hourly Episode2 automation might have changed since last first-person movement in Area8. DM should not be asked for repetitive screenshots. Read the evidence below as *distinguishing known actions from causal inference*: neither automation run logs nor a full machine event log proves every actor/time attribution.
+
+## Best verified last-working state
+- GitHub `docs/AREA8_TOKEN_VIEWPOINT_GAMEPLAY_TEST_20261016.md`: **2026-10-16 23:15 ET** actual 1902×973 3D Canvas first-person viewpoint/vision masked renderer screenshots were captured and visibly inspected; camera free-look and tokens tested earlier under installed v2.7.23 native patched `levels-3d-preview/scripts/main.js` and `handlers/GameCamera.js`.
+- That same source: **2026-10-16 23:21 ET** after DM reopened Foundry, read-only `inspect_3d_scene` returned `levels3d_active:true`, Area8 `NUEDEFAULTSCENE0` revision `b544b9896ab79a55e998878232794d5df46c15239260ccb69882f17de4a91120`, preserved vision config. The 23:21 check was *inspector/readback*, not a new separate image.
+- GitHub handoff commit `37aee0d9f3bfc5f7dfefc6dfd6b1dcd613a553f3` dated 2026-10-17 03:54:29 UTC preserves this connected status, before Episode2 starts. Other docs record a transient F5 disconnection during non-GM vision testing that night (so transient splash/reload issues existed before Test but user then reconnected). This does NOT certify current graphics health.
+
+## Hourly task factual activity boundary
+- `automations.peek` 2026-10-18 returned `Episode 2 Scene Build` id `6ad2f82d88908191a8ecf3972cddd5a6`, `RRULE:FREQ=HOURLY;INTERVAL=1`, latest recorded run **2026-10-18 17:25:45 UTC = 13:25:45 ET**, at that time enabled with **diagnostic-only** prompt. Initial recurring schedule `DTSTART:20261017T042309Z` i.e., after best last-good Area8 state.
+- Explicitly **disabled** via `automations.update(is_enabled:false)` on 2026-10-18 in the forensic audit; tool returned `SUCCESS`. No further scheduled work is authorized until user decides to resume.
+- Automation and direct assistant sessions subsequently prepared Episode2 Blender v002-v010 assets/skill/docs, Meshy genuine road/bank sources, and **only in DM-created Test scene** placed four disposable Tiles, later hid three and changed one road to a reduced LOD. Foundry normal readback currently reports `Test` 4 Tiles, 1 visible. The available tools do **NOT** expose a full per-run task-action log, so do not attribute each file/scene operation exclusively to the hourly automation rather than contemporaneous direct user commands. Some of these were transparently authored during direct live conversations.
+- Last user-accepted Area8 v082 .blend and prior GLB sources were governed as immutable; read-only latest Area8 Foundry scene returns expected **162 Tiles, 36 Walls, 13 Regions, 6 lights, two QA viewpoint tokens**. This is document integrity, not a pixel-verified GPU pass.
+- Installed 3D Canvas **v9.0.35** main.js checksum `6abf61e2bc0b40203a989bf8bc0ac1918f63cea41f4ecae2abc2bfea1615817f`, Windows mtime **2026-10-16 22:43 local**, predates actual 23:15 ET working Area8 screenshot; pristine vendor backup `60cab83f15d1b84f986826807826cf8ff9d4e3f82c4edebb4052c0ff6531b52e` preserved. `acq-foundry-bridge.js` local mtime October 16 20:54 ET, likewise before last-good. Live commit API checked GitHub `integrations/foundry-bridge/module/acq-foundry-bridge/scripts/acq-foundry-bridge.js` and `tools/foundry3d` **no repo code commits** after `2026-10-17T03:54Z` through Oct18. Note: GitHub changes alone cannot rule out unversioned local changes, GPU driver/OS state, module settings or browser caches. Do NOT blame or exonerate any component categorically.
+
+## Current direct/attempted visual QA
+- 2026-10-18 user supplied actual Foundry screenshots: `Test` and Area8 3D Canvas loading spinner; user later supplied DevTools Console. Seen WebGL `INVALID_OPERATION uniformMatrix3fv location is not from associated program` repeated 256+, Canvas3DCompendium `*.webp` three 404s, deprecation `Scene#background`, and a **diagnostic-only** narrow viewport warning with DevTools docked. These are independent of Tile database success; shader failure cause not yet identified.
+- Current run called `mcp__Acq_3D_Map__capture_3d_view(scene_id:Test)`: **FAILED RuntimeException**, returned NO image. `inspect_3d_scene(Test)`: also FAILED RuntimeException. Normal `Foundry_MCP__scene_get(Test)` responds `4 Tiles (1 visible)`; `scene_get(Area8)` returns unchanged scene contents. The Blender MCP session responds `Session terminated`; cannot assert a current local .blend content or render.
+- There is **NO CURRENT INDEPENDENT PIXEL-QA PASS**. Historic successful screenshots cannot certify current renderer, and neither scene metadata nor an empty Foundry server error log is a renderer check. No live QA attempt was made to launch arbitrary browser JavaScript, patch installed 3D Canvas source, force-stop Foundry, or edit Area8.
+
+## Safest next self-directed diagnostic
+1. Preserve all original data, latest scene state and current camera script plus verified native backups.
+2. Recover bridge/browser client via normal non-destructive connection when available, get actual renderer capture or browser JS program error/Network URLs without DM local presence. If impossible, report precise limitation rather than asking for screens again.
+3. Test **truly empty** Test model path only via authorized, revision-guarded existing QA tile update if client becomes stable; previous update attempt was rejected before any confirmed mutation, so `Test` is not empty.
+4. If empty Test also cannot load, narrow WebGL / Canvas3DCompendium shader 404s / module settings and native patched-camera controlled A/B under backups and explicit change/rollback plan. Keep Area8 intact and camera behavior preserved.
+5. Restore scheduled production only once a real current 3D frame and core QA confirm runtime recovery. Never spend Meshy credits or add scene geometry during graphics outage.
+
+## Precedence
+GitHub current `docs/DOCUMENTATION_AUTHORITY.md`, project instruction and handoffs; `docs/FOUNDRY_SHARED_3D_CANVAS_LOADING_INCIDENT_20261018.md`; `docs/FOUNDRY_3D_CANVAS_CONSOLE_ERRORS_20261018.md`. Historical successful capture ≠ DM ACCEPTED or playable state.
