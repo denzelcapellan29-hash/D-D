@@ -1,0 +1,25 @@
+# TaleSpire P1 v003 and genuine Meshy tentacle P2 LOD002 — verified checkpoint (2026-10-18 EDT)
+
+## DM scope
+In-person two-player campaign displayed via HDMI from DM laptop to TV. **No multiplayer testing** required; test TV/player-view secrecy, extended-display behavior, reliable 3D play, original/derived assets, quick room placement, save/reload, and session-duration stability instead. Native TaleSpire kit is allowed for ordinary architecture; custom Meshy hero objects should supply major artistic moments. First-person is optional. User had a streaming interruption and requested status recovery; remain clear about validated vs pending.
+
+## P1 chamber v003
+- Existing TaleSpire board **Unknown Realm 1** remains disposable QA, not released campaign.
+- Native slab v003 4×4-grid U-shaped chamber with 10 verified asset UUID placements: 4 floors + 6 walls, front open, two perpendicular corner joins, tile rotation bounds corrected by the 19/19 local unit-tested compiler.
+- Actual TaleSpire in-game paste/commit was performed with real Windows scan-code input. One ten-piece group placed on QA board, duplicate ghost canceled. Screenshots at two oblique camera angles show true textured multi-sided enclosure with continuous *visible* stone floor, no gross corner gap at those angles, entrance open, no crash. Floor-to-wall mesh contact, token navigation, roof mating, player display, and multi-hour runtime **NOT certified**. Original four-piece group remains adjacent; its board reload had passed in previous checkpoint. **v003 chamber reload was not independently verified**.
+- PNG `P1_v003_10TileUChamber_ActualInGame_Oblique_20261018.png` 1536×864 2,466,845 bytes SHA256 `5692315515324ff58f414fcf1d262035dca564cfc4819f5b8a9c1deb9b69ae65` captured directly from Windows TaleSpire, copied to G: Drive mirror, independently confirmed by Drive search: https://drive.google.com/file/d/13TK-3wF8ZwY2r0PnAp0yj0aOH4-5pKJ-/view?usp=drivesdk .
+- Only one Windows display was detected during this test (DISPLAY1, primary 1536×864), so actual HDMI extended/player-view security QA will wait until TV connected.
+
+## P2 source-preserving tentacle LOD002
+- Approved original Area8 v082 optimized Meshy-derived tentacle: `%LOCALAPPDATA%\FoundryVTT\Data\assets\acq-inc\Area8_v082_Tentacle_Foundry_90pctFaces_1K_OriginZero.glb`, SHA256 `f7e795d547fd907d5a95f5c51f3a65167bd7ddb4d9897b7b93ae617d84b6a6e3`, 190,669 vertices / 237,335 triangles; immutable.
+- Two independent Blender background derivative attempts, first LOD001 48,208 verts / 42,720 triangles visually close but FBX reimport bottom offset `-0.01312` m; preserved as historical first attempt, not release. LOD002 **corrected post-decimation bottom-center pivot** and re-exported versioned outputs; no live Blender project scene edits, no Meshy credit spend.
+- LOD002 independent fresh Blender FBX reimport QA: 1 mesh, 48,208 vertices (under official TaleWeaver Lite creature cap 60,000), 42,720 triangles, 1 UV layer/material; world min Z `-6.3×10^-8 m`, bottom XY center `[0,0]`, max height 1.9172 m. File SHA `e85ab760b4a00fc238c68893f849034b5d167bc5428e3036515985a22e7df2e8`.
+- Genuine source/LOD002 **front and side render pairs visually reviewed**: hooked silhouette, green/brown slime detail and spreading base preserved; appearance close, small LOD differences expected. This is a candidate asset, NOT DM accepted.
+- Prepared Unity-orientated FBX, QA GLB, original embedded 1K Albedo and Normal maps, MAOS packed 1K (R metallic, G AO 1 since source absent, B emissive 0 since absent, A 1-roughness), provenance/status and 4 renders. All in an integrity-tested archive: `Area8_Tentacle_TaleWeaver_CREATURE_PREP_LOD002_Uncompiled.zip`, 9,569,750 bytes SHA256 `e7293e250864cd00bfe7adc917d6302ace97f104c07adff7eead9f54167695d9`; Windows local `C:\Users\denze\Documents\AcqTaleSpireQA\P2_Tentacle_LOD002_20261018\`; byte-identical copy staged under `G:\My Drive\D&D\TaleSpire QA\assets\` **but cloud search had NOT confirmed zip yet**, do not invent a Drive link.
+- Unity Hub and TaleWeaver Lite were not detected in normal installed paths and Registry on connected PC. Hence **no TaleWeaver Lite .tsMod compilation, real mini import or scale/collision verification**. Tentacle hero-as-creature path is provisional; do not mislabel as structural environment Tile.
+
+## Next verified increments
+1. Independently check staged LOD002 ZIP in Google Drive and link only after sync appears. Optional Unity Hub/TaleWeaver Lite installation, with user action if needed and no silent installation.
+2. Build source-grounded native-kit TaleSpire room via the same semantic blueprint, measure actual floor continuity + place/move one token for in-person VTT, confirm GM-only cues aren't on player display.
+3. When HDMI TV connected, check Extended display vs mirror, Player View secrecy and TaleSpire performance; one local GM controlling all movement, no multiplayer requirement.
+4. Original approved 3D scenes, Meshy provider sources, Foundry cold world backup/disabled build automations untouched. No TaleSpire campaign art acceptance yet.
