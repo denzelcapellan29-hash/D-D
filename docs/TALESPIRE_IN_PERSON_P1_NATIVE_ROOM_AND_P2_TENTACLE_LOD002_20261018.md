@@ -36,3 +36,6 @@ Source GLB at `%LOCALAPPDATA%\FoundryVTT\Data\assets\acq-inc\Area8_v082_Tentacle
 4. Do not re-enable Foundry hourly build automations or claim a full episode/DM-accepted scene. Never use TaleSpire proprietary mesh extraction as exporter to Foundry.
 
 Scope note: user selected local HDMI/in-person, so discard remote multiplayer as a required release gate but keep save/reopen, secret concealment, 3–4h stability and efficient table operation as required.
+
+## Independently verified visual-comparison Drive link (follow-up)
+PNG contact sheet `P2_Tentacle_SourceVsLOD002_MatchedFront_20261018.png` (1,205,717 bytes, SHA-256 `fc067bc60aa0129e0785f402967b11f09c2677a6c775c8831d7e0ccabf246e72`) shows actual matched original vs 48,208-vertex derivative; remote Drive search verified https://drive.google.com/file/d/1dSIfVdWO0uKIOBSckNM9hRR5x1AJwUO8/view?usp=drivesdk . As of follow-up, the 9.57 MB versioned P2 source-preserving ZIP had been copied byte-identically to the Google Drive desktop mount, but no connector search result returned for it yet; provide local Windows path, do NOT invent cloud link.
