@@ -1,0 +1,57 @@
+# Acquisitions Incorporated — TaleSpire speed and efficiency review
+
+Date: 2026-10-18 EDT. Status: evidence-based process review; **not** full episode production or DM artwork acceptance.
+
+## User decision and operating constraints
+- Two players physically together, laptop and TV via HDMI. No multiplayer join/synchronization test. TV/GM-secret display test expressly **deferred**, not silently passed.
+- Native TaleSpire structural tiles for repeatable ordinary architecture. Original, traceable Meshy geometry for signature encounters (planar tentacle, dragon/boulder); Unity/TaleWeaver Lite creature mods are NOT registered architectural Tile/Prop slabs.
+- Primary priority: 3D, automation, stable startup/loading, efficient end-to-end room prep. First-person optional.
+- Preserve canonical official source -> semantic metric blueprint -> asset registry -> supported runtime adapter; do NOT build full scenes separately in Blender and TaleSpire.
+
+## Proven observations, not predictions
+1. TaleSpire build 25937418: v002 4-piece slab successfully rendered and survived a true backend board reload; v003 10-piece, U-shaped room rendered as native tiles with joined perpendicular walls and open entrance; captured actual game screenshot independently found in Drive. This is *technical* fixture QA, not official-source room.
+2. v004 Python generator parameterizes even-dimension U-rooms (e.g. 8x8 cells -> 28 pieces) from a single template+verified native catalog rather than manually describing each tile. 25/25 local unit tests, v003 10-piece layout equivalence fixture PASS. **No v004 in-game test yet.**
+3. Local benchmark, 5-iteration median CPU time, isolated ChatGPT Python runner, existing v003 O(n²) collider check (not renderer): 10 pieces 0.00025 s; 28 pieces 0.00089 s; 88 pieces 0.00341 s; 304 pieces 0.02945 s; 1,120 pieces 0.38182 s. These numbers measure *compile_room only*, exclude reading source, generation, TaleSpire UI/asset-load/paste, real QA, human interventions. The container baseline differs from Windows GPU hardware. This does not establish 'entire room in under one second'. O(n²) broadphase may matter at many thousands of tiles, but isn't current end-to-end bottleneck.
+4. Approved original Area8 tentacle optimization was 190,669 vertices/237,335 triangles. Independently numbered LOD002 output: 48,208 vertices/42,720 triangles, 1 mesh/material/UV, correctly bottom anchored after FBX reimport, visually compared source and derivative front/side. ZIP 9,569,750 bytes; locally staged; original untouched. Official TaleWeaver Lite max 60k creature vertices. **Unity/TaleWeaver `.tsMod` not compiled/imported** (Unity Hub/account not installed yet).
+5. Official TaleWeaver Lite 0.0.70 zip (51,919,305 bytes) successfully fetched from https://talespire.com/taleweaverlite-install-guide and CRC verified on the connected Windows host, but not installed; Unity Hub -> Unity **2021.3.45f2**, free Personal login/license required. The user needs to complete Unity account/license setup to pass P2. Do not manually author fake `.tsMod` or claim the custom creature is in-game.
+
+## Bottleneck diagnosis and proposed improvements to installed AI 3D Asset Workflow v2.7.27
+| Existing practice | Inefficiency / risk | More efficient change | Evidence / gate |
+|---|---|---|---|
+| One Meshy custom asset for each ordinary wall/floor | generation, LOD, UV/texture, Blender+game assembly and join debugging repeated | native registered kit for routine structure; Meshy reserved for unique story silhouettes | actual 4/10 piece native game render pass; aesthetic style acceptance separate |
+| Full scene built in Blender then reconstructed in VTT | double authoring, drift in transforms/sockets | Blender isolated only for source-derived per-asset LOD/pivot/material QA; single canonical semantic layout -> TaleSpire slab; Foundry optional semantic export only | v003 room paste; no cross-platform visual parity yet |
+| Per-tile manual placement or hand-authored JSON | repetitive input and accidental overlap | stable dimension/shape templates emit validated UUID placements; preserve source geometry/doors/entrances over template convenience | v004 25/25 format tests; real 28-piece game QA pending |
+| Expensive all-room bespoke review after every minor change | long feedback loop, duplicate QA captures | fix one 2-wall/roof/floor interface then replicate; only changed joins plus hero first-person/isometric views each iteration | binding existing connector skill, prior Area8 seam lessons |
+| Optimizing materials/LOD only after import failure | game stalls/rework | source SHA/cache-key -> Blender background derivative -> actual FBX reimport -> 2+ QA renders -> TaleWeaver format check BEFORE import; reject bad pivot/texture then stop | tentacle LOD001 bottom drift caught and LOD002 corrected |
+| Assume a saved GLB/scene or one beautiful camera implies acceptance | false progress, late fixes | separate FORMAT / ASSET / RENDER / NAVIGATION / PERSISTENCE / DM ACCEPTED gates, attach actual evidence | P1 native board true reload; token walking not yet verified |
+| Repeated large handoff and project-document prepends | cumbersome restoration and conflicting 'current version' pointers | one compact authoritative handoff, append only links to canonical dated design/performance log; preserve chronology in CHANGELOG not every file | repo CURRENT_HANDOFF and authority grew very long; cleanup requires governance-approved anchored edits |
+| Re-run Meshy for polish when native scene composition suffice | provider cost, time | choose kit first by role, true signature Meshy only; prevent 'assets lacking suitable interfaces' loops with early connector test | consistent with approved purpose-built and no substitute primitives rules |
+
+## Recommended fast production lane (native architecture)
+1. **Source once per room revision**: official keyed text/map -> write frozen facts and proposed artistic departures in one semantic scene JSON. Keep source tags and entrance graph. Do not invent source layout from parameterized template.
+2. **Asset registry lookup**: role-based floor/wall/door/roof/ceiling native catalog with real UUID, dimensions, rotation rules, collider bound and proven connector family. Reject unregistered IDs. Preapprove one reusable family/style per region.
+3. **Generate and lint**: room template or source geometry -> canonical grid (one 1.524m cell; vertical quarter step), strict collision/door/path constraints and deterministic slab. Tests run in seconds; cache by SHA of blueprint+asset registry+compiler version.
+4. **One controlled game paste** on disposable board; ready-state screenshot, correct rotation, one in-room view and one structural/join view. Profile time separately for clipboard, asset load, QA and reload. Avoid one-click-per-tile.
+5. **Commit only when** true build persists on game reload and a token can be placed/moved across floor without unintended drop or secrecy leak (HDMI postponed by DM). Track source deviations. Save release slab + registry + screenshot + performance metrics.
+6. For hero creature: only when a source-approved reusable hero role requires it, fetch approved original source and approved visual refs, create hash-addressed versioned Blender LOD derivative; ≤60k vertices hard cap, prefer much lower when possible, correct bottom-center AFTER topology changes, triangular mesh, 1 UV/material and 3 1K/2K texture channels. FBX reimport and multi-angle source comparison before Unity/TaleWeaver; target positions/thumbnail/default scale then `.tsMod` into `LocalContentPacks` for local in-person use; verify genuine game image. Unity 2021.3.45f2 and Personal license are preconditions.
+
+## Explicit non-goals and bottlenecks remaining
+- No multiplayer tests. No HDMI tests until later user direction; GM secrets protection remains a future release safety gate.
+- No direct native Tile/Prop registration for Meshy hero models through TaleWeaver Lite. Use official creature mods as decorative/interactive encounter miniatures only, not hidden collision shells.
+- No TaleSpire-to-Foundry native geometry extraction (rights and omissions); share canonical semantic intent, not decompile proprietary kit meshes.
+- No measured end-to-end session preparation time yet; this is a **probable improvement for stock architecture**, not evidence of faster bespoke hero commissioning nor finished-source rooms. Benchmarks should log real 'user prompt -> visually accepted playable room' wall time for 3 sample rooms and compare with historical timestamps where reliable.
+
+## Immediate next tests (prioritized by impact)
+A. **P2 blocker**: install Unity Hub + Unity 2021.3.45f2 (requires user's account and free Personal license), open staged official TaleWeaver Lite project, compile LOD002 into actual `.tsMod` and render it. Do not spend any Meshy credits.
+B. **P1 build capacity**: v004 28-piece template in disposable board, capture real native load and actual reload; then one miniature path/walkability test. 
+C. **Performance pilot**: time the full 3-stage build (source plan; registry+slab compiler; game render/QA) for one easy room and one source-faithful keyed dungeon room. Compare exact DM interventions, crashes, and revisions—not screenshot attractiveness alone.
+D. HDMI/GM-secrets on separate TV display later. No multiplayer test.
+
+## Companion artifacts and canonical evidence
+- Local v004 parameterized room generator archive: `/mnt/data/talespire_native_slab_pilot_v004.zip` (only current-turn sandbox link when verified).
+- Real U chamber PNG: https://drive.google.com/file/d/13TK-3wF8ZwY2r0PnAp0yj0aOH4-5pKJ-/view?usp=drivesdk
+- V003 + tentacle LOD002 existing checkpoint: `docs/TALESPIRE_P1_V003_TENTACLE_P2_LOD002_20261018.md`
+- Official: https://talespire.com/taleweaverlite-install-guide ; https://talespire.com/taleweaverlite-guide ; https://talespire.com/adding-creatures-from-tsmod-files
+
+## Skill revision recommendation (proposed v2.7.28, not installed by this document)
+Add `skills/meshy-asset-pipeline/references/TALESPIRE_NATIVE_SPEED_LANE_V2728.md` and a pointer in core `SKILL.md`: make runtime adapter conditional on newest explicit DM platform decision; Foundry v2.7.27 performance gate remains active ONLY when building Foundry. Default TaleSpire routine geometry to cataloged registered native tiles, room template+slab and actual native render/persistence; require separate TWL miniature (not tile) for genuine Meshy hero; in-person solo-GM setup omits multiplayer/HDMI until user requests; implement per-stage timings and enforce unique source/no-procedural-visible-mesh and original/derivative provenance. The existing plugin `plugin.json` still states Foundry is the canonical scene builder; guard that declaration with a current DM override. Do not update code/policies in bulk without anchored revision comparison and readback.
