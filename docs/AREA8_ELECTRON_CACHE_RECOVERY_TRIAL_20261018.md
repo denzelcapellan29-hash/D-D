@@ -28,3 +28,8 @@ Using local Windows PrintWindow capture and user-interface 3D toggle, independen
 
 ## Guardrails and next reversible milestone
 **STOP additional speculative resets** until a specific diagnostic target is identified. Next read-only evidence: capture earliest renderer JS exception and complete failed asset request URL in undocked DevTools, inspect shader/program initialization and GPU adapter. A later controlled device-selection test (dedicated RX 6550M) may require one additional restart, but should be independently authorized/justified and performed alone to avoid confounding changes. Always preserve original cache archive, versioned camera script backups, and cold offline world snapshot; do not regenerate road assets or touch accepted Area 8. Distinguish world API connection and `levels3d_active=true` from actual rendered frame and first-person movement PASS. Hourly automations remain disabled. No Meshy credits spent.
+
+## Subsequent read-only model/resource audit
+A complete enumeration of Area 8’s 161 3D-modeled Tiles yielded seven unique source GLB paths. All seven are present in `%LOCALAPPDATA%\FoundryVTT\Data\assets\acq-inc`; structural header checks confirmed `glTF` magic, GLB v2, declared length exactly equal to file length, one mesh per GLB, and no required glTF extensions. The configured shared lighting EXR `modules/canvas3dcompendium/assets/EXRs_1K/Lighting/Night/moonless_golf_1k.exr` is present. This does **not** establish valid shaders/textures, but reduces likelihood that missing primary Area 8 model or environment EXR explains the spinner. 
+
+Real task state was independently checked using task inspection: both `Episode 2 Scene Build` and `Build Playable Area 8` hourly automations are disabled. No scheduling mutation was made.
