@@ -452,6 +452,54 @@ function inspect3dCapabilities(scene) {
   };
 }
 
+/**
+ * Read-only native-workflow inventory for the installed 3D Canvas UI.
+ * In 3D Canvas 9.0.36, CONFIG.UI.windows.AssetBrowser is an INSTANCE assigned
+ * only when the Props browser is constructed, not a class registration.
+ * Buttons are provided by core and Premium with disabled/callback metadata.
+ * Never call third-party button callbacks during discovery.
+ */
+function inspect3dNativeWorkflows(scene) {
+  const l3d = levels3d();
+  const panel = l3d?.BuildPanel ?? null;
+  const browser = l3d?.CONFIG?.UI?.windows?.AssetBrowser ?? null;
+  const buttonIds = ["props", "environment", "terrain", "materials", "roombuilder", "effects", "cutscenes"];
+  const registered = Array.isArray(panel?.BUILD_PANEL_BUTTONS) ? panel.BUILD_PANEL_BUTTONS : [];
+  const buttonStates = buttonIds.map(id => {
+    const entry = registered.find(item => item?.id === id);
+    return {
+      id,
+      registered: Boolean(entry),
+      disabled: entry ? entry.disabled === true : null,
+      callable: entry ? typeof entry.callback === "function" : false
+    };
+  });
+  const selected = Array.from(canvas?.tokens?.controlled ?? []).slice(0, 8);
+  return {
+    scene_id: scene?.id ?? null,
+    active: Boolean(l3d?._active),
+    render_ready: Boolean(l3d?._ready && l3d?.renderer),
+    native_browser: {
+      instance_open: Boolean(browser),
+      can_build_tile_data: typeof browser?.buildTileData === "function",
+      registered_props_action: Boolean(buttonStates.find(x => x.id === "props")?.callable),
+      note: "The browser instance is created on opening Props, not registered as a class."
+    },
+    native_buttons: buttonStates,
+    camera: {
+      game_camera_available: typeof l3d?.GameCamera?.toggle === "function",
+      game_camera_enabled: Boolean(l3d?.GameCamera?.enabled),
+      first_person_available: typeof l3d?.toggleFirstPerson === "function",
+      first_person_enabled: Boolean(l3d?.firstPersonMode),
+      can_focus_controlled: typeof l3d?.setCameraToControlled === "function",
+      controlled_token_count: selected.length,
+      controlled_3d_token_count: selected.filter(token => Boolean(l3d?.tokens?.[token?.id])).length,
+      cutscene_playing: Boolean(l3d?.cutsceneEngine?.isPlaying)
+    },
+    safe_inventory_only: true
+  };
+}
+
 async function set3dCamera(scene, op, dryRun = false) {
   const runtimeRecovery = dryRun
     ? null
@@ -916,6 +964,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_3d_native_workflows") {
+    return {op: type, ok: true, ...inspect3dNativeWorkflows(scene)};
   }
 
   if (type === "set_3d_camera") {
