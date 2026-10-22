@@ -148,6 +148,29 @@ def preview_native_asset_tile(
 
 
 @mcp.tool()
+def manage_vision_qa_scene(
+    action: str,
+    actor: str | None = None,
+    angle: int | None = None,
+    range_scene_units: float | None = None,
+    qa_scene_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """GM-only Area8 directional-vision QA: guarded native clone, inspect, token angle/range, GM-local view and restore. Original approved Scene must match pinned revision. Preview by default; never activate the clone for players."""
+    op: dict[str, Any] = {"op": "manage_vision_qa_scene", "action": action}
+    if actor is not None:
+        op["actor"] = actor
+    if angle is not None:
+        op["angle"] = angle
+    if range_scene_units is not None:
+        op["range"] = range_scene_units
+    if qa_scene_id is not None:
+        op["qa_scene_id"] = qa_scene_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run, timeout_seconds=65.0))
+
+
+@mcp.tool()
 def inspect_3d_settings(scene_id: str | None = None) -> dict[str, Any]:
     """Read-only audit of native 3D Canvas world/client module settings versus Foundry Scene vision, QA Token sight and Tile collision flags. No setting writes."""
     return _operation(_rpc([{"op": "inspect_3d_settings"}], scene_id=scene_id))
