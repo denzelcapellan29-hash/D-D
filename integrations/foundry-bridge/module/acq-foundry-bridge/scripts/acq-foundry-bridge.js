@@ -1,3 +1,4 @@
+import "./fps-camera-anchor.mjs";
 const MODULE_ID = "acq-foundry-bridge";
 const PROTOCOL_VERSION = 1;
 
@@ -339,6 +340,115 @@ async function inspect3dScene(scene) {
     tile_count: tiles.length,
     light_count: Number(scene?.lights?.size ?? scene?.lights?.contents?.length ?? 0),
     region_count: Number(scene?.regions?.size ?? scene?.regions?.contents?.length ?? 0)
+  };
+}
+
+
+/**
+ * Read-only 3D Canvas discovery. Deliberately does not execute arbitrary source,
+ * enumerate all settings, or return values from unapproved module settings.
+ * Feature tests check the live client's public object shape, NOT that an action
+ * has been successfully exercised. Works even when 3D Canvas is inactive.
+ */
+function inspect3dCapabilities(scene) {
+  const l3d = levels3d();
+  const safeModules = [
+    "levels-3d-preview",
+    "canvas3dcompendium",
+    "canvas3dtokencompendium",
+    "canvas3d-premium",
+    "lib-wrapper",
+    MODULE_ID
+  ];
+  const modules = safeModules.map(id => {
+    const mod = game.modules?.get?.(id) ?? null;
+    return {
+      id,
+      installed: Boolean(mod),
+      active: Boolean(mod?.active),
+      version: mod?.version ?? null
+    };
+  });
+
+  // Explicit allowlist. Never expose arbitrary module settings or credentials.
+  const cameraSettingKeys = [
+    "enableGameCamera", "gameCameraDefaultGm", "gameCameraAutoLock",
+    "gameCameraMinAngle", "gameCameraMaxAngle",
+    "gameCameraMinAzimuth", "gameCameraMaxAzimuth",
+    "gameCameraMaxZoom", "gameCameraClipping",
+    "altCameraControls", "screenspacepanning", "cameralockzero"
+  ];
+  const cameraSettings = cameraSettingKeys.map(key => {
+    const registered = game.settings?.settings?.get?.(`levels-3d-preview.${key}`) ?? null;
+    let value = null;
+    let readable = false;
+    if (registered) {
+      try {
+        const candidate = game.settings.get("levels-3d-preview", key);
+        // Primitive settings only; never leak serialized custom objects.
+        if (["string", "boolean", "number"].includes(typeof candidate) &&
+            (typeof candidate !== "string" || candidate.length <= 128)) {
+          value = candidate;
+          readable = true;
+        }
+      } catch {}
+    }
+    return {key, registered: Boolean(registered), readable, value};
+  });
+
+  const gc = l3d?.GameCamera ?? null;
+  const controls = l3d?.controls ?? null;
+  const selected = Array.from(canvas?.tokens?.controlled ?? []).slice(0, 8).map(t => ({
+    id: t.id,
+    rendered_3d: Boolean(l3d?.tokens?.[t.id])
+  }));
+  const tileConfigKeys = Array.from(scene?.tiles ?? [])
+    .flatMap(tile => Object.keys(tile?.flags?.["levels-3d-preview"] ?? {}));
+  const sceneConfigKeys = Object.keys(scene?.flags?.["levels-3d-preview"] ?? {});
+
+  const api = {
+    canvas3d_alias: Boolean(game?.canvas3D && game.canvas3D === l3d),
+    scene_toggle: typeof l3d?.toggle === "function",
+    scene_reload: typeof l3d?.reload === "function",
+    first_person_toggle: typeof l3d?.toggleFirstPerson === "function",
+    focus_controlled_token: typeof l3d?.setCameraToControlled === "function",
+    game_camera_toggle: typeof gc?.toggle === "function",
+    game_camera_top_down_toggle: typeof gc?.toggleTopDown === "function",
+    game_camera_ground_probe: typeof gc?.getY === "function",
+    live_camera_controls: Boolean(l3d?.camera && controls),
+    threejs_renderer: Boolean(l3d?.renderer),
+    asset_browser_class: typeof l3d?.CONFIG?.UI?.windows?.AssetBrowser === "function" ||
+      Boolean(l3d?.CONFIG?.UI?.windows?.AssetBrowser),
+    tile_runtime_registry: Boolean(l3d?.tiles),
+    player_token_runtime_registry: Boolean(l3d?.tokens),
+    cutscene_engine: Boolean(l3d?.cutsceneEngine),
+    interaction_manager: Boolean(l3d?.interactionManager)
+  };
+
+  return {
+    discovered_at: new Date().toISOString(),
+    foundry_version: game?.version ?? null,
+    world_id: game?.world?.id ?? null,
+    scene_id: scene?.id ?? null,
+    modules,
+    runtime: threeRuntimeState(scene),
+    camera: {
+      first_person: Boolean(l3d?.firstPersonMode),
+      game_camera_present: Boolean(gc),
+      game_camera_enabled: Boolean(gc?.enabled),
+      game_camera_lock: gc ? Boolean(gc.lock) : null,
+      game_camera_top_down: gc ? Boolean(gc.topDown) : null,
+      position: vectorToObject(l3d?.camera?.position),
+      target: vectorToObject(controls?.target),
+      selected_tokens: selected
+    },
+    camera_settings: cameraSettings,
+    available_apis: api,
+    config_inventory: {
+      scene_flag_keys: sceneConfigKeys.sort().slice(0, 100),
+      tile_flag_keys: Array.from(new Set(tileConfigKeys)).sort().slice(0, 150),
+      tile_count: Number(scene?.tiles?.size ?? scene?.tiles?.contents?.length ?? 0)
+    }
   };
 }
 
@@ -802,6 +912,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_scene") {
     return {op: type, ok: true, ...(await inspect3dScene(scene))};
+  }
+
+  if (type === "inspect_3d_capabilities") {
+    return {op: type, ok: true, ...inspect3dCapabilities(scene)};
   }
 
   if (type === "set_3d_camera") {
