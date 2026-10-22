@@ -9,6 +9,11 @@ const bridge = fs.readFileSync(
   path.join(__dirname, "../module/acq-foundry-bridge/scripts/acq-foundry-bridge.js"),
   "utf8"
 );
+// The live custom first-person stabilizer is preserved as an ESM import.
+// Node vm.Script parses classic scripts; test the module body without executing that import.
+const protectedImport = 'import "./fps-camera-anchor.mjs";';
+assert.ok(bridge.startsWith(protectedImport), "protected first-person module import must remain");
+const bridgeBody = bridge.slice(protectedImport.length).replace(/^\\r?\\n/, "");
 
 function fixture(active) {
   let writes = 0;
@@ -69,7 +74,7 @@ function fixture(active) {
   const canvas = {scene, tokens: {controlled: [{id: "monk"}]}};
   const context = {game, canvas, Hooks: {once() {}, on() {}}, console};
   context.globalThis = context;
-  vm.runInNewContext(bridge + "\n globalThis.__capProbe = inspect3dCapabilities;", context);
+  vm.runInNewContext(bridgeBody + "\n globalThis.__capProbe = inspect3dCapabilities;", context);
   return {report: context.__capProbe(scene), getWrites: () => writes};
 }
 
