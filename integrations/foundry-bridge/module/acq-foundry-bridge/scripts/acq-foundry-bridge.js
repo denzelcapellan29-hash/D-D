@@ -603,6 +603,146 @@ function inspectNativeSettings(scene) {
  * restoration reverses only the exact changed QA pose fields. Restricted to QA ONLY tokens
  * and only when the GM has no existing controlled tokens.
  */
+
+const QA_VISION_SOURCE_ID = "NUEDEFAULTSCENE0";
+const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f";
+const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
+
+function isAcqVisionClone(doc) {
+  const tag = doc?.getFlag?.("acq", "qaVisionFixture");
+  return Boolean(tag?.sourceSceneId === QA_VISION_SOURCE_ID &&
+    tag?.expectedSourceRevision === QA_VISION_BASE_REVISION &&
+    doc?.name === QA_VISION_NAME && doc?.active === false);
+}
+
+/** Native Foundry Scene duplication, client-local viewing and token sight.
+ * NEVER update or activate source Area 8 or a user-owned non-QA Scene.
+ */
+async function manageVisionQaScene(scene, op, dryRun = true) {
+  if (!game.user?.isGM) throw new Error("Vision QA controls are GM-only.");
+  const action = op.action;
+  if (!["preflight", "clone", "inspect", "configure", "view", "restore_view"].includes(action)) {
+    throw new Error("Unknown native vision QA action.");
+  }
+  const source = game.scenes?.get(QA_VISION_SOURCE_ID);
+  if (!source) throw new Error("Area8 approved source Scene missing.");
+  const sourceSnapshot = await sceneSnapshot(source);
+  if (sourceSnapshot.revision !== QA_VISION_BASE_REVISION) {
+    throw new Error("Approved Area8 revision mismatch. No QA changes allowed.");
+  }
+  const matches = Array.from(game.scenes ?? []).filter(s =>
+    s.name === QA_VISION_NAME || s.getFlag?.("acq","qaVisionFixture"));
+  const owned = matches.filter(isAcqVisionClone);
+  if (matches.length !== owned.length || owned.length > 1) {
+    throw new Error("Ambiguous QA Scene name/ownership. Refusing changes.");
+  }
+  const clone = owned[0] ?? null;
+  const foundryActive = game.scenes.active?.id ?? null;
+  const viewed = canvas?.scene?.id ?? null;
+  const details = {
+    source_scene_id:source.id, source_revision:sourceSnapshot.revision,
+    qa_scene_id:clone?.id ?? null, qa_exists:Boolean(clone),
+    foundry_active_scene_id:foundryActive, gm_viewed_scene_id:viewed,
+    players_pulled:false
+  };
+  if (action === "preflight") {
+    return {...details,dry_run:true,would_clone:!clone,
+      source_counts:{tiles:source.tiles.size,walls:source.walls.size,
+        lights:source.lights.size,regions:source.regions.size,tokens:source.tokens.size}};
+  }
+  if (action === "clone") {
+    if (clone) return {...details,dry_run,already_exists:true};
+    if (scene?.id !== source.id || viewed !== source.id || foundryActive !== source.id) {
+      throw new Error("QA clone starts from viewed+active original Area8 only.");
+    }
+    if (dryRun) return {...details,dry_run:true,would_create:true};
+    const original = source.toObject();
+    delete original._id;
+    original.name = QA_VISION_NAME;
+    original.active = false;
+    original.navigation = false;
+    original.ownership = {default:0};
+    original.flags = {
+      ...original.flags,
+      acq:{
+        ...(original.flags?.acq ?? {}),
+        qaVisionFixture:{
+          sourceSceneId: QA_VISION_SOURCE_ID,
+          expectedSourceRevision: QA_VISION_BASE_REVISION,
+          purpose:"isolated native directional sight settings QA",
+          createdAt:new Date().toISOString()
+        }
+      }
+    };
+    const created = await source.constructor.create(original);
+    if (!created || !isAcqVisionClone(created)) {
+      throw new Error("Native Scene.create did not return an owned QA clone.");
+    }
+    const countNames = ["tiles","walls","lights","regions","tokens"];
+    const bad = countNames.filter(k => created[k].size !== source[k].size);
+    if (bad.length) {
+      await created.delete();
+      throw new Error("QA Scene count mismatch; created clone deleted: " + bad.join(","));
+    }
+    return {...details,qa_scene_id:created.id,qa_exists:true,
+      created:true,dry_run:false,clone_count_verified:true};
+  }
+  if (!clone) throw new Error("QA clone must exist before this action.");
+  if (action === "inspect") {
+    const qaToken = Array.from(clone.tokens.contents).filter(t=>t.name?.startsWith("QA ONLY")).map(t=>({
+      name:t.name,id:t.id,x:t.x,y:t.y,elevation:t.elevation,
+      rotation:t.rotation,angle:t.sight?.angle,range:t.sight?.range,
+      visionMode:t.sight?.visionMode
+    }));
+    return {...details,read_only:true,qa_tokens:qaToken,
+      qa_counts:{tiles:clone.tiles.size,walls:clone.walls.size,
+        lights:clone.lights.size,regions:clone.regions.size,tokens:clone.tokens.size}};
+  }
+  if (action === "configure") {
+    const angle = Number(op.angle);
+    const range = Number(op.range);
+    if (![120,270,360].includes(angle) || !Number.isFinite(range) || range<0 || range>60) {
+      throw new Error("Vision QA angle must be 120,270 or 360 and scene-unit range must be in [0,60].");
+    }
+    const actor = String(op.actor);
+    if (!["monk","druid"].includes(actor)) throw new Error("Only monk/druid QA tokens are configurable.");
+    const token = Array.from(clone.tokens.contents).find(t =>
+      t.name?.startsWith("QA ONLY") && t.name?.toLowerCase().includes(actor));
+    if (!token) throw new Error("QA token not present on clone.");
+    if (dryRun) return {...details,dry_run:true,would_update:{token_id:token.id,angle,range},
+      before:{angle:token.sight?.angle,range:token.sight?.range}};
+    const before = {angle:token.sight?.angle,range:token.sight?.range};
+    await token.update({"sight.angle":angle,"sight.range":range});
+    if (Number(token.sight.angle)!==angle || Number(token.sight.range)!==range) {
+      throw new Error("Native token sight configuration readback mismatch.");
+    }
+    return {...details,updated:true,token_id:token.id,before,
+      after:{angle:token.sight.angle,range:token.sight.range}};
+  }
+  if (action === "view") {
+    if (clone?.id !== op.qa_scene_id || foundryActive !== source.id) {
+      throw new Error("Only this verified QA clone may be viewed without activating players.");
+    }
+    if (dryRun) return {...details,dry_run:true,would_view:clone.id};
+    if (levels3d()?.firstPersonMode || (canvas?.tokens?.controlled?.length ?? 0)>0) {
+      throw new Error("Cannot switch scene during native first-person or token control.");
+    }
+    await clone.view();
+    return {...details,view_requested:true,now_viewed:canvas?.scene?.id ?? null,
+      players_pulled:false};
+  }
+  if (action === "restore_view") {
+    if (foundryActive !== source.id) throw new Error("Source is no longer active; stop.");
+    if (dryRun) return {...details,dry_run:true,would_restore_source:true};
+    if (levels3d()?.firstPersonMode || (canvas?.tokens?.controlled?.length ?? 0)>0) {
+      throw new Error("Cannot restore view during native first-person or token control.");
+    }
+    await source.view();
+    return {...details,restored_view:true,now_viewed:canvas?.scene?.id ?? null};
+  }
+  throw new Error("Unsupported vision QA action.");
+}
+
 let nativeQaTokenSelection = null;
 async function manageNativeQaTokenSelection(scene, op, dryRun = true) {
   const action = op.action;
@@ -1306,6 +1446,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "manage_vision_qa_scene") {
+    return {op:type,ok:true,...(await manageVisionQaScene(scene,op,dryRun))};
   }
 
   if (type === "native_select_qa_token") {
