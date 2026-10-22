@@ -515,6 +515,7 @@ function nativeCameraState(l3d) {
     first_person: Boolean(l3d?.firstPersonMode),
     camera_position: vectorToObject(camera?.position),
     camera_target: vectorToObject(l3d?.controls?.target),
+    camera_near: Number.isFinite(camera?.near) ? camera.near : null,
     controlled_token_ids: Array.from(canvas?.tokens?.controlled ?? []).map(t => t?.id).filter(Boolean)
   };
 }
@@ -542,6 +543,7 @@ async function setNativeCameraMode(scene, op, dryRun = true) {
     if (Boolean(l3d.GameCamera?.enabled) !== original.game_camera) l3d.GameCamera.toggle();
     if (original.camera_position) setVector(l3d.camera.position, original.camera_position);
     if (original.camera_target) setVector(l3d.controls.target, original.camera_target);
+    if (original.camera_near !== null) { l3d.camera.near = original.camera_near; l3d.camera.updateProjectionMatrix?.(); }
     l3d.controls.update?.();
     nativeCameraSession = null;
     return {dry_run:false, mode, before, after:nativeCameraState(l3d), restored:true};
@@ -586,6 +588,7 @@ async function setNativeCameraMode(scene, op, dryRun = true) {
       if (Boolean(l3d.GameCamera?.enabled) !== before.game_camera) l3d.GameCamera.toggle();
       if (before.camera_position) setVector(l3d.camera.position,before.camera_position);
       if (before.camera_target) setVector(l3d.controls.target,before.camera_target);
+      if (before.camera_near !== null) { l3d.camera.near = before.camera_near; l3d.camera.updateProjectionMatrix?.(); }
       l3d.controls.update?.();
     } finally { nativeCameraSession = null; }
     throw err;
