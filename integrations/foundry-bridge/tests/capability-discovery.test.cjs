@@ -13,7 +13,7 @@ const bridge = fs.readFileSync(
 // Node vm.Script parses classic scripts; test the module body without executing that import.
 const protectedImport = 'import "./fps-camera-anchor.mjs";';
 assert.ok(bridge.startsWith(protectedImport), "protected first-person module import must remain");
-const bridgeBody = bridge.slice(protectedImport.length).replace(/^\\r?\\n/, "");
+const bridgeBody = bridge.slice(protectedImport.length).replace(/^\r?\n/, "");
 
 function fixture(active) {
   let writes = 0;
