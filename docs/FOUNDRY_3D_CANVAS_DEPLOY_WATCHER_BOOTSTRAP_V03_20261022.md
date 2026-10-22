@@ -5,9 +5,9 @@ Status: SOURCE BUNDLE CREATED AND TESTED IN CHAT; WINDOWS BOOTSTRAP NOT INSTALLE
 The current Windows diagnostic agent was verified live on 2026-10-22, but grants only read-only diagnostics. The existing custom 3D MCP advertises seven tools. The already-staged read-only capability discovery tool is not activated until two first-party runtime files (Foundry bridge JS, Python MCP server) are updated safely.
 
 ## Deliverables
-User-facing conversation attachment: `Acq_3D_Canvas_Guarded_Bootstrap_v0.3.zip`, 13,685 bytes, SHA256 `2e9409e62368a8a95c2f3c3b5852eb950c9ebcb90899929200bca01e07d51cb2`.
+User-facing conversation attachment: `Acq_3D_Canvas_Guarded_Bootstrap_v0.3.zip`, 14,283 bytes, SHA256 `398027cceed71cba2085e0029d163dfbac3c05ffb19cec0289e926e135dd4d50`.
 
-ZIP contains first-party `acq_bridge_deployer.py`, `acq_deploy_watcher.py`, `install_deploy_watcher.ps1`, README, SHA256SUMS, two unittest modules. The ZIP is a **conversation attachment**, not a file in GitHub or independently Drive-hosted. Do not assert a downloadable GitHub binary link until separately uploaded.
+ZIP now includes a double-click `Start_3D_Upgrade.cmd` launcher for the one-time Windows bootstrap. ZIP contains first-party `acq_bridge_deployer.py`, `acq_deploy_watcher.py`, `install_deploy_watcher.ps1`, README, SHA256SUMS, two unittest modules. The ZIP is a **conversation attachment**, not a file in GitHub or independently Drive-hosted. Do not assert a downloadable GitHub binary link until separately uploaded.
 
 The worker deliberately uses a separate queue `automation/deploy_requests/` and separate dedicated git clone from old read-only agent's `automation/requests/` diagnostics. It does not overwrite the old diagnostic agent or execute arbitrary shell commands from jobs.
 
