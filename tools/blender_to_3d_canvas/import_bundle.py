@@ -158,6 +158,8 @@ def cli():
     p.add_argument("--module-asset-root",type=pathlib.Path,required=True)
     p.add_argument("--scene-id",required=True)
     p.add_argument("--build-id",required=True)
+    p.add_argument("--semantic-id",default=None,
+                   help="QA-only stable semantic ID for updating an existing import.")
     p.add_argument("--offset-x-px",type=float,default=0)
     p.add_argument("--offset-y-px",type=float,default=0)
     p.add_argument("--apply",action="store_true")
@@ -199,7 +201,9 @@ def main():
     # Area8 fixture. Earlier preview adapter wrongly subtracts w/2,h/2.
     candidate["x"]=round(cx)
     candidate["y"]=round(cy)
-    sid="blender-bundle:"+a.build_id
+    sid=a.semantic_id or "blender-bundle:"+a.build_id
+    if not (sid.startswith("blender-bundle:") or sid.startswith("qa:blender-import:")) or len(sid)>130:
+        raise ValueError("Only scoped Blender QA import semantic IDs are allowed.")
     create={
         "op":"apply_semantic_objects","build_id":a.build_id,
         "objects":[{"document":"Tile","semantic_id":sid,"build_id":a.build_id,
