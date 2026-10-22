@@ -47,3 +47,21 @@ These names are from upstream public source, not yet matched to the installed mo
 
 ## Next independent milestone
 Complete installed-code version discovery and camera-controller fixture (GM selected token, native first-person toggle, exit/restore, Game Camera lock/free modes, collision/eye-height). Create a separate controlled endpoint only after baseline proves it safe.
+
+## 2026-10-22 live Windows preflight and additive upgrade preparation
+
+The **already-running Windows v0.1 development agent** successfully processed fresh GitHub diagnostic requests through the default branch:
+- `automation/results/health-20261022-mcp-upgrade.json`: ports 18747, 18748 and 8083 listening; installed `acq-foundry-bridge`, `levels-3d-preview`, `canvas3dcompendium`, `canvas3d-premium`.
+- `automation/results/bridge-hash-20261022-mcp-upgrade.json`: installed client JS 37,532 bytes, SHA256 `842e858751b50d765ac86c90665c29eaa59fd15b7562339fc2c67658615fa951`.
+- `automation/results/bridge-installed-read-20261022-mcp.json`: after line-normalized diff the installed JS matches repository main **except for the extra first line** `import "./fps-camera-anchor.mjs";`.
+- `automation/results/bridge-fps-anchor-20261022-mcp.json`: installed 1,400-byte runtime-only FPS camera control stabilization source was recovered/verified as first-party. It has been committed to the feature branch and restored to the JS entrypoint. It remains part of the active installation; do not remove it.
+- `automation/results/bridge-installed-manifest-20261022-mcp.json`: installed bridge version 0.2.8.
+
+**Important operational blocker:** This proved the Windows diagnostic agent is running, but v0.1 supports only allowlisted read-only diagnostics. It does NOT provide guarded deployment, process restarts or arbitrary filesystem writes. No accessible MCP can safely replace the installed bridge/Python service. DO NOT claim deployment completed or improvise via Godot/Blender script execution or modify the third-party 3D Canvas module.
+
+**Prepared guarded installer:** `integrations/foundry-bridge/upgrade_capability_discovery.ps1` (PowerShell, dry-run default, `-Apply` for guarded backup and first-party file replacement), with hard gate on the exact installed SHA, 0.2.8 manifest, original FPS anchor match, running Python MCP source discovery, and module/scene isolation. Python MCP modification is additive rather than overwriting unknown installed tools. Versioned backup and post-write integrity records are created under `%LOCALAPPDATA%\AcqBridgeBackups`. `rollback_capability_discovery.ps1` can restore the recorded original versions after integrity preflight.
+
+**Current install status:** files STAGED IN GITHUB; NOT installed on Windows; no restart/refresh; new tool not yet live. The installer has not been run on Windows or verified with PowerShell parser/CI. Perform its dry run and correct any compatibility issues before its `-Apply` mode; then restart the MCP process and refresh the GM client when gameplay is idle. Tool discovery may require tunnel reconnection.
+
+**Local user action when ready:** obtain feature branch files on the Windows PC, launch an ordinary PowerShell in the `integrations/foundry-bridge` folder, run `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\upgrade_capability_discovery.ps1` for dry run and then with `-Apply` only after it reports **PRECHECK PASS**. If running MCP process detection cannot resolve the path, provide `-McpServerPath "C:\path\to\mcp_server.py"` explicitly. No user world edits are part of this installer. The assistant can then verify the new tool, active scene revision and physical camera APIs.
+
