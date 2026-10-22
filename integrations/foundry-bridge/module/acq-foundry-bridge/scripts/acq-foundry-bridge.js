@@ -648,6 +648,9 @@ async function previewNativeAssetTile(scene, op) {
   if (w < 1 || h < 1) throw new Error("Model footprint is sub-pixel at selected scale.");
   const tx = Math.round(x - (origin === "center" ? w/2 : 0));
   const ty = Math.round(y - (origin === "center" ? h/2 : 0));
+  if (op.color !== undefined && (typeof op.color !== "string" || !/^#[0-9a-fA-F]{6}$/.test(op.color))) {
+    throw new Error("Native Tile color must be a six-digit hex value.");
+  }
   const opt = (key, fallback) => op[key] === undefined ? fallback : op[key];
   for(const key of ["collision","sight","camera_collision"]) {
     if (op[key] !== undefined && typeof op[key] !== "boolean") {
