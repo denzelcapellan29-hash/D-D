@@ -91,6 +91,12 @@ def main():
         visible = visible[:args.limit]
     if not visible:
         raise RuntimeError("No visible source MESH objects to export.")
+    other_geometry = [o.name for o in bpy.context.scene.objects
+        if o.type in ("CURVE","SURFACE","FONT","META","CURVES","POINTCLOUD","VOLUME")
+        and not o.hide_render]
+    if other_geometry:
+        raise RuntimeError("Visible non-MESH geometry would be silently omitted: "
+                           + repr(other_geometry[:12]))
     depsgraph = bpy.context.evaluated_depsgraph_get()
     coords = []
     source_meshes = []
@@ -112,6 +118,9 @@ def main():
         })
         if source_meshes[-1]["interactive"]:
             interactive.append(obj.name)
+    if interactive:
+        raise RuntimeError("Do not bake dynamic or door geometry into a static world chunk: "
+                           + repr(interactive[:12]) + ". Export as separately interactive parts.")
     xs = [v.x for v in coords]
     ys = [v.y for v in coords]
     zs = [v.z for v in coords]
@@ -185,7 +194,8 @@ def main():
             "scene_grid_size_px":args.grid_size,
             "native_3d_tile_scale":scale,
             "tile_center_xy_px":[xcenter,ycenter],
-            "tile_elevation_scene_units":minz,
+            "tile_elevation_scene_units":0,
+            "source_anchor_floor_z_blender_m":minz,
             "tile_rotation_degrees":0,
             "tile_flags":{
                 "collision":True,"sight":True,
