@@ -1,0 +1,11 @@
+{
+  "job_id": "bridge-js-hash-after-ready-20261022",
+  "completed_at": "2026-10-22T15:06:16.797841+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "scripts/acq-foundry-bridge.js",
+    "size": 40874,
+    "sha256": "0129dbefea404c56fb7d5206355f4f896fe26e30820fc824e8a38c305aed3ad9"
+  }
+}
