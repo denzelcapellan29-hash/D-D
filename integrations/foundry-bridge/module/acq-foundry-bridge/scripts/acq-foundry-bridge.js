@@ -1,3 +1,4 @@
+import "./fps-camera-anchor.mjs";
 const MODULE_ID = "acq-foundry-bridge";
 const PROTOCOL_VERSION = 1;
 
