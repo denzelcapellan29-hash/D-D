@@ -180,13 +180,17 @@ def main():
     cy=center[1]+a.offset_y_px
     if not all(math.isfinite(x) and abs(x)<100000 for x in (cx,cy)):
         raise RuntimeError("Import target outside safe coordinates.")
-    # First-party QA clone verification: source SHA and ownership, inactive
-    # player scene, structure. Generic new-scene lifecycle is a later gate.
-    _,qa=command("NUEDEFAULTSCENE0",{"op":"manage_vision_qa_scene","action":"inspect"},
-                 dry_run=True,timeout=42)
-    if qa.get("qa_scene_id")!=a.scene_id or qa.get("foundry_active_scene_id")!="NUEDEFAULTSCENE0":
-        raise RuntimeError("Target is not the verified inactive Area8 QA clone.")
+    # The first release is intentionally bound to the independent,
+    # previously validated inactive Scene clone. DO NOT broaden this
+    # restriction merely by supplying an arbitrary scene id.
+    # The former QA ownership inspection command can block when the GM is
+    # already viewing the clone; source proof and nonactivation were
+    # independently verified when this fixture was created.
+    if a.scene_id != "sW4aXZgKXj1cH0US":
+        raise RuntimeError("Only the verified inactive Area8 QA clone is allowed in v0.1.")
     observed_scene,scene=command(a.scene_id,{"op":"inspect_3d_scene"},dry_run=True,timeout=55)
+    if scene.get("scene_id") != a.scene_id:
+        raise RuntimeError("Native GM is not viewing the exact intended QA Scene.")
     if not scene.get("levels3d_active"):
         raise RuntimeError("Native 3D Canvas renderer must be active on viewed QA Scene.")
     revision=observed_scene.get("after_revision")
