@@ -160,6 +160,18 @@
         "scene_and_tile_3d_flag_names"
       ],
       "notes": "Presence of a method is not proof of successful use. No arbitrary runtime evaluation, setting enumeration, third-party code edits, or Scene/Token writes."
+    },
+    "inspect_3d_native_workflows": {
+      "read_only": true,
+      "inputs": [
+        "scene_id (optional)"
+      ],
+      "returns": [
+        "native_browser_instance_state",
+        "registered_core_and_premium_actions",
+        "camera_and_first_person_prerequisites"
+      ],
+      "notes": "AssetBrowser is an instance registered upon window open in 3D Canvas 9.0.36; false does not mean unsupported."
     }
   },
   "non_goals": [
