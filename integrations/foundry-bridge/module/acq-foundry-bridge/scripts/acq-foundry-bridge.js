@@ -604,6 +604,61 @@ function inspectNativeSettings(scene) {
  * and only when the GM has no existing controlled tokens.
  */
 
+/**
+ * Read-only native Foundry V14 CanvasVisibility test on the isolated Area8
+ * QA clone only. A GM result is diagnostic, NOT proof of player visibility.
+ */
+function inspectNativeVisionBearings(scene, op) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id) {
+    throw new Error("Native vision bearing sampler requires the viewed GM-only Area8 QA clone.");
+  }
+  const selection = Array.from(canvas?.tokens?.controlled ?? []);
+  if (selection.length !== 1 || !selection[0]?.document?.name?.startsWith("QA ONLY")) {
+    throw new Error("Exactly one existing QA ONLY token must be selected.");
+  }
+  if (typeof canvas?.visibility?.testVisibility !== "function") {
+    throw new Error("Installed Foundry lacks the native CanvasVisibility.testVisibility API.");
+  }
+  const token = selection[0];
+  const document = token.document;
+  const center = token.center;
+  if (!center || !Number.isFinite(center.x) || !Number.isFinite(center.y)) {
+    throw new Error("Native selected token's pixel center is unavailable.");
+  }
+  const bearings = [0,45,90,135,180,225,270,315];
+  const radii = [100,250,450,650];
+  const bounds = scene.dimensions?.sceneRect ?? {x:0,y:0,width:scene.width,height:scene.height};
+  const within = p =>
+    p.x >= bounds.x && p.x <= bounds.x+bounds.width &&
+    p.y >= bounds.y && p.y <= bounds.y+bounds.height;
+  const results = [];
+  for (const radius of radii) {
+    const row = [];
+    for (const bearing of bearings) {
+      const rad = bearing*Math.PI/180;
+      const point = {x:center.x + radius*Math.sin(rad),y:center.y - radius*Math.cos(rad)};
+      const signedDelta = ((bearing-document.rotation+540)%360)-180;
+      row.push({
+        bearing_deg:bearing, radius_px:radius,
+        inside_scene:within(point),
+        expected_inside_token_angle:Math.abs(signedDelta)<=Number(document.sight?.angle ?? 360)/2,
+        native_visible:within(point) ? Boolean(canvas.visibility.testVisibility(point,{tolerance:0})) : null
+      });
+    }
+    results.push(row);
+  }
+  return {
+    read_only:true, qa_scene_id:scene.id, token_id:document.id,
+    token_rotation_deg:document.rotation,
+    sight_angle_deg:document.sight?.angle,
+    sight_range_scene_units:document.sight?.range,
+    pixel_center:{x:center.x,y:center.y},
+    native_vision_source_count:canvas.effects?.visionSources?.size ?? null,
+    gm_only_caveat:"Native CanvasVisibility.testVisibility sampled in GM client; does NOT certify player fog or 3D vertical LOS.",
+    bearing_grid:results
+  };
+}
+
 const QA_VISION_SOURCE_ID = "NUEDEFAULTSCENE0";
 const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f";
 const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
@@ -1446,6 +1501,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_native_vision_bearings") {
+    return {op:type,ok:true,...inspectNativeVisionBearings(scene,op)};
   }
 
   if (type === "manage_vision_qa_scene") {
