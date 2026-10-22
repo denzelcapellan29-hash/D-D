@@ -500,6 +500,185 @@ function inspect3dNativeWorkflows(scene) {
   };
 }
 
+
+let nativeCameraSession = null;
+
+/**
+ * Idempotent, short-lived GM camera QA session. Never changes Scene documents
+ * or native module preferences. Only one bridge-owned session may be active.
+ * First person requires an explicitly named already-controlled 3D token.
+ */
+function nativeCameraState(l3d) {
+  const camera = l3d?.camera;
+  return {
+    game_camera: Boolean(l3d?.GameCamera?.enabled),
+    first_person: Boolean(l3d?.firstPersonMode),
+    camera_position: vectorToObject(camera?.position),
+    camera_target: vectorToObject(l3d?.controls?.target),
+    controlled_token_ids: Array.from(canvas?.tokens?.controlled ?? []).map(t => t?.id).filter(Boolean)
+  };
+}
+
+async function setNativeCameraMode(scene, op, dryRun = true) {
+  const l3d = levels3d();
+  const mode = op.mode;
+  if (!["game_camera", "first_person", "restore"].includes(mode)) {
+    throw new Error("Native camera mode must be game_camera, first_person or restore.");
+  }
+  if (!l3d?._active || !l3d?._ready || !l3d.camera || !l3d.controls) {
+    throw new Error("Native camera controls unavailable: active and ready 3D Canvas required.");
+  }
+  const before = nativeCameraState(l3d);
+  if (mode === "restore") {
+    if (!nativeCameraSession || nativeCameraSession.scene_id !== scene.id) {
+      throw new Error("No matching bridge-owned native camera session to restore.");
+    }
+    if (op.session_id !== nativeCameraSession.id) {
+      throw new Error("Camera restore requires the exact bridge-owned session_id.");
+    }
+    if (dryRun) return {dry_run:true, mode, before, would_restore:nativeCameraSession.initial};
+    const original = nativeCameraSession.initial;
+    if (l3d.firstPersonMode) l3d.toggleFirstPerson();
+    if (Boolean(l3d.GameCamera?.enabled) !== original.game_camera) l3d.GameCamera.toggle();
+    if (original.camera_position) setVector(l3d.camera.position, original.camera_position);
+    if (original.camera_target) setVector(l3d.controls.target, original.camera_target);
+    l3d.controls.update?.();
+    nativeCameraSession = null;
+    return {dry_run:false, mode, before, after:nativeCameraState(l3d), restored:true};
+  }
+  if (nativeCameraSession) throw new Error("An Acq native camera QA session is already active; restore it first.");
+  if (before.first_person) throw new Error("First person is already active outside bridge control; do not override it.");
+  if (l3d.cutsceneEngine?.isPlaying) throw new Error("Do not change camera while a cutscene is playing.");
+  let token = null;
+  if (mode === "first_person") {
+    if (typeof op.token_id !== "string" || !/^[A-Za-z0-9]{1,32}$/.test(op.token_id)) {
+      throw new Error("First-person camera requires a specific token_id.");
+    }
+    token = Array.from(canvas?.tokens?.controlled ?? []).find(t => t?.id === op.token_id);
+    if (!token) throw new Error("First-person token must already be selected in the GM client.");
+    if (!l3d.tokens?.[token.id] || !l3d.tokens[token.id]?.head) {
+      throw new Error("Selected token is missing a loaded 3D head anchor.");
+    }
+    if (typeof l3d.toggleFirstPerson !== "function" ||
+        typeof l3d.setCameraToControlled !== "function") {
+      throw new Error("Installed 3D Canvas lacks the required native first-person methods.");
+    }
+  } else if (typeof l3d.GameCamera?.toggle !== "function") {
+    throw new Error("Installed GameCamera.toggle method is unavailable.");
+  }
+  if (dryRun) return {dry_run:true, mode, token_id:token?.id ?? null, before, would_enter:true};
+  const id = "acq-camera-" + Date.now().toString(36);
+  nativeCameraSession = {id, scene_id:scene.id, initial:before, mode};
+  try {
+    if (mode === "first_person") {
+      l3d.toggleFirstPerson();
+      if (!l3d.firstPersonMode) throw new Error("3D Canvas refused first-person transition.");
+      l3d.setCameraToControlled(token);
+    } else if (!l3d.GameCamera.enabled) {
+      l3d.GameCamera.toggle();
+    }
+    l3d.controls.update?.();
+    return {dry_run:false, mode, session_id:id, token_id:token?.id ?? null, before, after:nativeCameraState(l3d)};
+  } catch (err) {
+    // Make one bounded best-effort rollback to the original ephemeral camera mode.
+    try {
+      if (l3d.firstPersonMode && !before.first_person) l3d.toggleFirstPerson();
+      if (Boolean(l3d.GameCamera?.enabled) !== before.game_camera) l3d.GameCamera.toggle();
+      if (before.camera_position) setVector(l3d.camera.position,before.camera_position);
+      if (before.camera_target) setVector(l3d.controls.target,before.camera_target);
+      l3d.controls.update?.();
+    } finally { nativeCameraSession = null; }
+    throw err;
+  }
+}
+
+/**
+ * Source-faithful dry-run preparation. Uses upstream 9.0.36 AssetBrowser:
+ * tileSize = canvas.dimensions.size / scale; dropFunctions.Tile loads model,
+ * computes THREE.Box3, then creates Tile width/height/depth from bbox.
+ * Loading approved external GLB may update a renderer cache; never creates Tile.
+ */
+async function previewNativeAssetTile(scene, op) {
+  const l3d = levels3d();
+  const foundryPath = op.foundry_path;
+  const allowlist = [
+    "modules/canvas3dcompendium/assets/",
+    "modules/levels-3d-preview/assets/",
+    "modules/canvas3d-premium/assets/",
+    "modules/acq-foundry-bridge/assets/"
+  ];
+  if (typeof foundryPath !== "string" || foundryPath.length > 600 ||
+      !allowlist.some(prefix => foundryPath.startsWith(prefix)) ||
+      !/\.(glb|gltf)$/i.test(foundryPath) ||
+      /[?#\\]/.test(foundryPath) || foundryPath.includes("..") ||
+      /%2e|%2f|%5c/i.test(foundryPath)) {
+    throw new Error("Only allowlisted local module GLB/GLTF asset paths are permitted.");
+  }
+  const x = Number(op.x), y = Number(op.y), elevation = Number(op.elevation ?? 0);
+  const scale = Number(op.scale ?? 1), rotation = Number(op.rotation ?? 0);
+  const origin = op.origin ?? "center";
+  if (![x,y,elevation,scale,rotation].every(Number.isFinite) ||
+      scale < 0.05 || scale > 10 || !["center","top_left"].includes(origin) ||
+      Math.abs(x) > 100000 || Math.abs(y) > 100000 || Math.abs(elevation) > 10000 ||
+      Math.abs(rotation) > 36000) {
+    throw new Error("Native asset placement requires finite, bounded coordinates, scale, and supported origin.");
+  }
+  if (!l3d?._active || !l3d?._ready || !l3d?.THREE?.Box3 ||
+      typeof l3d?.helpers?.loadModel !== "function") {
+    throw new Error("Loaded native renderer and model loader required for GLB geometry preflight.");
+  }
+  const asset = await l3d.helpers.loadModel(foundryPath);
+  if (!asset?.model) throw new Error("Native 3D Canvas asset loader returned no model.");
+  const bb = new l3d.THREE.Box3().setFromObject(asset.model);
+  const dimensions = {
+    width: Number(bb.max.x - bb.min.x),
+    vertical: Number(bb.max.y - bb.min.y),
+    height: Number(bb.max.z - bb.min.z)
+  };
+  if (!Object.values(dimensions).every(v => Number.isFinite(v) && v >= 0) ||
+      dimensions.width === 0 || dimensions.height === 0) {
+    throw new Error("Loaded GLB has invalid or degenerate native bounding dimensions.");
+  }
+  // Equivalent to upstream AssetBrowser scale and Tile drop width/height/depth.
+  const gridSize = Number(canvas?.grid?.size ?? scene?.dimensions?.size);
+  if (!Number.isFinite(gridSize) || gridSize <= 0) throw new Error("Scene grid size unavailable.");
+  const w = Math.round(dimensions.width * gridSize * scale);
+  const h = Math.round(dimensions.height * gridSize * scale);
+  const depth = (dimensions.vertical * gridSize * scale) || 0.05;
+  if (w < 1 || h < 1) throw new Error("Model footprint is sub-pixel at selected scale.");
+  const tx = Math.round(x - (origin === "center" ? w/2 : 0));
+  const ty = Math.round(y - (origin === "center" ? h/2 : 0));
+  const opt = (key, fallback) => op[key] === undefined ? fallback : op[key];
+  for(const key of ["collision","sight","camera_collision"]) {
+    if (op[key] !== undefined && typeof op[key] !== "boolean") {
+      throw new Error(key + " must be boolean when provided.");
+    }
+  }
+  const candidate = {
+    x:tx, y:ty, width:w, height:h, elevation,
+    rotation,
+    texture:{src:"modules/levels-3d-preview/assets/blank.webp"},
+    flags:{"levels-3d-preview":{
+      model3d:foundryPath,
+      autoGround:true,
+      autoCenter:origin === "center",
+      depth,
+      dynaMesh:"default",
+      color:opt("color","#ffffff"),
+      collision:opt("collision",true),
+      sight:opt("sight",true),
+      cameraCollision:opt("camera_collision",true),
+      castShadow:true
+    }}
+  };
+  return {
+    dry_run:true, scene_id:scene?.id ?? null, model_path:foundryPath, scale,
+    model_bounds:{min:vectorToObject(bb.min),max:vectorToObject(bb.max),dimensions},
+    candidate, did_create_tile:false,
+    warnings:["Preliminary Tile footprint uses native GLB bounds; rotated extent, mesh seams, collider and ground contact require actual runtime QA."]
+  };
+}
+
 async function set3dCamera(scene, op, dryRun = false) {
   const runtimeRecovery = dryRun
     ? null
@@ -968,6 +1147,13 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_native_workflows") {
     return {op: type, ok: true, ...inspect3dNativeWorkflows(scene)};
+  }
+
+  if (type === "set_native_camera_mode") {
+    return {op: type, ok:true, ...(await setNativeCameraMode(scene, op, dryRun))};
+  }
+  if (type === "preview_native_asset_tile") {
+    return {op: type, ok:true, ...(await previewNativeAssetTile(scene, op))};
   }
 
   if (type === "set_3d_camera") {
