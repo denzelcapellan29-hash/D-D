@@ -597,6 +597,51 @@ function inspectNativeSettings(scene) {
   };
 }
 
+/**
+ * GM-only transient QA token control. Delegates to native Token.control/release,
+ * does not change TokenDocument, actor, or Scene. Restricted to QA ONLY tokens
+ * and only when the GM has no existing controlled tokens.
+ */
+let nativeQaTokenSelection = null;
+function manageNativeQaTokenSelection(scene, op, dryRun = true) {
+  const action = op.action;
+  if (!["select","restore"].includes(action)) throw new Error("QA selection action must be select or restore.");
+  if (!game.user?.isGM) throw new Error("QA selection is GM-only.");
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d?._ready) throw new Error("3D Canvas runtime is not active/ready.");
+  if (action === "restore") {
+    if (!nativeQaTokenSelection || nativeQaTokenSelection.sceneId !== scene.id || op.session_id !== nativeQaTokenSelection.id) {
+      throw new Error("A matching QA selection session is required to restore.");
+    }
+    if (l3d.firstPersonMode) throw new Error("Exit native first-person camera before restoring selected token.");
+    if (dryRun) return {dry_run:true,would_restore:true,token_id:nativeQaTokenSelection.tokenId};
+    canvas.tokens.get(nativeQaTokenSelection.tokenId)?.release();
+    const after = Array.from(canvas.tokens.controlled ?? []).map(t=>t.id);
+    nativeQaTokenSelection = null;
+    return {dry_run:false,restored:true,controlled_token_ids:after};
+  }
+  if (nativeQaTokenSelection) throw new Error("An Acq QA token selection is already active.");
+  const currentlyControlled = Array.from(canvas?.tokens?.controlled ?? []);
+  if (currentlyControlled.length) throw new Error("GM has selected tokens; existing UI state is protected.");
+  if (l3d.firstPersonMode || l3d.GameCamera?.enabled || l3d.cutsceneEngine?.isPlaying) {
+    throw new Error("Close existing first-person, Game Camera or cutscene before QA selection.");
+  }
+  const id = op.token_id;
+  if (typeof id !== "string" || !/^[A-Za-z0-9]{1,32}$/.test(id)) throw new Error("A specific valid QA token ID is required.");
+  const doc = scene.tokens.get(id);
+  const token = canvas.tokens.get(id);
+  if (!doc?.name?.startsWith("QA ONLY") || !token) throw new Error("Token is not an existing QA ONLY token in the live Scene.");
+  if (!l3d.tokens?.[id]?.head) throw new Error("The QA token has no native 3D head anchor.");
+  if (dryRun) return {dry_run:true,would_select:true,token_id:id,had_selected_tokens:false};
+  const changed = token.control({releaseOthers:true});
+  if (changed === false || !canvas.tokens.controlled.some(t => t.id === id)) {
+    throw new Error("Native Token.control did not select the requested QA token.");
+  }
+  const sessionId = "acq-qa-" + Date.now().toString(36);
+  nativeQaTokenSelection={id:sessionId,sceneId:scene.id,tokenId:id};
+  return {dry_run:false,session_id:sessionId,selected_token_id:id,controlled_count:canvas.tokens.controlled.length};
+}
+
 let nativeCameraSession = null;
 
 /**
@@ -1245,6 +1290,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "native_select_qa_token") {
+    return {op:type,ok:true,...manageNativeQaTokenSelection(scene,op,dryRun)};
   }
 
   if (type === "inspect_3d_settings") {
