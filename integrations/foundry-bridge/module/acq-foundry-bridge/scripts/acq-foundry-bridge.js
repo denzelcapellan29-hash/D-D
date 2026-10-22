@@ -74,11 +74,22 @@ async function sceneSnapshot(scene = activeScene()) {
 }
 
 async function request(path, options = {}) {
-  return fetch(`${agentUrl()}${path}`, {
-    ...options,
-    headers: {"Content-Type": "application/json", ...(options.headers ?? {})},
-    cache: "no-store"
-  });
+  // Without an abort, a lost loopback fetch can leave pollCommand.inFlight
+  // permanently true, silently preventing all future MCP commands.
+  const {timeoutMs = 12000, ...fetchOptions} = options;
+  const controller = new AbortController();
+  const effectiveTimeout = Math.max(1000, Math.min(Number(timeoutMs) || 12000, 30000));
+  const timeout = setTimeout(() => controller.abort(), effectiveTimeout);
+  try {
+    return await fetch(`${agentUrl()}${path}`, {
+      ...fetchOptions,
+      signal: controller.signal,
+      headers: {"Content-Type": "application/json", ...(fetchOptions.headers ?? {})},
+      cache: "no-store"
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function postState(reason = "update") {
@@ -1342,7 +1353,7 @@ async function pollCommand() {
   inFlight = true;
   try {
     const qs = new URLSearchParams({world_id: game.world?.id ?? "", scene_id: scene.id});
-    const response = await request(`/bridge/next?${qs.toString()}`, {method: "GET"});
+    const response = await request(`/bridge/next?${qs.toString()}`, {method: "GET", timeoutMs: 6000});
     if (response.status === 204) return;
     if (!response.ok) throw new Error(`Agent returned HTTP ${response.status}`);
     const command = await response.json();
