@@ -1,0 +1,31 @@
+# Area 8 — Darkvision geometry and units audit (2026-10-22)
+**Decision:** DM correctly states 60-ft darkvision is a radius, not 60/4 cardinal allocations. For rules-faithful tabletop character sight, token vision **angle 360°**, distance **60 real feet**, subject to occlusion and darkness semantics. A 120° token cone used earlier is an explicitly separate optional cinematic/FPS design decision, NOT RAW darkvision. A first-person camera's on-screen FOV may be directional while the underlying character's rules-level sight remains omnidirectional and wall-blocked.
+
+## Verified immutable information
+- Scene `NUEDEFAULTSCENE0`, Foundry v14.368 / 3D Canvas 9.0.36, original full Scene revision `e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f` recovered and verified after native camera QA; no persistent art or scene settings changes by this audit.
+- Actual original Scene grid object `{"type":0,"size":100,"distance":1,"units":""}`: **gridless**, with internal reference 100 scene pixels per one scene distance unit, and NO distance unit label (not automatically ft).
+- Area 8 documented source-authoring/world scale from installed `FOUNDRY_AREA8_SCENE_BUILD_V2717.md`: **75 Foundry scene pixels per Blender metre**. This is Area8-specific and must not be assumed for Area10 or Godot.
+- QA Monk Actor UUID `Actor.0RE9y8365cStS6x4` native D&D5e `system.attributes.senses.ranges.darkvision = 60` (feet by character source intent); token id `iSbK8OUBuUEjIGGu` native token `sight.enabled=true, visionMode='darkvision', range=60, angle=120`. QA Druid Actor `Actor.yLysDMnPJzM2WNeW` darkvision 0; token `KB7cUY9hXEXHeJqV` `basic, range=0, angle=120`.
+- Scene tokenVision true, darknessLevel 0.55, fog.mode 0; 36 invisible Foundry Walls form vision-only ring, radius 800 px from (1920,960), movement blocking 0. 3D Canvas `showSceneWalls=false` prevents unapproved visual wall boxes.
+- Official Foundry documentation: native Token Vision Angle defaults to 360°, can be separately reduced; Token Vision Range is in Scene distance units; Scene GridConfiguration `distance` determines numeric distance per grid space. Official references: `https://foundryvtt.com/article/tokens/`, `https://foundryvtt.com/api/v14/interfaces/foundry.grid.types.GridConfiguration.html`, `https://foundryvtt.com/article/scenes/`.
+- D&D darkvision specifies a **range** in which darkness behaves as dim light and dim light as bright light. It does not divide a radius by N cardinal/intercardinal directions. Actual 3D Canvas fog applies Foundry's 2D vision texture; true volume occlusion still requires runtime verification.
+
+## Physical scale conversion
+Authoritative Area 8 conversion, with `metres_per_foot = 0.3048`:
+- Source darkvision radius: `60 ft × 0.3048 = 18.288 metres`.
+- At **75 px per source metre**: `18.288 × 75 = 1371.6 px` radial in Area8 Foundry scene.
+- With scene reference **100 px per scene distance=1**: `1371.6 / 100 = 13.716 Scene distance units`.
+- If someone instead assumed that a 100 px reference grid cell is **exactly 5 ft**, the conditional radius would be 12 grid cells ×100 = **1200px**, but THAT ASSUMPTION DOES NOT MATCH the separately documented 75px/metre Area8 conversion (100px then equals 4.37445ft). Do not silently promote a grid calibration conflicting with the authored Blender scale.
+- Existing token sight range `60` with Scene distance=1 corresponds to `60 ×100=6000px` nominal radius, which exceeds the entire 3840×1920 pixel scene. Therefore current QA token has the actor's literal numeric '60' applied to wrong units. It DOES NOT mean the engine divides the range by 4; sight effects are dominated by the 120° cone, lighting, obstructions, and Scene boundaries.
+- 36-segment Foundry sight ring itself lies 800 px (10.667 m ≈ 34.996ft) from (1920,960); it will block sight before 60 ft. At the QA Druid position (1970,585), shortest straight-line distance to that ring is about 421.7px (5.623m ≈ 18.45ft). A small measured visible distance inside this ring is NOT a darkvision radius cap. Precise actual visible range from first-person camera direction must be rendered and verified, not guessed.
+
+## Requested behavior and QA gates
+1. D&D/Foundry character sight: 360° radial vision, with 60ft transformed through **per-map physical scale** to a Token Vision Range in scene units. Separate creature senses (darkvision, blindsight, etc.) from 3D first-person **camera FOV**. The user controls the direction the *camera* is looking without artificially quartering darkvision.
+2. 3D wall/floor/roof occlusion and Foundry invisible 2D Walls may block the radius; a 60ft radius does NOT permit vision through physical walls or magical darkness. Token Vision Mode must be darkvision on Monk, basic on Druid. Keep individual player and GM views separate.
+3. Test proposed `Monk.sight.range=13.716, angle=360` **only in a duplicate or disposable QA Scene** with identical Area8 physical scale; leave existing player-facing Area8 untouched pending visual/permission/LOS QA. Preserve Druid basic vision `range=0`; test Druid `angle=360` only if choosing rules-faithful baseline for both.
+4. Viewpoint test at token center, along cardinal AND diagonal bearings (0°,45°,90°,135°,180°,225°,270°,315°). For clear sightlines, the 60ft cutoff should be ~1371.6px in **every** bearing; intervening walls cut it shorter. Require true non-GM player session, not only GM source/Three renderer.
+5. Keep 120° directional QA as optional **cinematic prototype** if the DM later prefers it. It limits field angle, NOT range; do not use angle reduction to simulate shorter-range darkvision.
+6. Add to Blender-to-runtime exporter schema: `scene_pixels_per_blender_meter`, `physical_units_per_scene_unit`, explicit `character_senses_ft`, `native_scene_grid.distance/size/units/type`, and calculated Token Vision Range; warn on unit mismatches and prevent implicit `darkvision_ft -> token.sight.range` copy.
+
+## Source and acceptance
+Source metric: installed Area8/Foundry asset workflow v2.7.17; Foundry source scene immutable backup; QA actors resolved through live Foundry UUID. This is **READ-ONLY CALIBRATION / PROPOSED FIX**, not accepted token sight changes, not a gameplay-ready darkvision proof. No custom renderer, new 3D geometry, imported GLBs, Meshy credits or scene data edits here.
