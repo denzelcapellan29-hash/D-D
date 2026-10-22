@@ -1,0 +1,11 @@
+{
+  "job_id": "bridge-hash-20261022-mcp-upgrade",
+  "completed_at": "2026-10-22T04:53:11.238049+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "scripts/acq-foundry-bridge.js",
+    "size": 37532,
+    "sha256": "842e858751b50d765ac86c90665c29eaa59fd15b7562339fc2c67658615fa951"
+  }
+}
