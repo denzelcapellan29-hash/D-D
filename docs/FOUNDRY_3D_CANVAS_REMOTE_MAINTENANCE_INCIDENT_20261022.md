@@ -1,0 +1,32 @@
+# First-party 3D Canvas remote maintenance incident — October 22, 2026
+
+## DM instruction (binding)
+DM explicitly objected to repeated manual installers: updates must be attempted through already connected authorized MCP/Windows maintenance capabilities, with safety gates, rather than reflexively assigning local scripts to the DM. Do not ask DM to run a replacement ZIP for this incident.
+
+## Failed v0.4 installer (REJECTED)
+DM supplied actual Windows console: `Ran 14 tests in 0.916s / OK` followed by `Expected exactly one running v0.3 watcher process; found 0. STOP.` Windows PowerShell source location at `Upgrade_3D_Watcher_v04.ps1:37`. The guard stopped before changing source. We independently verified on Windows through live Blender MCP: `Acq3DDeployAgent/app/acq_deploy_watcher.py` and deployer present and match expected prior SHA256, but **no watcher Python process existed**. Important second defect: ZIP SHA256 `5ea2678d2f2aff16adccaa67f92f770276b54a8a61243cdc374e6c7c0534a50e` matched published artifact, yet unpacked `acq_bridge_deployer.py` was **byte-identical** to the v0.3 installed deployer (SHA256 `25065507f4ec54669ace7e232b8febb7bc9ae0b7ff5728265bec98d0f141181c`). The claimed general release upgrade engine was NOT present. Do not ask DM to repeat v0.4 installer; no valid release upgrade would result.
+
+## Remote Windows capability discovery
+Live `mcp__Blender_MCP__execute_blender_code` can execute non-scene-changing Python on the same Windows host. This was verified before use; the Blender .blend remains an unsaved dirty buffer, and no bpy/scene operations were issued. Running Acq MCP process parent/worker pair and unique on-disk server source were identified from Win32_Process; Acq agent and hosted Foundry remained online. Live bridge module installed at v0.2.8; existing first-party JS SHA256 `0129dbefea404c56fb7d5206355f4f896fe26e30820fc824e8a38c305aed3ad9`, existing Python MCP SHA256 `16747c98e5a7ff1fc8e58be48f507ab8cc089b9ca4c3f92ce129ebc14bf7c55d`.
+
+## Executed direct release staging (SAVED, failed runtime QA)
+- Verified private GitHub D-D origin, branch `feature/3d-canvas-native-controls-20261022` exact commit `76112978d71a04a461e243b71fb77c2c63b497cf`; fetched JS/Python and protected original FPS camera anchor using the authenticated Windows git clone.
+- Checked installed SHA pins, module manifest v0.2.8, semantic identity of preserved `fps-camera-anchor.mjs`, node --check of source and Python AST. Source JS SHA `494b87ca580c0a4765844136a554f563db9f7dfca0f1891d4b67c3a9e9e500c5`.
+- Additively inserted only three new @mcp.tool wrappers in the installed Python MCP, preserving all existing installed-only tools. Candidate Python SHA `d7581cc8b46d856f271c3914b82265510e51a2000acf4bc9f684c82475db38a5`.
+- Created immutable local backup ID `native-controls-20261022T162611Z`, copied original JS, Python MCP and FPS anchor, wrote manifest. Atomic writes and post-write SHA checks succeeded, no vendor module writes or scene document changes.
+- Remotely restarted ONLY verified Python MCP parent/worker tree. Restart port 18748 listening with staged SHA. Windows launcher/worker executables differ legitimately (Python SoftwareFoundation PythonManager shim vs pythoncore-3.14-64 child), so do not require identical EXE paths; require parent-child relationship, same MCP entrypoint, expected port owner and hashes.
+- First attempt to focus Foundry with user32.SetForegroundWindow failed harmlessly before keypress; targeted WScript.Shell AppActivate(unique Foundry window) then SendKeys F5 returned success. Read-only custom `inspect_3d_scene` initially succeeded on same source Scene and preserved known revision. Later direct localhost agent RPC `inspect_3d_native_workflows` and control `inspect_3d_scene` timed out (HTTP 504), agent queue eventually empty; GM browser poller stopped consuming commands. Read-only Windows agent state heartbeat was stale by ~242 seconds. **Do not claim Phase2 native tools accepted or active.**
+
+## Bounded rollback / current status
+Per rollback contract, exactly restored previous JS `0129dbefea404c56fb7d5206355f4f896fe26e30820fc824e8a38c305aed3ad9` and Python MCP `16747c98e5a7ff1fc8e58be48f507ab8cc089b9ca4c3f92ce129ebc14bf7c55d` using backup `native-controls-20261022T162611Z`, checked hashes and set backup manifest `rolled_back_to_verified_v01`; restarted only verified MCP process tree and targeted F5 of Foundry window once. The legacy custom `inspect_3d_scene` still returns generic error, so **runtime recovery NOT verified**. STOP additional restarts/retries or scene operations without diagnosis. The hosted generic Foundry MCP `scene_get` still read Area8 successfully after rollback: active Scene, 162 total Tiles (161 tagged as 3D at earlier checkpoint), six lights, 13 Regions, 36 Walls, two QA Tokens. **No Scene edits or camera modifications**. Current exact tagged-3D revision after rollback is unverified because custom inspector failed; prior last-good `e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f`.
+
+## Corrected process policy and next engineering step
+The previous v0.4 updater is REJECTED, not installed. Do not requeue Phase2 into the v0.3 watcher. Do not claim automatic no-touch updater persistence is complete. Direct Windows maintenance through connected Blender MCP is a **verified conditional path**; it requires the appropriate authenticated user session and connected Blender host, and must only change explicitly approved first-party files with pinned source, backups and no Blender scene edits. Future engineering should implement a proper persistent, source-pinned first-party release watcher that can be upgraded offline after proving the files genuinely differ from installed version, validating its Windows startup/persistence, and end-to-end tests in a disposable instance. Probe/diagnose why first-party Foundry GM poll loop stopped; inspect browser console/bridge state without further speculative reloads. Only then redeploy Phase2, validate native introspection, genuine first-person traversal and renderer capture.
+
+## Acceptance
+- Direct remote Windows file maintenance: **verified in practice**.
+- v0.4 upgrade package: **REJECTED**.
+- Phase2 native code on PR #2: **SAVED ON DEVELOPMENT BRANCH, not accepted or deployed**.
+- First-party live Acq MCP command path: **DEGRADED / NOT VERIFIED AFTER BOUNDED ROLLBACK**.
+- Foundry Scene persisted objects: **READABLE AND UNMODIFIED BY THIS WORK**.
+- DM visual acceptance: **NOT REQUESTED**, Godot remains primary until fair 3D Canvas benchmark.
