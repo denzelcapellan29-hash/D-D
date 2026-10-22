@@ -68,7 +68,7 @@ if ($anchorCurrent -ne $anchorCandidate) {
 if (-not $McpServerPath) {
   $possible = @()
   $regex = '[A-Za-z]:[\\/](?:(?![A-Za-z]:[\\/])[^"''\r\n])*?mcp_server\.py'
-  foreach ($proc in @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'mcp_server\.py' })) {
+  foreach ($proc in @(Get-CimInstance Win32_Process -Filter "Name = 'python.exe' OR Name = 'pythonw.exe'" | Where-Object { $_.CommandLine -match 'mcp_server\.py' })) {
     $hits = [regex]::Matches([string]$proc.CommandLine, $regex)
     foreach ($hit in $hits) {
       $resolved = [string]$hit.Value
