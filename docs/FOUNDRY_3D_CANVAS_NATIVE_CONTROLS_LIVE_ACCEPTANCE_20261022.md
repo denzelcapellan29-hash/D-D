@@ -1,0 +1,23 @@
+# Acq 3D Canvas native controls — live engineering acceptance, 2026-10-22
+Status: FIRST-PARTY PHASE2 NATIVE MCP ENGINEERING VERIFIED LIVE. DM visual acceptance / new map build NOT done. No scene writes.
+
+## Interruption recovery and baseline
+DM requested "Streaming interrupted where did you leave off" during native Game Camera round-trip. We resumed with mandatory discovery of connected Blender, Godot, Foundry, Acq3D, Meshy, GitHub, Drive, skill. Blender was connected but held an unnamed unsaved/dirty buffer; no bpy or Blender scene writes were made. Godot remained connected as primary renderer. Baseline current scene `NUEDEFAULTSCENE0`: native 3D active, 161 3D Tiles, 6 AmbientLights, 13 Regions, unchanged scene revision `e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f`.
+
+## Live Game Camera enter/restore (PASS)
+First-party GM-bridge RPC `inspect_3d_native_workflows` confirmed 3D active/ready, GameCamera initially disabled, no controlled characters. `set_native_camera_mode(mode='game_camera',dry_run=false)` returned ok, enabled GameCamera and issued bridge-owned session ID. `set_native_camera_mode(mode='restore',session_id=<exact issued>)` returned ok, restored GameCamera disabled, first-person disabled, original camera position, controls target, and near clipping plane. Total round trip 2.62 seconds. Revision unchanged at all stages. This is a genuine native 3D Canvas live camera QA, not just a V8 fixture. No player first-person traversal test yet (requires an actual QA token already selected in GM client).
+
+## Activated three new MCP server tools on Windows (PASS)
+Pinned source GitHub feature branch `feature/3d-canvas-native-controls-20261022`, commit `be1feaa0b720ff9ed2785155f453141a595c789f`. First-party JS source already installed on GM machine SHA256 `0447610cb31d6935a0f3acb6034b472cae260d9d379d02a101440f759d6c3bfd` with native handlers and 6s bounded bridge polling. Original Python MCP source SHA256 `16747c98e5a7ff1fc8e58be48f507ab8cc089b9ca4c3f92ce129ebc14bf7c55d`; added ONLY three `@mcp.tool()` functions via AST-verified source extraction, preserving existing runtime functions: `inspect_3d_native_workflows`, `set_native_camera_mode`, `preview_native_asset_tile`. Python compilation PASS. Immutable backup `mcp-native-tools-20261022T183151Z` created; installed revised Python SHA256 `d7581cc8b46d856f271c3914b82265510e51a2000acf4bc9f684c82475db38a5`, checked post-write.
+
+Controlled first-party Python MCP parent/worker restart on Windows succeeded, new port 18748 responding. Foundry application NOT restarted during Python MCP registration. MCP Streamable-HTTP initialize returned HTTP 200, protocol `2025-06-18`; direct `tools/list` reported **11 tools**, including all three new names. The ChatGPT *existing in-conversation* connector snapshot continued showing 8 names; that is an advertised-tool cache lag, NOT evidence the running MCP omitted the tools. New tools are callable through the verified first-party server with MCP `tools/call` from connected Windows MCP, without DM manual changes.
+
+End-to-end MCP `tools/call` smoke outcomes:
+- `inspect_3d_native_workflows`: PASS, `active=true`, `render_ready=true`, native Props button callable and all 7 tested native editor actions registered.
+- `set_native_camera_mode(mode='game_camera',dry_run=true)`: PASS, would_enter=true, no world write or persisted camera change.
+- `preview_native_asset_tile` for official existing Mapmaking Pack `modules/canvas3dcompendium/assets/Tiles/Medieval%20Dungeon/Decorative_Wall.glb` at (1200,1200): PASS, read-only native model bbox -> proposed Tile footprint 174x44 pixels; `did_create_tile=false`. Saved Scene revision unchanged.
+
+## Safety/next milestone
+No procedural geometry, scene Tile creation, third-party vendor source edits or model asset mutations. Original `fps-camera-anchor.mjs` remains protected. Backup snapshots preserved. Code deployment is VERIFIED, but no native GLB actual placement in a disposable scene, collision/traversal QA, first-person character view, performance benchmark, or DM visual acceptance has happened. Next: use an existing disposable QA Scene (not approved Area 8), identify a known selected 3D QA token, test genuine first-person and restore, then source-validated GLB placement under a rollbackable transaction. Assess 3D Canvas FPS performance and world feel against Godot only after realistic scene testing. Godot remains primary until DM decision.
+
+Operational instruction: DO NOT request another manual installer or rerun old v0.4 ZIP. Remote maintenance via verified Blender MCP on Windows was successful for first-party file and Python process changes; no Blender .blend scene operations were used.
