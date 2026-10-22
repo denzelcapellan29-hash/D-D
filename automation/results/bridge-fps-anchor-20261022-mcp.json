@@ -1,0 +1,11 @@
+{
+  "job_id": "bridge-fps-anchor-20261022-mcp",
+  "completed_at": "2026-10-22T04:54:38.721040+00:00",
+  "status": "ok",
+  "result": {
+    "module": "acq-foundry-bridge",
+    "path": "scripts/fps-camera-anchor.mjs",
+    "size": 1400,
+    "content": "// Acquisitions Incorporated verified first-person camera tracking for 3D Canvas 9.0.35.\n// Preserve token heading as its 3D head moves across genuine GLB floor tiles.\n// Runtime-only camera/controls translation: no meshes, token elevation, or map edits.\nfunction install(l3d) {\n  const controls = l3d?.controls;\n  if (!controls || controls.__acqAnchorInstalled || !l3d.camera) return;\n  const original = controls.update.bind(controls);\n  controls.update = function(...args) {\n    if (l3d.firstPersonMode && l3d._active && l3d.tokens) {\n      const token = globalThis.canvas?.tokens?.controlled?.[0];\n      const head = token && l3d.tokens[token.id]?.headFast;\n      if (head && Number.isFinite(head.x) && Number.isFinite(head.y) && Number.isFinite(head.z)) {\n        const eye = l3d.camera.position;\n        const dx = head.x - eye.x, dy = head.y - eye.y, dz = head.z - eye.z;\n        // Keep target and eye translated together, preserving user's orbit/look bearing.\n        controls.target.x += dx; controls.target.y += dy; controls.target.z += dz;\n        eye.set(head.x, head.y, head.z);\n      }\n    }\n    return original(...args);\n  };\n  controls.__acqAnchorInstalled = true;\n}\nif (globalThis.Hooks) {\n  Hooks.on(\"3DCanvasPostInit\", install);\n  Hooks.on(\"3DCanvasSceneReady\", install);\n}\nif (globalThis.game?.Levels3DPreview?.controls) install(game.Levels3DPreview);\n"
+  }
+}
