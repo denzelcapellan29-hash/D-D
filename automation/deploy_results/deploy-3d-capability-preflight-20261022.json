@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "operation": "deploy_3d_capabilities",
+  "dry_run": true,
+  "source_commit": "e003dc9b26c6c29e6489b55c58e495fc20e5980b",
+  "old_js_sha256": "842e858751b50d765ac86c90665c29eaa59fd15b7562339fc2c67658615fa951",
+  "new_js_sha256": "0129dbefea404c56fb7d5206355f4f896fe26e30820fc824e8a38c305aed3ad9",
+  "old_mcp_sha256": "d9c9b8e436110099cc010847ce658abbaaecc0532627c262f179cb5ca8e41b41",
+  "new_mcp_sha256": "16747c98e5a7ff1fc8e58be48f507ab8cc089b9ca4c3f92ce129ebc14bf7c55d",
+  "scene_changed": false,
+  "requires_manual_restart": false,
+  "requires_gm_client_refresh": false,
+  "status": "preflight_pass"
+}
