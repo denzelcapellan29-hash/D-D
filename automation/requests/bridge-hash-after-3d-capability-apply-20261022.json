@@ -1,0 +1,5 @@
+{
+  "op": "hash_file",
+  "module": "acq-foundry-bridge",
+  "path": "scripts/acq-foundry-bridge.js"
+}
