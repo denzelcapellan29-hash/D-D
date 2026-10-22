@@ -189,7 +189,7 @@ def main():
     if a.scene_id != "sW4aXZgKXj1cH0US":
         raise RuntimeError("Only the verified inactive Area8 QA clone is allowed in v0.1.")
     observed_scene,scene=command(a.scene_id,{"op":"inspect_3d_scene"},dry_run=True,timeout=55)
-    if scene.get("scene_id") != a.scene_id:
+    if observed_scene.get("scene_id") != a.scene_id:
         raise RuntimeError("Native GM is not viewing the exact intended QA Scene.")
     if not scene.get("levels3d_active"):
         raise RuntimeError("Native 3D Canvas renderer must be active on viewed QA Scene.")
