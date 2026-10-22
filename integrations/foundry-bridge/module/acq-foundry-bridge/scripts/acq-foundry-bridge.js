@@ -512,6 +512,91 @@ function inspect3dNativeWorkflows(scene) {
 }
 
 
+/**
+ * Read-only inventory separating Foundry Scene/token vision from installed
+ * 3D Canvas module-scoped settings. Strict allowlists prevent leaking
+ * credentials or optional paths from unrelated plugins and users.
+ */
+function inspectNativeSettings(scene) {
+  const moduleId = "levels-3d-preview";
+  const groups = {
+    camera: ["enableGameCamera","gameCameraDefaultGm","gameCameraAutoLock","gameCameraMinAngle","gameCameraMaxAngle","gameCameraMinAzimuth","gameCameraMaxAzimuth","gameCameraMaxZoom","gameCameraClipping","cameralockzero","altCameraControls","screenspacepanning","enabledamping"],
+    visibility: ["exactTokenVisibility","dynamicTokenVisibility","allTokens","preventNegative","hideEffects"],
+    rendering: ["enableShaders","enableEffects","sharedContext","lightCacheSize","paddingAppearance","fullTransparency","outline","solidBaseMode","regionsAlwaysFlat"]
+  };
+  const settings = {};
+  for (const [group, keys] of Object.entries(groups)) {
+    settings[group] = keys.map(key => {
+      const registered = game.settings.settings.get(moduleId + "." + key);
+      if (!registered) return {key,registered:false};
+      const entry = {key,registered:true,scope:registered.scope ?? null};
+      try {
+        const value = game.settings.get(moduleId,key);
+        entry.value = typeof value === "number" || typeof value === "boolean" || typeof value === "string" ? value : null;
+        entry.readable = true;
+      } catch {
+        entry.readable = false;
+      }
+      return entry;
+    });
+  }
+  const sceneFlags = scene?.flags?.[moduleId] ?? {};
+  const allowedSceneFlags = ["showSceneWalls","renderBackground","renderTable","fogColor","fogDistance"];
+  const flags = {};
+  for (const key of allowedSceneFlags) {
+    if (Object.prototype.hasOwnProperty.call(sceneFlags,key)) flags[key] = sceneFlags[key];
+  }
+  const allTiles = Array.from(scene?.tiles?.contents ?? []);
+  const tally = key => ({
+    true: allTiles.filter(tile => tile.getFlag?.(moduleId,key) === true).length,
+    false: allTiles.filter(tile => tile.getFlag?.(moduleId,key) === false).length,
+    unset: allTiles.filter(tile => tile.getFlag?.(moduleId,key) == null).length
+  });
+  const qaTokens = Array.from(scene?.tokens?.contents ?? []).filter(t => t.name?.startsWith("QA ONLY")).map(token => ({
+    id: token.id,
+    name: token.name,
+    actor_id: token.actorId,
+    sight: {
+      enabled: Boolean(token.sight?.enabled),
+      range: Number(token.sight?.range ?? 0),
+      angle: Number(token.sight?.angle ?? 360),
+      visionMode: token.sight?.visionMode ?? "basic"
+    },
+    elevation: Number(token.elevation ?? 0),
+    controlled: Boolean(canvas?.tokens?.controlled?.some(t => t.id === token.id))
+  }));
+  const l3d = levels3d();
+  return {
+    scene_id:scene?.id,
+    module_id:moduleId,
+    native_module_version: game.modules?.get(moduleId)?.version ?? null,
+    module_settings:settings,
+    foundry_scene: {
+      tokenVision:Boolean(scene?.tokenVision),
+      darknessLevel:Number(scene?.environment?.darknessLevel ?? 0),
+      fogMode:scene?.fog?.mode ?? null,
+      gridSize:scene?.grid?.size ?? null,
+      gridDistance:scene?.grid?.distance ?? null,
+      walls:scene?.walls?.size ?? 0,
+      tiles:allTiles.length
+    },
+    scene_3d_flags: flags,
+    tile_3d_flags: {
+      collision:tally("collision"),
+      cameraCollision:tally("cameraCollision"),
+      sight:tally("sight")
+    },
+    qa_tokens:qaTokens,
+    gm_view: {
+      isGM:Boolean(game.user?.isGM),
+      tokenVisionSources:canvas?.effects?.visionSources?.size ?? null,
+      firstPerson:Boolean(l3d?.firstPersonMode),
+      GameCamera:Boolean(l3d?.GameCamera?.enabled)
+    },
+    read_only:true
+  };
+}
+
 let nativeCameraSession = null;
 
 /**
@@ -1160,6 +1245,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_3d_settings") {
+    return {op:type,ok:true,...inspectNativeSettings(scene)};
   }
 
   if (type === "inspect_3d_native_workflows") {
