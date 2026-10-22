@@ -59,9 +59,12 @@ if (-not $upgradeText.StartsWith('import "./fps-camera-anchor.mjs";') -or
   throw "Proposed client is not the expected additive capability-discovery build."
 }
 $anchorCurrent = (Get-FileHash -LiteralPath $InstalledAnchor -Algorithm SHA256).Hash.ToLowerInvariant()
-$anchorCandidate = (Get-FileHash -LiteralPath $CandidateAnchor -Algorithm SHA256).Hash.ToLowerInvariant()
-if ($anchorCurrent -ne $anchorCandidate) {
-  throw "Installed first-person stabilization file differs from candidate. Stop; preserve customized code."
+# GitHub stores LF while this installed camera patch has CRLF. Compare normalized
+# text rather than byte hashes, and never overwrite the installed anchor itself.
+$anchorCurrentText = (Get-Content -LiteralPath $InstalledAnchor -Raw).Replace("`r`n", "`n").TrimEnd("`r", "`n")
+$anchorCandidateText = (Get-Content -LiteralPath $CandidateAnchor -Raw).Replace("`r`n", "`n").TrimEnd("`r", "`n")
+if ($anchorCurrentText -cne $anchorCandidateText) {
+  throw "Installed first-person stabilization source differs from candidate. Stop; preserve customized code."
 }
 
 # Locate the exact running Python MCP file, not any arbitrary .py under a user folder.
