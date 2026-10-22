@@ -104,6 +104,50 @@ def inspect_3d_native_workflows(scene_id: str | None = None) -> dict[str, Any]:
 
 
 @mcp.tool()
+def set_native_camera_mode(
+    mode: str,
+    token_id: str | None = None,
+    session_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Guarded, ephemeral native Game Camera/first-person QA. Preview by default; restore requires the exact session ID. First person requires an already-selected loaded 3D token."""
+    op = {"op": "set_native_camera_mode", "mode": mode}
+    if token_id is not None:
+        op["token_id"] = token_id
+    if session_id is not None:
+        op["session_id"] = session_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run))
+
+
+@mcp.tool()
+def preview_native_asset_tile(
+    foundry_path: str,
+    x: float,
+    y: float,
+    elevation: float = 0,
+    scale: float = 1,
+    rotation: float = 0,
+    origin: str = "center",
+    color: str = "#ffffff",
+    collision: bool = True,
+    sight: bool = True,
+    camera_collision: bool = True,
+    scene_id: str | None = None,
+) -> dict[str, Any]:
+    """Resolve a local approved GLB with 3D Canvas' loader; compute a read-only native Tile placement candidate. No Scene writes."""
+    op = {
+        "op": "preview_native_asset_tile",
+        "foundry_path": foundry_path,
+        "x": x, "y": y, "elevation": elevation,
+        "scale": scale, "rotation": rotation, "origin": origin,
+        "color": color, "collision": collision,
+        "sight": sight, "camera_collision": camera_collision,
+    }
+    return _operation(_rpc([op], scene_id=scene_id, timeout_seconds=60.0))
+
+
+@mcp.tool()
 def search_3d_assets(
     query: str,
     limit: int = 50,
