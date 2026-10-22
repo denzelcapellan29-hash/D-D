@@ -144,6 +144,22 @@
         "after"
       ],
       "notes": "Calls the supported 3D Canvas runtime reload/toggle API to repopulate the active Three.js scene after scene switches or stale live updates; does not mutate canonical Scene documents."
+    },
+    "inspect_3d_capabilities": {
+      "read_only": true,
+      "inputs": [
+        "scene_id (optional active-scene guard)"
+      ],
+      "returns": [
+        "foundry_version",
+        "installed_allowlisted_modules",
+        "3d_runtime_state",
+        "camera_controller_mode_and_selected_token_runtime",
+        "registered_allowlisted_camera_settings",
+        "available_runtime_methods",
+        "scene_and_tile_3d_flag_names"
+      ],
+      "notes": "Presence of a method is not proof of successful use. No arbitrary runtime evaluation, setting enumeration, third-party code edits, or Scene/Token writes."
     }
   },
   "non_goals": [
