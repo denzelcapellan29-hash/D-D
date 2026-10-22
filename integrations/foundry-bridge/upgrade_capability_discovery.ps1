@@ -93,6 +93,27 @@ if (-not $mcpCurrent.Contains('def inspect_3d_scene(') -or
     -not $mcpCandidate.Contains('def inspect_3d_capabilities(')) {
   throw "Python MCP source identity cannot be verified."
 }
+if ($mcpCurrent.Contains('def inspect_3d_capabilities(')) {
+  throw "Running MCP file already includes the new tool. Stop and inspect before double-patching."
+}
+# Patch the existing Python server additively, preserving any installed-only tools.
+$pyNl = $mcpCurrent.Replace("`r`n", "`n")
+$pyAnchor = "@mcp.tool()`ndef search_3d_assets("
+if (-not $pyNl.Contains($pyAnchor)) {
+  throw "Installed Python MCP server lacks expected discovery insertion anchor."
+}
+$pyAddition = @'
+@mcp.tool()
+def inspect_3d_capabilities(scene_id: str | None = None) -> dict[str, Any]:
+    """Read-only 3D Canvas discovery: installed module versions, camera state, available runtime methods, and safe registered settings. Method availability is not proof of tested behavior."""
+    return _operation(_rpc([{"op": "inspect_3d_capabilities"}], scene_id=scene_id))
+
+
+'@
+$patchedMcp = $pyNl.Replace($pyAnchor, ($pyAddition + "`n" + $pyAnchor))
+if (-not $patchedMcp.Contains('def inspect_3d_capabilities(')) {
+  throw "Python MCP additive patch failed."
+}
 
 $node = Get-Command "node" -ErrorAction SilentlyContinue
 if ($node) {
@@ -146,12 +167,13 @@ $clientTmp = $InstalledClient + ".acq-validated-" + [guid]::NewGuid().ToString("
 $mcpTmp = $McpServerPath + ".acq-validated-" + [guid]::NewGuid().ToString("N")
 try {
   [IO.File]::WriteAllText($clientTmp, $upgradeText, (New-Object System.Text.UTF8Encoding($false)))
-  [IO.File]::WriteAllText($mcpTmp, $mcpCandidate, (New-Object System.Text.UTF8Encoding($false)))
+  [IO.File]::WriteAllText($mcpTmp, $patchedMcp, (New-Object System.Text.UTF8Encoding($false)))
   [IO.File]::Replace($clientTmp, $InstalledClient, $null)
   [IO.File]::Replace($mcpTmp, $McpServerPath, $null)
   $clientNew = (Get-FileHash -LiteralPath $InstalledClient -Algorithm SHA256).Hash.ToLowerInvariant()
   $mcpNew = (Get-FileHash -LiteralPath $McpServerPath -Algorithm SHA256).Hash.ToLowerInvariant()
   if ($clientNew -eq $ActualBridgeHash) { throw "3D capability source did not change." }
+  if (-not (Get-Content -LiteralPath $McpServerPath -Raw).Contains('def inspect_3d_capabilities(')) { throw 'Post-write MCP tool validation failed.' }
   if (-not (Get-Content -LiteralPath $InstalledClient -Raw).Contains('function inspect3dCapabilities(')) {
     throw "Post-write discovery endpoint validation failed."
   }
