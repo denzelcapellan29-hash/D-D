@@ -609,7 +609,7 @@ const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa6
 const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
 
 function isAcqVisionClone(doc) {
-  const tag = doc?.getFlag?.("acq", "qaVisionFixture");
+  const tag = doc?.flags?.["acq-foundry-bridge"]?.qaVisionFixture;
   return Boolean(tag?.sourceSceneId === QA_VISION_SOURCE_ID &&
     tag?.expectedSourceRevision === QA_VISION_BASE_REVISION &&
     doc?.name === QA_VISION_NAME && doc?.active === false);
@@ -631,7 +631,7 @@ async function manageVisionQaScene(scene, op, dryRun = true) {
     throw new Error("Approved Area8 revision mismatch. No QA changes allowed.");
   }
   const matches = Array.from(game.scenes ?? []).filter(s =>
-    s.name === QA_VISION_NAME || s.getFlag?.("acq","qaVisionFixture"));
+    s.name === QA_VISION_NAME || s.flags?.["acq-foundry-bridge"]?.qaVisionFixture);
   const owned = matches.filter(isAcqVisionClone);
   if (matches.length !== owned.length || owned.length > 1) {
     throw new Error("Ambiguous QA Scene name/ownership. Refusing changes.");
@@ -664,8 +664,8 @@ async function manageVisionQaScene(scene, op, dryRun = true) {
     original.ownership = {default:0};
     original.flags = {
       ...original.flags,
-      acq:{
-        ...(original.flags?.acq ?? {}),
+      "acq-foundry-bridge":{
+        ...(original.flags?.["acq-foundry-bridge"] ?? {}),
         qaVisionFixture:{
           sourceSceneId: QA_VISION_SOURCE_ID,
           expectedSourceRevision: QA_VISION_BASE_REVISION,
