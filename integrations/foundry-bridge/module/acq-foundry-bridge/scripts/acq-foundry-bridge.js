@@ -599,11 +599,12 @@ function inspectNativeSettings(scene) {
 
 /**
  * GM-only transient QA token control. Delegates to native Token.control/release,
- * does not change TokenDocument, actor, or Scene. Restricted to QA ONLY tokens
+ * temporarily allows native 3D Canvas to rotate or move a QA TokenDocument;
+ * restoration reverses only the exact changed QA pose fields. Restricted to QA ONLY tokens
  * and only when the GM has no existing controlled tokens.
  */
 let nativeQaTokenSelection = null;
-function manageNativeQaTokenSelection(scene, op, dryRun = true) {
+async function manageNativeQaTokenSelection(scene, op, dryRun = true) {
   const action = op.action;
   if (!["select","restore"].includes(action)) throw new Error("QA selection action must be select or restore.");
   if (!game.user?.isGM) throw new Error("QA selection is GM-only.");
@@ -615,10 +616,23 @@ function manageNativeQaTokenSelection(scene, op, dryRun = true) {
     }
     if (l3d.firstPersonMode) throw new Error("Exit native first-person camera before restoring selected token.");
     if (dryRun) return {dry_run:true,would_restore:true,token_id:nativeQaTokenSelection.tokenId};
-    canvas.tokens.get(nativeQaTokenSelection.tokenId)?.release();
-    const after = Array.from(canvas.tokens.controlled ?? []).map(t=>t.id);
+    const session = nativeQaTokenSelection;
+    const doc = scene.tokens.get(session.tokenId);
+    if (!doc?.name?.startsWith("QA ONLY")) throw new Error("Original QA token is missing, cannot guarantee document restore.");
+    canvas.tokens.get(session.tokenId)?.release();
+    // Native 3D Canvas can persist token heading while turning in first person.
+    // Restore only the exact scene-backed QA pose fields that changed.
+    const changed = {};
+    for (const key of ["x", "y", "elevation", "rotation"]) {
+      if (doc[key] !== session.originalPose[key]) changed[key] = session.originalPose[key];
+    }
+    if (Object.keys(changed).length) await doc.update(changed);
+    for (const key of Object.keys(changed)) {
+      if (doc[key] !== session.originalPose[key]) throw new Error("QA pose restoration did not persist: " + key);
+    }
+    const after = Array.from(canvas.tokens.controlled ?? []).map(t => t.id);
     nativeQaTokenSelection = null;
-    return {dry_run:false,restored:true,controlled_token_ids:after};
+    return {dry_run:false,restored:true,controlled_token_ids:after,restored_document_fields:Object.keys(changed)};
   }
   if (nativeQaTokenSelection) throw new Error("An Acq QA token selection is already active.");
   const currentlyControlled = Array.from(canvas?.tokens?.controlled ?? []);
@@ -638,7 +652,9 @@ function manageNativeQaTokenSelection(scene, op, dryRun = true) {
     throw new Error("Native Token.control did not select the requested QA token.");
   }
   const sessionId = "acq-qa-" + Date.now().toString(36);
-  nativeQaTokenSelection={id:sessionId,sceneId:scene.id,tokenId:id};
+  nativeQaTokenSelection={id:sessionId,sceneId:scene.id,tokenId:id,originalPose:{
+    x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation
+  }};
   return {dry_run:false,session_id:sessionId,selected_token_id:id,controlled_count:canvas.tokens.controlled.length};
 }
 
@@ -1293,7 +1309,7 @@ async function applyOperation(scene, op, dryRun = false) {
   }
 
   if (type === "native_select_qa_token") {
-    return {op:type,ok:true,...manageNativeQaTokenSelection(scene,op,dryRun)};
+    return {op:type,ok:true,...(await manageNativeQaTokenSelection(scene,op,dryRun))};
   }
 
   if (type === "inspect_3d_settings") {
