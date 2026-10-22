@@ -177,9 +177,9 @@ try {
   if (-not (Get-Content -LiteralPath $InstalledClient -Raw).Contains('function inspect3dCapabilities(')) {
     throw "Post-write discovery endpoint validation failed."
   }
-  $manifestData.applied = $true
-  $manifestData.new_bridge_sha256 = $clientNew
-  $manifestData.new_mcp_sha256 = $mcpNew
+  $manifestData["applied"] = $true
+  $manifestData["new_bridge_sha256"] = $clientNew
+  $manifestData["new_mcp_sha256"] = $mcpNew
   $manifestData | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
 } catch {
   Write-Warning "Deployment failed; restoring both first-party files from verified backup."
