@@ -148,6 +148,29 @@ def preview_native_asset_tile(
 
 
 @mcp.tool()
+def inspect_3d_settings(scene_id: str | None = None) -> dict[str, Any]:
+    """Read-only audit of native 3D Canvas world/client module settings versus Foundry Scene vision, QA Token sight and Tile collision flags. No setting writes."""
+    return _operation(_rpc([{"op": "inspect_3d_settings"}], scene_id=scene_id))
+
+
+@mcp.tool()
+def native_select_qa_token(
+    action: str,
+    token_id: str | None = None,
+    session_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Native ephemeral GM-only control of existing 'QA ONLY' Token, with owned session restore. Does not update TokenDocuments. Default preview only."""
+    op = {"op": "native_select_qa_token", "action": action}
+    if token_id is not None:
+        op["token_id"] = token_id
+    if session_id is not None:
+        op["session_id"] = session_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run))
+
+
+@mcp.tool()
 def search_3d_assets(
     query: str,
     limit: int = 50,
