@@ -1,0 +1,36 @@
+# Native 3D Canvas token movement — real two-direction QA PASS (2026-10-23)
+**Acceptance classification:** FIRST PARTY BRIDGE COMMAND + NATIVE 3D CANVAS TokenLayer.moveMany EXECUTION PASS; native wall blocking, floor movement integration, Falling, player-eye free motion and doors **NOT CERTIFIED**.
+
+## Boundary / source
+Test uses installed Foundry V14.368 + D&D5e6.0.5 + 3D Canvas9.0.36 native `libWrapper` `foundry.canvas.layers.TokenLayer.prototype.moveMany`; it is **not** a raw TokenDocument `x/y` move and is not custom gravity. Native vendor source `levels-3d-preview/scripts/wrappers.js` lines393–475 shows `moveMany` wrapper uses `handleArrowKeys` for camera-relative direction, `computeSightCollision(...,'move')` for horizontal wall checks and downward ground-hit to choose native target elevation, then `Scene.updateEmbeddedDocuments`. Native movement input is camera-relative; its `handleArrowKeys` mapping is at lines485–508. Native vendor modules were never edited.
+
+The project was resumed by mandatory tool discovery: 14 Acq3D, 121 Foundry, Blender/Godot/Meshy/Drive/GitHub connected; AI 3D Asset Workflow skills read live. Protected accepted original `NUEDEFAULTSCENE0` revision `e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f`. GM-only player-inactive QA clone `sW4aXZgKXj1cH0US` revision `05134d2c6debeb2ffb49d17b3f1c06e96dfa409c35a348d801157dd815a03e94`. Its full source document backed up in private Drive `https://drive.google.com/drive/folders/1bfan6hyWbuWqi_kT89rB7GMRHiA-TTp1` backup SHA `8956e5e8570145901d7469206a9db5ec59698ae66a7762848107d54022d8ce65`.
+
+## Implementation and guard
+- FIRST PARTY code only, feature branch `feature/native-token-movemany-qa-20261023`, updated bridge operation `qa_native_token_move_many`. Explicitly requires GM, inactive QA clone `isAcqVisionClone`, 3D renderer active+ready, one exact selected `QA ONLY` token, bridge-owned selection session ID and one cardinal movement input. Refuses cutscenes, first-person/GameCamera active, invalid scene bounds, invalid document/selection. Read-only preview plus `exercise_and_restore` path.
+- The real move **calls `canvas.tokens.moveMany({dx,dy,dz:0,ids:[tokenId],includeLocked:false})`**, allowing native 3D Canvas's registered movement wrapper to govern movement, blocking and floor. Records actual resulting Token document pose, then uses an explicit **rollback-only** TokenDocument update and bounded angular-normalized pose readback. The restore is **not** counted as locomotion. Bridge command `expected_revision` pin and clone source SHA guard in local RPC transport.
+- Original branch syntax PASS; six isolated Node tests PASS: preview-only, successful native move+rollback, simulated blocked move, simulated native error+rollback, invalid selection block, diagonal block. Strict first-party candidate checksum and backup deployment script; initial installed SHA `b25a35aa23c53e361222c53ab0518e7e30f2b17f70df3fef861db3b3151cd631`. Backup `C:\Users\denze\Acq3DDeployAgent\backups\qa-native-movement-20261023T174756Z`. Foundry served identical JS, one guarded F5 reload, browser polling resumed.
+- Re-viewed only GM-local QA clone, players not pulled. Activated NATIVE `preview3d` toolbar, 163 assets finished loading, `active=true,ready=true`. Selected QA Monk token `iSbK8OUBuUEjIGGu`, session `acq-qa-mvl9s3vn` after successful dry run.
+- Four cardinal dry run previews initially returned `horizontal_mesh_collision=false` one grid away at camera's starting pose. **Initial preview incorrectly assumed grid-absolute direction**; rectified in later staged source using native `handleArrowKeys` mapping, see below. Do not rely on grid-absolute preview from installed checksum `b25a35...`.
+
+## Two REAL native movement calls (not simulated)
+Through GM-browser /rpc first-party operation HTTP200, `native_api_invoked=true`, `native_move_succeeded=true`, and no command error:
+1. Input `dx=+1,dy=0`: native module remapped relative to camera to **negative X**. Monk pose **before** (x1770,y300,elev.13,heading333.3798438225904°); **after native move** (x1670,y300,elev.13,heading90°); **after rollback** exact original pose. Scene revision returned exact clone baseline `05134d...`.
+2. Input `dx=-1,dy=0`: native module remapped to **positive X**. Monk **after native move** (x1870,y300,elev.13,heading270°); after rollback exact original pose; Scene revision exactly baseline.
+No explicit wall intersection occurred in these steps. The unchanged elevation .13 is one short step observation, NOT full floor/falling support. Real visual movement during player-eye camera was **not captured**, so do not report player traversal certification. These two commands prove native 3D Canvas's wrapped Foundry `moveMany` performed actual x movement and heading updates; they do not prove collision blocking or movement into doors.
+
+## Cleanup and independent verification
+- `native_select_qa_token(action=restore, session_id=acq-qa-mvl9s3vn)` returned selected token IDs empty, restored document fields none, baseline clone revision unchanged.
+- `manage_vision_qa_scene(action=restore_view)` returned GM to accepted source, no players pulled.
+- Independent source `inspect_3d_capabilities`: accepted original Scene ID+SHA unchanged, native runtime inactive in source after restoration. Independent `manage_vision_qa_scene(action=inspect)`: QA clone inactive, 163 Tiles/13 Regions/two tokens, player-active source unchanged. Bridge /health active browser longpoll=1 and zero queue/inflight.
+
+## Camera-relative QA preview correction — **staged, not live**
+Native `wrappers.js` `handleArrowKeys` computes camera-to-target angle and remaps input using `mappedDx=Math.round(Math.sin(finalAngle))`, `mappedDy=Math.round(-Math.cos(finalAngle))`. Staged source updated QA preview direction and reports `camera_relative_direction=true,mapped_dx,mapped_dy`. Source branch commit `1bcd0abd91bb070578450677fddd965ee356780d`, Node syntax PASS and four camera-mapping fixtures PASS, including observed movement x1670 and blocked mock. **DO NOT CLAIM THIS MAPPING PREVIEW IS INSTALLED**; installed source still SHA `b25a35...`. A future guarded replacement and QA client reload would be necessary to activate it.
+
+## Next acceptance work
+1. Preserve QA clone and source. Install the camera-relative preview correction through a new dry-run/backed-up firstparty script only if needed for collision approach. Do not repeatedly reload Foundry or risk login state merely for display refinement.
+2. Use read-only native 3D raycast distances to select a **source-geometrically plausible wall approach** within the approved QA clone. Then one reversible native `moveMany` blocked-collision fixture should demonstrate no penetration. Do not force a blocked position by TokenDocument teleport.
+3. Test native player-eye traversal, client/non-GM visibility and door interactions under actual renderer and collision settings; Foundry V14 `defineSurface` .125 support PASS in separate ledger, but actual 3D Canvas integration and D&D5e Falling are unverified (`dnd5e.disableFalling=true`).
+4. Keep GameCamera visual fail separate; currently disabled by native world setting, guard is installed. DM alone accepts final visual quality.
+
+**QA-SAVED, native movement exercise PASS, not DM visual acceptance or full control.**
