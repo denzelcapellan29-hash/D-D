@@ -29,9 +29,9 @@ FILES = tuple(PINNED["v0.3"])
 
 
 def version_from_hashes(hashes: dict) -> str:
-    if all(hashes.get(n) == PINN[v][n] for n in FILES for v in ["v0.3"]):
+    if all(hashes.get(n) == PINNED[v][n] for n in FILES for v in ["v0.3"]):
         return "v0.3"
-    if all(hashes.get(n) == PINN[v][n] for n in FILES for v in ["v0.4"]):
+    if all(hashes.get(n) == PINNED[v][n] for n in FILES for v in ["v0.4"]):
         return "v0.4"
     return "UNRECOGNIZED_OR_MIXED"
 
@@ -139,7 +139,7 @@ def inspect(root: Path) -> dict:
 
 
 def selftest():
-    old, new = PINN["v0.3"], PINN["v0.4"]
+    old, new = PINNED["v0.3"], PINNED["v0.4"]
     good = [{"allow_deploy": True, "path_matches": True,
              "all_required_args": True, "started_after_install": True}]
     assert version_from_hashes(old) == "v0.3"
