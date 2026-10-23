@@ -107,6 +107,8 @@ def collect_access_audit(chatgpt_visible_tools: list[str] | None = None):
             "latest_scene": status.get("latest_scene"),
         },
         "tunnel_ready": bool(tun.get("live") and tun.get("ready")),
+        "browser_poll_telemetry": status.get("browser_poll", "UNAVAILABLE_IN_RUNNING_AGENT"),
+        "browser_result_telemetry": status.get("browser_result", "UNAVAILABLE_IN_RUNNING_AGENT"),
         "last_browser_scene_snapshot": _age_file(transport / "state" / "current_scene.json"),
         "firstparty_bridge_js_sha256": js_hash,
         "mcp_server_script_present": agent.is_file(),
