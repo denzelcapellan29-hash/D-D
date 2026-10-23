@@ -41,8 +41,12 @@ def preflight():
     status=health.get("status",{})
     if any(status.get(k) for k in ("queued","rpc_queued","inflight")):
         raise RuntimeError("STOP: Bridge command queue nonempty")
-    if not status.get("browser_poll",{}).get("recent_within_10s"):
-        raise RuntimeError("STOP: native GM browser not polling recently")
+    # Native first-party long polling intentionally holds one GET for up to
+    # 20 seconds. A >10-second heartbeat age is NORMAL while a GET is open.
+    connected = status.get("active_browser_longpoll_requests", 0) > 0 or bool(
+        status.get("browser_poll", {}).get("recent_within_10s"))
+    if not connected:
+        raise RuntimeError("STOP: neither active GM longpoll nor recent browser heartbeat")
     return dict(target=target,old=old,new=new,backups=backups)
 
 def replace_checked(target: pathlib.Path,data: bytes,pin: str):
