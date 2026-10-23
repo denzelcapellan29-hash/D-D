@@ -659,6 +659,55 @@ function inspectNativeVisionBearings(scene, op) {
   };
 }
 
+
+/** Read-only QA: actual native collision BVH rays and D&D5e Falling status. */
+async function inspectNativePlayability(scene) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id)
+    throw new Error("Playability test requires viewed GM-only Area8 QA clone.");
+  const l3d=levels3d(), manager=l3d?.interactionManager;
+  if (!l3d?._active || !l3d?._ready || typeof manager?.computeSightCollisionFrom3DPositions!=="function")
+    throw new Error("Native 3D Canvas collision service not ready.");
+  const THREE=await getThreeModule();
+  const ray=(p,q,type)=>{
+    const hit=manager.computeSightCollisionFrom3DPositions(
+      new THREE.Vector3(...p),new THREE.Vector3(...q),type,false,true,false,true);
+    return Array.isArray(hit)?hit.slice(0,5).map(h=>({
+      distance:+h.distance.toFixed(5),point:vectorToObject(h.point),
+      mesh:String(h.object?.name ?? "").slice(0,90),
+      parent:String(h.object?.parent?.name ?? "").slice(0,90),
+      board:h.object===l3d.board
+    })):[];
+  };
+  const tokens=Array.from(scene.tokens?.contents ?? []).filter(t=>t.name?.startsWith("QA ONLY")).map(t=>{
+    const x=(t.x+(t.width??1)*scene.grid.size/2)/1000;
+    const z=(t.y+(t.height??1)*scene.grid.size/2)/1000;
+    return {id:t.id,name:t.name,x,z,elevation:t.elevation,
+      status:Array.from(t.actor?.statuses??[]).sort(),
+      downward_move_hits:ray([x,0.32,z],[x,-0.15,z],"move")};
+  });
+  let disableFalling=null;
+  try{if(game.settings.settings.has("dnd5e.disableFalling"))
+    disableFalling=game.settings.get("dnd5e","disableFalling");}catch{}
+  const from=[1.92,0.12,0.55],to=[1.92,0.12,0.03];
+  const north_wall={
+    from,to,
+    movement_hits:ray(from,to,"move"),
+    sight_hits:ray(from,to,"sight"),
+    camera_hits:ray(from,to,"camera")
+  };
+  const groupCounts=Object.fromEntries(["move","sight","camera"].map(
+    k=>[k,manager._sightCollisions?.[k]?.length ?? null]));
+  const qaTiles=Array.from(scene.tiles?.contents??[]);
+  return {read_only:true,scene_id:scene.id,
+    dnd5e_disableFalling:disableFalling,
+    falling_condition_validation_masked:disableFalling===true,
+    game_camera_enabled:Boolean(l3d.GameCamera?.enabled),
+    native_collision_group_counts:groupCounts,
+    tokens,north_wall,
+    camera_collider_tiles:qaTiles.filter(t=>t.getFlag?.("levels-3d-preview","cameraCollision")===true).length,
+    caveat:"Actual native ray hits; token keyboard movement, physical support, and camera clipping NOT yet certified."};
+}
+
 const QA_VISION_SOURCE_ID = "NUEDEFAULTSCENE0";
 const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f";
 const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
@@ -1501,6 +1550,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_native_playability") {
+    return {op:type,ok:true,...(await inspectNativePlayability(scene))};
   }
 
   if (type === "inspect_native_vision_bearings") {
