@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import shlex
 from pathlib import Path
 import subprocess
 import sys
@@ -41,8 +42,18 @@ def classify(hashes: dict, procs: list[dict]) -> tuple[str, list[str]]:
     issues = []
     if version == "UNRECOGNIZED_OR_MIXED":
         issues.append("Installed watcher files do not match one pinned full version.")
-    if len(procs) != 1:
-        issues.append(f"Expected exactly one live watcher process; observed {len(procs)}.")
+    # Windows may show a python.exe launcher AND its direct python.exe child.
+    # That is one logical watcher only when the relationship is verified.
+    logical_single = len(procs) == 1 or (
+        len(procs) == 2 and any(
+            child.get("parent_pid") == parent.get("pid")
+            and child.get("pid") != parent.get("pid")
+            and child.get("script_identity") == parent.get("script_identity")
+            for parent in procs for child in procs
+        )
+    )
+    if not logical_single:
+        issues.append(f"Expected one watcher or a direct launcher/worker pair; observed {len(procs)} processes.")
     for proc in procs:
         if not proc.get("allow_deploy", False):
             issues.append("Live watcher lacks explicit --allow-deploy approval flag.")
@@ -67,6 +78,7 @@ $matches = @(Get-CimInstance Win32_Process | Where-Object {
 } | ForEach-Object {
     [pscustomobject]@{
         pid = [int]$_.ProcessId
+        parentPid = [int]$_.ParentProcessId
         command = [string]$_.CommandLine
         createdUtc = $_.CreationDate.ToUniversalTime().ToString('o')
     }
@@ -85,14 +97,20 @@ ConvertTo-Json -InputObject $matches -Depth 4 -Compress
         args = ["--repo", "--foundry-user-data", "--mcp-path", "--backup-root"]
         for item in arr:
             command = item.get("command", "")
+            # Windows CIM reports options like \"--allow-deploy\" in quoted arguments.
+            # shlex(posix=False) preserves quoted path values; strip outer quotes only.
+            parts = [p.strip('"') for p in shlex.split(command, posix=False)]
             started = datetime.fromisoformat(item["createdUtc"].replace("Z", "+00:00")).timestamp()
             # Allow harmless filesystem timestamp granularity of three seconds.
             out.append({
                 "pid": item.get("pid"),
+                "parent_pid": item.get("parentPid"),
+                "script_identity": str(expected_script).casefold(),
                 "started_utc": item["createdUtc"],
-                "allow_deploy": "--allow-deploy" in command.split(),
-                "path_matches": str(expected_script).casefold() in command.casefold(),
-                "all_required_args": all(arg in command.split() for arg in args),
+                "allow_deploy": "--allow-deploy" in parts,
+                "path_matches": str(expected_script).casefold() in [p.casefold() for p in parts],
+                "all_required_args": all(arg in parts and parts.index(arg) + 1 < len(parts)
+                                         and not parts[parts.index(arg) + 1].startswith("--") for arg in args),
                 "started_after_install": started + 3 >= script_mtime,
             })
         return out, None
@@ -151,6 +169,12 @@ def selftest():
     assert classify(new, [dict(good[0], allow_deploy=False)])[0] == "STOP_UNVERIFIED"
     assert classify(new, [dict(good[0], started_after_install=False)])[0] == "STOP_UNVERIFIED"
     assert classify(new, good + good)[0] == "STOP_UNVERIFIED"
+    # A Windows python.exe bootstrap process with one direct worker is allowed.
+    pair = [dict(good[0], pid=100, parent_pid=1, script_identity="same"),
+            dict(good[0], pid=101, parent_pid=100, script_identity="same")]
+    assert classify(new, pair)[0] == "v0.4_INSTALLED_AND_PROCESS_PROVEN"
+    pair[1]["parent_pid"] = 999
+    assert classify(new, pair)[0] == "STOP_UNVERIFIED"
     print(json.dumps({"selftest": "PASS", "cases": 9}))
 
 
