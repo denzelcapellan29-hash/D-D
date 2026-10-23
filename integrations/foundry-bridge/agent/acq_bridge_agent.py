@@ -57,6 +57,15 @@ class BridgeStore:
         self.transient_queue: list[dict] = []
         self.transient_waiters: dict[str, threading.Event] = {}
         self.transient_results: dict[str, dict] = {}
+        # First-party in-memory telemetry only; no vendor/browser source changes.
+        self.last_browser_poll_at: str | None = None
+        self.last_browser_poll_monotonic: float | None = None
+        self.last_browser_scene_id: str | None = None
+        self.last_browser_world_id: str | None = None
+        self.browser_poll_count = 0
+        self.last_browser_result_at: str | None = None
+        self.browser_result_count = 0
+        self.active_longpoll_count = 0
 
         for p in [self.commands, self.processed, self.results, self.state, self.backups, self.incoming]:
             p.mkdir(parents=True, exist_ok=True)
@@ -82,6 +91,15 @@ class BridgeStore:
                 "revision": payload.get("revision"),
                 "transport_root": str(self.root)
             })
+
+    def mark_browser_poll(self, world_id: str | None, scene_id: str | None) -> None:
+        """Observe the native GM polling request without queuing a command."""
+        with self.lock:
+            self.last_browser_poll_at = utcnow()
+            self.last_browser_poll_monotonic = time.monotonic()
+            self.last_browser_world_id = world_id
+            self.last_browser_scene_id = scene_id
+            self.browser_poll_count += 1
 
     def current_state(self) -> dict | None:
         path = self.state / "current_scene.json"
@@ -114,6 +132,20 @@ class BridgeStore:
         return cmd
 
     def enqueue_rpc(self, command: dict, timeout: float = 30.0) -> dict:
+        # Fail clearly when no GM browser polls, rather than queueing an opaque 504.
+        # Heartbeat checks are opt-in until an installed browser poll has been verified.
+        if os.environ.get("ACQ_REQUIRE_RECENT_GM_POLL", "0") == "1":
+            with self.lock:
+                recent = self.active_longpoll_count > 0 or (
+                    self.last_browser_poll_monotonic is not None and
+                    time.monotonic() - self.last_browser_poll_monotonic <= 10.0
+                )
+                if not recent:
+                    raise RuntimeError(
+                        "Foundry GM browser is not polling the Acq Bridge agent "
+                        "(no GET /bridge/next in the past 10 seconds). "
+                        "MCP server and tunnel health alone do not confirm GM control."
+                    )
         command = json.loads(json.dumps(command))
         command_id = str(command.get("command_id") or f"rpc-{time.time_ns()}")
         command["command_id"] = command_id
@@ -187,9 +219,38 @@ class BridgeStore:
                 return expanded
         return None
 
+    def wait_next(self, world_id: str | None, scene_id: str | None,
+                  wait_seconds: float = 0.0) -> dict | None:
+        """Return a claimed native Foundry command, optionally waiting for arrival.
+
+        A bounded pending GET keeps the browser command channel live even when
+        background tabs throttle JavaScript timers. No new gameplay logic.
+        """
+        bounded = max(0.0, min(float(wait_seconds), 22.0))
+        deadline = time.monotonic() + bounded
+        self.mark_browser_poll(world_id, scene_id)
+        if bounded:
+            with self.lock:
+                self.active_longpoll_count += 1
+        try:
+            while True:
+                command = self.claim_next(world_id, scene_id)
+                if command is not None:
+                    return command
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    return None
+                time.sleep(min(0.15, remaining))
+        finally:
+            if bounded:
+                with self.lock:
+                    self.active_longpoll_count -= 1
+
     def write_result(self, result: dict) -> None:
         command_id = str(result.get("command_id") or "unknown")
         with self.lock:
+            self.last_browser_result_at = utcnow()
+            self.browser_result_count += 1
             atomic_json(self.results / f"{command_id}_result.json", result)
             src = self.inflight.pop(command_id, None)
             waiter = self.transient_waiters.get(command_id)
@@ -208,7 +269,23 @@ class BridgeStore:
                 "queued": [p.name for p in self._candidate_commands()],
                 "rpc_queued": [str(cmd.get("command_id")) for cmd in self.transient_queue],
                 "inflight": list(self.inflight),
-                "latest_scene": (self.current_state() or {}).get("scene_name")
+                "latest_scene": (self.current_state() or {}).get("scene_name"),
+                "browser_poll": {
+                    "last_seen_at": self.last_browser_poll_at,
+                    "age_seconds": round(max(0.0, time.monotonic() - self.last_browser_poll_monotonic), 2)
+                        if self.last_browser_poll_monotonic is not None else None,
+                    "scene_id": self.last_browser_scene_id,
+                    "world_id": self.last_browser_world_id,
+                    "total_polls": self.browser_poll_count,
+                    "recent_within_10s": self.last_browser_poll_monotonic is not None
+                        and (time.monotonic() - self.last_browser_poll_monotonic) <= 10.0,
+                    "note": "Observed GET /bridge/next, not an authenticated browser identity or proof that 3D Canvas loaded."
+                },
+                "active_browser_longpoll_requests": self.active_longpoll_count,
+                "browser_result": {
+                    "last_seen_at": self.last_browser_result_at,
+                    "total_results": self.browser_result_count
+                }
             }
 
 
@@ -281,7 +358,11 @@ class BridgeHandler(BaseHTTPRequestHandler):
             world_id = (qs.get("world_id") or [None])[0]
             scene_id = (qs.get("scene_id") or [None])[0]
             try:
-                command = self.store.claim_next(world_id, scene_id)
+                # Old callers (without wait_ms) retain the same immediate API.
+                # Long poll is capped so dead browser connections cannot tie up
+                # this standard-library threaded HTTP agent indefinitely.
+                wait_ms = max(0, min(int((qs.get("wait_ms") or ["0"])[0]), 22000))
+                command = self.store.wait_next(world_id, scene_id, wait_ms / 1000.0)
             except Exception as exc:
                 return self._json(500, {"ok": False, "error": str(exc)})
             if command is None:
