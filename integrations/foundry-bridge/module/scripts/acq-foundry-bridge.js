@@ -741,13 +741,16 @@ function inspectNativeFloorSurfaces(scene) {
       const z=Number(t.elevation??0);
       let nativeHit=null, hitError=null;
       try{
+        // Foundry V14 ElevatedPoint uses .elevation, never Three.js .z.
+        // Using {z: ...} makes both undefined elevations equal and the
+        // native Scene.testSurfaceCollision path return null immediately.
         const closest=scene.testSurfaceCollision(
-          {x,y,z:z+1},
-          {x,y,z:z-1},
+          {x,y,elevation:z+1},
+          {x,y,elevation:z-1},
           {level,mode:"closest",type:"move"}
         );
         nativeHit=closest && typeof closest === "object" ?
-          {x:Number(closest.x),y:Number(closest.y),z:Number(closest.z)} :
+          {x:Number(closest.x),y:Number(closest.y),elevation:Number(closest.elevation)} :
           closest;
       }catch(e){hitError=String(e?.message??e).slice(0,250);}
       return {id:t.id,name:t.name,position:{x,y,elevation:z},
