@@ -940,9 +940,26 @@ async function manageNativeQaTokenSelection(scene, op, dryRun = true) {
       if (doc[key] !== session.originalPose[key]) changed[key] = session.originalPose[key];
     }
     if (Object.keys(changed).length) await doc.update(changed);
-    for (const key of Object.keys(changed)) {
-      if (doc[key] !== session.originalPose[key]) throw new Error("QA pose restoration did not persist: " + key);
+    // Foundry V14 may settle a native TokenDocument update asynchronously after
+    // update() resolves, particularly if 3D Canvas has just changed heading.
+    // Poll the SAME document readback, never issue a second implicit write.
+    // Always fail if the corrected pose is not observable within this bound.
+    const qaPoseMatches = (key) => {
+      const current = Number(doc[key]);
+      const expected = Number(session.originalPose[key]);
+      if (!Number.isFinite(current) || !Number.isFinite(expected)) return false;
+      if (key === "rotation") {
+        const delta = ((current - expected + 540) % 360) - 180;
+        return Math.abs(delta) <= 0.01;
+      }
+      return Math.abs(current - expected) <= 0.0001;
+    };
+    let mismatched = Object.keys(changed).filter(key => !qaPoseMatches(key));
+    for (let attempt = 0; mismatched.length && attempt < 15; attempt++) {
+      await new Promise(resolve => setTimeout(resolve, 120));
+      mismatched = Object.keys(changed).filter(key => !qaPoseMatches(key));
     }
+    if (mismatched.length) throw new Error("QA pose restoration did not persist: " + mismatched.join(", "));
     const after = Array.from(canvas.tokens.controlled ?? []).map(t => t.id);
     nativeQaTokenSelection = null;
     return {dry_run:false,restored:true,controlled_token_ids:after,restored_document_fields:Object.keys(changed)};
