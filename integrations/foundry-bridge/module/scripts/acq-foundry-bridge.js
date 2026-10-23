@@ -974,6 +974,107 @@ async function manageNativeQaTokenSelection(scene, op, dryRun = true) {
   return {dry_run:false,session_id:sessionId,selected_token_id:id,controlled_count:canvas.tokens.controlled.length};
 }
 
+/**
+ * GM-only QA integration test of the INSTALLED native 3D Canvas wrapper around
+ * Foundry TokenLayer.moveMany(). This deliberately does NOT teleport a token to
+ * demonstrate movement. The same operation restores the original QA pose.
+ */
+async function qaNativeMoveMany(scene, op, dryRun = true) {
+  ensureGM();
+  if (!isAcqVisionClone(scene) || scene.active) throw new Error("Native movement exercise requires an inactive GM-only QA clone.");
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d?._ready || !l3d?.interactionManager || !l3d?.tokens) {
+    throw new Error("The native 3D Canvas renderer and interaction manager must be active and ready.");
+  }
+  if (l3d.firstPersonMode || l3d.GameCamera?.enabled || l3d.cutsceneEngine?.isPlaying) {
+    throw new Error("Native movement exercise requires neutral camera state and no cutscene.");
+  }
+  const tokenId = op.token_id;
+  if (!nativeQaTokenSelection || nativeQaTokenSelection.id !== op.session_id
+      || nativeQaTokenSelection.sceneId !== scene.id || nativeQaTokenSelection.tokenId !== tokenId) {
+    throw new Error("Native movement requires a matching bridge-owned QA selection session.");
+  }
+  const selected = Array.from(canvas.tokens.controlled ?? []);
+  if (selected.length !== 1 || selected[0].id !== tokenId) throw new Error("One exact QA token must be selected.");
+  const token = canvas.tokens.get(tokenId);
+  const doc = scene.tokens.get(tokenId);
+  const nativeToken = l3d.tokens[tokenId];
+  if (!doc?.name?.startsWith("QA ONLY") || !token || !nativeToken?.head) {
+    throw new Error("The selected test token has no recognized native 3D representation.");
+  }
+  const dx = Number(op.dx);
+  const dy = Number(op.dy);
+  if (!Number.isInteger(dx) || !Number.isInteger(dy) || Math.abs(dx) + Math.abs(dy) !== 1) {
+    throw new Error("Exactly one cardinal native grid movement (dx/dy = -1/0/1) is required.");
+  }
+  if (typeof canvas.tokens.moveMany !== "function") throw new Error("Foundry TokenLayer.moveMany unavailable.");
+  const gridSize = Number(canvas.grid.size);
+  if (!(gridSize > 0) || !Number.isFinite(gridSize)) throw new Error("Invalid Foundry grid size.");
+  const center = token.center;
+  const newCenter = {x: center.x + dx * gridSize, y: center.y + dy * gridSize};
+  if (newCenter.x <= 0 || newCenter.y <= 0
+      || newCenter.x >= scene.width || newCenter.y >= scene.height) {
+    throw new Error("Refusing QA move beyond Scene bounds.");
+  }
+  const originalPose = {x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation};
+  const oldPos = {x:center.x,y:center.y,z:nativeToken.losHeight ?? doc.elevation};
+  const nextPos = {x:newCenter.x,y:newCenter.y,z:oldPos.z};
+  const horizontalHit = l3d.interactionManager.computeSightCollision(oldPos,nextPos,"move");
+  const preview = {
+    qa_scene_id:scene.id,token_id:tokenId,dx,dy,grid_size:gridSize,
+    original_pose:originalPose,preview_center:newCenter,
+    horizontal_mesh_collision:Boolean(horizontalHit),
+    native_api:"Foundry TokenLayer.moveMany, intercepted by native 3D Canvas libWrapper"
+  };
+  if (dryRun || op.action === "preview") return {dry_run:true,would_exercise:true,...preview};
+  if (op.action !== "exercise_and_restore") throw new Error("Unsupported native movement QA action.");
+
+  let moved = null, moveError = null, restored = false, restoreError = null;
+  try {
+    // Native Foundry movement pathway, including 3D Canvas movement BVH
+    // collision and ground-height resolution. Not a raw TokenDocument move.
+    await canvas.tokens.moveMany({dx,dy,dz:0,ids:[tokenId],includeLocked:false});
+    await new Promise(resolve => setTimeout(resolve,240));
+    moved = {x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation};
+  } catch (err) {
+    moveError = String(err?.message ?? err);
+  } finally {
+    try {
+      const differences = {};
+      for (const key of ["x","y","elevation","rotation"]) {
+        if (Number(doc[key]) !== Number(originalPose[key])) differences[key] = originalPose[key];
+      }
+      // Restoration of the starting QA pose is authorized only as rollback;
+      // it never counts as a native locomotion acceptance result.
+      if (Object.keys(differences).length) await doc.update(differences);
+      let mismatched = true;
+      for (let retry = 0; retry < 16; retry++) {
+        mismatched = ["x","y","elevation","rotation"].some(key => {
+          const delta = Number(doc[key]) - Number(originalPose[key]);
+          return key === "rotation" ? Math.abs(((delta+540)%360)-180) > 0.01 : Math.abs(delta) > 0.0001;
+        });
+        if (!mismatched) break;
+        await new Promise(resolve => setTimeout(resolve,120));
+      }
+      if (mismatched) throw new Error("QA pose failed to restore after native moveMany.");
+      restored = true;
+    } catch (err) {
+      restoreError = String(err?.message ?? err);
+    }
+  }
+  if (!restored || restoreError) throw new Error(
+    "STOP: native movement QA rollback unverified: " + String(restoreError ?? "unknown")
+    + "; candidate movement result " + JSON.stringify(moved) + "; move error " + String(moveError));
+  const movedDocument = Boolean(moved &&
+    (Math.abs(moved.x-originalPose.x) > 0.0001 || Math.abs(moved.y-originalPose.y) > 0.0001));
+  return {
+    dry_run:false,native_api_invoked:true,native_move_succeeded:!moveError,
+    native_move_error:moveError,native_document_position_changed:movedDocument,
+    measured_move_pose:moved,restored_pose:{x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation},
+    restored:true,...preview
+  };
+}
+
 let nativeCameraSession = null;
 
 /**
@@ -1654,6 +1755,9 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "native_select_qa_token") {
     return {op:type,ok:true,...(await manageNativeQaTokenSelection(scene,op,dryRun))};
+  }
+  if (type === "qa_native_token_move_many") {
+    return {op:type,ok:true,...(await qaNativeMoveMany(scene,op,dryRun))};
   }
 
   if (type === "inspect_3d_settings") {
