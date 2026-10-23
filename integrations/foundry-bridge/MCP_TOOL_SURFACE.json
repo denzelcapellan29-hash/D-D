@@ -160,6 +160,61 @@
         "scene_and_tile_3d_flag_names"
       ],
       "notes": "Presence of a method is not proof of successful use. No arbitrary runtime evaluation, setting enumeration, third-party code edits, or Scene/Token writes."
+    },
+    "inspect_3d_native_workflows": {
+      "read_only": true,
+      "inputs": [
+        "scene_id (optional)"
+      ],
+      "returns": [
+        "native_browser_instance_state",
+        "registered_core_and_premium_actions",
+        "camera_and_first_person_prerequisites"
+      ],
+      "notes": "AssetBrowser is an instance registered upon window open in 3D Canvas 9.0.36; false does not mean unsupported."
+    },
+    "set_native_camera_mode": {
+      "ephemeral_ui_action": true,
+      "inputs": [
+        "mode",
+        "token_id",
+        "session_id",
+        "scene_id",
+        "dry_run (true by default)"
+      ],
+      "requirements": [
+        "GM",
+        "3D Canvas ready",
+        "single owned session",
+        "existing controlled 3D token for first person",
+        "no cutscene running",
+        "restore with exact session_id"
+      ],
+      "notes": "Native toggle via verified 3D Canvas APIs; no document writes. Preview by default; live QA required."
+    },
+    "preview_native_asset_tile": {
+      "read_only": true,
+      "inputs": [
+        "foundry_path",
+        "x",
+        "y",
+        "elevation",
+        "scale",
+        "rotation",
+        "origin",
+        "color",
+        "collision",
+        "sight",
+        "camera_collision",
+        "scene_id"
+      ],
+      "returns": [
+        "model_bounds",
+        "candidate",
+        "did_create_tile:false",
+        "warnings"
+      ],
+      "notes": "Native loader Box3 measured footprint; no writes, no unapproved geometry. Verify real surface and model fit before applying."
     }
   },
   "non_goals": [

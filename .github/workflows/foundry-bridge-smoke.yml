@@ -33,6 +33,15 @@ jobs:
       - name: Read-only capability discovery tests
         run: node --test integrations/foundry-bridge/tests/capability-discovery.test.cjs
 
+      - name: Native 3D workflow inventory tests
+        run: node --test integrations/foundry-bridge/tests/native-workflow-inventory.test.cjs
+
+      - name: Native camera and GLB preview contract tests
+        run: node --test integrations/foundry-bridge/tests/native-control.test.cjs
+
+      - name: Foundry GM polling abort tests
+        run: node --test integrations/foundry-bridge/tests/polling-timeout.test.cjs
+
       - name: Install MCP SDK
         run: python -m pip install -r integrations/foundry-bridge/agent/requirements-mcp.txt
 

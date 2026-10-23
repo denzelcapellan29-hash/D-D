@@ -98,6 +98,102 @@ def inspect_3d_capabilities(scene_id: str | None = None) -> dict[str, Any]:
 
 
 @mcp.tool()
+def inspect_3d_native_workflows(scene_id: str | None = None) -> dict[str, Any]:
+    """Read-only native 3D Canvas editor inventory: Props browser instance, Premium editor buttons, and character camera prerequisites."""
+    return _operation(_rpc([{"op": "inspect_3d_native_workflows"}], scene_id=scene_id))
+
+
+@mcp.tool()
+def set_native_camera_mode(
+    mode: str,
+    token_id: str | None = None,
+    session_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Guarded, ephemeral native Game Camera/first-person QA. Preview by default; restore requires the exact session ID. First person requires an already-selected loaded 3D token."""
+    op = {"op": "set_native_camera_mode", "mode": mode}
+    if token_id is not None:
+        op["token_id"] = token_id
+    if session_id is not None:
+        op["session_id"] = session_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run))
+
+
+@mcp.tool()
+def preview_native_asset_tile(
+    foundry_path: str,
+    x: float,
+    y: float,
+    elevation: float = 0,
+    scale: float = 1,
+    rotation: float = 0,
+    origin: str = "center",
+    color: str = "#ffffff",
+    collision: bool = True,
+    sight: bool = True,
+    camera_collision: bool = True,
+    scene_id: str | None = None,
+) -> dict[str, Any]:
+    """Resolve a local approved GLB with 3D Canvas' loader; compute a read-only native Tile placement candidate. No Scene writes."""
+    op = {
+        "op": "preview_native_asset_tile",
+        "foundry_path": foundry_path,
+        "x": x, "y": y, "elevation": elevation,
+        "scale": scale, "rotation": rotation, "origin": origin,
+        "color": color, "collision": collision,
+        "sight": sight, "camera_collision": camera_collision,
+    }
+    return _operation(_rpc([op], scene_id=scene_id, timeout_seconds=60.0))
+
+
+@mcp.tool()
+def manage_vision_qa_scene(
+    action: str,
+    actor: str | None = None,
+    angle: int | None = None,
+    range_scene_units: float | None = None,
+    qa_scene_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """GM-only Area8 directional-vision QA: guarded native clone, inspect, token angle/range, GM-local view and restore. Original approved Scene must match pinned revision. Preview by default; never activate the clone for players."""
+    op: dict[str, Any] = {"op": "manage_vision_qa_scene", "action": action}
+    if actor is not None:
+        op["actor"] = actor
+    if angle is not None:
+        op["angle"] = angle
+    if range_scene_units is not None:
+        op["range"] = range_scene_units
+    if qa_scene_id is not None:
+        op["qa_scene_id"] = qa_scene_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run, timeout_seconds=65.0))
+
+
+@mcp.tool()
+def inspect_3d_settings(scene_id: str | None = None) -> dict[str, Any]:
+    """Read-only audit of native 3D Canvas world/client module settings versus Foundry Scene vision, QA Token sight and Tile collision flags. No setting writes."""
+    return _operation(_rpc([{"op": "inspect_3d_settings"}], scene_id=scene_id))
+
+
+@mcp.tool()
+def native_select_qa_token(
+    action: str,
+    token_id: str | None = None,
+    session_id: str | None = None,
+    scene_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Native ephemeral GM-only control of existing 'QA ONLY' Token, with owned session restore. Does not update TokenDocuments. Default preview only."""
+    op = {"op": "native_select_qa_token", "action": action}
+    if token_id is not None:
+        op["token_id"] = token_id
+    if session_id is not None:
+        op["session_id"] = session_id
+    return _operation(_rpc([op], scene_id=scene_id, dry_run=dry_run))
+
+
+@mcp.tool()
 def search_3d_assets(
     query: str,
     limit: int = 50,

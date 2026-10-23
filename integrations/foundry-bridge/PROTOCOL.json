@@ -83,6 +83,30 @@
       "read_only": true,
       "returns": "installed module versions, safe camera settings, 3D runtime methods, selected token render state, discovered Scene/Tile flag names",
       "security": "fixed module and setting allowlists; no arbitrary JavaScript execution or settings enumeration"
+    },
+    "inspect_3d_native_workflows": {
+      "read_only": true,
+      "returns": "core/Premium BuildPanel button registration and disabled status, actual Props browser instance, selected 3D token and camera prerequisites",
+      "security": "no invocation of 3rd-party callbacks, no changes to UI or Scene"
+    },
+    "set_native_camera_mode": {
+      "mode": "game_camera|first_person|restore",
+      "token_id": "explicit selected 3D token ID for first person",
+      "session_id": "required for restore",
+      "dry_run": "true by default in MCP wrapper",
+      "effects": "temporary GM camera only, no scene document writes",
+      "safety": "one bridge-owned session, snapshot/restore, GM-required"
+    },
+    "preview_native_asset_tile": {
+      "foundry_path": "approved local module GLB/GLTF path only",
+      "x": "canvas pixel coordinate",
+      "y": "canvas pixel coordinate",
+      "origin": "center|top_left",
+      "elevation": "scene units",
+      "scale": "bounded .05..10",
+      "rotation": "degrees",
+      "returns": "source mesh bounds and a calculated read-only Foundry Tile candidate",
+      "safety": "never creates or edits Tile; output is not visual QA"
     }
   },
   "direct_rpc": {
