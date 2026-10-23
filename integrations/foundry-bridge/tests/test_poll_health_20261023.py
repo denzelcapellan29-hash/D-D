@@ -33,6 +33,17 @@ class BrowserPollingHealthTests(unittest.TestCase):
         self.assertEqual(status["rpc_queued"], [])
         self.assertEqual(status["inflight"], [])
 
+    def test_failfast_guard_requires_recent_poll_only_when_opted_in(self):
+        from unittest.mock import patch
+        with patch.dict("os.environ", {"ACQ_REQUIRE_RECENT_GM_POLL": "1"}):
+            with self.assertRaisesRegex(RuntimeError, "GM browser is not polling"):
+                self.store.enqueue_rpc({"operations": [{"op": "inspect_3d_capabilities"}]}, timeout=0.01)
+            self.assertEqual(self.store.queue_status()["rpc_queued"], [])
+            self.store.mark_browser_poll("world-fixture", "scene-fixture")
+            with self.assertRaises(TimeoutError):
+                self.store.enqueue_rpc({"operations": [{"op": "inspect_3d_capabilities"}]}, timeout=0.01)
+            self.assertEqual(self.store.queue_status()["rpc_queued"], [])
+
     def test_result_telemetry_distinct_from_poll(self):
         self.store.mark_browser_poll("world-fixture", "scene-fixture")
         self.assertEqual(self.store.queue_status()["browser_result"]["total_results"], 0)
