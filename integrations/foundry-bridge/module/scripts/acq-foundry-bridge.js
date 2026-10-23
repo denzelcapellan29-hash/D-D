@@ -1088,6 +1088,152 @@ async function qaNativeMoveMany(scene, op, dryRun = true) {
   };
 }
 
+
+/**
+ * Bounded QA-only wall survey and native movement/blocked-wall acceptance.
+ * All tests use the installed 3D Canvas computeSightCollision + moveMany
+ * wrapper, not custom physics or unapproved visible geometry.
+ */
+async function qaNativeWallCollision(scene, op, dryRun = true) {
+  ensureGM();
+  if (!isAcqVisionClone(scene) || scene.active || canvas?.scene?.id !== scene.id) {
+    throw new Error("Wall collision QA is restricted to the GM-viewed inactive Area8 clone.");
+  }
+  const l3d = levels3d(), native = l3d?.interactionManager;
+  if (!l3d?._active || !l3d?._ready || typeof native?.computeSightCollision !== "function") {
+    throw new Error("Active ready native 3D Canvas movement collider is required.");
+  }
+  if (l3d.firstPersonMode || l3d.GameCamera?.enabled || l3d.cutsceneEngine?.isPlaying) {
+    throw new Error("Wall QA requires neutral native camera state and no cutscene.");
+  }
+  const tokenId = op.token_id, sessionId = op.session_id;
+  if (!nativeQaTokenSelection || nativeQaTokenSelection.id !== sessionId
+    || nativeQaTokenSelection.sceneId !== scene.id || nativeQaTokenSelection.tokenId !== tokenId) {
+    throw new Error("Matching bridge-owned QA selection session is required.");
+  }
+  const selected = Array.from(canvas.tokens?.controlled ?? []);
+  if (selected.length !== 1 || selected[0].id !== tokenId) {
+    throw new Error("One exact QA token must be selected.");
+  }
+  const doc = scene.tokens.get(tokenId), token = canvas.tokens.get(tokenId);
+  const token3d = l3d.tokens?.[tokenId];
+  if (!doc?.name?.startsWith("QA ONLY") || !token || !token3d?.head) {
+    throw new Error("QA token or its real 3D head anchor is missing.");
+  }
+  const gridSize=Number(canvas.grid?.size);
+  if (!Number.isFinite(gridSize) || gridSize <= 0 || gridSize>1000) {
+    throw new Error("Unexpected native Foundry grid size.");
+  }
+  const camera=l3d.camera?.position, target=l3d.controls?.target;
+  if (!camera || !target) throw new Error("Native camera rotation data missing.");
+  // Same exact mapping as native vendor scripts/wrappers.js:handleArrowKeys.
+  const cameraAngle=Math.atan2(target.z-camera.z,target.x-camera.x);
+  const worldDir=(dx,dy)=>{
+    const a=Math.atan2(dy,dx)+cameraAngle-Math.PI;
+    return {x:Math.round(Math.sin(a)),y:Math.round(-Math.cos(a))};
+  };
+  const directions=[
+    {input:{dx:1,dy:0},world:worldDir(1,0)},
+    {input:{dx:-1,dy:0},world:worldDir(-1,0)},
+    {input:{dx:0,dy:1},world:worldDir(0,1)},
+    {input:{dx:0,dy:-1},world:worldDir(0,-1)}
+  ];
+  const center=()=>({x:Number(doc.x)+Number(doc.width||1)*gridSize/2,
+    y:Number(doc.y)+Number(doc.height||1)*gridSize/2,
+    z:Number(token3d.losHeight ?? doc.elevation)});
+  const bounds=point=> point.x>0 && point.y>0
+    && point.x<scene.width && point.y<scene.height;
+  const scan=[];
+  for (const direction of directions) {
+    const origin=center(),steps=[];
+    for (let n=1;n<=6;n++) {
+      const from={x:origin.x+(n-1)*direction.world.x*gridSize,
+        y:origin.y+(n-1)*direction.world.y*gridSize,z:origin.z};
+      const to={x:origin.x+n*direction.world.x*gridSize,
+        y:origin.y+n*direction.world.y*gridSize,z:origin.z};
+      if (!bounds(to)) {steps.push({step:n,out_of_bounds:true});break;}
+      const hit=native.computeSightCollision(from,to,"move");
+      steps.push({step:n,blocked:Boolean(hit),from:{x:from.x,y:from.y},
+        to:{x:to.x,y:to.y},point:hit?.point?vectorToObject(hit.point):null});
+      if (hit)break;
+    }
+    scan.push({input:direction.input,mapped_world:direction.world,steps});
+  }
+  const survey={qa_scene_id:scene.id,token_id:tokenId,grid_size:gridSize,
+    original_pose:{x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation},
+    scan,engine:"native_3d_canvas_computeSightCollision"};
+  if (dryRun || op.action === "survey") return {dry_run:true,read_only:true,...survey};
+  if (op.action !== "approach_block_and_restore") {
+    throw new Error("Unsupported wall QA action.");
+  }
+  const dx=Number(op.dx),dy=Number(op.dy);
+  if (!Number.isInteger(dx)||!Number.isInteger(dy)||Math.abs(dx)+Math.abs(dy)!==1) {
+    throw new Error("Wall QA path must have exactly one cardinal input direction.");
+  }
+  const maxSteps=Number(op.max_steps);
+  if (!Number.isInteger(maxSteps)||maxSteps<2||maxSteps>4) {
+    throw new Error("Wall QA path requires between 2 and 4 native one-cell steps.");
+  }
+  const chosen=scan.find(v=>v.input.dx===dx && v.input.dy===dy);
+  if (!chosen)throw new Error("Requested native movement direction not found.");
+  const predictedFirstHit=chosen.steps.find(v=>v.blocked);
+  if (!predictedFirstHit || predictedFirstHit.step<2
+      || predictedFirstHit.step>maxSteps) {
+    throw new Error("Refusing live wall QA without at least one open approach step and a predicted real wall within the bound.");
+  }
+  const originalPose={x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation};
+  const progress=[];
+  let failure=null,rollbackError=null;
+  try {
+    for (let n=1;n<=maxSteps;n++) {
+      const before={x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation};
+      const orig=center(),w=worldDir(dx,dy);
+      const next={x:orig.x+w.x*gridSize,y:orig.y+w.y*gridSize,z:orig.z};
+      if (!bounds(next))throw new Error("Move would cross QA Scene bounds.");
+      const hit=native.computeSightCollision(orig,next,"move");
+      await canvas.tokens.moveMany({dx,dy,dz:0,ids:[tokenId],includeLocked:false});
+      await new Promise(resolve=>setTimeout(resolve,210));
+      const after={x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation};
+      const moved= Math.abs(Number(after.x)-Number(before.x))>0.0001
+        || Math.abs(Number(after.y)-Number(before.y))>0.0001;
+      progress.push({step:n,mesh_collision_before:Boolean(hit),document_moved:moved,
+        before,after});
+      if (hit || !moved)break;
+    }
+  } catch (err) {
+    failure=String(err?.message??err);
+  } finally {
+    try {
+      const changed={};
+      for (const k of ["x","y","elevation","rotation"]) {
+        if (Number(doc[k])!==Number(originalPose[k]))changed[k]=originalPose[k];
+      }
+      if (Object.keys(changed).length)await doc.update(changed);
+      let mismatch=true;
+      for (let i=0;i<16;i++) {
+        mismatch=["x","y","elevation","rotation"].some(k=>{
+          const delta=Number(doc[k])-Number(originalPose[k]);
+          return k==="rotation" ? Math.abs(((delta+540)%360)-180)>0.01
+            : Math.abs(delta)>0.0001;
+        });
+        if (!mismatch)break;
+        await new Promise(resolve=>setTimeout(resolve,120));
+      }
+      if (mismatch)throw new Error("Original QA token pose did not persist after rollback.");
+    } catch (err) {
+      rollbackError=String(err?.message??err);
+    }
+  }
+  if (rollbackError)throw new Error("STOP: wall QA rollback unverified: "+rollbackError);
+  const positiveControl=progress.some(p=>p.document_moved && !p.mesh_collision_before);
+  const blockedActual=progress.some(p=>p.mesh_collision_before && !p.document_moved);
+  const penetratedWall=progress.some(p=>p.mesh_collision_before && p.document_moved);
+  return {dry_run:false,native_move_many_invoked:progress.length>0,positive_control:positiveControl,
+    blocked_movement_verified:positiveControl && blockedActual && !penetratedWall && !failure,
+    penetration_detected:penetratedWall,move_error:failure,progress,restored:true,
+    restored_pose:{x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation},...survey};
+}
+
 let nativeCameraSession = null;
 
 /**
@@ -1771,6 +1917,9 @@ async function applyOperation(scene, op, dryRun = false) {
   }
   if (type === "qa_native_token_move_many") {
     return {op:type,ok:true,...(await qaNativeMoveMany(scene,op,dryRun))};
+  }
+  if (type === "qa_native_wall_collision") {
+    return {op:type,ok:true,...(await qaNativeWallCollision(scene,op,dryRun))};
   }
 
   if (type === "inspect_3d_settings") {
