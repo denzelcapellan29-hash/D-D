@@ -38,3 +38,9 @@ An automated gate must parse real source and QA records. Never count historical 
 
 **Generalizable correction:** Test decorative surfaces *as open source-derived front-face geometry*, not a texture projected blindly onto arbitrary CAD UVs. Source geometry can fill the visible front almost continuously while remaining entirely outside the CAD mating volume. Require both dense surface ray coverage and a deliberate shift failing the clearance plane. This method reduces exposed seam width but does not fix the texture repetition, unfinished corners, or lockable doors; keep the structural/art gates independent.
 
+
+## v030–v031: independent door leaf and swing topology
+
+A source-indexed candidate Area6 locked west doorway has a new **numeric CAD door leaf** at a deliberately defined world-Z hinge and a 1.17m clear structural leaf. The archived background Blender P1 fixture tests closed vs 90-degree inward swing; 16/16 cast rays hit the closed leaf, 16/16 pass the inward-open leaf, and all five surrounding structural wall solids have 0 unintended volume intersections in either configuration. Negative controls are physically effective: a +100mm lifted closed leaf admits low-level rays, while an incorrect 90-degree outward swing leaves only 34mm free corridor width—well under a 600mm human-capsule corridor target. The door structural geometry is a legitimate parametric master, but it is *not* artwork, does not implement lock-state interaction, and is not a Godot collision/navigation demonstration.
+
+The new v031 executable G4 gate parses this manifest, passes its evidence self-test, but still returns exit 3 / `G4_BLOCKED` because the full map topology, authentic door art, runtime locking and visual acceptance are outstanding. Do not infer collision/locking in the live game engine from Blender raycasts alone.
