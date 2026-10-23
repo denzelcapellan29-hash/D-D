@@ -46,3 +46,36 @@ Existing Blender master/art quality acceptance remains separate. Import does not
 - Installed adaptive Blender-first skill v2.7.50 references current source-first art QA and scoped geometry policy; newest explicit DM decision supersedes earlier 2026-10-21 Godot-presentation prioritization.
 
 **Ownership:** All test fixtures GM-only, new semantic IDs, revisable, with bounded rollback, no vendor source edit and no Meshy credit spend without provider-required approval.
+
+## First actual native collider diagnostic — 2026-10-22 (engineering evidence)
+
+**New DM direction:** Do not spend time revising the installed skill further now; the Blender → GLB → 3D Canvas procedure is already recorded in `docs/BLENDER_TO_3D_CANVAS_IMPORT_SPIKE_20261022.md` and in first-party GitHub scripts. Advance immediately to playable floor, physical walls and camera collision. Explicit original master art/source remains immutable.
+
+**QA-only read-only runtime test:** The first-party bridge now has `inspect_native_playability` (GitHub feature source commit `e5f9a85048f08746eba1ff17ba0a6225e0a987d4`, first-party installed JS SHA `9057486a844fda12c73e15a662700f6f35357f5b4c50706d37bb8a1d1ce1d0fc`, backup `native-physical-qa-20261023T000640Z`). It is restricted to the GM-viewed inactive clone `sW4aXZgKXj1cH0US`; its guard was live-tested to reject the approved Area8 scene `NUEDEFAULTSCENE0`. 3D Canvas v9.0.36 native `interactionManager.computeSightCollisionFrom3DPositions` with its existing accelerated BVH provides actual hit coordinates and models. No ad-hoc collider meshes, no TokenDocument movement, no Scene/settings writes.
+
+**Native hit results:**
+- QA druid projected center (3D x=2.02,z=0.635), vertical movement-category ray from y=.32 to -.15 hit true 3D surface at **y≈0**. This is a meaningful actual source-geometry floor hit, but is not yet a physical walking/settling test.
+- QA monk projected center (x=1.82,z=.35): same vertical ray first hit a real `AREA8_ROOF_DERIVED001` mesh at **y≈.28057**, then `RADIAL_CONNECTOR_A001` source-derived geometry at **y≈.01251**. Important: roof is above monk; floor-support probes must distinguish a ceiling hit from a foot-support hit.
+- Test north wall ray from (1.92,.12,.55) toward (1.92,.12,.03) hit native `TEMP_AREA8_WALL_ZERO_PIVOT` at z≈**.166978** for **movement**. The **camera** collision ray hit the same mesh at the same world coordinate; native **sight** ray saw this plus additional masked geometry z≈.178. This passes **ray-level geometry inclusion**, not physical token-motion clipping or Game Camera visual behavior.
+- Native collision ray service group counters after scoped ray tests: movement=7, sight=9, camera=4 (context-specific, **not total map collider counts**). QA clone has **13 Tile documents explicitly cameraCollision=true**, including one extra imported rim QA Tile; original source Area8 has 12.
+- Two QA tokens' actor statuses currently empty, so no visible `falling` condition. HOWEVER actual native `game.settings.get('dnd5e','disableFalling')` returned **true**. Therefore `Falling absent` is **NOT a PASS**: world-wide automation is masking false positives and legitimate drops alike.
+- Historic skill references `FOUNDRY_GAMEPLAY_MECHANICS_V2718.md` and `FOUNDRY_CAMERA_FALLING_VERIFIED_V2720.md` already verified the mechanism: D&D5e v6/v14 falling queries **Foundry Levels/Surfaces**, while a collidable 3D Canvas GLB does not automatically register a native supporting Surface. Official D&D5e 6.0 release note confirms that native Surface configuration is required and optional Falling automation can be disabled; source <https://newreleases.io/project/github/foundryvtt/dnd5e/release/release-6.0.0>. Foundry API `Scene.getSurfaces({type:"move"})` is documented at <https://foundryvtt.com/api/classes/foundry.documents.Scene.html>.
+- Read-only original scene document check shows **one native Level** (`defaultLevel0000`, elevation bottom0/top4), 13 Regions dominated by difficult-terrain movement behaviors, and no explicit `surfaces` field on the Level record. This alone does NOT prove `Scene.getSurfaces` has zero derived surfaces; next QA should read that native API. Do not change `grid.distance`—previous attempt broke actual 3D roof elevation.
+
+**Current acceptance statuses (required granularity)**
+
+| Gate | Status | Reason |
+|---|---|---|
+| One-source static Blender-to-3D-Canvas geometry/placement | **PASS** | Native model loaded, bounds/center/checksum checked; source unmodified |
+| Actual imported-source floor ray | **PARTIAL PASS** | Druid y≈0, monk lower structural surface y≈.0125, both genuine mesh hits |
+| Floor traversal, seam crossing, foot contact | **UNVERIFIED** | Not a keyboard/mouse movement test |
+| Wall movement obstruction geometry | **PARTIAL PASS** | Native BVH move ray hits northern wall |
+| Attempted character walk into wall/through doorway | **UNVERIFIED** | No real in-client move trial this pass |
+| Native Game Camera obstruction geometry | **PARTIAL PASS** | Camera ray intersects northern wall, but Game Camera disabled |
+| Actual Game Camera and first-person clipping | **UNVERIFIED** | No dynamic active-camera test |
+| Falling condition absence without global suppression | **BLOCKED** | `dnd5e.disableFalling=true`; supported native Surfaces not yet proven |
+| Existing accepted Area8 map integrity | **PASS** | GM view and camera restored, source SHA unchanged |
+
+**Required next QA, not a skill rewrite:** Test native `Scene.getSurfaces({type:"move"})` read-only, then validate a source-footprint-specific **Foundry-native Region Surface/Level** configuration on the QA clone only (metadata, NOT fabricated visible geometry). If native Surfaces cannot accurately represent Blender floors/holes/slopes, classify falling automation as DM adjudication limitation or require a different native-supported solution; do not quietly turn Falling automation off as proof of true support. With the native floor model settled, carry out physical drag/WASD-native movement along two adjacent walkable chunks and against a wall, verify camera blocking in the actually enabled camera mode, then cold reload and repeat. This is a release gate for every accepted imported room; not an excuse to rebuild the room with procedural primitives or Foundry 2D wall spaghetti.
+
+**Recovery:** After read-only probe, the GM was returned to original source Area8 via native QA `restore_view`; one native renderer recovery succeeded. Source Scene was not activated/deactivated or document-edited by the probe.
