@@ -708,6 +708,74 @@ async function inspectNativePlayability(scene) {
     caveat:"Actual native ray hits; token keyboard movement, physical support, and camera clipping NOT yet certified."};
 }
 
+/**
+ * Native Foundry V14 Surfaces diagnostic. Actual D&D5e Falling uses Surfaces,
+ * which are distinct from 3D Canvas collidable GLB geometry. Strictly
+ * read-only and restricted to the marked inactive QA clone.
+ */
+function inspectNativeFloorSurfaces(scene) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id) {
+    throw new Error("Native floor diagnostic requires GM viewing approved inactive QA clone.");
+  }
+  if (typeof scene.getSurfaces !== "function" ||
+      typeof scene.testSurfaceCollision !== "function") {
+    throw new Error("Foundry V14 native Scene Surfaces API unavailable.");
+  }
+  const collected = scene.getSurfaces({type:"move"});
+  const all = Array.from(collected ?? []);
+  const levels = Array.from(scene.levels?.contents ?? []).map(l=>({
+    id:l.id, name:l.name ?? null,
+    elevation:l.elevation ?? null,
+    top:l.top ?? null,
+    bottom:l.bottom ?? null,
+    surfaces_count:Array.isArray(l.surfaces)?l.surfaces.length:null
+  }));
+  const level = scene.firstLevel ?? scene.initialLevel;
+  const probes = Array.from(scene.tokens?.contents ?? [])
+    .filter(t=>t.name?.startsWith("QA ONLY"))
+    .map(t=>{
+      const step=Number(scene.grid?.size ?? 100)/2;
+      const x=Number(t.x)+step*Number(t.width??1);
+      const y=Number(t.y)+step*Number(t.height??1);
+      const z=Number(t.elevation??0);
+      let nativeHit=null, hitError=null;
+      try{
+        const closest=scene.testSurfaceCollision(
+          {x,y,z:z+1},
+          {x,y,z:z-1},
+          {level,mode:"closest",type:"move"}
+        );
+        nativeHit=closest && typeof closest === "object" ?
+          {x:Number(closest.x),y:Number(closest.y),z:Number(closest.z)} :
+          closest;
+      }catch(e){hitError=String(e?.message??e).slice(0,250);}
+      return {id:t.id,name:t.name,position:{x,y,elevation:z},
+        native_support_hit:nativeHit,collision_error:hitError,
+        actor_statuses:Array.from(t.actor?.statuses??[]).sort()};
+    });
+  let fallingDisabled=null;
+  try{fallingDisabled=game.settings.get("dnd5e","disableFalling");}catch{}
+  return {
+    read_only:true, qa_scene_id:scene.id,
+    native_getSurfaces_type_move_count:all.length,
+    native_move_surfaces:all.slice(0,30).map(surface=>({
+      elevation:Number.isFinite(surface?.elevation)?surface.elevation:null,
+      region_id:surface?.region?.id??null,
+      region_name:surface?.region?.name??null,
+      level_id:surface?.level?.id??null,
+      culling:Boolean(surface?.culling),
+      occlusion:Boolean(surface?.occlusion),
+      property_names:Object.keys(surface??{}).slice(0,18),
+    })),
+    source_levels:levels,
+    first_level_id:level?.id??null,
+    native_surface_probes:probes,
+    dnd5e_disableFalling:fallingDisabled,
+    status:"DIAGNOSTIC_ONLY_NO_FALLING_AUTOMATION_TOGGLED",
+    caveat:"Foundry native Surfaces differ from 3D Canvas mesh raycasts; statuses are masked if disableFalling=true."
+  };
+}
+
 const QA_VISION_SOURCE_ID = "NUEDEFAULTSCENE0";
 const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f";
 const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
@@ -1550,6 +1618,10 @@ async function applyOperation(scene, op, dryRun = false) {
 
   if (type === "inspect_3d_capabilities") {
     return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_native_floor_surfaces") {
+    return {op:type,ok:true,...inspectNativeFloorSurfaces(scene)};
   }
 
   if (type === "inspect_native_playability") {
