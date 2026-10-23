@@ -741,13 +741,16 @@ function inspectNativeFloorSurfaces(scene) {
       const z=Number(t.elevation??0);
       let nativeHit=null, hitError=null;
       try{
+        // Foundry V14 ElevatedPoint uses .elevation, never Three.js .z.
+        // Using {z: ...} makes both undefined elevations equal and the
+        // native Scene.testSurfaceCollision path return null immediately.
         const closest=scene.testSurfaceCollision(
-          {x,y,z:z+1},
-          {x,y,z:z-1},
+          {x,y,elevation:z+1},
+          {x,y,elevation:z-1},
           {level,mode:"closest",type:"move"}
         );
         nativeHit=closest && typeof closest === "object" ?
-          {x:Number(closest.x),y:Number(closest.y),z:Number(closest.z)} :
+          {x:Number(closest.x),y:Number(closest.y),elevation:Number(closest.elevation)} :
           closest;
       }catch(e){hitError=String(e?.message??e).slice(0,250);}
       return {id:t.id,name:t.name,position:{x,y,elevation:z},
@@ -998,6 +1001,18 @@ async function setNativeCameraMode(scene, op, dryRun = true) {
   }
   if (!l3d?._active || !l3d?._ready || !l3d.camera || !l3d.controls) {
     throw new Error("Native camera controls unavailable: active and ready 3D Canvas required.");
+  }
+  // GameCamera.toggle() is a lower-level method and does NOT satisfy
+  // GameCamera.init() world+Scene enable prerequisites by itself.
+  // Never report QA success for a native mode disabled by its owner module.
+  if (mode === "game_camera") {
+    const worldEnabled = Boolean(game.settings.get("levels-3d-preview", "enableGameCamera"));
+    const sceneEnabled = scene.getFlag("levels-3d-preview", "enableGameCamera") ?? true;
+    if (!worldEnabled || !sceneEnabled) {
+      throw new Error("Native Game Camera is disabled by its " +
+        (!worldEnabled ? "world" : "Scene") +
+        " setting; refusing unsafe low-level toggle. No settings changed.");
+    }
   }
   const before = nativeCameraState(l3d);
   if (mode === "restore") {
