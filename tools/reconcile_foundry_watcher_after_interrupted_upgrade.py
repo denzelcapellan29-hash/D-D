@@ -25,7 +25,7 @@ PINNED = {
         "acq_deploy_watcher.py": "3f46f033076a08d8b504b84d8324c5c7585af1665ca60fae9b41a1ee5958baea",
     },
 }
-FILES = tuple(PINN["v0.3"])
+FILES = tuple(PINNED["v0.3"])
 
 
 def version_from_hashes(hashes: dict) -> str:
