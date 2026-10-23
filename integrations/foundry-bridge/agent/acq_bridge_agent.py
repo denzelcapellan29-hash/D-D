@@ -131,6 +131,19 @@ class BridgeStore:
         return cmd
 
     def enqueue_rpc(self, command: dict, timeout: float = 30.0) -> dict:
+        # Fail clearly when no GM browser polls, rather than queueing an opaque 504.
+        # Heartbeat checks are opt-in until an installed browser poll has been verified.
+        if os.environ.get("ACQ_REQUIRE_RECENT_GM_POLL", "0") == "1":
+            with self.lock:
+                recent = self.last_browser_poll_monotonic is not None and (
+                    time.monotonic() - self.last_browser_poll_monotonic <= 10.0
+                )
+                if not recent:
+                    raise RuntimeError(
+                        "Foundry GM browser is not polling the Acq Bridge agent "
+                        "(no GET /bridge/next in the past 10 seconds). "
+                        "MCP server and tunnel health alone do not confirm GM control."
+                    )
         command = json.loads(json.dumps(command))
         command_id = str(command.get("command_id") or f"rpc-{time.time_ns()}")
         command["command_id"] = command_id
