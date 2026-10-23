@@ -1,0 +1,1925 @@
+import "./fps-camera-anchor.mjs";
+const MODULE_ID = "acq-foundry-bridge";
+const PROTOCOL_VERSION = 1;
+
+const ALLOWED_EMBEDDED = new Set([
+  "Tile", "AmbientLight", "Wall", "Region", "Drawing",
+  "MeasuredTemplate", "Note", "Token", "AmbientSound"
+]);
+
+const ALLOWED_ENV_KEYS = new Set([
+  "skybox", "exr", "renderTable", "tableTex", "tableColor",
+  "renderBackground", "enableFog", "fogColor", "fogDistance",
+  "sceneTint", "timeSync", "sunPosition", "sunIntensity",
+  "exposure", "sunDistance", "sunTilt",
+  "ambientLightIntensity", "ambientLightColor", "shadowBias",
+  "bloom", "bloomThreshold", "bloomStrength", "bloomRadius",
+  "filter", "filterStrength", "filterCustom",
+  "renderSceneLights", "mirrorLevels", "showSceneWalls",
+  "showSceneDoors", "showSceneFloors"
+]);
+
+let pollTimer = null;
+let pollEpoch = 0;
+let snapshotTimer = null;
+let inFlight = false;
+let lastConnected = false;
+
+function agentUrl() {
+  return String(game.settings.get(MODULE_ID, "agentUrl") || "http://127.0.0.1:18747").replace(/\/+$/, "");
+}
+
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const key of Object.keys(value).sort()) out[key] = canonicalize(value[key]);
+    return out;
+  }
+  return value;
+}
+
+async function sha256Object(value) {
+  const text = JSON.stringify(canonicalize(value));
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function activeScene() {
+  return canvas?.scene ?? game.scenes?.active ?? null;
+}
+
+async function sceneSnapshot(scene = activeScene()) {
+  if (!scene) return null;
+  const data = scene.toObject();
+  const revision = await sha256Object(data);
+  return {
+    protocol_version: PROTOCOL_VERSION,
+    kind: "scene_state",
+    generated_at: new Date().toISOString(),
+    foundry: {
+      version: game.version,
+      world_id: game.world?.id ?? null,
+      world_title: game.world?.title ?? null,
+      system_id: game.system?.id ?? null,
+      system_version: game.system?.version ?? null,
+      user_id: game.user?.id ?? null,
+      user_name: game.user?.name ?? null
+    },
+    scene_id: scene.id,
+    scene_name: scene.name,
+    revision,
+    scene: data
+  };
+}
+
+async function request(path, options = {}) {
+  // Without an abort, a lost loopback fetch can leave pollCommand.inFlight
+  // permanently true, silently preventing all future MCP commands.
+  const {timeoutMs = 12000, ...fetchOptions} = options;
+  const controller = new AbortController();
+  const effectiveTimeout = Math.max(1000, Math.min(Number(timeoutMs) || 12000, 30000));
+  const timeout = setTimeout(() => controller.abort(), effectiveTimeout);
+  try {
+    return await fetch(`${agentUrl()}${path}`, {
+      ...fetchOptions,
+      signal: controller.signal,
+      headers: {"Content-Type": "application/json", ...(fetchOptions.headers ?? {})},
+      cache: "no-store"
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function postState(reason = "update") {
+  if (!game.user?.isGM) return;
+  const snapshot = await sceneSnapshot();
+  if (!snapshot) return;
+  snapshot.reason = reason;
+  try {
+    const response = await request("/bridge/state", {method: "POST", body: JSON.stringify(snapshot)});
+    if (!response.ok) throw new Error(`Agent returned HTTP ${response.status}`);
+    if (!lastConnected) {
+      ui.notifications?.info("Acq Foundry Bridge connected.");
+      lastConnected = true;
+    }
+  } catch (err) {
+    if (lastConnected) ui.notifications?.warn("Acq Foundry Bridge disconnected.");
+    lastConnected = false;
+    console.debug(`${MODULE_ID} state post failed`, err);
+  }
+}
+
+function scheduleSnapshot(reason = "update") {
+  clearTimeout(snapshotTimer);
+  snapshotTimer = setTimeout(() => postState(reason), 350);
+}
+
+function ensureGM() {
+  if (!game.user?.isGM) throw new Error("Acq Foundry Bridge commands require an active GM client.");
+}
+
+function getFilePicker() {
+  return foundry?.applications?.apps?.FilePicker ?? globalThis.FilePicker;
+}
+
+function b64ToFile(b64, filename, mimeType = "application/octet-stream") {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new File([bytes], filename, {type: mimeType});
+}
+
+
+function levels3d() {
+  return game?.Levels3DPreview ?? null;
+}
+
+function vectorToObject(v) {
+  if (!v) return null;
+  return {
+    x: Number(v.x ?? 0),
+    y: Number(v.y ?? 0),
+    z: Number(v.z ?? 0)
+  };
+}
+
+function setVector(target, value) {
+  if (!target || !value) return;
+  const x = Number(value.x);
+  const y = Number(value.y);
+  const z = Number(value.z);
+  if (![x, y, z].every(Number.isFinite)) throw new Error("3D vector requires finite x, y, z.");
+  if (typeof target.set === "function") target.set(x, y, z);
+  else {
+    target.x = x;
+    target.y = y;
+    target.z = z;
+  }
+}
+
+function relevant3dFlags(flags = {}) {
+  const allowed = [
+    "model3d", "material", "color", "scale",
+    "collision", "sight", "cameraCollision",
+    "doorType", "doorState", "doorStyle",
+    "doorAnimationDuration", "doorAnimateAngle", "doorSlidePercent",
+    "imageTexture", "fillType", "castShadow"
+  ];
+  const out = {};
+  for (const key of allowed) {
+    if (Object.prototype.hasOwnProperty.call(flags, key)) out[key] = flags[key];
+  }
+  return out;
+}
+
+function environment3dFlags(scene) {
+  const src = scene?.flags?.["levels-3d-preview"] ?? {};
+  const out = {};
+  for (const key of ALLOWED_ENV_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(src, key)) out[key] = src[key];
+  }
+  if (src.initialPosition) out.initialPosition = src.initialPosition;
+  return out;
+}
+
+function sleepMs(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function threeRuntimeState(scene) {
+  const l3d = levels3d();
+  const loading = l3d?.loadingTiles;
+  let loadingCount = 0;
+  try {
+    loadingCount = Number(
+      loading?.size ??
+      loading?.length ??
+      (loading && typeof loading === "object" ? Object.keys(loading).length : 0)
+    ) || 0;
+  } catch {}
+
+  return {
+    available: Boolean(l3d),
+    active: Boolean(l3d?._active),
+    ready: Boolean(l3d?._ready),
+    finalizing: Boolean(l3d?._finalizingLoad),
+    env_ready: Boolean(l3d?._envReady),
+    lights_ok: Boolean(l3d?._lightsOk),
+    loading_count: loadingCount,
+    scene_id: canvas?.scene?.id ?? null,
+    target_scene_id: scene?.id ?? null,
+    renderer: Boolean(l3d?.renderer),
+    scene_graph: Boolean(l3d?.scene),
+    camera: Boolean(l3d?.camera),
+    controls: Boolean(l3d?.controls)
+  };
+}
+
+async function waitFor3dReady(scene, {timeoutMs = 15000, stableMs = 500} = {}) {
+  const started = Date.now();
+  let stableSince = null;
+  let last = threeRuntimeState(scene);
+
+  while (Date.now() - started < timeoutMs) {
+    last = threeRuntimeState(scene);
+    const usable = (
+      last.available &&
+      last.active &&
+      last.ready &&
+      last.scene_id === scene.id &&
+      last.renderer &&
+      last.scene_graph &&
+      last.camera &&
+      last.controls &&
+      last.loading_count === 0
+    );
+
+    if (usable) {
+      if (stableSince === null) stableSince = Date.now();
+      if (Date.now() - stableSince >= stableMs) {
+        return {ok: true, waited_ms: Date.now() - started, state: last};
+      }
+    } else {
+      stableSince = null;
+    }
+    await sleepMs(100);
+  }
+
+  throw new Error(
+    `3D Canvas did not become ready within ${timeoutMs}ms. Last runtime state: ${JSON.stringify(last)}`
+  );
+}
+
+async function ensure3dRuntime(scene, {reason = "3d-operation"} = {}) {
+  let before = threeRuntimeState(scene);
+  if (!before.available) {
+    throw new Error("3D Canvas runtime is unavailable. Verify the 3D Canvas module is enabled.");
+  }
+
+  if (
+    before.active && before.ready && before.scene_id === scene.id &&
+    before.renderer && before.scene_graph && before.camera && before.controls &&
+    before.loading_count === 0
+  ) {
+    const ready = await waitFor3dReady(scene, {timeoutMs: 3000, stableMs: 250});
+    return {reason, action: "already-ready", before, after: ready.state, waited_ms: ready.waited_ms};
+  }
+
+  const l3d = levels3d();
+  let action = "wait";
+
+  if (!l3d?._active) {
+    if (typeof l3d?.toggle !== "function") {
+      throw new Error(
+        `3D Canvas is inactive and no runtime toggle API is available. State: ${JSON.stringify(before)}`
+      );
+    }
+    action = "toggle-on";
+    await Promise.resolve(l3d.toggle(true));
+  }
+
+  try {
+    const ready = await waitFor3dReady(scene, {timeoutMs: 8000, stableMs: 500});
+    return {reason, action, before, after: ready.state, waited_ms: ready.waited_ms};
+  } catch (firstError) {
+    const current = levels3d();
+    if (typeof current?.reload === "function") {
+      action = action === "toggle-on" ? "toggle-on+reload" : "reload";
+      await Promise.resolve(current.reload());
+    } else if (typeof current?.toggle === "function") {
+      action = action === "toggle-on" ? "toggle-cycle" : "toggle-cycle";
+      if (current._active) await Promise.resolve(current.toggle(false));
+      await sleepMs(300);
+      await Promise.resolve(current.toggle(true));
+    } else {
+      throw firstError;
+    }
+
+    const ready = await waitFor3dReady(scene, {timeoutMs: 15000, stableMs: 700});
+    return {reason, action, before, after: ready.state, waited_ms: ready.waited_ms};
+  }
+}
+
+
+async function inspect3dScene(scene) {
+  const THREE3D = await getThreeModule();
+  const l3d = levels3d();
+  const tiles = Array.from(scene?.tiles ?? []).map(tile => {
+    const flags = tile?.flags?.["levels-3d-preview"] ?? {};
+    const entity3d = l3d?.tiles?.[tile.id] ?? null;
+    let runtime_bounds = null;
+    try {
+      const box = entity3d?._worldBoundingBox?.clone?.() ?? null;
+      if (box && !box.isEmpty()) {
+        const size = box.getSize(new THREE3D.Vector3());
+        const center = box.getCenter(new THREE3D.Vector3());
+        runtime_bounds = {
+          min: vectorToObject(box.min),
+          max: vectorToObject(box.max),
+          size: vectorToObject(size),
+          center: vectorToObject(center)
+        };
+      }
+    } catch {}
+    return {
+      id: tile.id,
+      x: tile.x,
+      y: tile.y,
+      width: tile.width,
+      height: tile.height,
+      elevation: tile.elevation ?? 0,
+      rotation: tile.rotation ?? 0,
+      hidden: Boolean(tile.hidden),
+      flags: relevant3dFlags(flags),
+      acq: tile?.flags?.acq ?? null,
+      runtime_bounds
+    };
+  }).filter(t => Object.keys(t.flags).length > 0 || t.acq);
+
+  return {
+    levels3d_active: Boolean(l3d?._active),
+    levels3d_available: Boolean(l3d),
+    camera: l3d ? {
+      position: vectorToObject(l3d.camera?.position),
+      target: vectorToObject(l3d.controls?.target),
+      first_person_mode: Boolean(l3d.firstPersonMode)
+    } : null,
+    environment: environment3dFlags(scene),
+    tiles,
+    tile_count: tiles.length,
+    light_count: Number(scene?.lights?.size ?? scene?.lights?.contents?.length ?? 0),
+    region_count: Number(scene?.regions?.size ?? scene?.regions?.contents?.length ?? 0)
+  };
+}
+
+
+/**
+ * Read-only 3D Canvas discovery. Deliberately does not execute arbitrary source,
+ * enumerate all settings, or return values from unapproved module settings.
+ * Feature tests check the live client's public object shape, NOT that an action
+ * has been successfully exercised. Works even when 3D Canvas is inactive.
+ */
+function inspect3dCapabilities(scene) {
+  const l3d = levels3d();
+  const safeModules = [
+    "levels-3d-preview",
+    "canvas3dcompendium",
+    "canvas3dtokencompendium",
+    "canvas3d-premium",
+    "lib-wrapper",
+    MODULE_ID
+  ];
+  const modules = safeModules.map(id => {
+    const mod = game.modules?.get?.(id) ?? null;
+    return {
+      id,
+      installed: Boolean(mod),
+      active: Boolean(mod?.active),
+      version: mod?.version ?? null
+    };
+  });
+
+  // Explicit allowlist. Never expose arbitrary module settings or credentials.
+  const cameraSettingKeys = [
+    "enableGameCamera", "gameCameraDefaultGm", "gameCameraAutoLock",
+    "gameCameraMinAngle", "gameCameraMaxAngle",
+    "gameCameraMinAzimuth", "gameCameraMaxAzimuth",
+    "gameCameraMaxZoom", "gameCameraClipping",
+    "altCameraControls", "screenspacepanning", "cameralockzero"
+  ];
+  const cameraSettings = cameraSettingKeys.map(key => {
+    const registered = game.settings?.settings?.get?.(`levels-3d-preview.${key}`) ?? null;
+    let value = null;
+    let readable = false;
+    if (registered) {
+      try {
+        const candidate = game.settings.get("levels-3d-preview", key);
+        // Primitive settings only; never leak serialized custom objects.
+        if (["string", "boolean", "number"].includes(typeof candidate) &&
+            (typeof candidate !== "string" || candidate.length <= 128)) {
+          value = candidate;
+          readable = true;
+        }
+      } catch {}
+    }
+    return {key, registered: Boolean(registered), readable, value};
+  });
+
+  const gc = l3d?.GameCamera ?? null;
+  const controls = l3d?.controls ?? null;
+  const selected = Array.from(canvas?.tokens?.controlled ?? []).slice(0, 8).map(t => ({
+    id: t.id,
+    rendered_3d: Boolean(l3d?.tokens?.[t.id])
+  }));
+  const tileConfigKeys = Array.from(scene?.tiles ?? [])
+    .flatMap(tile => Object.keys(tile?.flags?.["levels-3d-preview"] ?? {}));
+  const sceneConfigKeys = Object.keys(scene?.flags?.["levels-3d-preview"] ?? {});
+
+  const api = {
+    canvas3d_alias: Boolean(game?.canvas3D && game.canvas3D === l3d),
+    scene_toggle: typeof l3d?.toggle === "function",
+    scene_reload: typeof l3d?.reload === "function",
+    first_person_toggle: typeof l3d?.toggleFirstPerson === "function",
+    focus_controlled_token: typeof l3d?.setCameraToControlled === "function",
+    game_camera_toggle: typeof gc?.toggle === "function",
+    game_camera_top_down_toggle: typeof gc?.toggleTopDown === "function",
+    game_camera_ground_probe: typeof gc?.getY === "function",
+    live_camera_controls: Boolean(l3d?.camera && controls),
+    threejs_renderer: Boolean(l3d?.renderer),
+    asset_browser_class: typeof l3d?.CONFIG?.UI?.windows?.AssetBrowser === "function" ||
+      Boolean(l3d?.CONFIG?.UI?.windows?.AssetBrowser),
+    tile_runtime_registry: Boolean(l3d?.tiles),
+    player_token_runtime_registry: Boolean(l3d?.tokens),
+    cutscene_engine: Boolean(l3d?.cutsceneEngine),
+    interaction_manager: Boolean(l3d?.interactionManager)
+  };
+
+  return {
+    discovered_at: new Date().toISOString(),
+    foundry_version: game?.version ?? null,
+    world_id: game?.world?.id ?? null,
+    scene_id: scene?.id ?? null,
+    modules,
+    runtime: threeRuntimeState(scene),
+    camera: {
+      first_person: Boolean(l3d?.firstPersonMode),
+      game_camera_present: Boolean(gc),
+      game_camera_enabled: Boolean(gc?.enabled),
+      game_camera_lock: gc ? Boolean(gc.lock) : null,
+      game_camera_top_down: gc ? Boolean(gc.topDown) : null,
+      position: vectorToObject(l3d?.camera?.position),
+      target: vectorToObject(controls?.target),
+      selected_tokens: selected
+    },
+    camera_settings: cameraSettings,
+    available_apis: api,
+    config_inventory: {
+      scene_flag_keys: sceneConfigKeys.sort().slice(0, 100),
+      tile_flag_keys: Array.from(new Set(tileConfigKeys)).sort().slice(0, 150),
+      tile_count: Number(scene?.tiles?.size ?? scene?.tiles?.contents?.length ?? 0)
+    }
+  };
+}
+
+/**
+ * Read-only native-workflow inventory for the installed 3D Canvas UI.
+ * In 3D Canvas 9.0.36, CONFIG.UI.windows.AssetBrowser is an INSTANCE assigned
+ * only when the Props browser is constructed, not a class registration.
+ * Buttons are provided by core and Premium with disabled/callback metadata.
+ * Never call third-party button callbacks during discovery.
+ */
+function inspect3dNativeWorkflows(scene) {
+  const l3d = levels3d();
+  const panel = l3d?.BuildPanel ?? null;
+  const browser = l3d?.CONFIG?.UI?.windows?.AssetBrowser ?? null;
+  const buttonIds = ["props", "environment", "terrain", "materials", "roombuilder", "effects", "cutscenes"];
+  const registered = Array.isArray(panel?.BUILD_PANEL_BUTTONS) ? panel.BUILD_PANEL_BUTTONS : [];
+  const buttonStates = buttonIds.map(id => {
+    const entry = registered.find(item => item?.id === id);
+    return {
+      id,
+      registered: Boolean(entry),
+      disabled: entry ? entry.disabled === true : null,
+      callable: entry ? typeof entry.callback === "function" : false
+    };
+  });
+  const selected = Array.from(canvas?.tokens?.controlled ?? []).slice(0, 8);
+  return {
+    scene_id: scene?.id ?? null,
+    active: Boolean(l3d?._active),
+    render_ready: Boolean(l3d?._ready && l3d?.renderer),
+    native_browser: {
+      instance_open: Boolean(browser),
+      can_build_tile_data: typeof browser?.buildTileData === "function",
+      registered_props_action: Boolean(buttonStates.find(x => x.id === "props")?.callable),
+      note: "The browser instance is created on opening Props, not registered as a class."
+    },
+    native_buttons: buttonStates,
+    camera: {
+      game_camera_available: typeof l3d?.GameCamera?.toggle === "function",
+      game_camera_enabled: Boolean(l3d?.GameCamera?.enabled),
+      first_person_available: typeof l3d?.toggleFirstPerson === "function",
+      first_person_enabled: Boolean(l3d?.firstPersonMode),
+      can_focus_controlled: typeof l3d?.setCameraToControlled === "function",
+      controlled_token_count: selected.length,
+      controlled_3d_token_count: selected.filter(token => Boolean(l3d?.tokens?.[token?.id])).length,
+      cutscene_playing: Boolean(l3d?.cutsceneEngine?.isPlaying)
+    },
+    safe_inventory_only: true
+  };
+}
+
+
+/**
+ * Read-only inventory separating Foundry Scene/token vision from installed
+ * 3D Canvas module-scoped settings. Strict allowlists prevent leaking
+ * credentials or optional paths from unrelated plugins and users.
+ */
+function inspectNativeSettings(scene) {
+  const moduleId = "levels-3d-preview";
+  const groups = {
+    camera: ["enableGameCamera","gameCameraDefaultGm","gameCameraAutoLock","gameCameraMinAngle","gameCameraMaxAngle","gameCameraMinAzimuth","gameCameraMaxAzimuth","gameCameraMaxZoom","gameCameraClipping","cameralockzero","altCameraControls","screenspacepanning","enabledamping"],
+    visibility: ["exactTokenVisibility","dynamicTokenVisibility","allTokens","preventNegative","hideEffects"],
+    rendering: ["enableShaders","enableEffects","sharedContext","lightCacheSize","paddingAppearance","fullTransparency","outline","solidBaseMode","regionsAlwaysFlat"]
+  };
+  const settings = {};
+  for (const [group, keys] of Object.entries(groups)) {
+    settings[group] = keys.map(key => {
+      const registered = game.settings.settings.get(moduleId + "." + key);
+      if (!registered) return {key,registered:false};
+      const entry = {key,registered:true,scope:registered.scope ?? null};
+      try {
+        const value = game.settings.get(moduleId,key);
+        entry.value = typeof value === "number" || typeof value === "boolean" || typeof value === "string" ? value : null;
+        entry.readable = true;
+      } catch {
+        entry.readable = false;
+      }
+      return entry;
+    });
+  }
+  const sceneFlags = scene?.flags?.[moduleId] ?? {};
+  const allowedSceneFlags = ["showSceneWalls","renderBackground","renderTable","fogColor","fogDistance"];
+  const flags = {};
+  for (const key of allowedSceneFlags) {
+    if (Object.prototype.hasOwnProperty.call(sceneFlags,key)) flags[key] = sceneFlags[key];
+  }
+  const allTiles = Array.from(scene?.tiles?.contents ?? []);
+  const tally = key => ({
+    true: allTiles.filter(tile => tile.getFlag?.(moduleId,key) === true).length,
+    false: allTiles.filter(tile => tile.getFlag?.(moduleId,key) === false).length,
+    unset: allTiles.filter(tile => tile.getFlag?.(moduleId,key) == null).length
+  });
+  const qaTokens = Array.from(scene?.tokens?.contents ?? []).filter(t => t.name?.startsWith("QA ONLY")).map(token => ({
+    id: token.id,
+    name: token.name,
+    actor_id: token.actorId,
+    sight: {
+      enabled: Boolean(token.sight?.enabled),
+      range: Number(token.sight?.range ?? 0),
+      angle: Number(token.sight?.angle ?? 360),
+      visionMode: token.sight?.visionMode ?? "basic"
+    },
+    elevation: Number(token.elevation ?? 0),
+    controlled: Boolean(canvas?.tokens?.controlled?.some(t => t.id === token.id))
+  }));
+  const l3d = levels3d();
+  return {
+    scene_id:scene?.id,
+    module_id:moduleId,
+    native_module_version: game.modules?.get(moduleId)?.version ?? null,
+    module_settings:settings,
+    foundry_scene: {
+      tokenVision:Boolean(scene?.tokenVision),
+      darknessLevel:Number(scene?.environment?.darknessLevel ?? 0),
+      fogMode:scene?.fog?.mode ?? null,
+      gridSize:scene?.grid?.size ?? null,
+      gridDistance:scene?.grid?.distance ?? null,
+      walls:scene?.walls?.size ?? 0,
+      tiles:allTiles.length
+    },
+    scene_3d_flags: flags,
+    tile_3d_flags: {
+      collision:tally("collision"),
+      cameraCollision:tally("cameraCollision"),
+      sight:tally("sight")
+    },
+    qa_tokens:qaTokens,
+    gm_view: {
+      isGM:Boolean(game.user?.isGM),
+      tokenVisionSources:canvas?.effects?.visionSources?.size ?? null,
+      firstPerson:Boolean(l3d?.firstPersonMode),
+      GameCamera:Boolean(l3d?.GameCamera?.enabled)
+    },
+    read_only:true
+  };
+}
+
+/**
+ * GM-only transient QA token control. Delegates to native Token.control/release,
+ * temporarily allows native 3D Canvas to rotate or move a QA TokenDocument;
+ * restoration reverses only the exact changed QA pose fields. Restricted to QA ONLY tokens
+ * and only when the GM has no existing controlled tokens.
+ */
+
+/**
+ * Read-only native Foundry V14 CanvasVisibility test on the isolated Area8
+ * QA clone only. A GM result is diagnostic, NOT proof of player visibility.
+ */
+function inspectNativeVisionBearings(scene, op) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id) {
+    throw new Error("Native vision bearing sampler requires the viewed GM-only Area8 QA clone.");
+  }
+  const selection = Array.from(canvas?.tokens?.controlled ?? []);
+  if (selection.length !== 1 || !selection[0]?.document?.name?.startsWith("QA ONLY")) {
+    throw new Error("Exactly one existing QA ONLY token must be selected.");
+  }
+  if (typeof canvas?.visibility?.testVisibility !== "function") {
+    throw new Error("Installed Foundry lacks the native CanvasVisibility.testVisibility API.");
+  }
+  const token = selection[0];
+  const document = token.document;
+  const center = token.center;
+  if (!center || !Number.isFinite(center.x) || !Number.isFinite(center.y)) {
+    throw new Error("Native selected token's pixel center is unavailable.");
+  }
+  const bearings = [0,45,90,135,180,225,270,315];
+  const radii = [100,250,450,650];
+  const bounds = scene.dimensions?.sceneRect ?? {x:0,y:0,width:scene.width,height:scene.height};
+  const within = p =>
+    p.x >= bounds.x && p.x <= bounds.x+bounds.width &&
+    p.y >= bounds.y && p.y <= bounds.y+bounds.height;
+  const results = [];
+  for (const radius of radii) {
+    const row = [];
+    for (const bearing of bearings) {
+      const rad = bearing*Math.PI/180;
+      const point = {x:center.x + radius*Math.sin(rad),y:center.y - radius*Math.cos(rad)};
+      const signedDelta = ((bearing-document.rotation+540)%360)-180;
+      row.push({
+        bearing_deg:bearing, radius_px:radius,
+        inside_scene:within(point),
+        expected_inside_token_angle:Math.abs(signedDelta)<=Number(document.sight?.angle ?? 360)/2,
+        native_visible:within(point) ? Boolean(canvas.visibility.testVisibility(point,{tolerance:0})) : null
+      });
+    }
+    results.push(row);
+  }
+  return {
+    read_only:true, qa_scene_id:scene.id, token_id:document.id,
+    token_rotation_deg:document.rotation,
+    sight_angle_deg:document.sight?.angle,
+    sight_range_scene_units:document.sight?.range,
+    pixel_center:{x:center.x,y:center.y},
+    native_vision_source_count:canvas.effects?.visionSources?.size ?? null,
+    gm_only_caveat:"Native CanvasVisibility.testVisibility sampled in GM client; does NOT certify player fog or 3D vertical LOS.",
+    bearing_grid:results
+  };
+}
+
+
+/** Read-only QA: actual native collision BVH rays and D&D5e Falling status. */
+async function inspectNativePlayability(scene) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id)
+    throw new Error("Playability test requires viewed GM-only Area8 QA clone.");
+  const l3d=levels3d(), manager=l3d?.interactionManager;
+  if (!l3d?._active || !l3d?._ready || typeof manager?.computeSightCollisionFrom3DPositions!=="function")
+    throw new Error("Native 3D Canvas collision service not ready.");
+  const THREE=await getThreeModule();
+  const ray=(p,q,type)=>{
+    const hit=manager.computeSightCollisionFrom3DPositions(
+      new THREE.Vector3(...p),new THREE.Vector3(...q),type,false,true,false,true);
+    return Array.isArray(hit)?hit.slice(0,5).map(h=>({
+      distance:+h.distance.toFixed(5),point:vectorToObject(h.point),
+      mesh:String(h.object?.name ?? "").slice(0,90),
+      parent:String(h.object?.parent?.name ?? "").slice(0,90),
+      board:h.object===l3d.board
+    })):[];
+  };
+  const tokens=Array.from(scene.tokens?.contents ?? []).filter(t=>t.name?.startsWith("QA ONLY")).map(t=>{
+    const x=(t.x+(t.width??1)*scene.grid.size/2)/1000;
+    const z=(t.y+(t.height??1)*scene.grid.size/2)/1000;
+    return {id:t.id,name:t.name,x,z,elevation:t.elevation,
+      status:Array.from(t.actor?.statuses??[]).sort(),
+      downward_move_hits:ray([x,0.32,z],[x,-0.15,z],"move")};
+  });
+  let disableFalling=null;
+  try{if(game.settings.settings.has("dnd5e.disableFalling"))
+    disableFalling=game.settings.get("dnd5e","disableFalling");}catch{}
+  const from=[1.92,0.12,0.55],to=[1.92,0.12,0.03];
+  const north_wall={
+    from,to,
+    movement_hits:ray(from,to,"move"),
+    sight_hits:ray(from,to,"sight"),
+    camera_hits:ray(from,to,"camera")
+  };
+  const groupCounts=Object.fromEntries(["move","sight","camera"].map(
+    k=>[k,manager._sightCollisions?.[k]?.length ?? null]));
+  const qaTiles=Array.from(scene.tiles?.contents??[]);
+  return {read_only:true,scene_id:scene.id,
+    dnd5e_disableFalling:disableFalling,
+    falling_condition_validation_masked:disableFalling===true,
+    game_camera_enabled:Boolean(l3d.GameCamera?.enabled),
+    native_collision_group_counts:groupCounts,
+    tokens,north_wall,
+    camera_collider_tiles:qaTiles.filter(t=>t.getFlag?.("levels-3d-preview","cameraCollision")===true).length,
+    caveat:"Actual native ray hits; token keyboard movement, physical support, and camera clipping NOT yet certified."};
+}
+
+/**
+ * Native Foundry V14 Surfaces diagnostic. Actual D&D5e Falling uses Surfaces,
+ * which are distinct from 3D Canvas collidable GLB geometry. Strictly
+ * read-only and restricted to the marked inactive QA clone.
+ */
+function inspectNativeFloorSurfaces(scene) {
+  if (!game.user?.isGM || !isAcqVisionClone(scene) || canvas?.scene?.id !== scene.id) {
+    throw new Error("Native floor diagnostic requires GM viewing approved inactive QA clone.");
+  }
+  if (typeof scene.getSurfaces !== "function" ||
+      typeof scene.testSurfaceCollision !== "function") {
+    throw new Error("Foundry V14 native Scene Surfaces API unavailable.");
+  }
+  const collected = scene.getSurfaces({type:"move"});
+  const all = Array.from(collected ?? []);
+  const levels = Array.from(scene.levels?.contents ?? []).map(l=>({
+    id:l.id, name:l.name ?? null,
+    elevation:l.elevation ?? null,
+    top:l.top ?? null,
+    bottom:l.bottom ?? null,
+    surfaces_count:Array.isArray(l.surfaces)?l.surfaces.length:null
+  }));
+  const level = scene.firstLevel ?? scene.initialLevel;
+  const probes = Array.from(scene.tokens?.contents ?? [])
+    .filter(t=>t.name?.startsWith("QA ONLY"))
+    .map(t=>{
+      const step=Number(scene.grid?.size ?? 100)/2;
+      const x=Number(t.x)+step*Number(t.width??1);
+      const y=Number(t.y)+step*Number(t.height??1);
+      const z=Number(t.elevation??0);
+      let nativeHit=null, hitError=null;
+      try{
+        const closest=scene.testSurfaceCollision(
+          {x,y,z:z+1},
+          {x,y,z:z-1},
+          {level,mode:"closest",type:"move"}
+        );
+        nativeHit=closest && typeof closest === "object" ?
+          {x:Number(closest.x),y:Number(closest.y),z:Number(closest.z)} :
+          closest;
+      }catch(e){hitError=String(e?.message??e).slice(0,250);}
+      return {id:t.id,name:t.name,position:{x,y,elevation:z},
+        native_support_hit:nativeHit,collision_error:hitError,
+        actor_statuses:Array.from(t.actor?.statuses??[]).sort()};
+    });
+  let fallingDisabled=null;
+  try{fallingDisabled=game.settings.get("dnd5e","disableFalling");}catch{}
+  return {
+    read_only:true, qa_scene_id:scene.id,
+    native_getSurfaces_type_move_count:all.length,
+    native_move_surfaces:all.slice(0,30).map(surface=>({
+      elevation:Number.isFinite(surface?.elevation)?surface.elevation:null,
+      region_id:surface?.region?.id??null,
+      region_name:surface?.region?.name??null,
+      level_id:surface?.level?.id??null,
+      culling:Boolean(surface?.culling),
+      occlusion:Boolean(surface?.occlusion),
+      property_names:Object.keys(surface??{}).slice(0,18),
+    })),
+    source_levels:levels,
+    first_level_id:level?.id??null,
+    native_surface_probes:probes,
+    dnd5e_disableFalling:fallingDisabled,
+    status:"DIAGNOSTIC_ONLY_NO_FALLING_AUTOMATION_TOGGLED",
+    caveat:"Foundry native Surfaces differ from 3D Canvas mesh raycasts; statuses are masked if disableFalling=true."
+  };
+}
+
+const QA_VISION_SOURCE_ID = "NUEDEFAULTSCENE0";
+const QA_VISION_BASE_REVISION = "e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f";
+const QA_VISION_NAME = "QA ONLY - Area 8 directional vision - 20261022";
+
+function isAcqVisionClone(doc) {
+  const tag = doc?.flags?.["acq-foundry-bridge"]?.qaVisionFixture;
+  return Boolean(tag?.sourceSceneId === QA_VISION_SOURCE_ID &&
+    tag?.expectedSourceRevision === QA_VISION_BASE_REVISION &&
+    doc?.name === QA_VISION_NAME && doc?.active === false);
+}
+
+/** Native Foundry Scene duplication, client-local viewing and token sight.
+ * NEVER update or activate source Area 8 or a user-owned non-QA Scene.
+ */
+async function manageVisionQaScene(scene, op, dryRun = true) {
+  if (!game.user?.isGM) throw new Error("Vision QA controls are GM-only.");
+  const action = op.action;
+  if (!["preflight", "clone", "inspect", "configure", "view", "restore_view"].includes(action)) {
+    throw new Error("Unknown native vision QA action.");
+  }
+  const source = game.scenes?.get(QA_VISION_SOURCE_ID);
+  if (!source) throw new Error("Area8 approved source Scene missing.");
+  const sourceSnapshot = await sceneSnapshot(source);
+  if (sourceSnapshot.revision !== QA_VISION_BASE_REVISION) {
+    throw new Error("Approved Area8 revision mismatch. No QA changes allowed.");
+  }
+  const matches = Array.from(game.scenes ?? []).filter(s =>
+    s.name === QA_VISION_NAME || s.flags?.["acq-foundry-bridge"]?.qaVisionFixture);
+  const owned = matches.filter(isAcqVisionClone);
+  if (matches.length !== owned.length || owned.length > 1) {
+    throw new Error("Ambiguous QA Scene name/ownership. Refusing changes.");
+  }
+  const clone = owned[0] ?? null;
+  const foundryActive = game.scenes.active?.id ?? null;
+  const viewed = canvas?.scene?.id ?? null;
+  const details = {
+    source_scene_id:source.id, source_revision:sourceSnapshot.revision,
+    qa_scene_id:clone?.id ?? null, qa_exists:Boolean(clone),
+    foundry_active_scene_id:foundryActive, gm_viewed_scene_id:viewed,
+    players_pulled:false
+  };
+  if (action === "preflight") {
+    return {...details,dry_run:true,would_clone:!clone,
+      source_counts:{tiles:source.tiles.size,walls:source.walls.size,
+        lights:source.lights.size,regions:source.regions.size,tokens:source.tokens.size}};
+  }
+  if (action === "clone") {
+    if (clone) return {...details,dry_run,already_exists:true};
+    if (scene?.id !== source.id || viewed !== source.id || foundryActive !== source.id) {
+      throw new Error("QA clone starts from viewed+active original Area8 only.");
+    }
+    if (dryRun) return {...details,dry_run:true,would_create:true};
+    const original = source.toObject();
+    delete original._id;
+    original.name = QA_VISION_NAME;
+    original.active = false;
+    original.navigation = false;
+    original.ownership = {default:0};
+    original.flags = {
+      ...original.flags,
+      "acq-foundry-bridge":{
+        ...(original.flags?.["acq-foundry-bridge"] ?? {}),
+        qaVisionFixture:{
+          sourceSceneId: QA_VISION_SOURCE_ID,
+          expectedSourceRevision: QA_VISION_BASE_REVISION,
+          purpose:"isolated native directional sight settings QA",
+          createdAt:new Date().toISOString()
+        }
+      }
+    };
+    const created = await source.constructor.create(original);
+    if (!created || !isAcqVisionClone(created)) {
+      throw new Error("Native Scene.create did not return an owned QA clone.");
+    }
+    const countNames = ["tiles","walls","lights","regions","tokens"];
+    const bad = countNames.filter(k => created[k].size !== source[k].size);
+    if (bad.length) {
+      await created.delete();
+      throw new Error("QA Scene count mismatch; created clone deleted: " + bad.join(","));
+    }
+    return {...details,qa_scene_id:created.id,qa_exists:true,
+      created:true,dry_run:false,clone_count_verified:true};
+  }
+  if (!clone) throw new Error("QA clone must exist before this action.");
+  if (action === "inspect") {
+    const qaToken = Array.from(clone.tokens.contents).filter(t=>t.name?.startsWith("QA ONLY")).map(t=>({
+      name:t.name,id:t.id,x:t.x,y:t.y,elevation:t.elevation,
+      rotation:t.rotation,angle:t.sight?.angle,range:t.sight?.range,
+      visionMode:t.sight?.visionMode
+    }));
+    return {...details,read_only:true,qa_tokens:qaToken,
+      qa_counts:{tiles:clone.tiles.size,walls:clone.walls.size,
+        lights:clone.lights.size,regions:clone.regions.size,tokens:clone.tokens.size}};
+  }
+  if (action === "configure") {
+    const angle = Number(op.angle);
+    const range = Number(op.range);
+    if (![120,270,360].includes(angle) || !Number.isFinite(range) || range<0 || range>60) {
+      throw new Error("Vision QA angle must be 120,270 or 360 and scene-unit range must be in [0,60].");
+    }
+    const actor = String(op.actor);
+    if (!["monk","druid"].includes(actor)) throw new Error("Only monk/druid QA tokens are configurable.");
+    const token = Array.from(clone.tokens.contents).find(t =>
+      t.name?.startsWith("QA ONLY") && t.name?.toLowerCase().includes(actor));
+    if (!token) throw new Error("QA token not present on clone.");
+    if (dryRun) return {...details,dry_run:true,would_update:{token_id:token.id,angle,range},
+      before:{angle:token.sight?.angle,range:token.sight?.range}};
+    const before = {angle:token.sight?.angle,range:token.sight?.range};
+    await token.update({"sight.angle":angle,"sight.range":range});
+    if (Number(token.sight.angle)!==angle || Number(token.sight.range)!==range) {
+      throw new Error("Native token sight configuration readback mismatch.");
+    }
+    return {...details,updated:true,token_id:token.id,before,
+      after:{angle:token.sight.angle,range:token.sight.range}};
+  }
+  if (action === "view") {
+    if (clone?.id !== op.qa_scene_id || foundryActive !== source.id) {
+      throw new Error("Only this verified QA clone may be viewed without activating players.");
+    }
+    if (dryRun) return {...details,dry_run:true,would_view:clone.id};
+    if (levels3d()?.firstPersonMode || (canvas?.tokens?.controlled?.length ?? 0)>0) {
+      throw new Error("Cannot switch scene during native first-person or token control.");
+    }
+    await clone.view();
+    return {...details,view_requested:true,now_viewed:canvas?.scene?.id ?? null,
+      players_pulled:false};
+  }
+  if (action === "restore_view") {
+    if (foundryActive !== source.id) throw new Error("Source is no longer active; stop.");
+    if (dryRun) return {...details,dry_run:true,would_restore_source:true};
+    if (levels3d()?.firstPersonMode || (canvas?.tokens?.controlled?.length ?? 0)>0) {
+      throw new Error("Cannot restore view during native first-person or token control.");
+    }
+    await source.view();
+    return {...details,restored_view:true,now_viewed:canvas?.scene?.id ?? null};
+  }
+  throw new Error("Unsupported vision QA action.");
+}
+
+let nativeQaTokenSelection = null;
+async function manageNativeQaTokenSelection(scene, op, dryRun = true) {
+  const action = op.action;
+  if (!["select","restore"].includes(action)) throw new Error("QA selection action must be select or restore.");
+  if (!game.user?.isGM) throw new Error("QA selection is GM-only.");
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d?._ready) throw new Error("3D Canvas runtime is not active/ready.");
+  if (action === "restore") {
+    if (!nativeQaTokenSelection || nativeQaTokenSelection.sceneId !== scene.id || op.session_id !== nativeQaTokenSelection.id) {
+      throw new Error("A matching QA selection session is required to restore.");
+    }
+    if (l3d.firstPersonMode) throw new Error("Exit native first-person camera before restoring selected token.");
+    if (dryRun) return {dry_run:true,would_restore:true,token_id:nativeQaTokenSelection.tokenId};
+    const session = nativeQaTokenSelection;
+    const doc = scene.tokens.get(session.tokenId);
+    if (!doc?.name?.startsWith("QA ONLY")) throw new Error("Original QA token is missing, cannot guarantee document restore.");
+    canvas.tokens.get(session.tokenId)?.release();
+    // Native 3D Canvas can persist token heading while turning in first person.
+    // Restore only the exact scene-backed QA pose fields that changed.
+    const changed = {};
+    for (const key of ["x", "y", "elevation", "rotation"]) {
+      if (doc[key] !== session.originalPose[key]) changed[key] = session.originalPose[key];
+    }
+    if (Object.keys(changed).length) await doc.update(changed);
+    for (const key of Object.keys(changed)) {
+      if (doc[key] !== session.originalPose[key]) throw new Error("QA pose restoration did not persist: " + key);
+    }
+    const after = Array.from(canvas.tokens.controlled ?? []).map(t => t.id);
+    nativeQaTokenSelection = null;
+    return {dry_run:false,restored:true,controlled_token_ids:after,restored_document_fields:Object.keys(changed)};
+  }
+  if (nativeQaTokenSelection) throw new Error("An Acq QA token selection is already active.");
+  const currentlyControlled = Array.from(canvas?.tokens?.controlled ?? []);
+  if (currentlyControlled.length) throw new Error("GM has selected tokens; existing UI state is protected.");
+  if (l3d.firstPersonMode || l3d.GameCamera?.enabled || l3d.cutsceneEngine?.isPlaying) {
+    throw new Error("Close existing first-person, Game Camera or cutscene before QA selection.");
+  }
+  const id = op.token_id;
+  if (typeof id !== "string" || !/^[A-Za-z0-9]{1,32}$/.test(id)) throw new Error("A specific valid QA token ID is required.");
+  const doc = scene.tokens.get(id);
+  const token = canvas.tokens.get(id);
+  if (!doc?.name?.startsWith("QA ONLY") || !token) throw new Error("Token is not an existing QA ONLY token in the live Scene.");
+  if (!l3d.tokens?.[id]?.head) throw new Error("The QA token has no native 3D head anchor.");
+  if (dryRun) return {dry_run:true,would_select:true,token_id:id,had_selected_tokens:false};
+  const changed = token.control({releaseOthers:true});
+  if (changed === false || !canvas.tokens.controlled.some(t => t.id === id)) {
+    throw new Error("Native Token.control did not select the requested QA token.");
+  }
+  const sessionId = "acq-qa-" + Date.now().toString(36);
+  nativeQaTokenSelection={id:sessionId,sceneId:scene.id,tokenId:id,originalPose:{
+    x:doc.x,y:doc.y,elevation:doc.elevation,rotation:doc.rotation
+  }};
+  return {dry_run:false,session_id:sessionId,selected_token_id:id,controlled_count:canvas.tokens.controlled.length};
+}
+
+let nativeCameraSession = null;
+
+/**
+ * Idempotent, short-lived GM camera QA session. Never changes Scene documents
+ * or native module preferences. Only one bridge-owned session may be active.
+ * First person requires an explicitly named already-controlled 3D token.
+ */
+function nativeCameraState(l3d) {
+  const camera = l3d?.camera;
+  return {
+    game_camera: Boolean(l3d?.GameCamera?.enabled),
+    first_person: Boolean(l3d?.firstPersonMode),
+    camera_position: vectorToObject(camera?.position),
+    camera_target: vectorToObject(l3d?.controls?.target),
+    camera_near: Number.isFinite(camera?.near) ? camera.near : null,
+    controlled_token_ids: Array.from(canvas?.tokens?.controlled ?? []).map(t => t?.id).filter(Boolean)
+  };
+}
+
+async function setNativeCameraMode(scene, op, dryRun = true) {
+  const l3d = levels3d();
+  const mode = op.mode;
+  if (!["game_camera", "first_person", "restore"].includes(mode)) {
+    throw new Error("Native camera mode must be game_camera, first_person or restore.");
+  }
+  if (!l3d?._active || !l3d?._ready || !l3d.camera || !l3d.controls) {
+    throw new Error("Native camera controls unavailable: active and ready 3D Canvas required.");
+  }
+  const before = nativeCameraState(l3d);
+  if (mode === "restore") {
+    if (!nativeCameraSession || nativeCameraSession.scene_id !== scene.id) {
+      throw new Error("No matching bridge-owned native camera session to restore.");
+    }
+    if (op.session_id !== nativeCameraSession.id) {
+      throw new Error("Camera restore requires the exact bridge-owned session_id.");
+    }
+    if (dryRun) return {dry_run:true, mode, before, would_restore:nativeCameraSession.initial};
+    const original = nativeCameraSession.initial;
+    if (l3d.firstPersonMode) l3d.toggleFirstPerson();
+    if (Boolean(l3d.GameCamera?.enabled) !== original.game_camera) l3d.GameCamera.toggle();
+    if (original.camera_position) setVector(l3d.camera.position, original.camera_position);
+    if (original.camera_target) setVector(l3d.controls.target, original.camera_target);
+    if (original.camera_near !== null) { l3d.camera.near = original.camera_near; l3d.camera.updateProjectionMatrix?.(); }
+    l3d.controls.update?.();
+    nativeCameraSession = null;
+    return {dry_run:false, mode, before, after:nativeCameraState(l3d), restored:true};
+  }
+  if (nativeCameraSession) throw new Error("An Acq native camera QA session is already active; restore it first.");
+  if (before.first_person) throw new Error("First person is already active outside bridge control; do not override it.");
+  if (l3d.cutsceneEngine?.isPlaying) throw new Error("Do not change camera while a cutscene is playing.");
+  let token = null;
+  if (mode === "first_person") {
+    if (typeof op.token_id !== "string" || !/^[A-Za-z0-9]{1,32}$/.test(op.token_id)) {
+      throw new Error("First-person camera requires a specific token_id.");
+    }
+    token = Array.from(canvas?.tokens?.controlled ?? []).find(t => t?.id === op.token_id);
+    if (!token) throw new Error("First-person token must already be selected in the GM client.");
+    if (!l3d.tokens?.[token.id] || !l3d.tokens[token.id]?.head) {
+      throw new Error("Selected token is missing a loaded 3D head anchor.");
+    }
+    if (typeof l3d.toggleFirstPerson !== "function" ||
+        typeof l3d.setCameraToControlled !== "function") {
+      throw new Error("Installed 3D Canvas lacks the required native first-person methods.");
+    }
+  } else if (typeof l3d.GameCamera?.toggle !== "function") {
+    throw new Error("Installed GameCamera.toggle method is unavailable.");
+  }
+  if (dryRun) return {dry_run:true, mode, token_id:token?.id ?? null, before, would_enter:true};
+  const id = "acq-camera-" + Date.now().toString(36);
+  nativeCameraSession = {id, scene_id:scene.id, initial:before, mode};
+  try {
+    if (mode === "first_person") {
+      l3d.toggleFirstPerson();
+      if (!l3d.firstPersonMode) throw new Error("3D Canvas refused first-person transition.");
+      l3d.setCameraToControlled(token);
+    } else if (!l3d.GameCamera.enabled) {
+      l3d.GameCamera.toggle();
+    }
+    l3d.controls.update?.();
+    return {dry_run:false, mode, session_id:id, token_id:token?.id ?? null, before, after:nativeCameraState(l3d)};
+  } catch (err) {
+    // Make one bounded best-effort rollback to the original ephemeral camera mode.
+    try {
+      if (l3d.firstPersonMode && !before.first_person) l3d.toggleFirstPerson();
+      if (Boolean(l3d.GameCamera?.enabled) !== before.game_camera) l3d.GameCamera.toggle();
+      if (before.camera_position) setVector(l3d.camera.position,before.camera_position);
+      if (before.camera_target) setVector(l3d.controls.target,before.camera_target);
+      if (before.camera_near !== null) { l3d.camera.near = before.camera_near; l3d.camera.updateProjectionMatrix?.(); }
+      l3d.controls.update?.();
+    } finally { nativeCameraSession = null; }
+    throw err;
+  }
+}
+
+/**
+ * Source-faithful dry-run preparation. Uses upstream 9.0.36 AssetBrowser:
+ * tileSize = canvas.dimensions.size / scale; dropFunctions.Tile loads model,
+ * computes THREE.Box3, then creates Tile width/height/depth from bbox.
+ * Loading approved external GLB may update a renderer cache; never creates Tile.
+ */
+async function previewNativeAssetTile(scene, op) {
+  const l3d = levels3d();
+  const foundryPath = op.foundry_path;
+  const allowlist = [
+    "modules/canvas3dcompendium/assets/",
+    "modules/levels-3d-preview/assets/",
+    "modules/canvas3d-premium/assets/",
+    "modules/acq-foundry-bridge/assets/"
+  ];
+  if (typeof foundryPath !== "string" || foundryPath.length > 600 ||
+      !allowlist.some(prefix => foundryPath.startsWith(prefix)) ||
+      !/\.(glb|gltf)$/i.test(foundryPath) ||
+      /[?#\\]/.test(foundryPath) || foundryPath.includes("..") ||
+      /%2e|%2f|%5c/i.test(foundryPath)) {
+    throw new Error("Only allowlisted local module GLB/GLTF asset paths are permitted.");
+  }
+  const x = Number(op.x), y = Number(op.y), elevation = Number(op.elevation ?? 0);
+  const scale = Number(op.scale ?? 1), rotation = Number(op.rotation ?? 0);
+  const origin = op.origin ?? "center";
+  if (![x,y,elevation,scale,rotation].every(Number.isFinite) ||
+      scale < 0.05 || scale > 10 || !["center","top_left"].includes(origin) ||
+      Math.abs(x) > 100000 || Math.abs(y) > 100000 || Math.abs(elevation) > 10000 ||
+      Math.abs(rotation) > 36000) {
+    throw new Error("Native asset placement requires finite, bounded coordinates, scale, and supported origin.");
+  }
+  if (!l3d?._active || !l3d?._ready || !l3d?.THREE?.Box3 ||
+      typeof l3d?.helpers?.loadModel !== "function") {
+    throw new Error("Loaded native renderer and model loader required for GLB geometry preflight.");
+  }
+  const asset = await l3d.helpers.loadModel(foundryPath);
+  if (!asset?.model) throw new Error("Native 3D Canvas asset loader returned no model.");
+  const bb = new l3d.THREE.Box3().setFromObject(asset.model);
+  const dimensions = {
+    width: Number(bb.max.x - bb.min.x),
+    vertical: Number(bb.max.y - bb.min.y),
+    height: Number(bb.max.z - bb.min.z)
+  };
+  if (!Object.values(dimensions).every(v => Number.isFinite(v) && v >= 0) ||
+      dimensions.width === 0 || dimensions.height === 0) {
+    throw new Error("Loaded GLB has invalid or degenerate native bounding dimensions.");
+  }
+  // Equivalent to upstream AssetBrowser scale and Tile drop width/height/depth.
+  const gridSize = Number(canvas?.grid?.size ?? scene?.dimensions?.size);
+  if (!Number.isFinite(gridSize) || gridSize <= 0) throw new Error("Scene grid size unavailable.");
+  const w = Math.round(dimensions.width * gridSize * scale);
+  const h = Math.round(dimensions.height * gridSize * scale);
+  const depth = (dimensions.vertical * gridSize * scale) || 0.05;
+  if (w < 1 || h < 1) throw new Error("Model footprint is sub-pixel at selected scale.");
+  const tx = Math.round(x - (origin === "center" ? w/2 : 0));
+  const ty = Math.round(y - (origin === "center" ? h/2 : 0));
+  if (op.color !== undefined && (typeof op.color !== "string" || !/^#[0-9a-fA-F]{6}$/.test(op.color))) {
+    throw new Error("Native Tile color must be a six-digit hex value.");
+  }
+  const opt = (key, fallback) => op[key] === undefined ? fallback : op[key];
+  for(const key of ["collision","sight","camera_collision"]) {
+    if (op[key] !== undefined && typeof op[key] !== "boolean") {
+      throw new Error(key + " must be boolean when provided.");
+    }
+  }
+  const candidate = {
+    x:tx, y:ty, width:w, height:h, elevation,
+    rotation,
+    texture:{src:"modules/levels-3d-preview/assets/blank.webp"},
+    flags:{"levels-3d-preview":{
+      model3d:foundryPath,
+      autoGround:true,
+      autoCenter:origin === "center",
+      depth,
+      dynaMesh:"default",
+      color:opt("color","#ffffff"),
+      collision:opt("collision",true),
+      sight:opt("sight",true),
+      cameraCollision:opt("camera_collision",true),
+      castShadow:true
+    }}
+  };
+  return {
+    dry_run:true, scene_id:scene?.id ?? null, model_path:foundryPath, scale,
+    model_bounds:{min:vectorToObject(bb.min),max:vectorToObject(bb.max),dimensions},
+    candidate, did_create_tile:false,
+    warnings:["Preliminary Tile footprint uses native GLB bounds; rotated extent, mesh seams, collider and ground contact require actual runtime QA."]
+  };
+}
+
+async function set3dCamera(scene, op, dryRun = false) {
+  const runtimeRecovery = dryRun
+    ? null
+    : await ensure3dRuntime(scene, {reason: "set_3d_camera"});
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d.camera || !l3d.controls) {
+    throw new Error("3D Canvas camera controls are unavailable after runtime recovery.");
+  }
+
+  const before = {
+    position: vectorToObject(l3d.camera.position),
+    target: vectorToObject(l3d.controls.target),
+    first_person_mode: Boolean(l3d.firstPersonMode)
+  };
+
+  if (!dryRun) {
+    if (op.position) setVector(l3d.camera.position, op.position);
+    if (op.target) setVector(l3d.controls.target, op.target);
+    if (typeof l3d.controls.update === "function") l3d.controls.update();
+
+    if (op.save_as_initial) {
+      await scene.update({
+        "flags.levels-3d-preview.initialPosition": {
+          target: vectorToObject(l3d.controls.target),
+          position: vectorToObject(l3d.camera.position),
+          firstPersonMode: Boolean(l3d.firstPersonMode)
+        }
+      }, {render: false});
+    }
+  }
+
+  return {
+    before,
+    after: dryRun ? before : {
+      position: vectorToObject(l3d.camera.position),
+      target: vectorToObject(l3d.controls.target),
+      first_person_mode: Boolean(l3d.firstPersonMode)
+    },
+    saved_as_initial: Boolean(op.save_as_initial && !dryRun),
+    runtime_recovery: runtimeRecovery
+  };
+}
+
+
+async function reload3dScene(scene, dryRun = false) {
+  const l3d = levels3d();
+  if (!l3d) throw new Error("3D Canvas runtime is unavailable.");
+  const before = {
+    active: Boolean(l3d._active),
+    ready: Boolean(l3d._ready),
+    tile_count: Object.keys(l3d.tiles ?? {}).length,
+    scene_id: canvas?.scene?.id ?? null
+  };
+  if (!dryRun) {
+    if (typeof l3d.reload === "function") {
+      l3d.reload();
+    } else if (typeof l3d.toggle === "function") {
+      l3d.toggle(false);
+      setTimeout(() => l3d.toggle(true), 300);
+    } else {
+      throw new Error("3D Canvas reload/toggle API unavailable.");
+    }
+
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+      if (l3d._active && l3d._ready && canvas?.scene?.id === scene.id) break;
+    }
+  }
+  return {
+    before,
+    after: {
+      active: Boolean(l3d._active),
+      ready: Boolean(l3d._ready),
+      tile_count: Object.keys(l3d.tiles ?? {}).length,
+      scene_id: canvas?.scene?.id ?? null
+    }
+  };
+}
+
+
+function canvasToBase64(canvas, format = "webp", quality = 0.85) {
+  const normalized = String(format || "webp").toLowerCase();
+  const mime = normalized === "png" ? "image/png" : "image/webp";
+  const q = Math.max(0.1, Math.min(1, Number(quality) || 0.85));
+  const dataUrl = canvas.toDataURL(mime, q);
+  return {
+    image_base64: dataUrl.replace(/^data:[^;]+;base64,/, ""),
+    mime_type: mime,
+    width: canvas.width,
+    height: canvas.height
+  };
+}
+
+let threeModulePromise = null;
+
+async function getThreeModule() {
+  if (!threeModulePromise) {
+    threeModulePromise = import("/modules/levels-3d-preview/scripts/lib/three.module.js");
+  }
+  return threeModulePromise;
+}
+
+async function capture3dView(scene, op) {
+  const runtimeRecovery = await ensure3dRuntime(scene, {reason: "capture_3d_view"});
+  const l3d = levels3d();
+  if (!l3d?._active || !l3d.renderer || !l3d.scene || !l3d.camera || !l3d.controls) {
+    throw new Error("3D Canvas renderer/camera is unavailable after runtime recovery.");
+  }
+
+  const THREE3D = await getThreeModule();
+  const renderer = l3d.renderer;
+  const sourceCanvas = renderer.domElement;
+  const width = Math.max(1, Math.min(4096, Number(op.width) || sourceCanvas?.width || 1920));
+  const height = Math.max(1, Math.min(4096, Number(op.height) || sourceCanvas?.height || 1080));
+
+  const originalPosition = vectorToObject(l3d.camera.position);
+  const originalTarget = vectorToObject(l3d.controls.target);
+  const originalRenderTarget = renderer.getRenderTarget();
+  const originalSize = renderer.getSize(new THREE3D.Vector2());
+
+  const hiddenHelpers = [];
+  const hideForCapture = (obj) => {
+    if (!obj || typeof obj.visible !== "boolean") return;
+    hiddenHelpers.push([obj, obj.visible]);
+    obj.visible = false;
+  };
+
+  for (const light of Object.values(l3d.lights?.sceneLights ?? {})) {
+    hideForCapture(light?.lightHelper);
+    hideForCapture(light?.dragHandle);
+  }
+  for (const sound of Object.values(l3d.sounds ?? {})) {
+    hideForCapture(sound?.lightHelper);
+    hideForCapture(sound?.dragHandle);
+    hideForCapture(sound?.helper);
+  }
+  for (const note of Object.values(l3d.notes ?? {})) {
+    hideForCapture(note?.mesh);
+    hideForCapture(note?.dragHandle);
+    hideForCapture(note?.nameplate);
+  }
+  for (const token of Object.values(l3d.tokens ?? {})) {
+    hideForCapture(token?.controlledBox);
+    hideForCapture(token?.border);
+    hideForCapture(token?.nameplate);
+    hideForCapture(token?.dragHandle);
+    if (token?.document?.hidden || token?.token?.document?.hidden || token?.placeable?.document?.hidden) {
+      hideForCapture(token?.mesh);
+    }
+  }
+  for (const finder of l3d.rangeFinders ?? []) {
+    hideForCapture(finder?.mesh);
+    hideForCapture(finder?.label);
+  }
+  hideForCapture(l3d.interactionManager?.transformControls);
+  hideForCapture(l3d.interactionManager?.draggable);
+  hideForCapture(l3d.interactionManager?._draggable);
+
+  const renderTarget = new THREE3D.WebGLRenderTarget(width, height, {
+    format: THREE3D.RGBAFormat,
+    type: THREE3D.UnsignedByteType
+  });
+
+  try {
+    if (op.position) setVector(l3d.camera.position, op.position);
+    if (op.target) setVector(l3d.controls.target, op.target);
+    if (typeof l3d.controls.update === "function") l3d.controls.update();
+
+    renderer.setSize(width, height, false);
+    renderer.setRenderTarget(renderTarget);
+    renderer.clear();
+    renderer.render(l3d.scene, l3d.camera);
+
+    const pixels = new Uint8Array(4 * width * height);
+    renderer.readRenderTargetPixels(renderTarget, 0, 0, width, height, pixels);
+
+    const captureCanvas = document.createElement("canvas");
+    captureCanvas.width = width;
+    captureCanvas.height = height;
+    const ctx = captureCanvas.getContext("2d");
+    if (!ctx) throw new Error("Unable to create 2D canvas context for 3D capture.");
+    const imageData = ctx.createImageData(width, height);
+
+    for (let y = 0; y < height; y++) {
+      const srcRow = (height - 1 - y) * width * 4;
+      const destRow = y * width * 4;
+      imageData.data.set(pixels.subarray(srcRow, srcRow + width * 4), destRow);
+    }
+    ctx.putImageData(imageData, 0, 0);
+
+    return {
+      ...canvasToBase64(captureCanvas, op.format, op.quality),
+      scene_id: scene.id,
+      scene_name: scene.name,
+      runtime_recovery: runtimeRecovery,
+      camera: {
+        position: vectorToObject(l3d.camera.position),
+        target: vectorToObject(l3d.controls.target),
+        first_person_mode: Boolean(l3d.firstPersonMode)
+      }
+    };
+  } finally {
+    for (const [obj, visible] of hiddenHelpers) obj.visible = visible;
+
+    renderer.setRenderTarget(originalRenderTarget);
+    renderer.setSize(originalSize.x ?? originalSize.width, originalSize.y ?? originalSize.height, false);
+    renderTarget.dispose();
+
+    if (op.restore_camera !== false) {
+      setVector(l3d.camera.position, originalPosition);
+      setVector(l3d.controls.target, originalTarget);
+      if (typeof l3d.controls.update === "function") l3d.controls.update();
+    }
+
+    renderer.render(l3d.scene, l3d.camera);
+  }
+}
+
+async function browseAssetDirectory(path) {
+  const FP = getFilePicker();
+  if (!FP?.browse) throw new Error("Foundry FilePicker.browse API unavailable.");
+  try {
+    return await FP.browse("public", path, {extensions: [".glb", ".gltf", ".fbx", ".webp", ".png", ".jpg", ".jpeg", ".exr"]});
+  } catch {
+    return await FP.browse("data", path, {extensions: [".glb", ".gltf", ".fbx", ".webp", ".png", ".jpg", ".jpeg", ".exr"]});
+  }
+}
+
+async function search3dAssets(op) {
+  const query = String(op.query ?? "").trim().toLowerCase();
+  if (!query) throw new Error("search_3d_assets requires a non-empty query.");
+  const limit = Math.max(1, Math.min(200, Number(op.limit) || 50));
+  const requestedRoots = Array.isArray(op.roots) ? op.roots : [];
+  const roots = requestedRoots.length ? requestedRoots : [
+    "modules/canvas3dcompendium/assets",
+    "modules/levels-3d-preview/assets",
+    "modules/canvas3d-premium/assets"
+  ];
+  const safeRoots = roots.filter(p => /^modules\/[a-z0-9._-]+\/assets(?:\/|$)/i.test(String(p)));
+  if (!safeRoots.length) throw new Error("No safe module asset roots supplied.");
+
+  const results = [];
+  const queue = safeRoots.map(root => ({path: String(root), depth: 0}));
+  const maxDepth = Math.max(0, Math.min(8, Number(op.max_depth) || 5));
+  const seen = new Set();
+
+  while (queue.length && results.length < limit) {
+    const current = queue.shift();
+    if (!current || seen.has(current.path)) continue;
+    seen.add(current.path);
+    let listing;
+    try {
+      listing = await browseAssetDirectory(current.path);
+    } catch {
+      continue;
+    }
+
+    for (const file of listing?.files ?? []) {
+      const lower = String(file).toLowerCase();
+      if (!lower.includes(query)) continue;
+      results.push({
+        foundry_path: String(file),
+        filename: String(file).split("/").pop(),
+        module_id: String(file).split("/")[1] ?? null,
+        kind: /\.(glb|gltf|fbx)$/i.test(String(file)) ? "model" :
+              /\.exr$/i.test(String(file)) ? "environment" : "texture"
+      });
+      if (results.length >= limit) break;
+    }
+
+    if (current.depth < maxDepth) {
+      for (const dir of listing?.dirs ?? []) {
+        if (String(dir).startsWith(current.path) && !seen.has(String(dir))) {
+          queue.push({path: String(dir), depth: current.depth + 1});
+        }
+      }
+    }
+  }
+
+  return {query, roots: safeRoots, count: results.length, results};
+}
+
+
+const SCENE_COLLECTION_BY_DOCUMENT = {
+  Tile: "tiles",
+  AmbientLight: "lights",
+  Wall: "walls",
+  Region: "regions",
+  Drawing: "drawings",
+  MeasuredTemplate: "templates",
+  Note: "notes",
+  Token: "tokens",
+  AmbientSound: "sounds"
+};
+
+function cloneData(value) {
+  if (foundry?.utils?.deepClone) return foundry.utils.deepClone(value);
+  return JSON.parse(JSON.stringify(value));
+}
+
+function collectionForDocument(scene, document) {
+  const key = SCENE_COLLECTION_BY_DOCUMENT[document];
+  if (!key) return [];
+  const collection = scene?.[key];
+  if (!collection) return [];
+  return Array.from(collection?.contents ?? collection);
+}
+
+function withAcqIdentity(data, identity) {
+  const out = cloneData(data ?? {});
+  out.flags ??= {};
+  out.flags.acq = {
+    ...(out.flags.acq ?? {}),
+    semantic_id: identity.semantic_id,
+    build_id: identity.build_id ?? null,
+    provenance: identity.provenance ?? null,
+    classification: identity.classification ?? null
+  };
+  return out;
+}
+
+async function applySemanticObjects(scene, op, dryRun = false) {
+  const objects = Array.isArray(op.objects) ? op.objects : [];
+  if (!objects.length) throw new Error("apply_semantic_objects requires a non-empty objects array.");
+
+  const created = [];
+  const updated = [];
+  const unchanged = [];
+
+  for (const item of objects) {
+    const document = String(item?.document ?? "");
+    if (!ALLOWED_EMBEDDED.has(document)) throw new Error(`Semantic object document not allowed: ${document}`);
+    const semanticId = String(item?.semantic_id ?? "").trim();
+    if (!semanticId) throw new Error("Every semantic object requires semantic_id.");
+
+    const matches = collectionForDocument(scene, document)
+      .filter(doc => String(doc?.flags?.acq?.semantic_id ?? "") === semanticId);
+    if (matches.length > 1) {
+      throw new Error(`Duplicate semantic_id ${semanticId} in ${document}; repair required before idempotent apply.`);
+    }
+
+    if (item.delete === true) {
+      if (matches.length === 0) {
+        unchanged.push({document, semantic_id: semanticId, id: null, deleted: false});
+      } else {
+        const existing = matches[0];
+        if (!dryRun) await scene.deleteEmbeddedDocuments(document, [existing.id]);
+        updated.push({document, semantic_id: semanticId, id: existing.id, deleted: true});
+      }
+      continue;
+    }
+
+    const payload = withAcqIdentity(item.data ?? {}, {
+      semantic_id: semanticId,
+      build_id: item.build_id ?? op.build_id ?? null,
+      provenance: item.provenance ?? null,
+      classification: item.classification ?? null
+    });
+
+    if (matches.length === 0) {
+      if (!dryRun) {
+        const docs = await scene.createEmbeddedDocuments(document, [payload]);
+        created.push({document, semantic_id: semanticId, id: docs?.[0]?.id ?? null});
+      } else {
+        created.push({document, semantic_id: semanticId, id: null});
+      }
+      continue;
+    }
+
+    const existing = matches[0];
+    const update = {_id: existing.id, ...payload};
+    if (!dryRun) await scene.updateEmbeddedDocuments(document, [update]);
+    updated.push({document, semantic_id: semanticId, id: existing.id});
+  }
+
+  return {created, updated, unchanged, count: objects.length};
+}
+
+
+async function deleteSemanticObjects(scene, op, dryRun = false) {
+  const semanticIds = Array.isArray(op.semantic_ids) ? op.semantic_ids.map(String) : [];
+  if (!semanticIds.length) throw new Error("delete_semantic_objects requires semantic_ids.");
+
+  const wanted = new Set(semanticIds);
+  const deleted = [];
+  for (const document of ALLOWED_EMBEDDED) {
+    const matches = collectionForDocument(scene, document)
+      .filter(doc => wanted.has(String(doc?.flags?.acq?.semantic_id ?? "")));
+    if (!matches.length) continue;
+    const ids = matches.map(doc => doc.id);
+    if (!dryRun) await scene.deleteEmbeddedDocuments(document, ids);
+    for (const doc of matches) {
+      deleted.push({
+        document,
+        id: doc.id,
+        semantic_id: String(doc.flags.acq.semantic_id)
+      });
+    }
+  }
+
+  const found = new Set(deleted.map(x => x.semantic_id));
+  const missing = semanticIds.filter(id => !found.has(id));
+  return {deleted, missing, count: deleted.length};
+}
+
+function semanticInventory(scene) {
+  const inventory = [];
+  for (const document of ALLOWED_EMBEDDED) {
+    for (const doc of collectionForDocument(scene, document)) {
+      const semanticId = doc?.flags?.acq?.semantic_id;
+      if (!semanticId) continue;
+      inventory.push({
+        document,
+        id: doc.id,
+        semantic_id: String(semanticId),
+        build_id: doc?.flags?.acq?.build_id ?? null,
+        provenance: doc?.flags?.acq?.provenance ?? null,
+        classification: doc?.flags?.acq?.classification ?? null
+      });
+    }
+  }
+  return inventory;
+}
+
+function validateSceneManifest(scene, op) {
+  const manifest = op.expected_manifest ?? {};
+  const expectedIds = new Set((manifest.semantic_ids ?? []).map(String));
+  const inventory = semanticInventory(scene);
+  const actualIds = new Set(inventory.map(x => x.semantic_id));
+  const missing = [...expectedIds].filter(id => !actualIds.has(id));
+  const unexpected = manifest.allow_unexpected === false
+    ? [...actualIds].filter(id => !expectedIds.has(id))
+    : [];
+
+  const counts = {};
+  for (const item of inventory) counts[item.document] = (counts[item.document] ?? 0) + 1;
+  const countMismatches = [];
+  for (const [document, expected] of Object.entries(manifest.counts ?? {})) {
+    const actual = counts[document] ?? 0;
+    if (actual !== Number(expected)) countMismatches.push({document, expected: Number(expected), actual});
+  }
+
+  return {
+    ok: missing.length === 0 && unexpected.length === 0 && countMismatches.length === 0,
+    missing,
+    unexpected,
+    count_mismatches: countMismatches,
+    inventory
+  };
+}
+
+async function applyOperation(scene, op, dryRun = false) {
+  if (!op || typeof op !== "object") throw new Error("Operation must be an object.");
+  const type = op.op;
+
+  if (type === "snapshot" || type === "ping") return {op: type, ok: true};
+
+  if (type === "inspect_3d_scene") {
+    return {op: type, ok: true, ...(await inspect3dScene(scene))};
+  }
+
+  if (type === "inspect_3d_capabilities") {
+    return {op: type, ok: true, ...inspect3dCapabilities(scene)};
+  }
+
+  if (type === "inspect_native_floor_surfaces") {
+    return {op:type,ok:true,...inspectNativeFloorSurfaces(scene)};
+  }
+
+  if (type === "inspect_native_playability") {
+    return {op:type,ok:true,...(await inspectNativePlayability(scene))};
+  }
+
+  if (type === "inspect_native_vision_bearings") {
+    return {op:type,ok:true,...inspectNativeVisionBearings(scene,op)};
+  }
+
+  if (type === "manage_vision_qa_scene") {
+    return {op:type,ok:true,...(await manageVisionQaScene(scene,op,dryRun))};
+  }
+
+  if (type === "native_select_qa_token") {
+    return {op:type,ok:true,...(await manageNativeQaTokenSelection(scene,op,dryRun))};
+  }
+
+  if (type === "inspect_3d_settings") {
+    return {op:type,ok:true,...inspectNativeSettings(scene)};
+  }
+
+  if (type === "inspect_3d_native_workflows") {
+    return {op: type, ok: true, ...inspect3dNativeWorkflows(scene)};
+  }
+
+  if (type === "set_native_camera_mode") {
+    return {op: type, ok:true, ...(await setNativeCameraMode(scene, op, dryRun))};
+  }
+  if (type === "preview_native_asset_tile") {
+    return {op: type, ok:true, ...(await previewNativeAssetTile(scene, op))};
+  }
+
+  if (type === "set_3d_camera") {
+    const camera = await set3dCamera(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...camera};
+  }
+
+  if (type === "reload_3d_scene") {
+    const result = await reload3dScene(scene, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
+  }
+
+  if (type === "capture_3d_view") {
+    if (dryRun) return {op: type, ok: true, dry_run: true};
+    const capture = await capture3dView(scene, op);
+    return {op: type, ok: true, ...capture};
+  }
+
+  if (type === "search_3d_assets") {
+    const search = await search3dAssets(op);
+    return {op: type, ok: true, ...search};
+  }
+
+  if (type === "apply_semantic_objects") {
+    const result = await applySemanticObjects(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
+  }
+
+  if (type === "validate_scene_manifest") {
+    const result = validateSceneManifest(scene, op);
+    return {op: type, ok: true, ...result};
+  }
+
+  if (type === "delete_semantic_objects") {
+    const result = await deleteSemanticObjects(scene, op, dryRun);
+    return {op: type, ok: true, dry_run: dryRun, ...result};
+  }
+
+  if (type === "set_3d_environment") {
+    const values = op.values ?? {};
+    const changes = {};
+    for (const [key, value] of Object.entries(values)) {
+      if (!ALLOWED_ENV_KEYS.has(key)) throw new Error(`3D environment key not allowed: ${key}`);
+      changes[`flags.levels-3d-preview.${key}`] = value;
+    }
+    if (!dryRun) await scene.update(changes);
+    return {op: type, ok: true, changes};
+  }
+
+  if (type === "resize_scene") {
+    const width = Number(op.width);
+    const height = Number(op.height);
+    const padding = op.padding === undefined ? undefined : Number(op.padding);
+
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
+      throw new Error("resize_scene requires finite width and height.");
+    }
+    if (width < 1000 || height < 1000 || width > 100000 || height > 100000) {
+      throw new Error(`resize_scene dimensions out of safe range: ${width}x${height}.`);
+    }
+    if (padding !== undefined && (!Number.isFinite(padding) || padding < 0 || padding > 1)) {
+      throw new Error("resize_scene padding must be between 0 and 1.");
+    }
+
+    const before = {
+      width: Number(scene.width),
+      height: Number(scene.height),
+      padding: Number(scene.padding ?? 0)
+    };
+    const changes = {width, height};
+    if (padding !== undefined) changes.padding = padding;
+
+    if (!dryRun) await scene.update(changes);
+    return {
+      op: type,
+      ok: true,
+      dry_run: dryRun,
+      before,
+      after: dryRun ? {...before, ...changes} : {
+        width: Number(scene.width),
+        height: Number(scene.height),
+        padding: Number(scene.padding ?? 0)
+      }
+    };
+  }
+
+  if (type === "scene_update") {
+    const changes = op.changes ?? {};
+    const allowedPrefixes = ["flags.", "name", "environment", "darkness", "grid", "background", "foreground", "tokenVision", "fog"];
+    for (const key of Object.keys(changes)) {
+      if (!allowedPrefixes.some(p => key === p || key.startsWith(p))) {
+        throw new Error(`Scene update path not allowed: ${key}`);
+      }
+    }
+    if (!dryRun) await scene.update(changes);
+    return {op: type, ok: true, changes};
+  }
+
+  if (["embedded_create", "embedded_update", "embedded_delete"].includes(type)) {
+    const document = String(op.document ?? "");
+    if (!ALLOWED_EMBEDDED.has(document)) throw new Error(`Embedded document type not allowed: ${document}`);
+
+    if (type === "embedded_create") {
+      const data = Array.isArray(op.data) ? op.data : [op.data].filter(Boolean);
+      if (!dryRun) await scene.createEmbeddedDocuments(document, data);
+      return {op: type, document, count: data.length, ok: true};
+    }
+    if (type === "embedded_update") {
+      const updates = Array.isArray(op.updates) ? op.updates : [op.updates].filter(Boolean);
+      if (updates.some(u => !u?._id)) throw new Error("Every embedded update requires _id.");
+      if (!dryRun) await scene.updateEmbeddedDocuments(document, updates);
+      return {op: type, document, count: updates.length, ok: true};
+    }
+    const ids = Array.isArray(op.ids) ? op.ids : [];
+    if (!dryRun) await scene.deleteEmbeddedDocuments(document, ids);
+    return {op: type, document, count: ids.length, ok: true};
+  }
+
+  if (type === "tile_set_model3d") {
+    if (!op.tile_id || !op.foundry_path) throw new Error("tile_set_model3d requires tile_id and foundry_path.");
+    const update = {
+      _id: op.tile_id,
+      "flags.levels-3d-preview.model3d": op.foundry_path,
+      "flags.levels-3d-preview.color": op.color ?? "#ffffff"
+    };
+    if (!dryRun) await scene.updateEmbeddedDocuments("Tile", [update]);
+    return {op: type, ok: true, tile_id: op.tile_id, foundry_path: op.foundry_path};
+  }
+
+  if (type === "asset_upload") {
+    if (!op.file_b64 || !op.filename) throw new Error("asset_upload requires file_b64 and filename.");
+    const relativeDir = String(op.relative_dir ?? "assets").replace(/^\/+|\/+$/g, "");
+    if (dryRun) return {op: type, ok: true, dry_run: true, filename: op.filename, relative_dir: relativeDir};
+    const FP = getFilePicker();
+    if (!FP?.uploadPersistent) throw new Error("Foundry FilePicker.uploadPersistent API unavailable.");
+    const file = b64ToFile(op.file_b64, op.filename, op.mime_type ?? "application/octet-stream");
+    const response = await FP.uploadPersistent(MODULE_ID, relativeDir, file, {}, {notify: false});
+    return {op: type, ok: true, upload_response: response};
+  }
+
+  throw new Error(`Unsupported operation: ${type}`);
+}
+
+async function executeCommand(command) {
+  ensureGM();
+  const scene = activeScene();
+  if (!scene) throw new Error("No active Scene.");
+  if (command.protocol_version !== PROTOCOL_VERSION) throw new Error(`Unsupported protocol version ${command.protocol_version}.`);
+  if (command.scene_id && command.scene_id !== scene.id) {
+    throw new Error(`Command scene_id ${command.scene_id} does not match active Scene ${scene.id}.`);
+  }
+
+  const before = await sceneSnapshot(scene);
+  if (command.expected_revision && command.expected_revision !== before.revision) {
+    throw new Error(`Revision mismatch. Expected ${command.expected_revision}; current ${before.revision}.`);
+  }
+
+  const results = [];
+  for (const op of command.operations ?? []) results.push(await applyOperation(scene, op, Boolean(command.dry_run)));
+  const after = await sceneSnapshot(scene);
+
+  return {
+    protocol_version: PROTOCOL_VERSION,
+    kind: "command_result",
+    command_id: command.command_id,
+    completed_at: new Date().toISOString(),
+    dry_run: Boolean(command.dry_run),
+    ok: true,
+    before_revision: before.revision,
+    after_revision: after.revision,
+    scene_id: scene.id,
+    operations: results
+  };
+}
+
+async function pollCommand() {
+  if (inFlight || !game.user?.isGM) return false;
+  const scene = activeScene();
+  if (!scene) return false;
+  inFlight = true;
+  try {
+    const qs = new URLSearchParams({world_id: game.world?.id ?? "", scene_id: scene.id, wait_ms: 20000});
+    const response = await request(`/bridge/next?${qs.toString()}`, {method: "GET", timeoutMs: 26000});
+    if (response.status === 204) return true;
+    if (!response.ok) throw new Error(`Agent returned HTTP ${response.status}`);
+    const command = await response.json();
+
+    let result;
+    try {
+      result = await executeCommand(command);
+    } catch (err) {
+      const snap = await sceneSnapshot(scene);
+      result = {
+        protocol_version: PROTOCOL_VERSION,
+        kind: "command_result",
+        command_id: command.command_id,
+        completed_at: new Date().toISOString(),
+        ok: false,
+        error: String(err?.stack ?? err),
+        current_revision: snap?.revision ?? null,
+        scene_id: scene.id
+      };
+      console.error(`${MODULE_ID} command failed`, err);
+      ui.notifications?.error(`Acq Bridge command failed: ${err.message ?? err}`);
+    }
+
+    await request("/bridge/result", {method: "POST", body: JSON.stringify(result)});
+    await postState("command-complete");
+    return true;
+  } catch (err) {
+    console.debug(`${MODULE_ID} poll failed`, err);
+    return false;
+  } finally {
+    inFlight = false;
+  }
+}
+
+async function continuousBridgePoll(epoch) {
+  while (epoch === pollEpoch && game.user?.isGM && game.settings.get(MODULE_ID, "enabled")) {
+    if (!activeScene()) {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      continue;
+    }
+    // The pending HTTP request itself supplies the wait; NO browser
+    // setInterval timer is needed on the normal command delivery path.
+    const healthy = await pollCommand();
+    if (!healthy) await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+}
+
+function startPolling() {
+  clearInterval(pollTimer);
+  const epoch = ++pollEpoch;
+  postState("bridge-start");
+  void continuousBridgePoll(epoch);
+}
+
+Hooks.once("init", () => {
+  game.settings.register(MODULE_ID, "enabled", {
+    name: "Enable local bridge",
+    hint: "Connect this GM client to the local Acq Bridge Agent.",
+    scope: "client", config: true, type: Boolean, default: true
+  });
+  game.settings.register(MODULE_ID, "agentUrl", {
+    name: "Bridge Agent URL",
+    hint: "Loopback URL for the local bridge agent.",
+    scope: "client", config: true, type: String, default: "http://127.0.0.1:18747"
+  });
+  game.settings.register(MODULE_ID, "pollMs", {
+    name: "Command polling interval (ms)",
+    hint: "How often the active GM checks for bridge commands.",
+    scope: "client", config: true, type: Number, default: 1000
+  });
+});
+
+Hooks.once("ready", () => {
+  globalThis.AcqFoundryBridge = {snapshot: sceneSnapshot, postState, executeCommand};
+  if (!game.user?.isGM || !game.settings.get(MODULE_ID, "enabled")) return;
+  startPolling();
+
+  Hooks.on("canvasReady", () => scheduleSnapshot("canvas-ready"));
+  Hooks.on("updateScene", () => scheduleSnapshot("scene-update"));
+  for (const hook of [
+    "createTile", "updateTile", "deleteTile",
+    "createAmbientLight", "updateAmbientLight", "deleteAmbientLight",
+    "createWall", "updateWall", "deleteWall",
+    "createRegion", "updateRegion", "deleteRegion"
+  ]) Hooks.on(hook, () => scheduleSnapshot(hook));
+});
