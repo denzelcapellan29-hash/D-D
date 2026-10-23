@@ -1011,7 +1011,19 @@ async function qaNativeMoveMany(scene, op, dryRun = true) {
   const gridSize = Number(canvas.grid.size);
   if (!(gridSize > 0) || !Number.isFinite(gridSize)) throw new Error("Invalid Foundry grid size.");
   const center = token.center;
-  const newCenter = {x: center.x + dx * gridSize, y: center.y + dy * gridSize};
+  // Exact camera-relative preview transform from the installed native
+  // levels-3d-preview/scripts/wrappers.js handleArrowKeys() (lines 485-508).
+  // Only the *preview* is mapped here; the actual move is still exclusively
+  // canvas.tokens.moveMany() and its native 3D Canvas libWrapper.
+  const cPos = l3d.camera?.position;
+  const cTar = l3d.controls?.target;
+  if (!cPos || !cTar) throw new Error("Native 3D Canvas camera orientation unavailable.");
+  const cameraAngle = Math.atan2(cTar.z - cPos.z, cTar.x - cPos.x);
+  const inputAngle = Math.atan2(dy, dx);
+  const finalAngle = inputAngle + cameraAngle - Math.PI;
+  const mappedDx = Math.round(Math.sin(finalAngle));
+  const mappedDy = Math.round(-Math.cos(finalAngle));
+  const newCenter = {x: center.x + mappedDx * gridSize, y: center.y + mappedDy * gridSize};
   if (newCenter.x <= 0 || newCenter.y <= 0
       || newCenter.x >= scene.width || newCenter.y >= scene.height) {
     throw new Error("Refusing QA move beyond Scene bounds.");
@@ -1022,6 +1034,7 @@ async function qaNativeMoveMany(scene, op, dryRun = true) {
   const horizontalHit = l3d.interactionManager.computeSightCollision(oldPos,nextPos,"move");
   const preview = {
     qa_scene_id:scene.id,token_id:tokenId,dx,dy,grid_size:gridSize,
+    camera_relative_direction:true,mapped_dx:mappedDx,mapped_dy:mappedDy,
     original_pose:originalPose,preview_center:newCenter,
     horizontal_mesh_collision:Boolean(horizontalHit),
     native_api:"Foundry TokenLayer.moveMany, intercepted by native 3D Canvas libWrapper"
