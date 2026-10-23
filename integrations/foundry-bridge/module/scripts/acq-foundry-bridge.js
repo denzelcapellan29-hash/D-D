@@ -999,6 +999,18 @@ async function setNativeCameraMode(scene, op, dryRun = true) {
   if (!l3d?._active || !l3d?._ready || !l3d.camera || !l3d.controls) {
     throw new Error("Native camera controls unavailable: active and ready 3D Canvas required.");
   }
+  // GameCamera.toggle() is a lower-level method and does NOT satisfy
+  // GameCamera.init() world+Scene enable prerequisites by itself.
+  // Never report QA success for a native mode disabled by its owner module.
+  if (mode === "game_camera") {
+    const worldEnabled = Boolean(game.settings.get("levels-3d-preview", "enableGameCamera"));
+    const sceneEnabled = scene.getFlag("levels-3d-preview", "enableGameCamera") ?? true;
+    if (!worldEnabled || !sceneEnabled) {
+      throw new Error("Native Game Camera is disabled by its " +
+        (!worldEnabled ? "world" : "Scene") +
+        " setting; refusing unsafe low-level toggle. No settings changed.");
+    }
+  }
   const before = nativeCameraState(l3d);
   if (mode === "restore") {
     if (!nativeCameraSession || nativeCameraSession.scene_id !== scene.id) {
