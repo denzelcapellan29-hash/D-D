@@ -98,6 +98,10 @@ def main():
         raise RuntimeError("Output must be an unused, empty versioned folder.")
     visible=[ob for ob in bpy.context.scene.objects
              if not ob.hide_render and not ob.hide_viewport]
+    # Excluded embedded library door cannot remain as hidden second blocker.
+    leaked=[ob.name for ob in visible if ob.type=="MESH" and ob.get("acq_excluded_reason")]
+    if leaked:
+        raise RuntimeError("Source mesh marked excluded still visible: "+repr(leaked))
     bad=[ob.name for ob in visible if ob.type in BLOCKED_GEOMETRY]
     if bad:
         raise RuntimeError("Visible unsupported geometry cannot be silently omitted: "+repr(bad[:10]))
@@ -117,8 +121,16 @@ def main():
         role=str(ob.get("acq_role","")).strip()
         if role not in ALLOWED_ACQ_ROLES:
             raise RuntimeError("Explicit acq_role required for native-safe export: "+ob.name)
-        if door != (role=="door_leaf"):
-            raise RuntimeError("Door tagging and acq_role=door_leaf must agree: "+ob.name)
+        if door and role!="door_leaf":
+            raise RuntimeError("Tagged moving door requires acq_role=door_leaf: "+ob.name)
+        if role=="door_leaf" and not door:
+            if not ob.get("acq_door_attachment"):
+                raise RuntimeError("Door mesh attachment requires acq_door_attachment: "+ob.name)
+            parent=ob.parent
+            if not parent or not parent.get("isDoor") or parent.get("acq_chunk")!=cid:
+                raise RuntimeError("Door attachment must be parented to hinged leaf: "+ob.name)
+        if door and ob.get("doorAnimateAngle") is not None:
+            raise RuntimeError("Native per-mesh doorAnimateAngle unit is not certified: "+ob.name)
         if door and not ob.get("doorId"):
             raise RuntimeError("Native door requires an explicit source doorId: "+ob.name)
         if door and int(ob.get("doorStyle",0)) not in (0,1,2):
@@ -167,17 +179,27 @@ def main():
         cx,cy=(lo[0]+hi[0])/2,(lo[1]+hi[1])/2
         filename=f"{a.bundle}-{idx:03d}-{cid}.glb"
         glb=dst/filename
-        original=[(ob,ob.parent,ob.matrix_world.copy(),ob.select_get()) for ob in objs]
+        # Preserve hinge-leaf child attachments inside the exported GLB.
+        # Only detach a parent OUTSIDE the chunk.
+        members=set(objs)
+        def local_depth(ob):
+            depth=0
+            parent=ob.parent
+            while parent in members:
+                depth+=1
+                parent=parent.parent
+            return depth
+        ordered=sorted(objs,key=lambda ob:(local_depth(ob),ob.name))
+        original=[(ob,ob.parent,ob.matrix_world.copy(),ob.select_get()) for ob in ordered]
         selected=list(bpy.context.selected_objects)
         try:
             for ob in selected:
                 ob.select_set(False)
             shift=Matrix.Translation((-cx,-cy,-lo[2]))
             for ob,parent,world,was_selected in original:
-                # Parent links can cause a glTF exporter to alter exported
-                # transforms when parents are omitted. Detach only in this
-                # in-memory disposable process, then restore matrices.
-                ob.parent=None
+                if parent not in members:
+                    ob.parent=None
+            for ob,parent,world,was_selected in original:
                 ob.matrix_world=shift @ world
                 ob.select_set(True)
             bpy.context.view_layer.objects.active=objs[0]
