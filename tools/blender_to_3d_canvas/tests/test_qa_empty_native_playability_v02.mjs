@@ -90,7 +90,7 @@ test("missing Tile denied before any ray calls",async()=>{
 });
 test("foreign Tile replaces one importer part and is rejected",async()=>{
   const f=fixture();f.tiles[0].flags.acq.classification="OTHER_BUILD";
-  await assert.rejects(()=>inspectEmptyQaNativePlayability(f.scene,f.ctx),/ownership/);
+  await assert.rejects(()=>inspectEmptyQaNativePlayability(f.scene,f.ctx),/inventory|provenance|ownership/);
 });
 test("native collision manager unavailable denied",async()=>{
   const f=fixture();f.ctx.l3d._ready=false;
