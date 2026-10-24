@@ -49,12 +49,30 @@ def matrix_flat(mat):
     return [float(mat[row][col]) for row in range(4) for col in range(4)]
 
 def bounds(objects):
-    points=[ob.matrix_world @ Vector(c) for ob in objects for c in ob.bound_box]
-    if not points or not all(math.isfinite(v) for p in points for v in p):
-        raise ValueError("Empty or non-finite source geometry bounds.")
-    lo=[min(p[i] for p in points) for i in range(3)]
-    hi=[max(p[i] for p in points) for i in range(3)]
-    return lo,hi
+    # Object.bound_box corners exaggerate world-axis extents of irregular
+    # geometry after rotation. Native Three.Box3 measures actual mesh
+    # vertices. Match that measurement using Blender's genuine source
+    # vertices and exact evaluated world matrices; no mesh is modified.
+    import numpy as np
+    result_min=np.array([float("inf")]*3,dtype=np.float64)
+    result_max=np.array([-float("inf")]*3,dtype=np.float64)
+    for ob in objects:
+        if any(mod.show_render for mod in ob.modifiers):
+            raise RuntimeError("Unbaked evaluated modifiers need explicit source QA: "+ob.name)
+        count=len(ob.data.vertices)
+        if not count:
+            raise RuntimeError("Empty source mesh: "+ob.name)
+        flat=np.empty(count*3,dtype=np.float32)
+        ob.data.vertices.foreach_get("co",flat)
+        arr=flat.reshape((count,3)).astype(np.float64,copy=False)
+        matrix=np.array([[float(ob.matrix_world[i][j]) for j in range(4)]
+                         for i in range(3)],dtype=np.float64)
+        world=arr @ matrix[:,:3].T + matrix[:,3]
+        if not np.isfinite(world).all():
+            raise RuntimeError("Non-finite source geometry: "+ob.name)
+        result_min=np.minimum(result_min,np.min(world,axis=0))
+        result_max=np.maximum(result_max,np.max(world,axis=0))
+    return result_min.tolist(),result_max.tolist()
 
 def main():
     a=parse()
