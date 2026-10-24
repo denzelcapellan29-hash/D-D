@@ -119,10 +119,21 @@ def main():
     if len(groups)>64:
         raise RuntimeError("QA v0.2 guard: at most 64 chunks in one export.")
     for cid,items in groups.items():
-        if len({mode for _,mode,_ in items})!=1:
-            raise RuntimeError("Mixed static and interactive meshes in "+cid)
-        if items[0][1]=="interactive" and len(items)!=1:
-            raise RuntimeError("Keep each independently interactive part in one chunk: "+cid)
+        active=[(ob,door) for ob,mode,door in items if mode=="interactive"]
+        if not active:
+            continue
+        # Interactive GLBs can be a native multi-mesh door assembly:
+        # door slab, frame and handle. All parts must explicitly opt into
+        # one rigid QA group; missing tags must fail rather than silently
+        # inventing a joint or treating the entire room as a door.
+        if len(items)>1 and not all(ob.get("acq_rigid_assembly") for ob,_,_ in items):
+            raise RuntimeError("Multi-mesh interactive assembly needs acq_rigid_assembly on every part: "+cid)
+        door_ids={str(ob.get("doorId")) for ob,_,door in items if door}
+        if len(door_ids)>1:
+            raise RuntimeError("Conflicting native door IDs in assembly: "+cid)
+        if any(ob.get("acq_interactive") and not door and not ob.get("acq_interactive_kind")
+               for ob,_,door in items):
+            raise RuntimeError("Untagged non-door interactive component: "+cid)
     dlo,dhi=bounds(meshes)
     dst.mkdir(parents=True,exist_ok=True)
     manifest={"schema":SCHEMA,"status":"SAVED_EXPORT_NOT_RUNTIME_ACCEPTED",
@@ -174,8 +185,8 @@ def main():
             bpy.context.view_layer.update()
         if not glb.exists() or glb.stat().st_size<1024:
             raise RuntimeError("Empty GLB for "+cid)
-        mode=items[0][1]
-        door=items[0][2]
+        mode="interactive" if any(v=="interactive" for _,v,_ in items) else "static"
+        door=any(v for _,_,v in items)
         source_objects=[]
         for ob,_,_ in items:
             source_objects.append({
@@ -192,6 +203,7 @@ def main():
         elevation=lo[2]*a.px_per_meter*a.grid_distance/a.grid_size
         chunk={
           "chunk_id":cid,"kind":mode,"interactive_door":door,
+          "rigid_assembly":bool(mode=="interactive" and len(items)>1),
           "asset":{"filename":filename,"sha256":digest(glb),"bytes":glb.stat().st_size,"format":"GLB"},
           "source_bounds_m":{"min":lo,"max":hi},
           "tile_center_xy_px":[a.origin_x+cx*a.px_per_meter,
