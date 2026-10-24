@@ -14,7 +14,7 @@
 | `6Qw4YrnmxoU` | [2023 Ep. 4 — Mapmaking (Exterior)](https://youtu.be/6Qw4YrnmxoU) | 2023 | ACCESSIBLE |
 | `Izs7oC1JvNE` | [2023 Ep. 4.5 — Heightmaps and the Gradient Shader](https://youtu.be/Izs7oC1JvNE) | 2023 | ACCESSIBLE |
 
-Original playlist: https://youtube.com/playlist?list=PLbNUuLLqMgaBfNAyYb6mhg4pR4bPcHXqM . Four playlist entries have not yet had transcripts retrieved in this study: Part 1 installation `5VKs1Lul_Rg`, 3D Automated Animations `3kbUVpnn45Y`, Colour Swap and Overlay Shader `F8i8QWsu_hM`, Cutscene Tool `3KnOl-Agc3I`. Actual playlist order/availability may change.
+Original playlist: https://youtube.com/playlist?list=PLbNUuLLqMgaBfNAyYb6mhg4pR4bPcHXqM . Five playlist entries have not yet had transcripts retrieved in this study: Part 1 installation `5VKs1Lul_Rg`, 3D Automated Animations `3kbUVpnn45Y`, Colour Swap and Overlay Shader `F8i8QWsu_hM`, Importing 3D-Printer Miniatures `eBByRaWI1aM`, and Cutscene Tool `3KnOl-Agc3I`. Actual playlist order/availability may change.
 
 ## Source-grounded lessons and engineering implications
 
