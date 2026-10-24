@@ -54,11 +54,22 @@ def main():
     p.add_argument("--manage-qa-view",action="store_true",
                    help="Scoped GM-only QA view/readiness then guaranteed source-view restore.")
     p.add_argument("--apply",action="store_true")
+    p.add_argument("--reconcile",action="store_true",
+                   help="Owned-only idempotent create/update with durable journal rollback.")
+    p.add_argument("--journal",type=pathlib.Path,
+                   help="Unique local transaction journal required with --reconcile.")
+    p.add_argument("--offset-x-px",type=int,default=0,
+                   help="QA-only bounded relocation of imported owned Tiles.")
+    p.add_argument("--offset-y-px",type=int,default=0)
     a=p.parse_args()
     if a.apply and not a.native_preview:
         raise RuntimeError("Cannot apply without native preflight.")
     if a.manage_qa_view and not a.native_preview:
         raise RuntimeError("GM view management requires native preview.")
+    if a.reconcile and (not a.native_preview or a.journal is None):
+        raise RuntimeError("--reconcile requires --native-preview and --journal.")
+    if not a.reconcile and (a.offset_x_px or a.offset_y_px or a.journal):
+        raise RuntimeError("Journal and offsets are only valid with --reconcile.")
     if not a.blend.is_file() or a.blend.suffix.lower()!=".blend":
         raise RuntimeError("Saved .blend source required.")
     if not a.asset_root.is_dir():
@@ -99,10 +110,17 @@ def main():
     if file_hash(a.blend)!=before:
         raise RuntimeError("Source Blender changed during workflow.")
     importer=[
-        sys.executable,str(pathlib.Path(__file__).with_name("import_chunks_v02.py")),
+        sys.executable,
+        str(pathlib.Path(__file__).with_name(
+            "reconcile_chunks_v02.py" if a.reconcile else "import_chunks_v02.py")),
         "--bundle-dir",str(folder),"--asset-root",str(a.asset_root)
     ]
-    if a.native_preview:importer.append("--native-preview")
+    if a.reconcile:
+        importer+=["--journal",str(a.journal),
+                   "--offset-x-px",str(a.offset_x_px),
+                   "--offset-y-px",str(a.offset_y_px)]
+    elif a.native_preview:
+        importer.append("--native-preview")
     if a.apply:importer.append("--apply")
     switched=False
     error=None
@@ -155,10 +173,12 @@ def main():
         raise error
     if file_hash(a.blend)!=before:
         raise RuntimeError("Source Blender changed after importer stage.")
-    return {"ok":True,"source_untouched_sha256":before,"stage":report["stage"],
+    return {"ok":True,"source_untouched_sha256":before,"stage":report.get("stage",report.get("phase")),
       "qa_scene_id":QA_SCENE if a.native_preview else None,
       "chunks":len(rows),"bundle":str(folder),
       "native_tile_ids":report.get("native_tile_ids"),
+      "reconcile_counts":report.get("counts"),
+      "transaction_journal":report.get("journal"),
       "gm_view_restored":gm_restored,
       "production_acceptance":False,"source_scene_writes":False}
 
