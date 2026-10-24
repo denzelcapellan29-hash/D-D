@@ -184,6 +184,8 @@ def main():
     p.add_argument("--offset-y-px",type=int,default=0)
     p.add_argument("--qa-inject-failure-after",type=int,default=0,
                    help="Test-only fail after N successful writes, proving rollback.")
+    p.add_argument("--qa-inject-ambiguous-after",type=int,default=0,
+                   help="QA: simulate lost RPC reply after one completed native write, before journal commit.")
     a=p.parse_args()
     if any(abs(v)>10 for v in (a.offset_x_px,a.offset_y_px)):
         raise RuntimeError("QA importer bounded placement adjustment is ±10px.")
@@ -191,6 +193,10 @@ def main():
         raise RuntimeError("Fault injection requires apply.")
     if a.qa_inject_failure_after not in (0,1):
         raise RuntimeError("One deliberately bounded fault injection allowed.")
+    if a.qa_inject_ambiguous_after not in (0,1) or (a.qa_inject_ambiguous_after and not a.apply):
+        raise RuntimeError("One explicitly guarded ambiguous-write simulation requires --apply.")
+    if a.qa_inject_ambiguous_after and a.qa_inject_failure_after:
+        raise RuntimeError("Only one fault injection may be active.")
     doc,rows=verify(a.bundle_dir,a.asset_root)
     prior,scene=scene_guard()
     candidates=native_candidates(rows,doc,prior["after_revision"])
@@ -211,6 +217,15 @@ def main():
          "source_revision":PROTECTED_SHA,
          "before_revision":prior["after_revision"],
          "bundle_sha":doc["source_blend_sha256"],
+         "bundle_id":doc["bundle"],
+         "baseline_inventory":{
+            "tiles":[{k:copy.deepcopy(v.get(k)) for k in
+                       ("id","x","y","width","height","elevation",
+                        "rotation","hidden","flags","acq")}
+                     for v in scene.get("tiles",[])],
+            "tile_count":scene.get("tile_count"),
+            "light_count":scene.get("light_count"),
+            "region_count":scene.get("region_count")},
          "owned_semantics":[x["semantic_id"] for x in plan],
          "status":"IN_PROGRESS","completed":[],"pending":None}
     stage_log(journal,log)
@@ -222,6 +237,14 @@ def main():
             log["pending"]={"action":item["action"],
                             "semantic_id":item["semantic_id"],
                             "backup":item.get("backup"),
+                            "desired_managed":{
+                               "scalars":{k:item["desired"][k] for k in SCALAR
+                                          if k in item["desired"]},
+                               "flags":item["expected_flags"],
+                               "provenance":{"asset_sha256":item["row"]["glb_sha256"],
+                                             "source":doc["source_blend"]},
+                               "build_id":doc["bundle"],
+                               "classification":CLASSIFICATION},
                             "expected_revision":rev}
             checkpoint_log(journal,log)
             if item["action"]=="create":
@@ -244,8 +267,12 @@ def main():
                 ids=[x.get("id") for x in done.get("created") or []]
                 if len(ids)!=1 or not ids[0]:
                     raise RuntimeError("Null/ambiguous native Tile create ID.")
-            completed={"action":item["action"],"semantic_id":item["semantic_id"],
-                       "backup":item.get("backup"),"after_revision":rev}
+            if a.qa_inject_ambiguous_after and write_count+1==a.qa_inject_ambiguous_after:
+                # Real native RPC succeeded; deliberately simulate a process
+                # crash/lost acknowledgment before durable commit. Recovery
+                # MUST inspect Foundry state instead of guessing completion.
+                raise RuntimeError("QA_SIMULATED_LOST_ACK_AFTER_NATIVE_WRITE")
+            completed={**log["pending"],"after_revision":rev}
             log["completed"].append(completed)
             log["pending"]=None
             checkpoint_log(journal,log)
