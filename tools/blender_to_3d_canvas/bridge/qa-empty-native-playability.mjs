@@ -10,6 +10,16 @@ export const EXPECTED=new Set([
   "upper_doorway","upper_floor","upper_interactive_door"
 ]);
 const PREFIX="qa:multichunk:qa-twolevel-library-v02:";
+const LEAF_PREFIX="qa:multichunk:qa-twolevel-doorleaf-v03:";
+const LEAF_SHA=Object.freeze({
+  lower_back_wall:"a7d7997840e3768a0a34daa7f533b6d3e542627d5bdc90cfef604122390f4749",
+  lower_floor:"d2a5278ba360a3684f91151a3d5173543384be38bcf38c67df08ae93562847d1",
+  lower_side_wall:"b05cdbb4f14f1ed27c7d499f7bf53f19527d0dfa644cd2ad274ca6717f53b679",
+  stair_connector:"1c73c685fb18edb4fce77e437e02be22570f33af7248d087eb70eb3cfd26a149",
+  upper_doorway:"87a62bb3da28facff1f07e6c6aa12ec4b30f027ea6322941638f1acb33615b43",
+  upper_floor:"381d925eaa57e899e64a11897552c63e00245d09ce34b867d322bd95e0c51c95",
+  upper_interactive_door:"2d58f8c6cf26ba72c399f01e40d624c55282e7741a9099c5bd3598661607f258"
+});
 
 // Native Three.js coordinate frame; 3D Canvas world units: scene pixels / 1000.
 export const PROBES=[
@@ -23,17 +33,27 @@ export const PROBES=[
 ];
 
 function exactTaggedInventory(scene){
-  const found=Array.from(scene?.tiles?.contents??scene?.tiles??[])
-    .filter(t=>String(t?.flags?.acq?.semantic_id??"").startsWith(PREFIX));
-  if(found.length!==EXPECTED.size || Number(scene?.tiles?.size)!==EXPECTED.size)
+  const all=Array.from(scene?.tiles?.contents??scene?.tiles??[]);
+  if(all.length!==EXPECTED.size||Number(scene?.tiles?.size)!==EXPECTED.size)
     throw new Error("Expected exactly seven exclusive QA-imported Tiles.");
-  const names=found.map(t=>String(t.flags.acq.semantic_id).slice(PREFIX.length));
-  if(new Set(names).size!==EXPECTED.size || names.some(n=>!EXPECTED.has(n)))
-    throw new Error("QA imported chunk inventory mismatch.");
-  if(found.some(t=>t.flags.acq.classification!=="QA_ONLY_MULTICHUNK_V02"||
-                   t.flags.acq.build_id!=="qa-twolevel-library-v02"))
-    throw new Error("Unexpected Tile ownership or build provenance.");
-  return found;
+  for(const spec of [
+    {prefix:PREFIX,build:"qa-twolevel-library-v02",sha:null},
+    {prefix:LEAF_PREFIX,build:"qa-twolevel-doorleaf-v03",sha:LEAF_SHA}
+  ]){
+    const names=all.map(t=>{
+      const acq=t?.flags?.acq??{};
+      const sid=String(acq.semantic_id??"");
+      if(!sid.startsWith(spec.prefix))return null;
+      const name=sid.slice(spec.prefix.length);
+      if(acq.classification!=="QA_ONLY_MULTICHUNK_V02"||
+         acq.build_id!==spec.build ||
+         (spec.sha&&acq.provenance?.asset_sha256!==spec.sha[name]))return null;
+      return name;
+    });
+    if(names.every(n=>n!==null&&EXPECTED.has(n))&&
+       new Set(names).size===EXPECTED.size)return all;
+  }
+  throw new Error("QA imported chunk inventory or exact source provenance mismatch.");
 }
 export function classifyHits(hitList,board){
   if(!Array.isArray(hitList))throw new Error("Native collision helper returned non-array.");
