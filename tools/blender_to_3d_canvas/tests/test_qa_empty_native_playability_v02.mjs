@@ -59,6 +59,14 @@ test("explicit one-ray probe returns a native BVH hit without other ray types",a
   assert.equal(r.physical_step_acceptance,false);
   assert.equal(r.door_hinge_acceptance,false);
 });
+test("native API null means a clear ray, not a malformed collision",async()=>{
+  const f=fixture();
+  f.ctx.l3d.interactionManager.computeSightCollisionFrom3DPositions=()=>null;
+  const result=await inspectEmptyQaNativePlayability(f.scene,f.ctx,{
+    mode:"ray",probe_name:"door_closed_horiz",collision_type:"move"});
+  assert.equal(result.native_probe_count,1);
+  assert.deepEqual(result.native_ray_probes[0].hits,[]);
+});
 test("non-GM denied",async()=>{
   const f=fixture();f.ctx.game.user.isGM=false;
   await assert.rejects(()=>inspectEmptyQaNativePlayability(f.scene,f.ctx),/guard failed/);
