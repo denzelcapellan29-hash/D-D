@@ -27,3 +27,13 @@ The new REAL geometry provides visible stone relief, more plausible material sem
 
 ## Next safe action
 Work in a separate v004 **derivative** only if needed: align PBR age/palette across wall/floor, create compatible genuine Meshy-derived corner and doorway returns or source-derived variation; inspect unchanged CAD portal/secret/roof envelopes, get player-eye/reverse/seam imagery, compare actual render with approved Area8 benchmark, and report keep/revert. Two unsuccessful aesthetic strategies trigger a different asset/fabrication strategy, not endless tinting. Foundry owner validates GLB camera/material/collision parity. No more Meshy paid tasks without their task-specific costs and DM confirmation.
+
+## Independently verified private Drive artifact links (same 2026-10-24 milestone)
+- **Wall original Meshy GLB (56.6 MB)**: https://drive.google.com/file/d/1gUFY5IKoE1GjvJfzdwU2vGzJ_Fp4YuY4/view
+- **Floor original Meshy GLB (24.6 MB)**: https://drive.google.com/file/d/1a2CYlEBzFrqsMNgyOatRe35ze8jZsCU6/view
+- **Reversible v003 Blender two-bay fixture (121.6 MB)**: https://drive.google.com/file/d/1GcBS0-vLpWHf2zJQP9_UKfE0Oh5AIaja/view
+- **Preserved v002 four-panel comparison fixture**: https://drive.google.com/file/d/1_8Nzlf6uFKAWw9HP3TXW4O8oPVufB8-w/view
+- **Evaluated-vertex contact, 25mm negative controls, hashes, triangle budgets**: https://drive.google.com/file/d/1xllrDVk4YPEabm2bdey2Ae1ux-ySPi0w/view
+- **Actual rendered three-stage art comparison (v125 / v002 / v003)**: https://drive.google.com/file/d/1zY1KKLsSSUKR0xTH1g7AvKNiM6jYEYyN/view
+
+The above Drive file IDs were independently resolved from containing private Drive folders; hashes computed in connected Blender. No full room art acceptance or native Foundry parity implied.
