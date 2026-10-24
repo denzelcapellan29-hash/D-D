@@ -194,10 +194,11 @@ def execute(args):
                   False,timeout=130)
         if not capture.get("image_base64"):
             raise RuntimeError("Native 3D renderer did not initialize.")
-        _,empty=call(qa_id,{"op":"inspect_3d_scene"},True,timeout=70)
+        empty_envelope,empty=call(qa_id,{"op":"inspect_3d_scene"},True,timeout=70)
         if empty.get("tile_count")!=0:
             raise RuntimeError("Unexpected Tile in reserved empty QA Scene.")
-        loaded_sha,objects=import_once(qa_id,manifest,rows,empty["after_revision"])
+        loaded_sha,objects=import_once(qa_id,manifest,rows,
+                                      empty_envelope["after_revision"])
         imported=True
         # Real nonblack visual QA belongs to an actual capture. This runner
         # returns captured metadata but not DM artistic acceptance.
