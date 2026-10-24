@@ -39,16 +39,23 @@ function fixture(){
   };
   return {ctx,scene,tiles,counts};
 }
-test("fixed source-backed stair/door ray table returns native hit categories",async()=>{
+test("inventory-only mode performs zero native collision rays",async()=>{
   const f=fixture();
   const r=await inspectEmptyQaNativePlayability(f.scene,f.ctx);
-  assert.equal(r.read_only,true);
+  assert.equal(r.mode,"inventory");
   assert.equal(r.tiles,7);
-  assert.equal(r.native_probe_count,PROBES.length);
-  for(const type of ["move","sight","camera"]){
-    assert.equal(f.counts[type],PROBES.length);
-  }
-  assert.equal(r.native_ray_probes.find(p=>p.name==="door_closed_horiz").move_hits.length,1);
+  assert.equal(r.native_probe_count,0);
+  for(const type of ["move","sight","camera"])assert.equal(f.counts[type],0);
+});
+test("explicit one-ray probe returns a native BVH hit without other ray types",async()=>{
+  const f=fixture();
+  const r=await inspectEmptyQaNativePlayability(f.scene,f.ctx,{
+    mode:"ray",probe_name:"door_closed_horiz",collision_type:"move"});
+  assert.equal(r.native_probe_count,1);
+  assert.equal(r.native_ray_probes[0].hits.length,1);
+  assert.equal(f.counts.move,1);
+  assert.equal(f.counts.sight,0);
+  assert.equal(f.counts.camera,0);
   assert.equal(r.physical_step_acceptance,false);
   assert.equal(r.door_hinge_acceptance,false);
 });
