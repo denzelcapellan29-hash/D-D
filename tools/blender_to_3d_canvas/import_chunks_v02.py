@@ -256,9 +256,20 @@ def native_candidates(rows,manifest,revision):
             extras=configs[0]
             # Keep the existing 3D Canvas vendor door engine/flags.
             flags=candidate.setdefault("flags",{}).setdefault("levels-3d-preview",{})
-            flags["doorType"]=int(extras.get("doorType",1))
-            flags["doorState"]=int(extras.get("doorState",0))
-            flags["doorStyle"]=int(extras.get("doorStyle",0))
+            # GLB internal model door, NOT whole-Tile door. Native tile3d.js
+            # rotates child.userData.isDoor by modelDoors[doorId].ds.
+            # A whole-Tile doorType rotates mesh.children[0] instead.
+            door_id=str(extras["doorId"])
+            if not door_id or len(door_id)>128:
+                raise RuntimeError("Invalid native embedded door identity.")
+            if int(extras.get("doorStyle",1))!=1:
+                raise RuntimeError("QA bundle requires native hinged mesh door.")
+            if extras.get("doorAnimateAngle") is not None:
+                raise RuntimeError("Per-mesh angle unit not certified.")
+            flags.pop("doorType",None)
+            flags.pop("doorState",None)
+            flags.pop("doorStyle",None)
+            flags["modelDoors"]={door_id:{"ds":int(extras.get("ds",extras.get("doorState",0)))}}
         candidates.append(candidate)
     return candidates
 
