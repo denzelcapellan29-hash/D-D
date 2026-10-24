@@ -45,7 +45,7 @@ export function classifyHits(hitList,board){
     point:h?.point ? {x:Number(h.point.x),y:Number(h.point.y),z:Number(h.point.z)} : null
   }));
 }
-export async function inspectEmptyQaNativePlayability(scene,context){
+export async function inspectEmptyQaNativePlayability(scene,context,options={}){
   const {game,canvas,sourceRevision,l3d,THREE}=context;
   if(!game?.user?.isGM||!isOwnedEmptyQaScene(scene)||
      scene.id!==canvas?.scene?.id||scene.active||
@@ -59,25 +59,29 @@ export async function inspectEmptyQaNativePlayability(scene,context){
     throw new Error("Native 3D Canvas collision raycast API is not ready.");
   if(l3d?.GameCamera?.enabled||l3d?.cutsceneEngine?.isPlaying)
     throw new Error("Neutral native QA camera required; no GameCamera/cutscene.");
-  const run=(probe,type)=>{
-    const f=new THREE.Vector3(...probe.from);
-    const t=new THREE.Vector3(...probe.to);
-    const raw=manager.computeSightCollisionFrom3DPositions(
-      f,t,type,false,true,false,true);
-    return classifyHits(raw,l3d.board);
-  };
-  const rows=PROBES.map(probe=>({
-    ...probe,
-    move_hits:run(probe,"move"),
-    sight_hits:run(probe,"sight"),
-    camera_hits:run(probe,"camera")
-  }));
+  const mode=String(options.mode??"inventory");
+  if(mode!=="inventory" && mode!=="ray")
+    throw new Error("Explicit inventory or one-ray diagnostic required.");
   const groups=Object.fromEntries(["move","sight","camera"].map(
     type=>[type,manager?._sightCollisions?.[type]?.length??null]));
+  // A one-request/one-ray limit prevents 21 potentially expensive native
+  // raycasts from blocking the single-threaded Foundry client and bridge.
+  const results=[];
+  if(mode==="ray"){
+    const probe=PROBES.find(x=>x.name===String(options.probe_name??""));
+    const type=String(options.collision_type??"");
+    if(!probe||!["move","sight","camera"].includes(type))
+      throw new Error("Known probe name and exactly one collision type required.");
+    const from=new THREE.Vector3(...probe.from);
+    const to=new THREE.Vector3(...probe.to);
+    const raw=manager.computeSightCollisionFrom3DPositions(
+      from,to,type,false,true,false,true);
+    results.push({...probe,collision_type:type,hits:classifyHits(raw,l3d.board)});
+  }
   return {read_only:true,qa_scene_id:scene.id,source_scene_id:SOURCE_SCENE_ID,
     source_revision:sourceRevision,tiles:tiles.length,
-    native_collision_groups:groups,native_probe_count:rows.length,
-    native_ray_probes:rows,
+    native_collision_groups:groups,mode,native_probe_count:results.length,
+    native_ray_probes:results,
     physical_step_acceptance:false,door_hinge_acceptance:false,
-    note:"Native 3D Canvas BVH ray evidence only; does not execute TokenLayer.moveMany or D&D5e Falling."};
+    note:"One native BVH ray at a time; inventory mode runs ZERO collision rays. Actual token traversal remains a separate QA gate."};
 }
