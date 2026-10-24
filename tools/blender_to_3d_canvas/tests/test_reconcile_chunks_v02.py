@@ -64,8 +64,10 @@ class ReconciliationTests(unittest.TestCase):
             self.plan([fake])
 
     def test_ambiguous_duplicates_rejected(self):
+        second=copy.deepcopy(self.existing)
+        second["id"]="otherTile987"
         with self.assertRaisesRegex(Exception,"Duplicate"):
-            self.plan([self.existing,self.existing])
+            self.plan([self.existing,second])
 
     def test_runtime_missing_rejected(self):
         fake=copy.deepcopy(self.existing)
