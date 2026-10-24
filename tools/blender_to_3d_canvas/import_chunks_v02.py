@@ -118,8 +118,9 @@ def verify(bundle, assets_root=None):
             raise RuntimeError("Elevation anchor inconsistent: "+cid)
         if item["kind"] not in ("static","interactive"):
             raise RuntimeError("Unsupported chunk kind.")
-        if item["kind"]=="interactive" and len(item["source_objects"])!=1:
-            raise RuntimeError("Interactive chunk must contain exactly one authored part.")
+        if (item["kind"]=="interactive" and len(item["source_objects"])!=1
+            and not item.get("rigid_assembly")):
+            raise RuntimeError("Multi-mesh interactive geometry needs explicit rigid_assembly.")
         for o in item["source_objects"]:
             mat=o["source_matrix_world_rowmajor"]
             if len(mat)!=16 or not all(isinstance(x,(int,float)) and math.isfinite(x) for x in mat):
@@ -197,11 +198,12 @@ def native_candidates(rows,manifest,revision):
         candidate["y"]=round(cy)
         candidate["elevation"]=row["tile_elevation"]
         if row["interactive_door"]:
-            attrs=row["source_objects"]
             authored=next(c for c in manifest["chunks"] if c["chunk_id"]==row["chunk_id"])
-            extras=authored["source_objects"][0]["native_door_extras"]
-            if not extras.get("doorId"):
-                raise RuntimeError("Door has no native doorId.")
+            configs=[o["native_door_extras"] for o in authored["source_objects"]
+                     if o["native_door_extras"].get("doorId")]
+            if len({str(c["doorId"]) for c in configs})!=1:
+                raise RuntimeError("Door assembly must have exactly one native door identity.")
+            extras=configs[0]
             # Keep the existing 3D Canvas vendor door engine/flags.
             flags=candidate.setdefault("flags",{}).setdefault("levels-3d-preview",{})
             flags["doorType"]=int(extras.get("doorType",1))
