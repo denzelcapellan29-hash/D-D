@@ -72,8 +72,9 @@ def native_preview(scene_id,manifest,rows,sha):
             "foundry_path":row["foundry_path"],
             "x":x,"y":y,"scale":grid["native_3d_tile_scale"],
             "elevation":row["tile_elevation"],"origin":"center",
-            "rotation":0,"collision":True,"sight":True,
-            "camera_collision":True}
+            "rotation":0,"collision":row["semantic_flags"][0],
+            "sight":row["semantic_flags"][1],
+            "camera_collision":row["semantic_flags"][2]}
         _,preview=call(scene_id,op,True,sha,timeout=95)
         cand=preview.get("candidate") or {}
         exp=row["expected_dimensions_px"]
@@ -94,9 +95,13 @@ def native_preview(scene_id,manifest,rows,sha):
             if len(entries)!=1:
                 raise RuntimeError("A single native door identity is required.")
             extra=entries[0]
-            flags["doorType"]=int(extra.get("doorType",1))
-            flags["doorState"]=int(extra.get("doorState",0))
-            flags["doorStyle"]=int(extra.get("doorStyle",0))
+            if int(extra.get("doorStyle",1))!=1 or extra.get("doorAnimateAngle") is not None:
+                raise RuntimeError("Only native mesh-hinged door style is QA-verified as a source format.")
+            door_id=str(extra["doorId"])
+            flags.pop("doorType",None)
+            flags.pop("doorState",None)
+            flags.pop("doorStyle",None)
+            flags["modelDoors"]={door_id:{"ds":int(extra.get("ds",extra.get("doorState",0)))}}
         got.append(cand)
     return got
 
