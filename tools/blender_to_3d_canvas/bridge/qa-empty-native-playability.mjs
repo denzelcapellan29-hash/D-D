@@ -96,7 +96,7 @@ export async function inspectEmptyQaNativePlayability(scene,context,options={}){
     const to=new THREE.Vector3(...probe.to);
     const raw=manager.computeSightCollisionFrom3DPositions(
       from,to,type,false,true,false,true);
-    results.push({...probe,collision_type:type,hits:classifyHits(raw,l3d.board)});
+    results.push({...probe,collision_type:type,hits:classifyHits(raw??[],l3d.board)});
   }
   return {read_only:true,qa_scene_id:scene.id,source_scene_id:SOURCE_SCENE_ID,
     source_revision:sourceRevision,tiles:tiles.length,
