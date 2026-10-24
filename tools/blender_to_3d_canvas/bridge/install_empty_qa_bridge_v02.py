@@ -83,7 +83,7 @@ def main():
     bridge_tmp=bridge.with_suffix(".js.qa-pending")
     try:
         module_tmp.write_bytes(module.read_bytes())
-        bridge_tmp.write_text(candidate,encoding="utf8")
+        bridge_tmp.write_bytes(candidate.encode("utf8"))
         if sha(module_tmp)!=sha(module):
             raise RuntimeError("Module staging checksum mismatch.")
         os.replace(module_tmp,dest)
