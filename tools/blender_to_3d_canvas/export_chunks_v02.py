@@ -25,6 +25,13 @@ SCHEMA = "acq.blender-3dcanvas.multichunk.v0.2"
 BLOCKED_GEOMETRY = {"CURVE","SURFACE","FONT","META","CURVES","POINTCLOUD","VOLUME"}
 DOOR_FIELDS = ("isDoor","doorId","ds","doorStyle","doorAnimateAngle",
                "doorType","doorState","slidePercent")
+# Explicit author role contract. No inference from names, dimensions, or all-true
+# legacy flags: silence is an error for a new native import.
+ALLOWED_ACQ_ROLES = {
+    "walkable_floor", "stair", "opaque_wall", "roof",
+    "door_leaf", "solid_prop", "decorative_prop", "foliage",
+}
+
 
 def digest(path):
     h=hashlib.sha256()
@@ -107,6 +114,11 @@ def main():
             raise RuntimeError("Unsafe source chunk ID: "+repr(cid))
         mode="interactive" if (ob.get("acq_interactive") or ob.get("isDoor") or ob.get("doorType")) else "static"
         door=bool(ob.get("isDoor") or ob.get("doorType"))
+        role=str(ob.get("acq_role","")).strip()
+        if role not in ALLOWED_ACQ_ROLES:
+            raise RuntimeError("Explicit acq_role required for native-safe export: "+ob.name)
+        if door != (role=="door_leaf"):
+            raise RuntimeError("Door tagging and acq_role=door_leaf must agree: "+ob.name)
         if door and not ob.get("doorId"):
             raise RuntimeError("Native door requires an explicit source doorId: "+ob.name)
         if door and int(ob.get("doorStyle",0)) not in (0,1,2):
@@ -196,7 +208,9 @@ def main():
               "source_asset":ob.get("asset_source",ob.get("source_glb")),
               "vertices":len(ob.data.vertices),"faces":len(ob.data.polygons),
               "materials":[m.name for m in ob.data.materials if m],
+              "acq_role":str(ob.get("acq_role")),
               "collision":ob.get("collision"),"sight":ob.get("sight"),
+              "camera_collision":ob.get("cameraCollision"),
               "native_door_extras":{k:ob.get(k) for k in DOOR_FIELDS if ob.get(k) is not None},
               "interactive_kind":ob.get("acq_interactive_kind"),
             })
