@@ -149,7 +149,7 @@ def check_tiles(plan,scene):
                 raise RuntimeError("Native Tile flag mismatch "+item["semantic_id"]+" "+k)
         if (tile.get("acq") or {}).get("provenance") != {
                 "asset_sha256":item["row"]["glb_sha256"],
-                "source":item["row"]["glb_file"] if False else item["source_blend"]}:
+                "source":item["source_blend"]}:
             raise RuntimeError("QA provenance mismatch: "+item["semantic_id"])
     return True
 
