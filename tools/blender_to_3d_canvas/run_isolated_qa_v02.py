@@ -163,7 +163,32 @@ def view_original(qa_id):
         raise RuntimeError("Original GM view restoration failed.")
     return r
 
+def restore_gm_if_needed():
+    _,inspection=call(PROTECTED_SCENE,{"op":"manage_empty_qa_scene","action":"inspect"},
+                      True,PROTECTED_SHA,timeout=80)
+    qa=inspection.get("qa_scene_id")
+    if (not inspection.get("qa_owned") or not qa or
+        inspection.get("source_revision")!=PROTECTED_SHA or
+        inspection.get("foundry_active_scene_id")!=PROTECTED_SCENE):
+        raise RuntimeError("STOP: GM-view restore requires exact owned isolated QA Scene.")
+    current=inspection.get("gm_viewed_scene_id")
+    if current==PROTECTED_SCENE:
+        return {"ok":True,"stage":"ALREADY_VIEWING_ORIGINAL",
+                "gm_view_restored":True,"qa_scene_id":qa}
+    if current!=qa:
+        raise RuntimeError("STOP: GM viewing unrelated Scene; cannot restore from it.")
+    view_original(qa)
+    _,final=call(PROTECTED_SCENE,{"op":"manage_empty_qa_scene","action":"inspect"},
+                 True,PROTECTED_SHA,timeout=80)
+    if final.get("gm_viewed_scene_id")!=PROTECTED_SCENE:
+        raise RuntimeError("STOP: GM-view restoration not independently verified.")
+    return {"ok":True,"stage":"GM_ORIGINAL_VIEW_RESTORED",
+            "gm_view_restored":True,"qa_scene_id":qa,
+            "source_revision":final["source_revision"]}
+
 def execute(args):
+    if getattr(args,"restore_view_only",False):
+        return restore_gm_if_needed()
     manifest,rows=verify(args.bundle_dir,args.asset_root)
     if set(r["chunk_id"] for r in rows)!=REQUIRED_CHUNKS:
         raise RuntimeError("This v0.2 QA runner accepts exactly the seven verified library chunks.")
@@ -215,7 +240,9 @@ def execute(args):
         if not args.retain_import:
             clean=cleanup(qa_id,{r["semantic_id"] for r in rows},len(rows))
             imported=False
-            report["empty_revision_restored"]=clean==baseline
+            if clean!=baseline:
+                raise RuntimeError("STOP: Isolated QA cleanup did not restore exact baseline revision.")
+            report["empty_revision_restored"]=True
     except Exception as e:
         error=e
         # A partially applied uncertain write is NOT automatically replayed,
@@ -240,11 +267,17 @@ def execute(args):
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
-    parser.add_argument("--bundle-dir",type=pathlib.Path,required=True)
-    parser.add_argument("--asset-root",type=pathlib.Path,required=True)
+    parser.add_argument("--bundle-dir",type=pathlib.Path)
+    parser.add_argument("--asset-root",type=pathlib.Path)
     parser.add_argument("--live",action="store_true")
+    parser.add_argument("--restore-view-only",action="store_true",
+                        help="Restore original GM-local view from the owned QA Scene; no imports or Tile writes.")
     parser.add_argument("--retain-import",action="store_true")
     args=parser.parse_args()
+    if not args.restore_view_only and (args.bundle_dir is None or args.asset_root is None):
+        parser.error("--bundle-dir and --asset-root required except with --restore-view-only")
+    if args.restore_view_only and (args.live or args.retain_import):
+        parser.error("--restore-view-only cannot be combined with import options")
     try:print(json.dumps(execute(args),indent=2))
     except Exception as error:
         print(json.dumps({"ok":False,"error":str(error)}),file=sys.stderr)
