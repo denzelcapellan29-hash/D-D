@@ -54,6 +54,52 @@ def read_glb_metadata(path):
             "animations":len(meta.get("animations",[])),
             "has_extras":any("extras" in x for x in meta.get("nodes",[]))}
 
+# Native 3D Canvas per-Tile defaults. These are intended roles, not a claim
+# of successful character traversal or 3D vision with Token Vision off.
+# Source-authored exceptions are explicit; implicit inherited all-true is unsafe.
+SEMANTIC_TILE_FLAGS = {
+    "walkable_floor": (True, False, False),
+    "stair": (True, False, False),
+    "opaque_wall": (True, True, True),
+    "roof": (True, True, True),
+    "door_leaf": (True, True, True),
+    "solid_prop": (True, False, True),
+    "decorative_prop": (False, False, False),
+    "foliage": (False, False, False),
+}
+
+def semantic_flags(chunk):
+    sources=chunk.get("source_objects") or []
+    if not sources:
+        raise RuntimeError("Semantic chunk has no source objects.")
+    roles={ob.get("acq_role") for ob in sources}
+    if len(roles)!=1 or next(iter(roles)) not in SEMANTIC_TILE_FLAGS:
+        raise RuntimeError("All chunk members require one explicit supported acq_role: "+
+                           str(chunk.get("chunk_id")))
+    role=next(iter(roles))
+    if bool(chunk.get("interactive_door"))!=(role=="door_leaf"):
+        raise RuntimeError("Door chunk must contain only tagged door_leaf mesh(es): "+
+                           str(chunk.get("chunk_id")))
+    defaults=SEMANTIC_TILE_FLAGS[role]
+    values=[]
+    for field,default in zip(("collision","sight","camera_collision"),defaults):
+        declared=[ob[field] for ob in sources if ob.get(field) is not None]
+        if declared and (len(declared)!=len(sources) or
+                         any(type(x) not in (bool,int) or x not in (0,1,True,False)
+                             for x in declared) or
+                         any(bool(x)!=bool(declared[0]) for x in declared)):
+            raise RuntimeError("Conflicting or partial source "+field+": "+
+                               str(chunk.get("chunk_id")))
+        chosen=bool(declared[0]) if declared else default
+        if chosen!=default:
+            justification=chunk.get("semantic_override_reason")
+            if not isinstance(justification,str) or len(justification.strip())<12:
+                raise RuntimeError("Role override of "+field+
+                                   " requires explicit semantic_override_reason: "+
+                                   str(chunk.get("chunk_id")))
+        values.append(chosen)
+    return role,tuple(values)
+
 def safe_identifier(text):
     return (isinstance(text,str) and 1<=len(text)<=70 and text.isascii()
         and all(c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in text))
@@ -125,7 +171,9 @@ def verify(bundle, assets_root=None):
             mat=o["source_matrix_world_rowmajor"]
             if len(mat)!=16 or not all(isinstance(x,(int,float)) and math.isfinite(x) for x in mat):
                 raise RuntimeError("Invalid authored world transform: "+cid)
+        role,flags=semantic_flags(item)
         rows.append({
+          "semantic_role":role,"semantic_flags":flags,
           "chunk_id":cid,"kind":item["kind"],"interactive_door":item["interactive_door"],
           "glb_file":str(glb),"glb_sha256":asset["sha256"],
           "glb":meta,"foundry_path":staging_root+filename if staging_root else None,
@@ -184,7 +232,9 @@ def native_candidates(rows,manifest,revision):
             "op":"preview_native_asset_tile","foundry_path":row["foundry_path"],
             "x":cx,"y":cy,"scale":manifest["foundry"]["native_3d_tile_scale"],
             "elevation":row["tile_elevation"],"origin":"center","rotation":0,
-            "collision":True,"sight":True,"camera_collision":True}
+            "collision":row["semantic_flags"][0],
+            "sight":row["semantic_flags"][1],
+            "camera_collision":row["semantic_flags"][2]}
         _,preview=call(QA_SCENE,preview_op,True,revision,90)
         candidate=copy.deepcopy(preview.get("candidate") or {})
         expected=row["expected_dimensions_px"]
