@@ -137,7 +137,7 @@ def import_once(scene_id,manifest,rows,sha):
     return after["after_revision"], actual
 
 def cleanup(scene_id,owned,expected_count):
-    _,s=call(scene_id,{"op":"inspect_3d_scene"},True,timeout=80)
+    envelope,s=call(scene_id,{"op":"inspect_3d_scene"},True,timeout=80)
     semantics=set(owned)
     tiles=s.get("tiles") or []
     owned_tiles=[t for t in tiles if (t.get("acq") or {}).get("semantic_id") in semantics]
@@ -148,7 +148,7 @@ def cleanup(scene_id,owned,expected_count):
         raise RuntimeError("Unowned Tile among cleanup targets.")
     _,deleted=call(scene_id,{"op":"delete_semantic_objects",
                  "semantic_ids":sorted(semantics)},
-                 False,s["after_revision"],timeout=90)
+                 False,envelope["after_revision"],timeout=90)
     if len(deleted.get("deleted") or [])!=expected_count:
         raise RuntimeError("Native cleanup incomplete.")
     final,remaining=collect_owned(scene_id,semantics)
