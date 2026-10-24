@@ -154,11 +154,21 @@ def call(scene,op,dry_run=True,revision=None,timeout=90):
     return result,entry
 
 def inspect_guard():
+    _,qastatus=call(QA_SCENE,
+        {"op":"manage_vision_qa_scene","action":"inspect"},True,timeout=70)
+    if (qastatus.get("source_scene_id")!=PROTECTED_SCENE
+        or qastatus.get("source_revision")!=PROTECTED_SHA
+        or qastatus.get("foundry_active_scene_id")!=PROTECTED_SCENE
+        or qastatus.get("gm_viewed_scene_id")!=QA_SCENE
+        or qastatus.get("qa_scene_id")!=QA_SCENE
+        or not qastatus.get("qa_exists")
+        or qastatus.get("players_pulled")):
+        raise RuntimeError("Original accepted Scene or GM-only QA safety guard failed.")
     snap,scene=call(QA_SCENE,{"op":"inspect_3d_scene"},True,timeout=70)
     if snap.get("scene_id")!=QA_SCENE or not scene.get("levels3d_active"):
-        raise RuntimeError("GM must view the original inactive QA clone with 3D Canvas active.")
-    if scene.get("scene_active"):
-        raise RuntimeError("QA clone must not be active for players.")
+        raise RuntimeError("GM must view the inactive QA clone with native 3D Canvas active.")
+    if snap.get("after_revision")!=QA_BASELINE_SHA:
+        raise RuntimeError("QA clone diverged from pinned baseline; refuse v0.2 writes.")
     return snap,scene
 
 def native_candidates(rows,manifest,revision):
