@@ -33,7 +33,13 @@ INSERT='''  if (type === "inspect_empty_qa_native_playability") {
     const source=game.scenes?.get(EMPTY_QA_SOURCE_ID);
     if (!source) throw new Error("Protected Area 8 Scene missing.");
     const sourceRevision=(await sceneSnapshot(source)).revision;
-    const result=await inspectEmptyQaNativePlayability(scene,{
+    // The bridge command envelope is always routed through the active source
+    // Scene; the GM may VIEW (but not Activate) the separate inactive QA
+    // Scene. Resolve only the exact requested, owned QA Scene here.
+    const qa=game.scenes?.get(String(op.qa_scene_id ?? ""));
+    if (!qa || qa.id===source.id)
+      throw new Error("Explicit non-source QA Scene ID is required.");
+    const result=await inspectEmptyQaNativePlayability(qa,{
       game,canvas,sourceRevision,l3d:levels3d(),THREE:await getThreeModule()
     });
     return {op:type,ok:true,...result};
