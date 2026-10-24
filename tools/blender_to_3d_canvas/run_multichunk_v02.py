@@ -21,7 +21,8 @@ import math
 import pathlib
 import subprocess
 import sys
-from import_chunks_v02 import verify, QA_SCENE
+from import_chunks_v02 import (verify, QA_SCENE, PROTECTED_SCENE,
+                              PROTECTED_SHA, call)
 
 def file_hash(p):
     h=hashlib.sha256()
@@ -50,10 +51,14 @@ def main():
     p.add_argument("--grid-distance",type=float,default=1)
     p.add_argument("--reuse-staged",action="store_true")
     p.add_argument("--native-preview",action="store_true")
+    p.add_argument("--manage-qa-view",action="store_true",
+                   help="Scoped GM-only QA view/readiness then guaranteed source-view restore.")
     p.add_argument("--apply",action="store_true")
     a=p.parse_args()
     if a.apply and not a.native_preview:
         raise RuntimeError("Cannot apply without native preflight.")
+    if a.manage_qa_view and not a.native_preview:
+        raise RuntimeError("GM view management requires native preview.")
     if not a.blend.is_file() or a.blend.suffix.lower()!=".blend":
         raise RuntimeError("Saved .blend source required.")
     if not a.asset_root.is_dir():
@@ -99,16 +104,62 @@ def main():
     ]
     if a.native_preview:importer.append("--native-preview")
     if a.apply:importer.append("--apply")
-    output=run(importer,"Guarded native multi-chunk QA",720)
-    report=json.loads(output)
-    if not report.get("ok"):
-        raise RuntimeError("Native stage did not report successful validation.")
+    switched=False
+    error=None
+    report=None
+    gm_restored=not a.manage_qa_view
+    try:
+        if a.manage_qa_view:
+            source_before,scene_before=call(PROTECTED_SCENE,
+                {"op":"inspect_3d_scene"},True,timeout=70)
+            if source_before["after_revision"]!=PROTECTED_SHA:
+                raise RuntimeError("Protected original Scene checksum drift.")
+            _,view=call(PROTECTED_SCENE,
+                {"op":"manage_vision_qa_scene","action":"view",
+                 "qa_scene_id":QA_SCENE},False,timeout=75)
+            if view.get("view_requested"):
+                switched=True
+            if view.get("now_viewed")!=QA_SCENE or not switched:
+                raise RuntimeError("Native GM-local QA view was not established.")
+            # Native first-party capture path starts/recover-checks 3D Canvas.
+            # Never toggle GameCamera or user-wide module preferences.
+            _,readiness=call(QA_SCENE,
+                {"op":"capture_3d_view","format":"webp","quality":0.30,
+                 "restore_camera":True},False,timeout=105)
+            if not readiness.get("ok") or not readiness.get("image_base64"):
+                raise RuntimeError("Native QA renderer activation did not produce a capture.")
+        output=run(importer,"Guarded native multi-chunk QA",720)
+        report=json.loads(output)
+        if not report.get("ok"):
+            raise RuntimeError("Native stage did not report successful validation.")
+    except Exception as problem:
+        error=problem
+    finally:
+        if switched:
+            try:
+                _,restored=call(QA_SCENE,
+                    {"op":"manage_vision_qa_scene","action":"restore_view"},
+                    False,timeout=75)
+                if restored.get("now_viewed")!=PROTECTED_SCENE or restored.get("players_pulled"):
+                    raise RuntimeError("GM view or player isolation not restored.")
+                final,_=call(PROTECTED_SCENE,{"op":"inspect_3d_scene"},True,timeout=75)
+                if final.get("after_revision")!=PROTECTED_SHA:
+                    raise RuntimeError("Accepted original Scene checksum changed.")
+                gm_restored=True
+            except Exception as restoration:
+                raise RuntimeError(
+                    "STOP: native stage error="+str(error)+
+                    "; GM view restoration UNVERIFIED: "+str(restoration)
+                ) from restoration
+    if error is not None:
+        raise error
     if file_hash(a.blend)!=before:
         raise RuntimeError("Source Blender changed after importer stage.")
     return {"ok":True,"source_untouched_sha256":before,"stage":report["stage"],
       "qa_scene_id":QA_SCENE if a.native_preview else None,
       "chunks":len(rows),"bundle":str(folder),
       "native_tile_ids":report.get("native_tile_ids"),
+      "gm_view_restored":gm_restored,
       "production_acceptance":False,"source_scene_writes":False}
 
 if __name__=="__main__":
