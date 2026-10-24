@@ -45,6 +45,7 @@ class ManifestV02UnitTests(unittest.TestCase):
             p=self.bundle/(cid+".glb")
             fake_glb(p)
             obj={"name":"Mock "+cid,"source_parent":None,
+                 "acq_role":"opaque_wall" if cid=="static" else "door_leaf",
                  "source_matrix_world_rowmajor":identity(),
                  "native_door_extras":{"doorId":"qa"} if cid=="interactive" else {}}
             chunks.append({"chunk_id":cid,
