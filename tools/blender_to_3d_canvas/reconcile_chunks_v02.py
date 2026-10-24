@@ -26,7 +26,7 @@ CLASSIFICATION="QA_ONLY_MULTICHUNK_V02"
 SCALAR=("x","y","width","height","elevation","rotation")
 ALLOWED_FLAGS=frozenset({
  "model3d","material","color","scale","collision","sight","cameraCollision",
- "doorType","doorState","doorStyle","doorAnimationDuration","doorAnimateAngle",
+ "doorType","doorState","doorStyle","doorAnimationDuration","doorAnimateAngle","modelDoors",
  "doorSlidePercent","imageTexture","fillType","castShadow"})
 METADATA_SCOPE="flags.acq.provenance"
 
