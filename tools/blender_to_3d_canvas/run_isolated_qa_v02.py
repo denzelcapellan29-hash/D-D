@@ -101,10 +101,12 @@ def native_preview(scene_id,manifest,rows,sha):
     return got
 
 def collect_owned(scene_id,semantics):
-    _,s=call(scene_id,{"op":"inspect_3d_scene"},True,timeout=80)
+    envelope,s=call(scene_id,{"op":"inspect_3d_scene"},True,timeout=80)
     items=(s.get("tiles") or [])
     found=[t for t in items if (t.get("acq") or {}).get("semantic_id") in semantics]
-    return s,found
+    # Revision is attached to the command envelope, not the inspect
+    # operation itself. Preserve the operation's native geometry fields.
+    return {**s,"after_revision":envelope["after_revision"]},found
 
 def import_once(scene_id,manifest,rows,sha):
     candidates=native_preview(scene_id,manifest,rows,sha)
