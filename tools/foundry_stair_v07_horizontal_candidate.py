@@ -82,6 +82,15 @@ def make_candidate(source, target, factor=STRETCH_Z):
         if "min" in accessor:accessor["min"]=mins
         if "max" in accessor:accessor["max"]=maxs
         transformed[kind]=count
+    # Source node translates the original 0..4 source-Z span by -2 to center.
+    # A buffer-only stretch would shift its runtime origin: preserve the pivot.
+    if len(doc.get("nodes",[]))!=1 or doc["nodes"][0].get("name")!="stairs":
+        raise ValueError("Unexpected stair node: refusing unguarded pivot change")
+    node=doc["nodes"][0]
+    translation=node.get("translation")
+    if translation is None or len(translation)!=3 or not math.isclose(translation[2],-2.0,abs_tol=1e-7):
+        raise ValueError("Unexpected node pivot: refusing shifted candidate")
+    node["translation"][2]*=factor
     docbytes=json.dumps(doc,separators=(",",":"),ensure_ascii=False).encode("utf8")
     docbytes+=b" "*(-len(docbytes)%4)
     binary=bytes(buf)
