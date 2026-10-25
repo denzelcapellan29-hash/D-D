@@ -1,0 +1,23 @@
+# 3D Canvas v05 native certification attempt — runtime BLOCKED (2026-10-24)
+
+**Classification: SOURCE / AS_BUILT. Native physical gameplay PASS NOT GRANTED.** No new QA Tiles or Tokens were written; no original Manor Blender master or vendor module was edited.
+
+## Protected source digest recovered
+Foundry V14.368, 3D Canvas v9.0.36, bridge v0.2.8. Source accepted Area8 scene NUEDEFAULTSCENE0 was active. Current SHA 446136385eeae576bfb4abac199639b1f42b2a66e2e48883b06c96b2ea3c40dd differed from pinned e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f. A direct JSON diff between live Scene.toObject and a private snapshot carrying the accepted SHA established precisely **one changed field**: monk QA Token iSbK8OUBuUEjIGGu rotation 333.3798438225904° -> 128.4709805667717°. All 162 Tiles, 36 Walls, 13 Regions, six Lights, two Tokens and other Scene fields were identical. The current source state was preserved privately as backups/qa_source_rotation_before_restore_20261024T2000.json before a one-field token_update restored accepted rotation 333.3798438225904°. Independent native readback confirmed EXACT accepted SHA recovered; no source geometry, walls or scenery changed.
+
+## GM-only scene view and actual native failure
+First-party manage_empty_qa_scene inspect confirmed QA Scene 3WNB3GURss8vPtua is inactive, GM-owned, QA SHA dd8676de454199188aee19d511717b8a93d50d3889fcf473b63e2ed5fdb86e2e, seven existing old-v03 Tiles and zero Tokens/Walls/Regions/Lights. Dry-run view PASS, actual GM-local Scene.view PASS. Source active scene did not change and players were not pulled.
+
+The 3D Canvas native capture then FAILED. Its first-party ensure3dRuntime performed a bounded native toggle/reload once and returned 409: 3D Canvas did not become ready within 15000ms. Subsequent READ-ONLY native inspections showed _active=true, _ready=false, _finalizingLoad=false, loadingTiles=7; _envReady eventually became true. Seven existing Tiles had runtime bounds, but this does not certify loaded render/physics. Attempted new-v05 QA asset preflight refused with 'Loaded native renderer and model loader required for GLB geometry preflight'. **No apply/import was attempted.**
+
+Vendor installed scripts/main.js was inspected READ-ONLY: animation returns before progress if canvas.ready=false, _pauseRendering=true, or fogExploration is unready. _onProgress sets _ready only when every loading Tile _loaded flag and _envReady are true. All seven existing 29–125KB QA GLBs and the default EXR were present and served with HTTP 200, so missing files are not evidenced. Actual canvas.ready, _pauseRendering and individual loadingTiles._loaded values remain UNVERIFIED. Do not patch vendor modules, force _ready, or call mere GLB bounds a gameplay pass.
+
+## Rollback and safe end state
+An exact QA baseline snapshot was copied privately to backups/qa_v05_before_new_semantic_import_20261024.json. GM local view was restored via guarded manage_empty_qa_scene(action=restore_view) PASS. Subsequent readback confirmed accepted Area8 source SHA e1c023a1ef9688fb4a0f4112adbc41b39089d04190bbaa696a6b36946c8c974f, QA unchanged with seven old Tiles. Area8 3D mode after restore was INACTIVE: no unsupported claim of restoring the prior first-person camera. Original Manor .blend saved/clean, Godot untouched.
+
+Seven NEW v05 explicit-role GLBs, 382108 bytes total, remained privately staged at module assets/blender_bundles/qa-native-door-v05-20261024. SHA and source manifest verification, real prior Area8 GLB previews of floor and door, and 47/47 Python offline regression tests PASSED. Native closed/open/closed hinge, collision, token stair traversal, Levels roof visibility, reload, performance and final artwork remain NOT CERTIFIED.
+
+## Exact next blocker to resolve
+Add a bounded first-party **read-only** loader diagnostic for canvas.ready, l3d._pauseRendering, fogExploration readiness, each loadingTiles id and _loaded/_destroyed state, native asset queue completion and progress handler. Reproduce within GM-only QA without changing vendor JS or protected source. Only after _active=true,_ready=true,_envReady=true,loading_count=0: preview all seven v05 chunks at a collision-separated offset (proposed +850px x,+350px y), apply with exact QA revision and semantic IDs, verify modelDoors mesh leaf and attached handle, actual native TokenLayer.moveMany stair/door passage and negative wall controls, sight/elevation/Levels, camera and nonblack captures, cold reload/FPS, then targeted semantic-ID rollback and exact source/QA digest restoration. DM accepts art separately.
+
+**SAVED / OFFLINE VERIFIED / NATIVE PREVIEW ≠ NATIVE PHYSICAL PASS ≠ DM ACCEPTED.**

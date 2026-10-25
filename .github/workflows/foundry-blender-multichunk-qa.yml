@@ -1,0 +1,41 @@
+name: Foundry Blender Multi-Chunk Offline QA
+on:
+  push:
+    branches:
+      - feature/foundry-multichunk-v02-20261023
+    paths:
+      - 'tools/blender_to_3d_canvas/**'
+      - '.github/workflows/foundry-blender-multichunk-qa.yml'
+  pull_request:
+    paths:
+      - 'tools/blender_to_3d_canvas/**'
+      - '.github/workflows/foundry-blender-multichunk-qa.yml'
+permissions:
+  contents: read
+jobs:
+  offline-python:
+    name: Offline Python manifest, transaction, recovery and isolated Scene tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run source-safe tests (no live Foundry RPC)
+        run: python -m unittest discover -s tools/blender_to_3d_canvas/tests -p 'test_*v02.py' -v
+  offline-node:
+    name: Node native-mock QA Scene and collision diagnostic tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check first-party module syntax
+        run: |
+          node --check tools/blender_to_3d_canvas/bridge/qa-empty-scene.mjs
+          node --check tools/blender_to_3d_canvas/bridge/qa-empty-native-playability.mjs
+      - name: Run isolated first-party Scene native-mock tests
+        run: |
+          node --test tools/blender_to_3d_canvas/tests/test_empty_qa_scene_v02.mjs
+          node --test tools/blender_to_3d_canvas/tests/test_qa_empty_native_playability_v02.mjs
