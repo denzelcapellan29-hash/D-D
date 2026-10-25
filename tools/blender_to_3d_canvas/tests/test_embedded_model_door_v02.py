@@ -34,6 +34,7 @@ class EmbeddedModelDoorV02(unittest.TestCase):
         c,_=run_case(True)
         f=c["flags"]["levels-3d-preview"]
         self.assertEqual(f["modelDoors"],{"qa-hinge":{"ds":0}})
+        self.assertEqual(f["fillType"],"fit")
         self.assertTrue(f["collision"])
         self.assertTrue(f["sight"])
         for name in ("doorType","doorState","doorStyle"):
