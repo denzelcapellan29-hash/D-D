@@ -269,6 +269,7 @@ def native_candidates(rows,manifest,revision):
             flags.pop("doorType",None)
             flags.pop("doorState",None)
             flags.pop("doorStyle",None)
+            flags["fillType"]="fit"  # Preserve actual glTF Mesh nodes and their userData.isDoor.
             flags["modelDoors"]={door_id:{"ds":int(extras.get("ds",extras.get("doorState",0)))}}
         candidates.append(candidate)
     return candidates
