@@ -101,6 +101,7 @@ def native_preview(scene_id,manifest,rows,sha):
             flags.pop("doorType",None)
             flags.pop("doorState",None)
             flags.pop("doorStyle",None)
+            flags["fillType"]="fit"  # Native tagged model-door mesh cannot be instanced.
             flags["modelDoors"]={door_id:{"ds":int(extra.get("ds",extra.get("doorState",0)))}}
         got.append(cand)
     return got
