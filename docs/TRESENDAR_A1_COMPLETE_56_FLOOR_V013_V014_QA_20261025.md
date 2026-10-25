@@ -1,0 +1,20 @@
+# Tresendar Area 1 — Complete 56/56 CAD floor visual coverage and raised landing (2026-10-25)
+
+## DM correction
+The DM rejected v012 as unfinished because only part of Area 1 had finished stone floor artwork. Audit of the actual v012 .blend identified **56 CAD floor-grid bays (8 × 7)**, of which only **11** were fitted with visible Meshy-derived paving (2 v006, 2 v011, 7 v012), leaving **45 visible flat gray CAD floor placeholders**. We corrected the WHOLE GRID rather than another small isolated fixture.
+
+## v013 full-grid floor
+Private reversible Blender: https://drive.google.com/file/d/1VioKHrB2sdMuohtR5qqz4HijvIDewCct/view
+SHA256 c4bbbe86ba317017e63611da69650285b6cd71f383dbde5db303dfe424ae2702. Original saved v012 never overwritten. Installed **45 source-Meshy PBR LOD28 (22,312 polygons each, UV/PBR retained) instances** on the remaining CAD tiles. Existing 11 stone tiles remained untouched. Every 8 × 7 CAD tile now has exactly one Meshy skin; **56/56, zero visible flat CAD tiles**, while all original floor CAD meshes/collisions/positions/materials remain intact. Each new skin's XY fit error <=0.00009m, visible top approximately 0.011975m above structural floor, neighboring test joint ~0.000058m, shifted 25mm negative detected. Protected cellar and door, cistern, stairs remain untouched. Original 285 v012 objects retained with all mesh identities, materials and transforms unchanged; only 45 floor CAD masters had render visibility switched off.
+
+Actual rendered v013 evidence: floor with cistern https://drive.google.com/file/d/1Ffyxa-yeeUNYed-D1zZerDsGXkDQLM6j/view, overhead floor diagnostic https://drive.google.com/file/d/1lS2YDqwHzcJ8ExzY0fc2SuQmokH6W4Ce/view (the ceiling was hidden only temporarily for cutaway camera, not in saved scene), approach https://drive.google.com/file/d/1RFRN9hTUxA3jvoIM4zOkZSu4jvG8DL5S/view, southern corner https://drive.google.com/file/d/1VkyFLAIFbi1ZE0Hshrj2XHb_fcszMqB6/view. Note these actual renders STILL show unfinished wall/entrance stairs, not remaining blank floor-grid tiles.
+
+## v014 raised eastern landing continuation
+Private reversible Blender: https://drive.google.com/file/d/1RYz5FoYJ7p5qJo0USEmCso29ZwOWUhc2/view
+SHA256 0dc3aece06c4db30786b75a74db33e2d9d79d23481fb3793e5ba1b85f2295cae. Took saved v013 and installed one more copy of same true source-Meshy LOD28 paving on Area 1's existing raised east landing CAD x[4.572,6.096], y[-0.762,0.762], top Z=0m. Actual art top +0.011975m, XY error 0.0000895m; original 330 objects/geometry/material/matrices preserved, only existing raised landing CAD render-hidden. Source v013 untouched; **whole 56-grid PLUS raised landing complete**. Both 12-step stair flights remain unchanged. New actual render evidence:
+- v014 full-room overhead with roof/ceiling cutaway solely for diagnostic: https://drive.google.com/file/d/1MZbeFhO3tasMlbtwlX490VAqufJuOwdX/view
+- v014 doorway to entire stone-paved floor: https://drive.google.com/file/d/10GIHPh02hKDSefEzfzoYMqh8fwdaYd9w/view
+- v014 east landing view, which reveals still-unfinished adjacent stone and gray world boundary: https://drive.google.com/file/d/1MUEB6kSPRMgza36-YDWygGJ5xAOojsV8/view
+
+## Acceptance / next gates
+SAVED v014 = true; per-grid FLOOR-VISUAL COVERAGE = PASS; CAD unchanged for all 56 floor masters and elevated landing. **Whole Area1 ART/WORLD FAIL/PENDING**: the actual eye renders show the east stair geometry/gray faces, old wall sections, outside sky/void beyond entrance, exposed seams, and inconsistent lighting/material atmosphere. Floor coverage does NOT mean whole scene is aesthetically complete or source-compliant; native Foundry V14 3D Canvas collisions/materials/vision UNVERIFIED, DM art acceptance NO. Do not repeat more tiles or perform extra tint experiments. Next priority is hero east stair/entrance and adjoining walls/material returns (real Meshy sculpture, source art contract, protect CAD); then native renderer parity and DM review. No new Meshy credits were spent, no original GLBs modified.
