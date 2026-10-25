@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {exerciseManorNativeMovement as run, MANOR_ID, SOURCE_ID, SOURCE_SHA} from './acq_manor_native_v016_candidate.mjs';
+import {exerciseManorNativeMovement as run, MANOR_ID, SOURCE_ID, SOURCE_SHA} from '../tools/manor-native-qa-v016-candidate.mjs';
 const records=[];
 function makeHarness({wrongBuild=false,sideways=false,blocked=false,drift=false,sourceDrift=false}={}){
  const tokenId='WFTbaMsg6sFNPblG';
