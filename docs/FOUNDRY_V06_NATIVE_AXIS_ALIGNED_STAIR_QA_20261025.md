@@ -28,3 +28,21 @@ READ installed `levels-3d-preview/scripts/wrappers.js` only. Native wrapper for 
 4. **Art/Skill** integration note: camera-aligned native TokenLayer `moveMany` and actual Mesh/BVH staircase support MUST be FAMILY_REVIEW native gate, separate from Blender structural contact and Foundry TokenDocument coordinate changes. Prior v2.7.67 skill did not yet incorporate this specific blocked-stair evidence. Preserve art/engineering joint pass and DM visual acceptance.
 
 **Acceptance:** Native source import, model-door BVH and two single-token movement vectors PASS. **Continuous stair ascent, descent, roof hide, cold reload, art/world/DM acceptance FAIL or UNVERIFIED.** No production release certification.
+
+
+## Additional independent stair-riser raycast finding (SOURCE geometry inspection, 2026-10-25)
+
+Performed second isolated headless Blender glTF import of **the same immutable stair connector GLB SHA `734f0c1bff44ce81fcad156c45477d36cdbd09f78e4117b07ec83f46071df81e`**, without editing its geometry or the Manor source. On the mesh named `stairs` (358 polygons), a *horizontal* ray from its centerline local (x0, y0) toward **positive local y1.3334** (the equivalent distance to the blocked native next grid cell, accounting for Tile scaling) produced:
+
+| GLB-local ray elevation | Mesh intersection on route | Contact |
+|---|---|---|
+| z3.0 | BLOCKED | vertical riser at y1, face350 |
+| z3.3 | BLOCKED | vertical riser at **y1, face351**, normal (0,-1,0) |
+| z3.35 | BLOCKED | same riser at y1, face351 |
+| z3.4 | BLOCKED | beveled transition near y1, face22 |
+| z3.5 | CLEAR | no intersection over this route segment |
+| z3.6 and z3.75 | CLEAR | no intersection |
+
+Repeated for x=-0.35 and x=+0.35 local: **z3.3 BLOCKED, z3.6 CLEAR**, so this is not a single centerline crack or camera trick. Scene Tile native scale0.075 maps one GLB local height unit to **0.075m** in the assembled fixture. A previous support ray placed the token on a local support surface near z2 at the third step; movement toward the next cell intersects source geometry at z3.3–3.4, i.e. a genuine forward riser inside the movement-height envelope. This is **strong source geometric evidence** that the mesh's rise/run/tread profile blocks native horizontal movement. The *exact native Three.js collider object ID* was not independently returned; therefore the statement is **SOURCE_GEOMETRY_PASS / NATIVE_BLOCKED**, not a signed native triangle attribution.
+
+**No authorized corrective geometry work was performed in this Foundry chat.** Manor owner needs to test a new *disposable library/source-faithful stair fixture* with a rise envelope compatible with the **actual** native 3D Canvas horizontal BVH and downward support ray; use existing source entry/exit elevations and sockets. A more gradual supported profile with smaller **maximum rise across one 100px native step** is a falsifiable approach, not an approved design change. Preserve original mesh/hashes and successful engineering connections; no arbitrary visible wedges, hiding collision, free-flight teleport or source reauthoring without DM/owner acceptance.
