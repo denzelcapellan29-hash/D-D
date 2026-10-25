@@ -1,0 +1,31 @@
+# Tresendar Exterior v058 Restoration — Verified Source/Assets and Next Fixture (2026-10-25)
+
+## Current truth / fail-safe
+**No Blender write in this checkpoint.** Blender MCP `get_blendfile_summary_path_info` returned `McpServerError: Session terminated` at the beginning of this continuation; this is an application/connector error, NOT missing MCP tools. Respect the one-recovery/STOP rule. Current GUI status therefore unknown; do not claim active state. Godot connected but experimental and not written. Foundry 3D Canvas asset catalog searched READ-ONLY, and no Foundry Scene or GM camera altered.
+
+**Best saved exterior art candidate:** private Drive v058 `https://drive.google.com/file/d/1SzJ8dVlsgrmlQbia0ORFTz2sv1qe9nRy/view`, SHA256 `7fe845704759250e4cbddf8f1e6ec0db089eab4a703d099b9c0a7875e85bfcea`. **Best local engineering base** v055 `https://drive.google.com/file/d/1QEj6EQ0Lk7XWPSOrwBmDUWxvek-AzlcK/view`. Independent QA `https://drive.google.com/file/d/1roEJQJloTDSOXWKxqoVnY_2Lm3c2SgKK/view`: 374 v055 original objects preserved through v058, 212 protected Area1 CAD unchanged, BVH open at both true 12-step entrances, ground intact around them; not proof of native Foundry parity. v059 `https://drive.google.com/file/d/1kJBW9nWj5H2pyte5hR-kS7nn9uRPWHQW/view` **do not promote**: despite exact hidden CAD/visible skin fit, five freestanding square-topped walls read as random panels, ART/WORLD FAIL. Existing Area1 v006 lintel still has an open underside. No additional paid Meshy tasks authorized or run.
+
+## Source-first art constraint (private book checked again)
+The Manor occupies a hilltop; the above-ground estate is **largely collapsed**, older masonry was already deteriorating, new replacement stonework was smashed, newly erected wood structures were burned or smashed, but **two wooden structures remain**. A central courtyard contains a searchable pile of stones. Specific exterior ground dimensions, ruin alignment and stone-color species are not defined by a surveyed outdoors map. `SOURCE_EXPLICIT` for destruction, stone-old/new contrast, two standing timber buildings, central rubble pile and descent under manor; `DESIGN_CHOICE` for footprint, terrain material, exact fallen masonry arrangements, color and bush density. Preserve GM encounter secrecy (no spoiler labels visible to players); avoid copying book prose to GitHub.
+
+## Verified installed 3D Canvas asset path candidates (NOT approved)
+Read-only `mcp__Acq_3D_Map__search_3d_assets` returned exact local module paths. Existence in 3D Canvas's bundled asset index is the ONLY verified property; visual style, polygon budget, license/reuse outside module, scale, UV/PBR, source fit and actual Blender use remain **UNVERIFIED**:
+- `modules/canvas3dcompendium/assets/Tiles/Modular%20Ruins/Wall_Broken.glb`
+- `modules/canvas3dcompendium/assets/Tiles/Modular%20Ruins/Wall_Double_Broken.glb`
+- `modules/canvas3dcompendium/assets/Tiles/Modular%20Ruins/Wall_ArchRound_Broken.glb`
+- `modules/canvas3dcompendium/assets/Tiles/Modular%20Ruins/Wall_ArchRound_Overgrown_Broken.glb` — overgrowth appropriate ONLY if age/location justifies it.
+- `modules/canvas3dcompendium/assets/Tiles/Kenney/Graveyard/debris.glb`; `.../debrisWood.glb` — alternate low-cost shape probes, likely stylized; rejected if visibly unsuitable.
+- `modules/canvas3dcompendium/assets/Tiles/KayKitPack/Dungeon/Remastered/rubble_large.glb` and `rubble_half.glb` — low-priority due to previously rejected KayKit-like stylistic mismatch.
+- `modules/canvas3dcompendium/assets/Tiles/CreativeTrio/Fences/Boards_Damaged_01.glb` / `02.glb` — damaged timber candidate only if source style matches.
+
+No asset binary was copied, embedded, imported or redistributed. Provenance and any pack license must be independently confirmed before moving assets into the Blender archive. If pack files are only licensed for 3D Canvas, use them only through supported Foundry native use, not by copying them to general-purpose Blender bundles.
+
+## Next reversible decorated-structure fixture: one NONREPETITIVE collapsed-manor segment
+1. When Blender connectivity is restored and read-only source SHA/dirty-state verified, start from a **separate numbered v058 derivative**. Do not mutate v058/v055, original Meshy wall/floor GLBs, accepted interior areas or other writers' current files.
+2. Inspect approved existing library/binary asset for three-quarter fractured silhouette, broken upper edge and fallen neighboring blocks. Reject any model that is a clean full-height panel, pastel KayKit/low-poly, cave or crystalline rock, or UV-incompatible/tint-only. If no compatible source exists, state `ASSET_STRATEGY_BLOCKED` and request task-specific Meshy credit cost before generation.
+3. Build ONE supported ruin-and-debris **representative fixture** adjoining the two surviving timber buildings or the outer courtyard edge (not over either stair/central gameplay path). Keep a real hidden CAD anchor/bearing master; derive visible appearance from approved real GLB geometry, use the source old/new mortar age distinction, no fake seam hiding or scattered isolated panels.
+4. Add constructed wall stump terminating jaggedly, physically touching fallen stones, partial charred cross-beam bearing, real sloped ground bank/hilltop/horizon. Retain the two surviving timber-building recognizable skeletons. Keep central searchable rubble encounter zone and entrances unobstructed; no unwarranted secret markers.
+5. Actual evaluated mesh contact/negative control; x/y stairwell BVH ray casts as v058; make sure BOTH 12-step flights and all 212 protected A1 CAD objects retain their matrices/materials and visible artwork unchanged; compare matched approach/oblique/reverse/overhead/outdoor horizon and stair reverse screenshots, plus native Foundry early parity.
+6. Only if same decorated fixture SOURCE+STRUCTURE+ART+WORLD+NATIVE gate passes, expand family. **DM alone marks artistic acceptance**. A saved or better-looking render is not `ART_PASS` or `RUNTIME_PASS`.
+
+**Immediate priority:** replace v059 isolated panels with a connected asymmetric collapse and meaningful hilltop bank — source-appropriate physical relief, continuous terrain, and better integration of wood/stone. Repetition is lower priority than believable ruin form and walkability.
