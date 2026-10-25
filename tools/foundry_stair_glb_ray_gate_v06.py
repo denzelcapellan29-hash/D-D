@@ -142,3 +142,52 @@ def run_gate(path,expected_sha=EXPECTED_V06_SHA,world_scale=.075,
             "calibrated_pass":bool(checks) and all(v["pass"] for v in checks),
             "native_runtime_certified":False,
             "scope":"immutable disposable v06 GLB; not the current Manor staircase"}
+
+
+def run_v06_regression(path):
+    """Four actual source lanes and a 25mm shifted support negative control."""
+    z_riser=-0.0952
+    shifted_z=z_riser+(.025/.075) # +25mm in placed native world distance
+    q=run_gate(path,lanes=(-.35,0,.35,2.5),
+               sample_heights_m=(.12,.16,.20,.24),
+               support_z=(0,z_riser,shifted_z,-.5714,-1.0476,-1.333333333333))
+    expect=((.12,False,None),(.16,True,1.45375),
+            (.20,True,1.385),(.24,False,None))
+    checked={}
+    checked["three_lateral_lanes"]=all(
+        all(ray["hit"]==hit and
+            (z is None or abs(ray["world_collision_z_m"]-z)<1e-6)
+            for ray,(_,hit,z) in zip(lane["rays"],expect))
+        for lane in q["lanes"][:3])
+    checked["outside_stair_lane_clear"]=all(
+        not ray["hit"] for ray in q["lanes"][3]["rays"])
+    on,shift=q["support_samples"][1:3]
+    checked["support_at_riser"]=abs(on["world_support_y_m"]-.16089)<1e-5
+    checked["25mm_shift_negative_control"]=(
+        shift["world_support_y_m"] is not None
+        and on["world_support_y_m"]-shift["world_support_y_m"] > .03)
+    checked["sha_pinned"]=q["source_sha256"]==EXPECTED_V06_SHA
+    return {"pass":all(checked.values()),"checks":checked,
+            "source_sha256":q["source_sha256"],
+            "source_triangles":q["triangles"],
+            "near_riser_support_m":on["world_support_y_m"],
+            "shift_plus_25mm_support_m":shift["world_support_y_m"],
+            "immutable_fixture_only":True,
+            "native_runtime_certified":False}
+
+if __name__=="__main__" and "--" in __import__("sys").argv:
+    import sys
+    from argparse import ArgumentParser
+    parser=ArgumentParser(description="BVH source preflight; no native runtime claim")
+    parser.add_argument("--asset",required=True)
+    parser.add_argument("--regression-v06",action="store_true")
+    parser.add_argument("--unpin",action="store_true",
+                        help="candidate asset, source-only diagnosis (not native certification)")
+    opts=parser.parse_args(sys.argv[sys.argv.index("--")+1:])
+    if opts.regression_v06:
+        output=run_v06_regression(opts.asset)
+        print(json.dumps(output,indent=2,sort_keys=True))
+        if not output["pass"]: raise SystemExit(3)
+    else:
+        output=run_gate(opts.asset,expected_sha=None if opts.unpin else EXPECTED_V06_SHA)
+        print(json.dumps(output,indent=2,sort_keys=True))
