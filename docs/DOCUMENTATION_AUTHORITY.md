@@ -13,9 +13,11 @@ Reconciled 2026-10-25.
 
 Start with compact current state, then relevant linked records. Historical statements do not become current by being in a long file. Separate SOURCE, DM_APPROVED, DESIGN_CHOICE, AS_BUILT and UNVERIFIED.
 
-Current method: [reproducible Blender-to-native-Foundry workflow](REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). Current private plugin v2.7.71 was published/read back; its [architectural-intent procedure](ARCHITECTURAL_INTENT_GATE.md) makes source-layout review and DM rejection handling explicit. A workflow release grants no architectural or visual acceptance. Approved modular-area geometry/continuous surfaces are a current lane; old global asset-only/no-room instructions do not override it.
+Current method: [reproducible Blender-to-native-Foundry workflow](REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). The selected workflow release is recorded and verified in compact private state; its [architectural-intent procedure](ARCHITECTURAL_INTENT_GATE.md) makes source-layout review and DM rejection handling explicit. A workflow release grants no architectural or visual acceptance. Approved modular-area geometry/continuous surfaces are a current lane; old global asset-only/no-room instructions do not override it.
 
 One coordinator may carry art, scene and integration roles sequentially or delegate isolated scopes. Keep one writer per mutable artifact, no silent takeover and no automatic cross-chat messaging.
+
+Use [source-once and change-aware production](REPEATABLE_PRODUCTION_AND_CHANGE_QA.md) and the [provider-neutral acquisition/library contract](ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md). Read experiment histories only for matching issues. Bonsai evaluation belongs to the next build.
 
 Update one current state record at meaningful milestones; preserve detailed incident evidence privately or in version history. Do not copy private sources, hidden encounter data or real build manifests into this public repository. Project settings must be updated separately from Drive/GitHub.
 
