@@ -1,0 +1,11 @@
+# Foundry V14 levels, 3D enclosure, light and fog
+
+Use native Scene Levels and Region Define Surface where applicable. The Levels and Wall Height modules are retired/migration-era for V14; their old magenta-plane/tile-blocking tutorials are not a current configuration recipe. See https://wiki.theripper93.com/levels and https://foundryvtt.com/api/v14/interfaces/foundry.documents.types.RegionSurface.html . Recheck installed versions.
+
+One Scene can contain overground and underground geometry at different elevations. Keep the real stair opening and supported mesh route, level/Region membership, visibility, core support/rules and actual 3D Canvas movement as separate checks. A Change Level region is not proof of continuous supported walking. Core light restrictions do not automatically establish Three.js light clipping. Mirror Levels Tile Visibility follows native Tile visibility/occlusion in installed 9.0.36; test first-person enclosure and the view back up stairs before hiding upper objects. Do not blindly hide the ceiling needed to feel underground or shift calibrated coordinates.
+
+Ordinary native 3D lights do not automatically stop at walls/tiles; per-light shadow blocking and client/global settings affect appearance and cost. Scene-wide ambient light and sun need separate inspection. A ground shell does not alone guarantee darkness underneath. Use source-motivated light and measure the actual outside-to-cellar transition and native performance. See https://wiki.theripper93.com/levels-3d-preview/info/entities/lights .
+
+The wiki documents explored fog as two-dimensional across vertical space. Token geometry sight, default full-map visibility and fog are different settings. Inspect secret-safe shared first-person views for the selected in-person GM-screen setup; do not impose unrelated player-client fog certification by default. See https://wiki.theripper93.com/levels-3d-preview/info/fow .
+
+Prefer public Foundry document APIs and documented module flags. Reproduce version-specific renderer behavior before relying on private internals. Save exact configuration and asset hashes; verify ascent/descent, closed/open controls, camera, reload, secret handling, moving-view performance and exact restore on the same QA revision.
