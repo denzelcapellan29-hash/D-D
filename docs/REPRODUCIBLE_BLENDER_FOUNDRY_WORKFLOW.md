@@ -23,6 +23,9 @@ Apply the [architectural-intent procedure](ARCHITECTURAL_INTENT_GATE.md) before 
 
 Known failures hold the affected release or repetition; independent reversible work may continue. Reuse the same area/family and valid evidence. Two comparable nonimproving attempts require a changed approach. Paid generation retains exact provider cost confirmation.
 
+## Native measurement fidelity
+Read [native rendering and route evidence](NATIVE_RENDER_AND_ROUTE_EVIDENCE.md) before accepting runtime images or movement. Confirm real canvas readiness and the installed compositor/shared context, budget shadows against hardware limits, and verify each actual movement direction, initial floor support and expected elevation trace. Repair continuous relief surfaces with shared physical boundary vertices. Tool success, a nonblack image and a count of movement calls are not substitutes for these checks. AI3D Workflow2.7.72 carries the same procedure; its publication does not certify a campaign scene.
+
 ## Per-location private bundle
 Keep the source directory tree and relative Blender library paths intact. A review bundle contains:
 - private build manifest: identity, exact inputs/hashes, tool versions, coordinate system, chosen collections/visible objects, assets/materials, portal contracts and declared route states;
