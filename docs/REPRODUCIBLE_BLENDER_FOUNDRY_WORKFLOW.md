@@ -26,6 +26,8 @@ Known failures hold the affected release or repetition; independent reversible w
 ## Native measurement fidelity
 Read [native rendering and route evidence](NATIVE_RENDER_AND_ROUTE_EVIDENCE.md) before accepting runtime images or movement. Confirm real canvas readiness and the installed compositor/shared context, budget shadows against hardware limits, and verify each actual movement direction, initial floor support and expected elevation trace. Repair continuous relief surfaces with shared physical boundary vertices. Tool success, a nonblack image and a count of movement calls are not substitutes for these checks. AI3D Workflow2.7.72 carries the same procedure; its publication does not certify a campaign scene.
 
+Use the [native performance preflight](NATIVE_PERFORMANCE_PREFLIGHT.md) before accepting FPS: inspect scene and Tile reports, clean accumulated renderer/selection state, verify actual light and transmission costs, use normal native resolution settings with full-frame visual readback, and settle pending first-person facing updates before restoring token pose. Average FPS alone does not establish stable frame pacing or whole-location acceptance.
+
 ## Per-location private bundle
 Keep the source directory tree and relative Blender library paths intact. A review bundle contains:
 - private build manifest: identity, exact inputs/hashes, tool versions, coordinate system, chosen collections/visible objects, assets/materials, portal contracts and declared route states;
