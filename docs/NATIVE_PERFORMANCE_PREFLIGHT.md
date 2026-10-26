@@ -1,0 +1,32 @@
+# Native 3D Canvas performance preflight
+
+Use native scene reports and per-Tile `getMeshStats()` alongside measured actual-composer FPS, frame intervals and GPU timing. The scene letter grade estimates geometry load; it is not a measured FPS result. Record runtime versions, camera, viewport and drawing-buffer dimensions, focus, OS pixel ratio, loaded content, light/shadow counts and the current rendering-pass inventory.
+
+## Establish a clean renderer first
+
+Inspect the actual installed compositor pass list. In 3D Canvas 9.0.36, repeated native scene reloads can retain old outline passes and repeat the same postprocessing pass. The installed scene setup removes some current passes but does not remove all prior outlines or repeated postprocessing entries. Do not assume a settings reload resets the renderer.
+
+Before an acceptance benchmark, save the current authored state and use a full Foundry page refresh when pass accumulation is observed. Return the GM locally to the existing private QA Scene, open native 3D once, wait for stable readiness and inspect the pass inventory again. Never activate QA for players or modify vendor files. Do not reload repeatedly as a substitute for diagnosis. Record the actual fresh configuration rather than enforcing one universal pass count: enabled effects legitimately add passes.
+
+Clear stale editor hover/selection through native controls, use the normal play layer, and keep token-selection state consistent between comparisons. A captured outdoor/overhead editor view is not a first-person performance acceptance test.
+
+## Controlled comparisons
+
+Change one principal variable at a time. Keep the full location loaded unless a split Scene is explicitly selected. Confirm the native runtime actually reflects each requested change. Directly hiding a Three.js light can be overwritten by native per-frame updates; use native light document visibility on a backed-up private QA Scene, then restore exact authored light state. A requested count of four lights is not evidence of four active lights.
+
+Use the registered native resolution setting with a full page refresh, a saved prior value, and exact restore. Do not accept a live renderer/composer pixel-ratio edit as a resolution benchmark: in shared-context mode the Foundry canvas also owns drawing-buffer dimensions. A changed internal buffer can leave a smaller rendered rectangle with gray borders. Read both actual buffer sizes and inspect a fresh full-frame capture before accepting FPS. A numerical frame-rate improvement does not make a partial viewport valid.
+
+Count actual installed composer frames. For full-frame draw counts, temporarily disable renderer.info auto-reset around one actual composer invocation and restore it immediately. Inspect GPU disjoint status before accepting GPU timer results. Do not use the last postprocessing draw's triangle count as the whole frame, and do not confuse unique asset triangles with repeated shadow/outline passes.
+
+Inventory all effective native Three.js lights, including the global directional sun and cached point/spot lights. Counting only the ambient-light document registry misses global shadows. In 9.0.36, a stored `sunIntensity` value does not establish actual directional-light intensity: inspect the installed global-illumination implementation and live object. The native global system uses sun distance/exposure; its zero-distance state disables both sun intensity and shadow casting. Select indoor illumination according to the source, measure it, and inspect resulting captures before keeping any change. Do not treat removal of unrelated outdoor lighting as permission to remove source-required light or token vision.
+
+Stop Blender rendering and other heavy jobs during measurements. Confirm focus and visibility for every sample. Compare matched captures as well as timings. No-shadows or low-resolution results are diagnostic ceilings until their visual tradeoffs have been reviewed. Validate moving player-eye viewpoints and native token traversal after selecting a viable preset, and leave headroom for the remaining location content and encounter effects.
+
+Inspect small refractive objects as well as large mesh counts. A single glTF transmission material can trigger a scene-wide opaque transmission prepass, so a low-triangle water Tile may have a large scene cost. Compare a suitable cheaper material, preserving source geometry and originals, but reject blank/opaque/gray water or lost basin detail. Do not count an invisible or materially broken surface as an optimization success.
+
+## Restore and retain evidence
+
+Finally restore authored Scene documents, selection/layer/camera, light/shadow state and settings; verify the protected campaign Scene independently. Persist successful optimizations as versioned derivatives or native settings, with rollback. Preserve failed conditions and label them invalid rather than silently counting their reported FPS.
+
+First-person camera-facing updates in 9.0.36 are throttled by 500ms and write Token rotation asynchronously. Exit the owned camera mode and restore control first, allow pending facing updates to settle, then restore the original token pose and verify it after a quiet interval. Save the full before Scene before movement. Do not reset legitimate modification metadata to recreate an old revision digest: verify exact authored content separately from expected timestamp changes, while retaining the protected source Scene's strict pin. Never weaken movement support/endpoint assertions to hide a restore race.
+
