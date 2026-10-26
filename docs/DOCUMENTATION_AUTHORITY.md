@@ -13,7 +13,7 @@ Reconciled 2026-10-25.
 
 Start with compact current state, then relevant linked records. Historical statements do not become current by being in a long file. Separate SOURCE, DM_APPROVED, DESIGN_CHOICE, AS_BUILT and UNVERIFIED.
 
-Current method: [reproducible Blender-to-native-Foundry workflow](REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). Current private plugin v2.7.70 was published/read back. Approved modular-area geometry/continuous surfaces are a current lane; old global asset-only/no-room instructions do not override it.
+Current method: [reproducible Blender-to-native-Foundry workflow](REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). Current private plugin v2.7.71 was published/read back; its [architectural-intent procedure](ARCHITECTURAL_INTENT_GATE.md) makes source-layout review and DM rejection handling explicit. A workflow release grants no architectural or visual acceptance. Approved modular-area geometry/continuous surfaces are a current lane; old global asset-only/no-room instructions do not override it.
 
 One coordinator may carry art, scene and integration roles sequentially or delegate isolated scopes. Keep one writer per mutable artifact, no silent takeover and no automatic cross-chat messaging.
 
