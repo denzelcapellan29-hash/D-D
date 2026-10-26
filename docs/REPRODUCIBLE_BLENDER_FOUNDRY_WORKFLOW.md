@@ -3,6 +3,9 @@ Current production method, reconciled 2026-10-25. Blender is the editable master
 
 This is a repeatable production procedure with an executable read-only bundle preflight. It does not claim that an inventory check creates artwork, certifies source facts, or replaces native gameplay testing.
 
+## Production reuse and current tool scope
+Use [one source specification, component reuse and dependency-aware QA](REPEATABLE_PRODUCTION_AND_CHANGE_QA.md). Keep the [provider-neutral asset/custom-library contract](ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md) separate from provider endpoints. [Future tool evaluation](FUTURE_TOOL_EVALUATION.md) reserves Bonsai for the next build; no Tresendar migration or 3D AI Studio trial is on the critical path. Reuse working generators/export/native adapters. These procedures do not claim a complete build compiler already exists. Historical experiment reports are read for matching issues, not as mandatory startup history.
+
 ## Ownership and authorities
 One coordinating task owns the selected build; delegate only isolated artifact scopes. Art, scene production and runtime integration are roles, not a requirement for three separate chats. Preserve originals and accepted releases. Current private project state selects exact artifacts; dated incident logs do not select a master.
 Published source controls canon, latest DM decisions control adaptations, GitHub controls implementation/tests, private project records hold assets/evidence, skills supply the method, and live applications establish actual behavior. Never place private sourcebook text, hidden encounter data or real private build manifests in this public repository.
@@ -24,9 +27,9 @@ Apply the [architectural-intent procedure](ARCHITECTURAL_INTENT_GATE.md) before 
 Known failures hold the affected release or repetition; independent reversible work may continue. Reuse the same area/family and valid evidence. Two comparable nonimproving attempts require a changed approach. Paid generation retains exact provider cost confirmation.
 
 ## Native measurement fidelity
-Read [native rendering and route evidence](NATIVE_RENDER_AND_ROUTE_EVIDENCE.md) before accepting runtime images or movement. Confirm real canvas readiness and the installed compositor/shared context, budget shadows against hardware limits, and verify each actual movement direction, initial floor support and expected elevation trace. Repair continuous relief surfaces with shared physical boundary vertices. Tool success, a nonblack image and a count of movement calls are not substitutes for these checks. AI3D Workflow2.7.72 carries the same procedure; its publication does not certify a campaign scene.
+For vertically connected exterior/interior builds on V14, read the [version-aware levels and underground review](V14_LEVELS_LIGHT_AND_FOG.md). Separate actual mesh support, core Scene Levels/Region surfaces, 3D visibility, lighting and fog. Legacy Levels UI instructions are not a current V14 configuration recipe; documentation availability is not a native acceptance result.
 
-Use the [native performance preflight](NATIVE_PERFORMANCE_PREFLIGHT.md) before accepting FPS: inspect scene and Tile reports, clean accumulated renderer/selection state, verify actual light and transmission costs, use normal native resolution settings with full-frame visual readback, and settle pending first-person facing updates before restoring token pose. Average FPS alone does not establish stable frame pacing or whole-location acceptance.
+Read [native rendering and route evidence](NATIVE_RENDER_AND_ROUTE_EVIDENCE.md) before accepting runtime images or movement. Confirm real canvas readiness and the installed compositor/shared context, budget shadows against hardware limits, and verify each actual movement direction, initial floor support and expected elevation trace. Repair continuous relief surfaces with shared physical boundary vertices. Tool success, a nonblack image and a count of movement calls are not substitutes for these checks. AI3D Workflow2.7.72 carries the same procedure; its publication does not certify a campaign scene.
 
 ## Per-location private bundle
 Keep the source directory tree and relative Blender library paths intact. A review bundle contains:
