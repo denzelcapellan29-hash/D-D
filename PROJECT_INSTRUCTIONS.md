@@ -9,8 +9,8 @@ Reconciled 2026-10-25. Follow [the reproducible workflow](docs/REPRODUCIBLE_BLEN
 - Use exact adventure/site/map/area/artifact identity; neither area-number prefixes nor a high version suffix selects a master.
 - Preserve originals, licensed asset provenance, player/GM separation, scoped acceptance and paid-provider confirmation.
 - First-person is the default in-person presentation. Separate non-GM fog tests are not default blockers.
-- Current private plugin v2.7.70 is published/read back; its procedure does not certify a scene.
-- Ordinary scene iterations update current state; reusable method changes update the recipe/skill.
+- Current workflow release and selected scene evidence are recorded in compact private state; workflow publication does not certify a scene.
+- Ordinary scene iterations update compact current state; reusable method changes update the recipe/skill. Use one source specification, our verified components, provider-neutral acquisition and dependency-aware QA. Bonsai is reserved for the next build; keep new-tool trials off the selected build's critical path.
 - Editing repository/Drive records does not update the project settings UI.
 
 Public documentation contains generic method and code. Private build manifests, sources, campaign decisions and review images stay in private project records. Actual art and native gameplay require separate evidence.
