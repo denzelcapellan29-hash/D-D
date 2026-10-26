@@ -10,3 +10,5 @@ The private workflow release has been updated and read back. Its selected versio
 Retain accepted architecture, current scope, valid native evidence and exact source protection from private state. Test changed dependencies and the assembled release; saved/exported is not source/art/runtime/DM acceptance. Do not infer current project completion or PR state from older handoffs.
 
 [Historical handoff](https://github.com/denzelcapellan29-hash/D-D/blob/ed95c4e9df287cda51d167aba9236cc9a8afe344/CURRENT_HANDOFF.md) is archived evidence, not current routing.
+
+Current compatibility findings are recorded in the [asset/native material contract](docs/ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md) and [V14 environment/startup notes](docs/V14_LEVELS_LIGHT_AND_FOG.md): verify Tile anchors and actual bounds, portable UV channels, native sky versus ground, underground light blocking and the Scene-view/native-open callback ordering. These are version-specific tested findings, not new scene acceptance. Keep private visual evidence and current performance limitations in private project state.
