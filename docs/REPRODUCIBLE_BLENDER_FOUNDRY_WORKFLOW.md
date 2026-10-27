@@ -70,3 +70,10 @@ Read one compact current status first, then only linked records needed for the j
 Project settings are durable pointers and require their own explicit update; editing Drive/GitHub does not change the settings UI.
 
 The integrated art/engineering contract remains applicable, with the current routing and role-coordination clarifications above: [contract](INTEGRATED_ART_ENGINEERING_AND_AUTHORITY_CONTRACT_20261024.md).
+
+
+## Native placement precision and portable delivery
+
+Foundry stores Tile canvas positions and dimensions as integers and clamps negative positions. Preserve a world-baked GLB's intended center with the native model-offset flag: offset.x=desiredX−storedX, offset.z=desiredY−storedY, offset.y=0, in canvas pixels. Inspect the installed native implementation before adapting another version. Measure actual loaded vertices and floor intersections; a correct provenance coordinate alone does not prove placement. Bound dimension-rounding error from the scene grid/pixel scale, and keep structural interface tolerances separate from background foliage placement tolerances. Detect a deliberately shifted negative control on the actual native geometry.
+
+For a portable private checkpoint, copy each selected area library without altering its original, make the master's library paths relative, pack all referenced images including unloaded files, and reopen it. Verify source/copy hashes, exact library membership, image dependencies and runtime GLB hashes. Archive the owned Scene/Actor resources and helper import closure, while recording licensed module dependencies rather than copying vendor miniatures. Distinguish the tested current-world restore from an untested fresh-world installer. Keep official private source material and campaign manifests out of public implementation repositories.
