@@ -1,5 +1,5 @@
 # Current handoff
-Updated 2026-10-26.
+Updated 2026-10-28.
 
 Resume from compact local CURRENT_STATUS.md or the current private project state, then follow [the production recipe](docs/REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). Current private sources, real scene IDs and artifact paths do not belong in this public pointer.
 
@@ -12,3 +12,5 @@ Retain accepted architecture, current scope, valid native evidence and exact sou
 [Historical handoff](https://github.com/denzelcapellan29-hash/D-D/blob/ed95c4e9df287cda51d167aba9236cc9a8afe344/CURRENT_HANDOFF.md) is archived evidence, not current routing.
 
 Current compatibility findings are recorded in the [asset/native material contract](docs/ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md) and [V14 environment/startup notes](docs/V14_LEVELS_LIGHT_AND_FOG.md): verify Tile anchors and actual bounds, portable UV channels, native sky versus ground, underground light blocking and the Scene-view/native-open callback ordering. These are version-specific tested findings, not new scene acceptance. Keep private visual evidence and current performance limitations in private project state.
+
+Latest reusable checks also cover consumer-supported UV baking, upward-face clue bakes, door proximity against validated native footprints, actual Open/Close UI tests, and sealed-exterior render LOD with matched images, unchanged collision and connected movement evidence. Read the [asset/native contract](docs/ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md). Selected build status and measured performance remain in private current state; they are not whole-location or DM acceptance.
