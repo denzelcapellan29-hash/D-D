@@ -1,6 +1,8 @@
 # Foundry and 3D Canvas tutorial library
 Reviewed 2026-10-28. This is a research reference, not a new scene configuration or release certification.
 
+Additional batch: [effects, shaders and native production tools](TUTORIAL_VFX_NATIVE_TOOLS_20261028.md) covers four more supplied videos through English captions, with current-documentation and installed-source checks.
+
 ## Evidence and use
 Five new videos were reviewed through English captions; one through the vidIQ visual-analysis service because captions were unavailable. One supplied link was already covered and was not retrieved again. Service visual analysis is secondary evidence, not independent frame-by-frame inspection by this assistant. Topic labels below are descriptive unless marked as a verified title. Timestamp ranges are navigation aids from the retrieved evidence.
 
@@ -16,6 +18,10 @@ Tutorials do not override published adventure sources, current user decisions, o
 | [9cly27JMCEA](https://www.youtube.com/watch?v=9cly27JMCEA) | GPU/browser troubleshooting | Existing caption review | Reused; no duplicate retrieval |
 | [DVv5IPOsYHE](https://www.youtube.com/watch?v=DVv5IPOsYHE) | 3D Canvas combat preparation, part 1 | Captions | Mesh/effect budgets and runtime diagnosis |
 | [snMktFnbGnA](https://www.youtube.com/watch?v=snMktFnbGnA) | 3D Canvas combat and cameras, part 2 | Captions | Candidate combat acceptance fixture |
+| [dnhTcLTrbyw](https://www.youtube.com/watch?v=dnhTcLTrbyw) | Particle presets, area and directional effects | Captions | Local effects recipes; detailed notes in additional batch |
+| [PhncPae8Ydg](https://www.youtube.com/watch?v=PhncPae8Ydg) | Modular assets, shaders and environment; V10-era | Captions | Retain concepts; reject obsolete defaults |
+| [6bu3_ZIMcl8](https://www.youtube.com/watch?v=6bu3_ZIMcl8) | Merging, asset browser, terrain and cameras | Captions | Compatible repetition of custom assets |
+| [jP6QiqFWSVI](https://www.youtube.com/watch?v=jP6QiqFWSVI) | 3D toolbar and native production overview | Captions | Candidate tools; detailed workflows need validation |
 
 ## hVOPxMKvO6Y — Does Foundry VTT LAG? Here's 5 Quick Tips!
 Verified title; caption-based notes.
@@ -95,3 +101,5 @@ Candidate fixture for future combat work: one PC and NPC; melee, ranged attack, 
 These are research priorities and reinforcement of existing quality procedures. This ingestion made no changes to the playable scene, installed modules, camera settings, assets or packaged skill.
 
 Further reading: [3D Canvas documentation](https://wiki.theripper93.com/levels-3d-preview), [production workflow](REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md), [asset/library contract](ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md).
+
+
