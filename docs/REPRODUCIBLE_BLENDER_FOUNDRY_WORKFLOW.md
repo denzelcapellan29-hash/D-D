@@ -4,6 +4,8 @@ Current production method, reconciled 2026-10-25. Blender is the editable master
 This is a repeatable production procedure with an executable read-only bundle preflight. It does not claim that an inventory check creates artwork, certifies source facts, or replaces native gameplay testing.
 
 ## Production reuse and current tool scope
+The [tutorial reference library](TUTORIAL_LIBRARY_20261028.md) indexes caption and visual-analysis research on performance, asset organization and combat/cameras. These are version-qualified references; research alone does not change the production method or certify an installed feature.
+
 Use [one source specification, component reuse and dependency-aware QA](REPEATABLE_PRODUCTION_AND_CHANGE_QA.md). Keep the [provider-neutral asset/custom-library contract](ASSET_ACQUISITION_AND_LIBRARY_CONTRACT.md) separate from provider endpoints. [Future tool evaluation](FUTURE_TOOL_EVALUATION.md) reserves Bonsai for the next build; no Tresendar migration or 3D AI Studio trial is on the critical path. Reuse working generators/export/native adapters. These procedures do not claim a complete build compiler already exists. Historical experiment reports are read for matching issues, not as mandatory startup history.
 
 ## Ownership and authorities
