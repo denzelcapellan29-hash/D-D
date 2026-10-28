@@ -1,0 +1,18 @@
+# Original architecture library: dimensional and native placement standard
+
+Build a compact original kit before a large catalog. The source blueprint chooses layout, elevations and material identity; the library supplies tested components, not a universal floorplan.
+
+Author in meters with explicit origins, axes, dimensions, connector frames, bearing areas, free portal envelopes and physical UV repetition widths. A five-foot pitch is 1.524m. Larger surfaces must preserve material density rather than stretch their surface detail. Keep editable art, runtime derivatives, thumbnails, provenance/licenses and per-configuration gate results together. A browser category is not a dimensional connector standard.
+
+Use portable base color, roughness/metallic and tangent-normal bindings on the consumer's supported UV channel. Keep geometry for silhouette, step support and openings; use maps for appropriate microsurface detail. Share external texture files when supported, preserve relative dependencies, and hash every shipped file. Resolve separated vendor glTF buffers/images through authorized downloads before declaring a model available. Licensed reference assets stay separate from original distributable geometry and textures.
+
+In the inspected Canvas 9.0.36 native browser, model bounds are multiplied by the browser placement scale; exported meters do not automatically imply a five-foot Tile. A scoped original-kit browser wrapper must convert current scene grid distance/units into meters per grid, preserve authored aspect ratios, set native collision/grounding/centering roles and correct a top-referenced floor's bottom elevation. Test the actual browser build/drop route. Do not change global scale for unrelated vendor assets or assume that an abstract fifty-foot map grid should enlarge people or doors.
+
+Native model-door discovery requires `isDoor`/`doorId` on a renderable Mesh. A glTF node with multiple material primitives can load as a Group and fail this test. A versioned runtime export may retain one body primitive at the hinge and parent separately shaded hardware beneath it. Preserve the hinge transform through the installed consumer's transform-baking behavior; test visual animation and closed/open collision from both sides. Keep original Blender artwork unchanged. On V14 controls, avoid reserved window-close action names for a visible Close button.
+
+Store one named original collection asset per piece with catalog, dimensions, sockets, material identity and preview. Register current records through the native browser's supported custom-source/asset APIs; refresh only owned cache entries, normalize leading-slash paths and avoid duplicate or stale versions. Native presets or scoped placement adapters must retain independent door state and reveal boundaries. Preserve compatible static file reuse for later instancing/merge.
+
+Require evaluated-mesh joins, supported stairs and roof bearings, free portal checks, a second corner arrangement and real displaced negative controls. Then test ordinary native walking, closed blocking, open crossing, reclosing, reverse crossing, ascent/descent and actual visible control buttons. Separate initial relocation from movement evidence. Check Blender and native eye, reverse, seam and overhead frames at the same revision. A disabled Falling rule does not prove support.
+
+Record saved/exported, structural, art, runtime and DM approval separately. Generic kit evidence does not certify future source layouts, all creature sizes, combat/fog, a cold restart or a fresh-world installation. Keep scene-specific IDs, licensed measurements and private source data out of the public procedure. Expand only the families needed by the next reachable campaign location.
+
