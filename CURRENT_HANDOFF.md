@@ -1,5 +1,10 @@
 # Current handoff
-Updated 2026-10-28.
+Updated 2026-10-29.
+
+## Reproducible architecture foundation
+
+Use the [tested environment workflow](docs/REPRODUCIBLE_ENVIRONMENT_WORKFLOW.md) and [reference tools](tools/environment_workflow) for numerical plan-driven structure, common components with boundary fittings, complete enclosure/bearing/clearance checks, exact exported family/master checks and separate release evidence. The packaged implementation is a scoped rectilinear technical reference, not a general source-to-world compiler or finished scene art. Its native gameplay and performance gates remain separate and unverified until actual tests. Preserve organic shapes and native effects/clues; do not infer performance from merged Tile counts. Keep Blender as the master; no new CAD application is required. Bonsai remains a next-build comparison based on measured authoring/revision effort.
+
 
 Resume from compact local CURRENT_STATUS.md or the current private project state, then follow [the production recipe](docs/REPRODUCIBLE_BLENDER_FOUNDRY_WORKFLOW.md). Current private sources, real scene IDs and artifact paths do not belong in this public pointer.
 
