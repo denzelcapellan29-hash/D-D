@@ -8,12 +8,23 @@ Use with the complete location recipe. The objective is fewer repeated decisions
 - Distinguish an individual reusable prop/structural family from a world-baked assembly section. A section GLB at fixed coordinates is not automatically a drop-in kit asset. Keep origin/scale, sockets, material/LOD variants and verification scope in the registry; reuse parameters and materials when the new source shape differs.
 - Establish architecture, elevations and clearance before fine dressing. Prioritize player-visible identity, reachable routes and narrative-critical clues before low-impact ornament. Do not simplify a source-critical feature merely because it is small.
 
+## Structured inputs and operator-friendly construction
+Keep the source interpretation in the project's existing machine-readable location plan, not only prose or chat. It should carry stable area/feature IDs, source locators and uncertainty, calibrated transforms/physical units, geometry/enclosure/elevations, token-centre lanes and portal clearances/states, material families, asset/encounter relationships, lighting/vision assumptions and runtime roles. Map these fields to existing supported schemas; do not silently ignore an unsupported shape or claim the reference compiler implements this complete specification. Expert source interpretation remains necessary.
+
+Prefer dependable, parameter-driven Blender operations for repeat architecture (wall run with opening, supported stair flight, room enclosure), with dry-run summaries, expected output membership and readable failures. Reuse existing approved art/PBR; a generated structural box is not finished artwork. Preserve natural terrain/caves and independently editable interactive parts. Meshy provides suitable distinctive assets/detail; image generation is not dimensional or hinge certification.
+
+The smallest useful repair unit is an existing connected room/portal/level transition. Diagnose against the source before changing geometry: an off-grid source-correct opening may need supported finer movement, not a source-breaking shift. Fix common generator/adapter causes and rebuild affected outputs; retain explicit exceptions only when source or runtime needs them. A skill update is not a reason to rebuild a completed environment or start another generic pilot.
+
 ## Use dependable generators and stable adapters
 Keep reusable area/terrain generation, export and native review tools driven by explicit project data rather than copying a new script with hardcoded live IDs for each revision. Reuse existing verified adapters first; parameterize a repeated operation only when it has a clear contract, rollback and representative tests. Do not claim a complete source-to-world compiler exists.
 
 Share immutable mesh/material inputs and derive runtime textures/LODs once per source hash and options. Cache keys include source bytes, recipe/script version, transforms/material/role choices and relevant tool versions; a filename, size or mtime alone is insufficient. Avoid full mesh copies for every repeat instance. Retain independently moving doors and source-state/reveal ownership.
 
 Group compatible changes into a connected-area batch, export only changed role sections and update stable semantic IDs. Use controlled lower-cost workbench previews during repair, then the required matched full views at review quality. Inspect corners/caps/back faces and portal clearance early enough to avoid decorating a defective family.
+
+Maintain one versioned controller entry point per owned runtime integration, configured by explicit scene/asset/role data. Give it idempotent install/update, inspect and teardown/restore operations, version/readiness guards, protected-scene checks and a recorded dependency closure. User-facing review controls must work without a temporary QA server. Start/stop and relevant edits must not leave duplicate timers, hooks, stale cached imports or hidden rendering behind.
+
+Use new isolated files for a bounded experiment, then consolidate a proven repeated repair into the owning generator/controller as a separate affected-scope change. Do not expand every incident into another permanent version-suffixed helper or rewrite a live working integration merely for tidiness. Preserve tested behaviour, independent native mechanics and rollback. This is a maintenance direction, not a claim that all existing helper code is consolidated.
 
 ## Order cheap checks before expensive work
 Check source layout/feature coverage, exact assembly membership, hashes and GLB scene/mesh integrity before staging large runtime assets. Import the representative real connection early, then reuse its validated interface and unchanged evidence. Run the existing bundle preflight and packaged GLB checker; neither grants art/playability approval.
@@ -26,6 +37,13 @@ Prepare independent source extraction, references, manifests or approved assets 
 The complete recipe's change matrix controls the actual tests. A prop color edit usually needs appearance/parity review; moving a bearing wall affects structure, neighbors, routes and camera; a light/environment change affects illumination/secrets and performance rather than automatically requiring every GLB to be exported again. If dependency impact is uncertain, expand checks rather than declaring them unaffected.
 
 Preserve final assembled source/art review and representative native routes, doors, elevations, camera, secrets, reload and performance at meaningful milestones. Reuse older evidence only with exact unchanged inputs, settings, versions, test recipe and relevant context. A known FAIL remains FAIL even if rerunning the same test would be wasteful. DM acceptance is not a cache flag.
+
+## Visual review and bounded diagnosis
+Use automated geometry/inventory/support checks to find measurable failures; inspect actual source-matched player-eye images for art and composition. Room review destinations need both a clear supported stance and a heading showing the area's defining feature or route. A safe camera facing a blank wall is a poor review destination. Recompute terrain elevation after XY changes and verify captures are fresh; contact overviews do not certify every small surface detail.
+
+Include ordinary oblique approaches, looking/turning, reopening/reclosing doors, stairs and drop recovery under actual gameplay light. Separate outdoor background/IBL/ambient fill from underground source/carried light; test light off/on and both transition directions. Review jumps, alignment nudges and inspection light are labelled aids, not proof of ordinary locomotion, grid correctness or darkvision.
+
+For a diagnosis, name one failed outcome and its likely layer, preserve a baseline, change one principal variable, compare the affected image/movement/performance result and KEEP or REVERT. After two comparable non-improving attempts, change the hypothesis or method. Save the cause and next bounded action rather than adding another broad exploration. Keep focused current state (selected/accepted artifacts, active ownership, open gates and next action) separate from incident histories.
 
 ## Read-only incremental planner
 The packaged skill includes the same helper. From the repository root:
