@@ -12,6 +12,13 @@ Prioritize the next reachable branch. Reuse the existing representative decorate
 
 Use validated generators and export/import adapters with stable semantic IDs, explicit roles, hashes, transforms, measured materials and reversible QA. Rebuild/reimport changed sections and their dependencies. Missing automation is work to implement, not an invented command or claim that an inventory checker completes a build. Record failures and KEEP/REVERT; two comparable nonimproving attempts warrant a different method. No vendor patches or disabled collision to manufacture passes.
 
+## Human review and native lifecycle
+Use supported area-review landings with headings that show the encounter, defining architecture or route. Check ordinary off-centre and oblique doorway approaches and turning, in addition to controlled cardinal crossings. Record token-centre/grid phase separately from construction pitch and preserve source-correct irregular openings; a review nudge is not a geometry repair.
+
+Test lantern-off/on, outside/underground transitions, source lights and explicit inspection light. A panorama may supply unshadowed environment illumination independently of the sun. Verify intentional darkness with a matched light-on frame instead of treating every black frame as renderer failure. Review jumps and alignment aids do not prove ordinary movement or darkvision.
+
+Maintain a configured versioned native controller with inspect, idempotent update, cleanup/restore, guards and a dependency closure. Consolidate repeated proven fixes in bounded changes; normal controls must work without temporary QA services. This requirement does not claim controller consolidation is already implemented.
+
 ## Dependency-aware checks
 | Change | Minimum affected evidence |
 | --- | --- |
