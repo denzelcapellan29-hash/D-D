@@ -1,3 +1,15 @@
+# Current handoff — workflow 2.7.79, 2026-10-29
+
+AI 3D Asset Workflow 2.7.79 is saved and read back. The update strengthens structured location inputs, parameter-driven construction, functional asset lookup, token-grid/doorway phase, useful review views and gameplay lighting, bounded causal repair and configured runtime-controller lifecycle. Nine source files changed; existing scripts and other components retained. This is a procedural update, not completed controller refactoring or new scene certification. Installed host-cache refresh remains unverified.
+
+Use the updated [reproducible environment workflow](docs/REPRODUCIBLE_ENVIRONMENT_WORKFLOW.md), [production efficiency](docs/PRODUCTION_EFFICIENCY.md) and owning asset/architecture/change-QA references. Public method stays generic; private current state and evidence hold selected artifacts, gates and the targeted finish plan.
+
+A workflow improvement does not require another full Tresendar rebuild. Preserve the existing candidate, originals, exterior and organic shapes. Next diagnose one existing troublesome doorway against source placement, physical clearance, token-grid phase and camera-relative movement; repair the causal layer and test ordinary angled approach before expanding. Preserve source-correct off-grid openings rather than shifting them merely to pass a grid test. Existing art, performance and restart holds remain. No native scene or Blender geometry was changed by this documentation work.
+
+Earlier checkpoints follow as history.
+
+---
+
 # Current handoff — resumed modular review, 2026-10-29
 
 The existing private Manor modular candidate has now passed scoped connected forward/return movement, rendered door controls, level transitions, removable masonry and drop/explore/GM recovery checks. It remains an unpromoted review alternative; production/fallback selection is preserved. Actual private artifact identities, hashes and screenshots are in the private handoff and local CURRENT_STATUS.md.
