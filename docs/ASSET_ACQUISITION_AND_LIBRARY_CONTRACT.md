@@ -8,6 +8,12 @@ Use a valid reference for the actual endpoint. For single-image conversion: one 
 
 Record provider/model/version/options, source/reference IDs and hashes, task ID, immutable downloaded source hashes, rights, approved/actual costs, dimensions, axes/origin, meshes, PBR/UV maps and isolated all-side inspection. Create separately versioned art/LOD derivatives; inspect every installed-facing side, underside, contact and actual assembled connection. Compare alternatives using the same reference and scene scale, cleanup effort, source fit, native material/draw/texture cost and cost per usable result; vendor credits are not interchangeable currencies. Marketing labels such as game-ready do not certify Foundry performance.
 
+## Functional catalogue records
+
+Search by role and compatible interface before provider/name: physical dimensions, pivot/axes, socket/clearance/hinge or stair contract, material family and texel scale, immutable source/license, shared runtime file/hash, measured render cost and exact native verification scope. Distinguish source/visual fit from geometric and runtime compatibility; use verified, derivative-needed and unverified states. Keep only fields that support selection or reliable reuse. A thumbnail/category alone is insufficient, and a certificate from one scale or native version does not transfer automatically.
+
+Prefer a small useful family set with boundary fittings. Identical geometry and material should share actual exported resources; colour, wear or UV variants need proven portable/native support rather than a unique model for every placement. Cataloguing existing unverified assets does not certify them.
+
 ## Library compatibility versus kit compatibility
 Installed 3D Canvas 9.0.36 AssetBrowser accepts custom sources and registered asset packs. Read-only installed implementation shows `assetBrowserCustomPath`, `registerPack(packId,packName,categories,{subfolder})`, optional `index.json` containing relative paths, and explicit `registerAssets` records (`output`, optional `displayName`, `preview`, `search`). Default discovered previews use matching `.webp` basenames. Recheck these version-specific hooks before implementation; do not patch vendor files or assume registration was performed.
 
