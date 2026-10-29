@@ -40,3 +40,7 @@ The final modular candidate disables automatic exterior/interior visibility cull
 
 Desktop key simulation can produce a trusted ArrowUp event with an empty `code`. Foundry binds `ArrowUp` by code, so that event does not test physical keyboard walking. Record event fields before changing bindings. In this case the unchanged native registered movement callback, supplied a complete key context, moved the selected walker one supported grid step; physical keyboard input remains a separate user check.
 
+## Source-feature preservation across construction methods
+
+A modular migration must preserve native image effects, clue images, particle settings and their offset/elevation contracts as well as GLB props. Geometry-only or solid/decorative-prop retention filters can silently omit a visible portal or clue without failing floor, wall or door tests. Reconcile every source feature to an actual current visual/runtime artifact, including effects that have no Blender mesh. Carry that explicit native-effects inventory through the layout, import manifest, dependency package and close-up review. A successful traversal test cannot substitute for this check.
+
