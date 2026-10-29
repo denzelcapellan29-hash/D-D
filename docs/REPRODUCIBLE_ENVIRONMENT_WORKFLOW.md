@@ -76,3 +76,17 @@ Performance `measurement` fields are `viewport_px`, `render_scale`, `quality`, `
 - Source/art/native/performance/DM gates remain UNVERIFIED for this technical fixture. No new Manor repair, native performance gain or whole-site certification follows from these tests.
 
 The workflow and tooling are reusable now within the stated scope. The next application should repair the paused Manor's affected connected architecture from its existing plan and preserve its successful artwork, then satisfy the actual decorated/native gates before any promotion. Do not restart a third whole-Manor rebuild or reinterpret the technical example as permission to replace its visuals with boxes.
+
+## Measured modular batching
+
+Separate architectural reuse from runtime grouping. A consistent kit accelerates editing but does not guarantee higher FPS. Native Auto Merge may instance one repeated asset across a large location; inspect the installed Three.js/native implementation and actual culling behavior before assuming each instance is culled. Do not patch vendor code.
+
+Benchmark a few difficult representative views first, including movement and stationary frames. Record draw calls and triangles together: splitting every cheap floor or wall batch can save geometry while increasing calls enough to make the scene slower. Try spatial grouping only for the expensive repeated opaque static families, leaving cheap batches alone. Derive family thresholds and group dimensions from measurements rather than a universal tile budget.
+
+A render-only candidate must preserve exact placement matrices, instance colors/custom attributes, materials, source membership and conservative bounds. Keep the registered native collision sources and interactive doors, secrets and effects independent. Check ordinary forward/return movement, support and rendered controls with the candidate installed. Require version and scene guards, cleanup on free view/exit, safe fallback on relevant edits and exact restoration. A scene-specific successful adapter is not automatically portable to the next native version.
+
+Matched-image tests need unchanged pose, actual first-person eye position, hidden review body, lighting, dimensions, focus and settled native shadows. If images differ, capture an unchanged A/A pair before blaming the candidate. Spinning native condition icons can change both pixels and shadows without an asset defect. Any scoped presentation-only suppression must apply equally to both images, preserve Actor conditions and restore on exit; do not change world settings merely to improve a test. Report exact equality separately from small render-rounding differences.
+
+For hillside coverage, recompute floor height after rounding or changing XY. A stale elevation can put a sample below intact terrain. Keep captured, occupied/excluded and unresolved positions separate. Finite torso/head rays can miss a camera inside thick masonry; inspect recaptures and use a reasoned nearby stance in the same review square when appropriate. Do not label finite samples continuous-volume or all-creature-size proof.
+
+Portable UV0 atlases and matching terrain bounds/support do not establish native art parity. Inspect the actual full-world result from both sides of a transition. Reject candidates that leave the original defect or expose new wedges; restore the source rather than adding tint, fog or camera masking.
