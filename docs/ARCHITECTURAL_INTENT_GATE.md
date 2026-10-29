@@ -8,6 +8,12 @@ Read the actual map, room text and latest DM decisions. Freeze the exact map ima
 
 Trace room and corridor envelopes, usable floor, wall faces/thickness, every normal/locked/secret/blocked opening, stair direction and landing, known elevations, chasm banks and bridges. Record portal owner and neighbor, source locator, center, clear width/height, opening/sweep and state. Distinguish explicit dimensions, measured raster estimates and design choices. A rectangular floor underneath walls does not alone define a room; compare its actual accessible envelope and wall/portal graph. Uncertain dimensions remain uncertain. Use the source to resolve routine choices; ask the DM only when a remaining ambiguity materially changes play or approved design.
 
+## Register token lanes and doorways together
+
+Record the native grid origin/phase, token footprint, ordinary movement increment and doorway centre line in the same calibrated frame. A wall snapped to a finer construction lattice can still put a four-foot opening between five-foot token-centre lanes. Audit lateral centring, approach and door-sweep clearance, turning room and the step across each opening; test off-centre and oblique camera approaches, not only an ideal cardinal crossing.
+
+Do not shift source-correct openings or uniformly enlarge/square caves to make a test pass. Compare with the source and physical clearance first; use supported finer/continuous native movement for intentional irregular or off-grid passages where appropriate. A centred review nudge is an aid, not proof that authored grid phase or ordinary movement is correct. Map-cell scale labels do not resize physical doors, characters or risers.
+
 ## Compare the actual assembled architecture
 
 Export or render an overhead plan from the evaluated saved geometry, with roofs hidden only for a labeled diagnostic. Overlay it on the single calibrated source blueprint. Inspect full connected circulation, not just object bounding boxes, collection membership or isolated rooms. List missing, extra, misplaced and wrongly sealed openings, room proportion/shape differences and stair/elevation contradictions. Include at least one deliberately wrong portal or room extent in the validation procedure and confirm that the source/layout review flags it. A connector gap negative control cannot substitute for this check.
