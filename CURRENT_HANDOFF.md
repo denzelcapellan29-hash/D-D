@@ -1,3 +1,17 @@
+# Current handoff — resumed modular review, 2026-10-29
+
+The existing private Manor modular candidate has now passed scoped connected forward/return movement, rendered door controls, level transitions, removable masonry and drop/explore/GM recovery checks. It remains an unpromoted review alternative; production/fallback selection is preserved. Actual private artifact identities, hashes and screenshots are in the private handoff and local CURRENT_STATUS.md.
+
+Selective spatial rendering groups for expensive repeated opaque static families improved three difficult moving samples about 12–19%, with unchanged source materials/geometry/colliders. Splitting every instance family regressed one view and was rejected. The 60 FPS whole-location target remains unmet; these are short focused samples at the recorded buffer, not full-monitor or cold-start certification. A broader settled native comparison produced 120/124 exact images; four differed by one channel at one 8-bit level. Native rotating status-icon/shadow drift was separated using unchanged A/A pairs.
+
+The private controls now install the tested candidate on Arrival/Walk and restore original rendering in free view, on exit or relevant static edits. Actor conditions/world settings and protected scene pins are preserved. Temporary QA runner/server stopped. Cold restart, final DM acceptance and outdoor transition polish remain open. An exterior terrain candidate failed native art review and was rejected/restored; source bounds/support alone did not establish visual success. No third wholesale rebuild, CAD install, paid generation or runtime change.
+
+[Reusable workflow](docs/REPRODUCIBLE_ENVIRONMENT_WORKFLOW.md) now includes measured batching, equivalent-image requirements, height resampling after grid rounding and finite-clearance evidence limits. AI 3D Asset Workflow backend 2.7.78 saved and read back; installed cache refresh is unverified. Blender remains the editable master; Bonsai is reserved for a measured next-build trial.
+
+The preceding checkpoint below describes foundation work before this resumed native validation. Its paused status is historical.
+
+---
+
 # Current handoff
 Updated 2026-10-29.
 
