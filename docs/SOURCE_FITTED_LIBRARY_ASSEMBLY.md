@@ -1,0 +1,21 @@
+# Reusing an architecture library without distorting the source map
+
+Use standard floor, wall, door and stair contracts together with source-fitted area members. The source blueprint chooses room polygons, elevations, shared-boundary ownership and free openings. A generic five-foot box must not replace an irregular room, split-level stair or secret approach solely to fit a starter kit.
+
+Store one editable collection asset per architectural member and one independently editable Blender file per area. A linked assembly brings those areas together at registered world coordinates. Preserve independent interactive leaves, gates, blocked masonry, traps and reveals. Keep unchanged successful exterior and dressing members rather than regenerating them without a reason.
+
+Use the grid for physical calibration and connectors. Use UV repetition measured in physical units for surface detail; stretching a floor footprint must not stretch its stone or timber pattern. Material slots and versioned PBR maps allow recoloring and retexturing. Share immutable texture dependencies by content hash where the consumer supports it. Separate a source-fitted member's registered assembly placement from its browser drop origin.
+
+Reduce geometry only in a runtime derivative. Compare the candidate to the immutable source using both directions of surface samples, triangle interiors, bounds and role-specific limits. Keep stairs, signature relief and moving parts exact when a proposed reduction fails. Surface sampling is a bounded approximation, not an exhaustive mathematical proof. Validate material definitions, decoded image bytes, node hierarchy, accessor/index validity and dependency hashes independently. A deliberately translated real vertex array must fail the interface check.
+
+Compile compatible static surfaces into area-sized native assets; do not automatically turn every five-foot floor square into a separate Foundry Tile. Small reusable pieces improve editing and consistency, but a large number of individual runtime objects can defeat the performance benefit. Repeated files can support native instancing or merging when their settings and semantics are compatible. Unique fitted shapes require their own geometry.
+
+Fork a private native Scene and pin the original before replacement. Put new models and copied scene-specific controls in a new namespace. Rebind model-hash guards and expected-chunk contracts to the actual new files. Copying a scene alone does not make scripts that hardcode its old ID work in the new one. Use supported document updates for custom provenance flags; do not assume arbitrary flag scopes are registered modules.
+
+Verify the same actual assembled native geometry: supported ordinary movement, closed blocking, open crossing, visible Close buttons, reverse crossing, stairs, source-depth drops, bottom exploration and recovery. Initial relocation is setup, never movement evidence. Restore initial source states after tests and verify the original scene's revision again.
+
+Capture matched, correctly lit frames before and after replacement. Confirm the native carried light exists, is visible and follows the walker; synchronize its normal lifecycle before a dark underground image is treated as an art failure. Activate the token layer before selecting the walker. On the inspected native renderer, scene transitions can retain stale postprocessing passes; only use the documented bounded cleanup for the recognized pattern and retain all active passes.
+
+Performance measurements require a focused window, a nonzero actual composer-frame sample, matched resolution, camera, lights and figures. Reject unfocused or zero-frame runs. Triangle savings are not FPS savings. Report standing, turning and ordinary walking separately, and retain known slower views instead of presenting a favorable wall-facing sample as whole-site certification.
+
+Reopen the saved Blender assembly and verify its relative links, exact membership and packed/external image dependencies. Set relative library paths against the saved master location; a relative path authored while the file is unsaved can resolve against the wrong drive root. Retain a reproducible recipe, native snapshot, exact hashes, real captures and a clear fallback. Final artistic acceptance remains with the DM.
