@@ -76,7 +76,7 @@ Performance `measurement` fields are `viewport_px`, `render_scale`, `quality`, `
 - Independent forward testing exposed six missed failure cases; each was corrected in the generator/checker and regression tests. Final independent retest confirms both last failures are detected and a non-grid revised layout with 12 risers passes (173 parts, 3,070 checks).
 - Source/art/native/performance/DM gates remain UNVERIFIED for this technical fixture. No new Manor repair, native performance gain or whole-site certification follows from these tests.
 
-The workflow and tooling are reusable now within the stated scope. The next application should repair the paused Manor's affected connected architecture from its existing plan and preserve its successful artwork, then satisfy the actual decorated/native gates before any promotion. Do not restart a third whole-Manor rebuild or reinterpret the technical example as permission to replace its visuals with boxes.
+The workflow and tooling are reusable now within the stated scope. Apply them to the selected existing branch and preserve its source-faithful geometry and artwork; satisfy affected decorated/native gates before promotion. The technical example is not permission to replace accepted visuals with boxes or start a wholesale replacement.
 
 ## Measured modular batching
 
@@ -91,3 +91,13 @@ Matched-image tests need unchanged pose, actual first-person eye position, hidde
 For hillside coverage, recompute floor height after rounding or changing XY. A stale elevation can put a sample below intact terrain. Keep captured, occupied/excluded and unresolved positions separate. Finite torso/head rays can miss a camera inside thick masonry; inspect recaptures and use a reasoned nearby stance in the same review square when appropriate. Do not label finite samples continuous-volume or all-creature-size proof.
 
 Portable UV0 atlases and matching terrain bounds/support do not establish native art parity. Inspect the actual full-world result from both sides of a transition. Reject candidates that leave the original defect or expose new wedges; restore the source rather than adding tint, fog or camera masking.
+
+## Builder-oriented execution and repair
+
+Use one structured source/location plan to drive dependable parameter-based Blender operations and checks. Record source uncertainty, token-centre lanes/grid phase, portal states and clearances, source features, suitable material/assets, lighting and native roles. Interpreting source and producing visible art remain expert tasks; the current technical compiler does not implement a complete world pipeline.
+
+Search a functional catalogue by role, dimensions, pivots, connectors, material family, provenance and measured native behaviour. Prefer useful common families and real shared resources; do not manufacture a unique model for every tint or tiny fitting. Keep editable module construction separate from measured runtime packaging.
+
+Maintain a configured, versioned controller with inspect, idempotent update and teardown/restore rather than accumulating permanent incident helpers. Consolidate proven repeated fixes with affected-scope validation and rollback; do not destabilize working controls for cosmetic cleanup. Normal review controls must run without temporary QA services. Controller consolidation is planned maintenance, not already-completed code.
+
+Review both safe stance and useful heading, ordinary oblique approaches, actual lighting and required interactions. For each failed outcome, preserve a baseline, identify the causal layer, change one principal variable, compare and keep/revert. After two comparable non-improving attempts change approach. Rebuild affected dependencies from the current selected artifact; an improved workflow does not require repeating an entire accepted environment. Keep current pointers compact and incident histories separate. Measure new build time, repair effort and playable coverage; no end-to-end speedup is established yet.
