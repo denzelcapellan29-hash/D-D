@@ -9,6 +9,7 @@ This workflow covers the whole environment. Constructed interiors use exact phys
 ## What changes after the Manor experiment
 
 - Author rooms, openings, stair flights and level changes from one registered location plan. Do not independently infer their adjoining caps or coordinate offsets in later repair scripts.
+- Define the token-centre lattice and doorway centre lines in that same plan. Snapping wall boundaries to a quarter-grid does not guarantee that a four-foot opening admits an ordinary five-foot token step. Audit the lateral phase of each opening, preserve source-required exceptions, and test an oblique camera approach as well as a centred cardinal crossing. A review alignment helper is a scoped usability aid, not proof that a mismatched grid has been repaired.
 - Prefer a small set of useful floor sizes and masonry runs. Use fitting pieces only at real boundaries. A finer tracing grid is not a requirement to manufacture a component for every tiny square.
 - Check whole enclosures, including floor thickness/bearings, wall backs/returns, stair sides, unequal ceiling transitions and pit shafts. Component socket tests and center-point movement tests alone missed defects.
 - Keep exact common geometry/material paths reusable. UV phase, random color and wear should not silently create a unique GLB per placement. Prove exported/native material support before choosing a variation strategy. Derive visible relief and finishes from approved art inputs; plain structural boxes are a technical stage.
