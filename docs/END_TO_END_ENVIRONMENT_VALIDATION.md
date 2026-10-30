@@ -25,6 +25,8 @@ Preserve approved imported assets' collision, sight and camera roles. Do not bla
 
 Sort imported objects, join inputs and exported membership to make outputs repeatable. Hash the actual immutable inputs and final files. Byte equality is the strongest simple check; when file bookkeeping differs, compare transformed triangle geometry, UVs, materials, images and role metadata with a stated tolerance. A bounded revision must change only the expected semantic set. Keep failed attempts and their diagnoses as project evidence rather than adding incident histories to the skill.
 
+Before a costly mesh-by-mesh comparison, check whether the GLB binary chunk and all structural/material JSON are already identical. A global specification stamp copied into every exported Scene can change every file hash after a local edit. Account for the exact provenance-only difference, keep complete build provenance in the manifest, and avoid needless duplicate deployment of unchanged asset data. Never ignore transforms, geometry, UVs, material/image content or gameplay-role extras as bookkeeping.
+
 Check texture-coordinate support in the installed runtime loader before baking a new atlas. A valid glTF feature can still be unsupported by that loader. Prefer a small, physical-size detail layer over rebaking an accepted floor when the change is only a clue or wear mark. Pin its provenance and preserve the other exports byte for byte.
 
 Compose incremental variants from unchanged content-addressed exports and explicit replacement or appended semantic groups. Keep the editable linked assembly as well as the export composition. Label these as incremental derivatives; they are not another clean architecture rebuild. At an open scope boundary, include the source-shaped adjoining visibility context through the next genuine bend or closed boundary. Do not manufacture a cap across a canonical route. Give shared threshold volumes one owner.
@@ -43,6 +45,8 @@ Cover finite source-grid stances, borders, treads and useful viewing headings. R
 
 Normal review controls should use the local runtime controller directly and work after temporary test services stop. Keep private destinations, door controls, lantern, walk/free view and pit recovery discoverable without overwriting the user's hotbar. Guard scene ownership/version and provide teardown that restores temporary presentation and resolution changes.
 
+When switching candidates, click the user's existing assigned hotbar buttons as well as newly created controls. Preserve Macro IDs, assignments and the original fallback commands. Route by the current owned Scene/build; a hard-coded previous Scene is a broken handoff even when a new review folder works. Navigation and recovery should preserve the chosen lantern state. Explain any different review-grid increment in physical units and keep combat-grid certification separate.
+
 Read back the actual camera near plane after entering first-person; a native mode toggle may reset it. Express any owned correction in physical units, check the closest normally reachable closed door and adjacent floor, and restore temporary camera settings on exit. A plausible clipping diagnosis is not a reproduced defect. Confirm held-key movement separately from automation tools that emit very short taps.
 
 ## Valid performance measurements
@@ -55,6 +59,10 @@ Report average FPS, median/p95/p99 frame time, draw calls, triangles including s
 
 Record the actual camera position, orientation and close-up distance, plus the active point-light shadow map size, radius and bias. A world quality label does not prove those runtime values. Keep the feature being assessed in view during movement; explicitly distinguish backpedalling from rapid alternating camera turns. Do not infer an optimization delta from different viewpoints or movement protocols. For image differences, compare RGB separately when unchanged alpha would hide a difference bounding box.
 
+Inspect outline selections for detached objects, not just duplicated compositor passes. An object removed from the actual Three scene can remain in a native controlled-selection array and still trigger full-scene outline work. A scoped helper may remove that exact detached reference through the native outline API; preserve attached editor selections and leave outline effects enabled. Record the stale-reference diagnosis separately from shadow or geometry optimizations.
+
+Exterior foliage can be expensive in underground point-shadow passes even when it is not visible in the color view. Test a reversible exclusion of exterior foliage's shadow casting only. Preserve the visible forest, terrain/architecture casters and every collision role. Compare matched underground images and movement timings, restore outdoor casting, and check transition/re-entry. This is a measured scene-specific policy, not permission to disable shadows globally.
+
 ## Efficient execution and honest delivery
 
 Use one build entry point and one configured controller rather than accumulating permanent repair macros. A successful process exit is insufficient: require completion receipts and export preflight. Commands and evidence are written atomically; use unique request IDs, bounded retries for reads and explicit pending status. Inspect actual state before repeating a mutation whose result is unknown.
@@ -64,3 +72,4 @@ The command service must not redeliver a completed action to a newly started run
 Measure source interpretation, asset preparation, clean generation, repair, native QA and final review separately. A five-minute generation stage after hours of interpretation and repair is not a five-minute finished environment. Record transfer/revision time and rework to find the next real bottleneck. Cache verified unchanged dependencies and retest affected neighbors.
 
 Deliver an editable master, immutable inputs, pinned recipes/assets, portable exports/configuration, evidence index, review controls and exact rollback. Reopening native 3D is different from a cold client restart or import into another world; verify each claimed level. Publish only the reusable method and nonprivate code to shared sources. Keep campaign maps, coordinates, GM clues and captures private.
+
