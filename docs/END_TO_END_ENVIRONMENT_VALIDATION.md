@@ -25,6 +25,10 @@ Preserve approved imported assets' collision, sight and camera roles. Do not bla
 
 Sort imported objects, join inputs and exported membership to make outputs repeatable. Hash the actual immutable inputs and final files. Byte equality is the strongest simple check; when file bookkeeping differs, compare transformed triangle geometry, UVs, materials, images and role metadata with a stated tolerance. A bounded revision must change only the expected semantic set. Keep failed attempts and their diagnoses as project evidence rather than adding incident histories to the skill.
 
+Check texture-coordinate support in the installed runtime loader before baking a new atlas. A valid glTF feature can still be unsupported by that loader. Prefer a small, physical-size detail layer over rebaking an accepted floor when the change is only a clue or wear mark. Pin its provenance and preserve the other exports byte for byte.
+
+Compose incremental variants from unchanged content-addressed exports and explicit replacement or appended semantic groups. Keep the editable linked assembly as well as the export composition. Label these as incremental derivatives; they are not another clean architecture rebuild. At an open scope boundary, include the source-shaped adjoining visibility context through the next genuine bend or closed boundary. Do not manufacture a cap across a canonical route. Give shared threshold volumes one owner.
+
 ## Native proof and useful review controls
 
 Native tests use ordinary controlled-token movement with actual support and collision in both directions. Test closed blocking, open passage, oblique approaches, stairs/landings, secret clear/restore, pit depth, exploration and recovery. Relocation is setup or a labelled GM review aid, never traversal or character climbing evidence.
@@ -33,9 +37,13 @@ Click the real rendered controls as well as testing document state. Dialog actio
 
 Validate the installed native placement schema before promising exact coordinates. If document coordinates are integer-only, use a verified native fractional offset where available and report remaining dimension quantization. Small placement errors can hide a shallow mural or create overlapping finishes. Include panorama/environment images in the hashed deployment dependency set alongside models and reveal variants, then reopen the renderer before judging the installed environment.
 
+For water and similar runtime effects, begin with an installed first-party reference recipe before authoring replacement materials. Loader support for a glTF extension does not establish correct appearance in the shared renderer. Verify the actual loaded material, opacity, normals and animation. In this installed 3D Canvas implementation, material transparency is a separate native flag; Tile alpha alone does not establish the resulting material opacity. Pin native recipes and their installed dependencies, preserve their usage rights, and identify native-generated geometry separately from exported Blender geometry. Ripples do not prove literal bubbles or another specific source effect.
+
 Cover finite source-grid stances, borders, treads and useful viewing headings. Record unsupported, occupied, excluded and unresolved positions separately. Any alternate stance remains within the same review square and on the same level, with the reason retained. Downward and upward views reveal defects missed by horizontal routes. Contact sheets are explicitly reduced previews; inspect full native images for flagged defects, clues and representative art.
 
 Normal review controls should use the local runtime controller directly and work after temporary test services stop. Keep private destinations, door controls, lantern, walk/free view and pit recovery discoverable without overwriting the user's hotbar. Guard scene ownership/version and provide teardown that restores temporary presentation and resolution changes.
+
+Read back the actual camera near plane after entering first-person; a native mode toggle may reset it. Express any owned correction in physical units, check the closest normally reachable closed door and adjacent floor, and restore temporary camera settings on exit. A plausible clipping diagnosis is not a reproduced defect. Confirm held-key movement separately from automation tools that emit very short taps.
 
 ## Valid performance measurements
 
@@ -45,9 +53,13 @@ Use bounded reversible renderer changes when needed; inspect the installed share
 
 Report average FPS, median/p95/p99 frame time, draw calls, triangles including shadow passes, actual buffer, GPU, quality and moving/standing route. Average 60 FPS and p95 at or below 16.67 ms are distinct outcomes. High small-slice FPS is neither whole-location certification nor proof that modular construction universally improves performance. Reject visually damaged optimizations even when faster.
 
+Record the actual camera position, orientation and close-up distance, plus the active point-light shadow map size, radius and bias. A world quality label does not prove those runtime values. Keep the feature being assessed in view during movement; explicitly distinguish backpedalling from rapid alternating camera turns. Do not infer an optimization delta from different viewpoints or movement protocols. For image differences, compare RGB separately when unchanged alpha would hide a difference bounding box.
+
 ## Efficient execution and honest delivery
 
 Use one build entry point and one configured controller rather than accumulating permanent repair macros. A successful process exit is insufficient: require completion receipts and export preflight. Commands and evidence are written atomically; use unique request IDs, bounded retries for reads and explicit pending status. Inspect actual state before repeating a mutation whose result is unknown.
+
+The command service must not redeliver a completed action to a newly started runner. Refuse conflicting replacement of an existing evidence receipt, accept only identical duplicate delivery, and keep mutable service readiness separate from acceptance evidence. Test this with completed movement and stop requests before relying on restart safety.
 
 Measure source interpretation, asset preparation, clean generation, repair, native QA and final review separately. A five-minute generation stage after hours of interpretation and repair is not a five-minute finished environment. Record transfer/revision time and rework to find the next real bottleneck. Cache verified unchanged dependencies and retest affected neighbors.
 
