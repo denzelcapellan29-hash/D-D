@@ -57,3 +57,7 @@ Cache native light shadow maps only while light and caster state is unchanged, u
 Benchmark stationary, turning and ordinary supported walking at the same full native buffer and light settings, with other heavy jobs stopped. Report per-location exceptions and timing-window limits rather than guaranteeing a locked frame rate. Confirm the latest optimized helper is the one installed in the user's controls, package its complete dependencies, and read back the saved scene after native renderer reopening. A same-app reopen is not a full app restart or fresh-world installation.
 
 A dark upward-facing surface can be above the native carried light. Diagnose material/normal integrity and actual light height with a reversible same-light comparison before changing textures, adding fill light or claiming a missing material. Restore the gameplay light after the diagnostic.
+
+## Native procedural consumer adapters
+
+Use [the native procedural-kit procedure](NATIVE_PROCEDURAL_KIT_WORKFLOW.md) for a selected generator. Browser registration does not establish generator units, connector behavior or safe instancing. Freeze measured catalogs, consumer-specific derivatives and required native roles; leave originals and vendor files unchanged. Validate interactive exclusions, delayed control readiness, continuous source-intended support, exact clean repetition and matched actual-composer performance before broad reuse.
