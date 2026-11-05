@@ -7,3 +7,7 @@ Before adoption, check installed Blender/Bonsai compatibility. Use two connected
 3D AI Studio is an optional future acquisition adapter. Its documented MCP includes alternative generators, low-poly conversion, UVs and material creation; advanced texturing/rigging/segmentation/Flow have website-only limitations. A paid connection and claims of game-ready output do not establish access, source fidelity or better results. Follow the common acquisition contract and benchmark specifically approved jobs before replacing a working provider. Do not add subscriptions or spend credits from a tool recommendation.
 
 References checked 2026-10-26: https://docs.bonsaibim.org/studio/quickstart/create_model.html ; https://docs.bonsaibim.org/studio/guides/authoring/advanced_modeling/parametric_geometry.html ; https://docs.3daistudio.com/mcp/capabilities . Treat dated vendor capabilities as documentation, not measured engine acceptance.
+
+## Selected native procedural-kit evaluation
+
+When selected by the user, Baileywiki Building Generator may be evaluated through [native kit and source-constrained furnishing](NATIVE_PROCEDURAL_KIT_WORKFLOW.md). Keep that evaluation in private native test scenes; retain the accepted location and private source authorities. Adopt only measured compatible families or constrained furnishing. Stock seeded room splitting is not a fixed source-plan importer, and published performance claims are not measured acceptance on our hardware.

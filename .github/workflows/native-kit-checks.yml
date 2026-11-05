@@ -1,0 +1,28 @@
+name: Native kit static asset checks
+
+on:
+  pull_request:
+    paths:
+      - 'tools/native_kit/**'
+      - '.github/workflows/native-kit-checks.yml'
+  push:
+    paths:
+      - 'tools/native_kit/**'
+      - '.github/workflows/native-kit-checks.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  original-fixtures:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify static normalization and negative controls
+        run: python -m unittest discover -s tools/native_kit -p "test_*.py" -v

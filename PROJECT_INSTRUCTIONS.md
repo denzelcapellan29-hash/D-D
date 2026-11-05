@@ -11,6 +11,7 @@ Reconciled 2026-10-25. Follow [the reproducible workflow](docs/REPRODUCIBLE_BLEN
 - First-person is the default in-person presentation. Separate non-GM fog tests are not default blockers.
 - Current workflow release and selected scene evidence are recorded in compact private state; workflow publication does not certify a scene.
 - Ordinary scene iterations update compact current state; reusable method changes update the recipe/skill. Use one source specification, our verified components, provider-neutral acquisition and dependency-aware QA. Bonsai is reserved for the next build; keep new-tool trials off the selected build's critical path.
+- For explicitly selected native procedural construction, follow [the opt-in kit procedure](docs/NATIVE_PROCEDURAL_KIT_WORKFLOW.md). Keep the source plan and accepted originals authoritative; procedural catalog compatibility and native behavior require their own evidence.
 - Editing repository/Drive records does not update the project settings UI.
 
 Public documentation contains generic method and code. Private build manifests, sources, campaign decisions and review images stay in private project records. Actual art and native gameplay require separate evidence.
