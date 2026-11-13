@@ -92,6 +92,12 @@ def inspect_3d_scene(scene_id: str | None = None) -> dict[str, Any]:
 
 
 @mcp.tool()
+def inspect_3d_capabilities(scene_id: str | None = None) -> dict[str, Any]:
+    """Read-only 3D Canvas discovery: installed module versions, camera state, available runtime methods, and safe registered settings. Method availability is not proof of tested behavior."""
+    return _operation(_rpc([{"op": "inspect_3d_capabilities"}], scene_id=scene_id))
+
+
+@mcp.tool()
 def search_3d_assets(
     query: str,
     limit: int = 50,

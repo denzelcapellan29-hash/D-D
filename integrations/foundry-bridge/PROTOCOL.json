@@ -78,6 +78,11 @@
       "height": "scene height in pixels, safe range 1000-100000",
       "padding": "optional 0-1",
       "result": "before/after dimensions; supports expected_revision at command level"
+    },
+    "inspect_3d_capabilities": {
+      "read_only": true,
+      "returns": "installed module versions, safe camera settings, 3D runtime methods, selected token render state, discovered Scene/Tile flag names",
+      "security": "fixed module and setting allowlists; no arbitrary JavaScript execution or settings enumeration"
     }
   },
   "direct_rpc": {

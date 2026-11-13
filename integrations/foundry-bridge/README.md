@@ -29,9 +29,30 @@ Google Drive remains available for private sources, releases, captures, backups 
 - Script macros remain disabled in the generic Foundry API Bridge.
 - Third-party 3D assets are referenced by installed Foundry paths; they are not copied into GitHub.
 
+## Development branch: runtime capability discovery (2026-10-22)
+
+`inspect_3d_capabilities` is staged on `feature/3d-canvas-capability-discovery-20261022`.
+It is a **read-only** end-to-end operation (Foundry module RPC dispatcher + Python MCP
+tool) to report the installed base/mapmaking/premium module versions, runtime
+readiness, native first-person and Game Camera controller method availability,
+actual selected-token render state, safe allowlisted camera settings, and
+discovered Scene/Tile flag field names.
+
+Only method existence is asserted; functionality must be exercised separately
+on a disposable scene after the exact installed module version is confirmed.
+No arbitrary JavaScript eval or filesystem access is added. The operation has
+not been deployed to the live Foundry world by committing GitHub changes.
+
+Validation: independent V8 syntax and stub-runtime discovery smoke **PASS**;
+the GitHub-hosted smoke workflow produced immediate failure with no steps/logs
+on the new branch and is **NOT** considered a code test pass. The Node contract
+test is committed but remains **UNVERIFIED in GitHub Actions**. Do not roll out
+without backup and live read-only check.
+
 ## Current specialized operations
 
 - `inspect_3d_scene`
+- `inspect_3d_capabilities` (development branch; not live yet)
 - `search_3d_assets`
 - `set_3d_camera`
 - `capture_3d_view`

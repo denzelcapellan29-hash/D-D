@@ -30,6 +30,9 @@ jobs:
       - name: JavaScript syntax
         run: node --check integrations/foundry-bridge/module/acq-foundry-bridge/scripts/acq-foundry-bridge.js
 
+      - name: Read-only capability discovery tests
+        run: node --test integrations/foundry-bridge/tests/capability-discovery.test.cjs
+
       - name: Install MCP SDK
         run: python -m pip install -r integrations/foundry-bridge/agent/requirements-mcp.txt
 
